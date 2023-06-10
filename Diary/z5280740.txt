@@ -1,0 +1,19 @@
+Week 1
+
+We formed our group before our Friday lab class and had set up our team on Moodle.
+We spent time during lab deciding which project to choose.
+I volunteered to be scrum master.
+We were talking about various things like:
+    potential novel ideas
+    software and libraries to use
+
+Week 2
+
+We chose Project 1 - Wait Management System, and spent most of the week through
+lengthy brainstorming sessions of figuring out what could be our novel functionalities.
+We came up with several ideas and discussed them with our tutor and lecturer.
+We finished the basic user stories on Jira, decided on our sprint structure and
+finished the background of the proposal.
+We plan to select our novel ideas towards the beginning of Week 3, and add user stories for these
+We will also complete the storyboards, software architecture diagram and
+technical specifications of the project for the proposal by Thursday, Week 3.
