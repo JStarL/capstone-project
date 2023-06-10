@@ -15,5 +15,5 @@ We came up with several ideas and discussed them with our tutor and lecturer.
 We finished the basic user stories on Jira, decided on our sprint structure and
 finished the background of the proposal.
 We plan to select our novel ideas towards the beginning of Week 3, and add user stories for these
-We will also complete the storyboards, software architecture diagram and
+Patrick and I will also complete the storyboards, software architecture diagram and
 technical specifications of the project for the proposal by Thursday, Week 3.
