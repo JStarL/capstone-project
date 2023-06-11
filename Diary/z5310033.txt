@@ -1,1 +1,25 @@
+Week 1
+-	Introductions
+-	Choose SCRUM master Jibitesh 
+-	Setup JIRA 
+- Communication will be done through messenger group chat 
+-	Discussion on roles (Hannah and William Frontend, Rohan and Patrick backend, Jibitesh Frontend and DB)
+-	Discussion on when to hold team meetings, Monday 2pm but subject to change around demos / due dates where we may want to meet more often 
+-	Discussion on what frameworks and programming languages (React for frontend with MUI, backend depending on chosen project - either java or python)
+-	Discussion on what project to choose, at the moment we are considering Wait management, car parking and learning management 
+-	Brainstorming novel ideas 
+
+Week 2 
+- Finalising project idea (wait management system)
+- First meeting Monday 5/6/23 2pm  
+- Discuss novel ideas for wait management system 
+- Going through proposal, delegate roles and deadlines
+- Plan out sprints for the project
+- Setup GitHub Classroom 
+
+- Tutorial Week 2 
+- Continue working on proposal 
+- Present potential novel ideas to mentor 
+- configure GitHub for Jira 
+- Discuss next steps: Rohan (consolidating report), William + Hannah (Frontend initial designs used for storyboarding), Pat + Jibi (System architecture diagram)
 
