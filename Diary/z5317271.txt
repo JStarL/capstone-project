@@ -2,11 +2,13 @@ WEEK ONE
 - Brief overview for each project proposal and discussed possible novel functionalities for each project
 - Decided on Scrum Master
 - Set up Jira
+- Allocation of roles: Frontend
 - Chose a weekly meeting day: Monday 2pm
 
 WEEK TWO
-Meeting
+Meeting/Tutorial
 - Chose Project: Project 1 Wait Management
+- Presentation and discussion of possible novel function ideas to tutor
 - Allocated tasks for the proposal
 - Finalised due dates for each sprint
 - Finalised Novel Functions - Personalised Allergy identifying system, Best selling category in menu
@@ -15,9 +17,10 @@ Individual Work
 - Added acceptance criterias to each user story
 
 WEEK THREE
-Meeting
+Meeting/Tutorial
 - Continued to work on screens needed for the project
 - Discussed possible ways a manager can register
+- Allocation of roles
 
 Individual Work
 - Finalised acceptance criterias for novel functionalities
