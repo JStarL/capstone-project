@@ -1,8 +1,28 @@
 WEEK ONE
-- 
+- Brief overview for each project proposal and discussed possible novel functionalities for each project
+- Decided on Scrum Master
+- Set up Jira
+- Chose a weekly meeting day: Monday 2pm
 
 WEEK TWO
+Meeting
+- Chose Project: Project 1 Wait Management
+- Allocated tasks for the proposal
+- Finalised due dates for each sprint
+- Finalised Novel Functions - Personalised Allergy identifying system, Best selling category in menu
+
+Individual Work
 - Added acceptance criterias to each user story
-- Finalised Novel Functions
+
 WEEK THREE
-- Made 
+Meeting
+- Continued to work on screens needed for the project
+- Discussed possible ways a manager can register
+
+Individual Work
+- Finalised acceptance criterias for novel functionalities
+- Made screens
+  - Customer - menu viewing screen, 
+  - Wait staff - view pending orders, customer assistance screen
+  - Kitchen staff - view pending orders screen
+  - Manager - screen to edit, add, delete categories/menu items on the menu
