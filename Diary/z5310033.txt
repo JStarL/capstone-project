@@ -22,5 +22,12 @@ Week 2
 - Continue working on proposal 
 - Present potential novel ideas to mentor 
 - configure GitHub for Jira 
-- Discuss next steps: Rohan (consolidating report), William + Hannah (Frontend initial designs used for storyboarding), Pat + Jibi (System architecture diagram)
+- Discuss next steps: Rohan (consolidating report), William + Hannah (Frontend initial designs used for storyboarding), Pat + Jibi (System architecture diagram, storyboarding)
+- Using Uizard over Figma for storyboarding 
 
+Week 3 
+- Meeting Monday 12/6/23 2pm 
+- Planning for sprint 2:
+- Skeleton for the frontend as backend work on data stuff
+- Figuring out how to delegate roles for making the storybaord when there a limitations for Uizard (limited screens and projects)
+- Finishing off storyboards (missed some screens)
