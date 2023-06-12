@@ -1,1 +1,8 @@
+WEEK ONE
+- 
 
+WEEK TWO
+- Added acceptance criterias to each user story
+- Finalised Novel Functions
+WEEK THREE
+- Made 
