@@ -21,4 +21,4 @@ Week 3
 - The main issue is that we didn't have enough user stories. So I had to add 10 more user stories to ensure that we covered every aspect of the system
 - Under some of these new 10 user stories, we had to create a new functionality (authentification) and correspondingly a new epic
 - Added child issues in the user stories for frontend developers and backend developers to know what to do.
-- Ready to start implementation of tasks in Sprint 2!
+- Ready to start implementation of tasks in Sprint 2! Specifically, I want to start the backend of the manager user stories relating to categories.
