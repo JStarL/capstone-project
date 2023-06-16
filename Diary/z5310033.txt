@@ -34,3 +34,8 @@ Week 3
 
 - Tutorial Week 3
 - Finalising proposal, small touches, formatting here and there
+- Submitting Proposal 
+- Discussion about what our next steps are for implementation 
+  - Interface between frontend and backend (swagger ui similar to 6080)
+  - What data does the frontend need from the backend  
+  - Thinking about how and what to store in the database
