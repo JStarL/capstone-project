@@ -31,3 +31,6 @@ Week 3
 - Skeleton for the frontend as backend work on data stuff
 - Figuring out how to delegate roles for making the storybaord when there a limitations for Uizard (limited screens and projects)
 - Finishing off storyboards (missed some screens)
+
+- Tutorial Week 3
+- Finalising proposal, small touches, formatting here and there
