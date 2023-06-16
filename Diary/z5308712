@@ -18,7 +18,7 @@ has been quite frustrating but I think in the end, we will choose the onese we b
 Week 3
 - We finished our proposal!
 - I had drafted the report and completed listing out all the functionalities
-- I had to add 10 more user stories to ensure that we covered every aspect of the system
+- The main issue is that we didn't have enough user stories. So I had to add 10 more user stories to ensure that we covered every aspect of the system
 - Under some of these new 10 user stories, we had to create a new functionality (authentification) and correspondingly a new epic
 - Added child issues in the user stories for frontend developers and backend developers to know what to do.
 - Ready to start implementation of tasks in Sprint 2!
