@@ -17,3 +17,16 @@ finished the background of the proposal.
 We plan to select our novel ideas towards the beginning of Week 3, and add user stories for these
 Patrick and I will also complete the storyboards, software architecture diagram and
 technical specifications of the project for the proposal by Thursday, Week 3.
+
+Week 3
+
+Early in week 3, we finally decided our novel functionalities.
+Throughout Week 3, all of us were busy working on the proposal,
+which was successfully submitted by the deadline. My main parts
+were to work on some of the customer storyboards like the persona related
+screens and the basic screens like looking at menu item descriptions.
+I also did a lot of reviewing of the storyboards as a whole, and sat with Rohan
+to review and finalise the sprint screenshots.
+Next week we plan to work on deciding what work there is to build the system,
+and who will be doing what, as well as  potentially create an interface
+between the backend and frontend so that we can all start working together.
