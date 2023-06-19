@@ -39,3 +39,9 @@ Week 3
   - Interface between frontend and backend (swagger ui similar to 6080)
   - What data does the frontend need from the backend  
   - Thinking about how and what to store in the database
+
+Week 4 
+- Meeting Monday 19/6/23
+- Working on interface between frontend and backend table which details Routes, Purpose, backend and frontend requirements, methods and exceptions
+- Adding assumptions to docs
+- Start inital pages of Frontend (very rough skeleton)
