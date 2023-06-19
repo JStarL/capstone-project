@@ -1,13 +1,10 @@
 import './App.css';
 import React from 'react';
 import { BrowserRouter, Routes, Route, Link } from 'react-router-dom';
+import ManagerLoginPage from './pages/ManagerLoginPage'
+import AddStaffPage from './pages/AddStaffPage';
 
 function App() {
-  const [gamesWon, setGamesWon] = React.useState(0)
-
-  const resetGamesWon = () => {
-    setGamesWon(0);
-  }
   const Nav = () => {
     return (
       <nav>
@@ -40,6 +37,8 @@ function App() {
         <main>
           <Routes>
             <Route path='/' element={<Dashboard />}/>
+            <Route path='/login' element={<ManagerLoginPage />}/>
+            <Route path='/addstaff' element={<AddStaffPage />}/>
           </Routes>
         </main>
         <footer>
