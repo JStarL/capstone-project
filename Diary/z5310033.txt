@@ -31,3 +31,17 @@ Week 3
 - Skeleton for the frontend as backend work on data stuff
 - Figuring out how to delegate roles for making the storybaord when there a limitations for Uizard (limited screens and projects)
 - Finishing off storyboards (missed some screens)
+
+- Tutorial Week 3
+- Finalising proposal, small touches, formatting here and there
+- Submitting Proposal 
+- Discussion about what our next steps are for implementation 
+  - Interface between frontend and backend (swagger ui similar to 6080)
+  - What data does the frontend need from the backend  
+  - Thinking about how and what to store in the database
+
+Week 4 
+- Meeting Monday 19/6/23
+- Working on interface between frontend and backend table which details Routes, Purpose, backend and frontend requirements, methods and exceptions
+- Adding assumptions to docs
+- Start inital pages of Frontend (very rough skeleton)

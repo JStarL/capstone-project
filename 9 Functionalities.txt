@@ -1,0 +1,19 @@
+Customers must be able to place orders without having to wait for staff to come by, through the Wait Management System using the following 9 functionalities:
+
+1. Customers must select their table number, browse through the menu and add items to their order before finally placing their order.
+
+2. Kitchen staff must be able to view a time-sorted list of customer orders and mark them for when orders are ready to be served.
+
+3. Wait staff must receive a notification when a customer requests assistance and mark these requests complete once handled with.
+
+4. Wait staff must receive a notification when an order item is ready to be served and mark these order items as completed once served.
+
+5. Managers must have access to add or remove any categories or menu items.
+
+6. Managers must have access to update any information including description, ingredients, category or cost related to the menu, as well as the order in which the categories and menu items are displayed.
+
+7. Managers, wait staff and kitchen staff must be able to authenticate into the system (register or login)
+
+8. Personalised UX, with recording allergies of a person using personas, also bill splitting by personas
+
+9. "Best Selling Category" to be dynamically created and updated automatically through algorithm design so that most relevant items are show to customer while browsing the menu
