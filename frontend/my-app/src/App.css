@@ -10,6 +10,29 @@ body {
   text-align: center;
 }
 
+.paper {
+  width: 70%;
+  align-items: center;
+}
+
+.login-page {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+}
+
+.login-form {
+  width: 100%;
+  padding: 20px;
+  margin: 5px;
+  justify-content: center;
+  align-items: center;
+}
+
+.email-textfield {
+  margin-bottom: 3px;
+}
+
 main, footer {
   width: 100%;
   max-width: 100%;
