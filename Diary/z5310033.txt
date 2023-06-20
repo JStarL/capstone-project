@@ -45,3 +45,5 @@ Week 4
 - Working on interface between frontend and backend table which details Routes, Purpose, backend and frontend requirements, methods and exceptions
 - Adding assumptions to docs
 - Start inital pages of Frontend (very rough skeleton)
+- Plan out how we are going to organise frontend components and pages 
+- Think about what we can do prior to interface between backend and frontend is setup
