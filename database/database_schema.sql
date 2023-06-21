@@ -18,3 +18,11 @@ create table managers (
 
 
 
+create table staff (
+    id          serial,
+    email       text not null unique check (email ~ '.*@.*'),
+    name        text not null,
+    password    text not null,
+
+    primary key (id)
+);
