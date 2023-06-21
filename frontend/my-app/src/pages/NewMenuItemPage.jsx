@@ -5,7 +5,7 @@ import { Button } from '@mui/material';
 
 function NewMenuItemPage () {
   return <>NEW MENU ITEM PAGE
-    <NewMenuItem></NewMenuItem>
+    <NewMenuItem />
     <Button>Add to Menu</Button>
   </>
 }
