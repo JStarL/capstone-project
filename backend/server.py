@@ -2,6 +2,7 @@ import signal
 from json import dumps
 from flask import Flask, request
 from flask_cors import CORS
+import psycopg2
 
 from src import config
 
@@ -70,9 +71,67 @@ APP.config['TRAP_HTTP_EXCEPTIONS'] = True
 APP.register_error_handler(Exception, defaultHandler)
 
 # NO NEED TO MODIFY ABOVE THIS POINT, EXCEPT IMPORTS
+db_conn = None
 
-# Example
+""" EXAMPLE FLASK AND SERVER FUNCTIONS """
+# LOOK AT ME!
+# LOOK AT ME!
+# LOOK AT ME!
 
+def login_backend(email, password):
+    
+    # This Login is for both managers and staff
+    # whose information is stored in 2 diff tables
+    # so we need to check both tables
+
+    # NOTE: The token used is their 'email' for now,
+    # since managers and staff are stored in different tables
+    
+    invalid_email = { 'error': 'invalid email' }
+    invalid_password = { 'error': 'invalid password' }
+    logged_in = { 'success': 'logged in' }
+
+
+    query1 = """
+    select password from managers where email = %s
+    """
+    query2 = """
+    select password from staff where email = %s
+    """
+    cur = db_conn.cursor()
+    cur.execute(query1, [email])
+    list1 = cur.fetchall()
+    
+    if len(list1) == 0:
+        # Not a manager, maybe a staff
+        cur.execute(query2, [email])
+        list1 = cur.fetchall()
+        if len(list1) == 0:
+            # nobody has this email
+            return invalid_email
+        # Access and compare staff's password
+        if password == list1[0][0]:
+            return logged_in
+        else:
+            return invalid_password
+    else:
+        # Access and compare manager's password
+        if password == list1[0][0]:
+            return logged_in
+        else:
+            return invalid_password
+
+
+
+@APP.route('/auth/login', methods=['POST'])
+def login_flask():
+    # For POST, it's a bit different to GET
+    data = request.get_json()
+    return dumps(login_backend(data['email'], data['password']))
+
+# LOOK AT ME!
+# LOOK AT ME!
+# LOOK AT ME!
 
 @APP.route("/echo", methods=['GET'])
 def echo():
@@ -389,4 +448,10 @@ def server_notifications_get_v1():
 
 if __name__ == "__main__":
     signal.signal(signal.SIGINT, quit_gracefully)  # For coverage
+    try:
+        db_conn = psycopg2.connect('dbname=wait_management_system user=lubuntu password=lubuntu')
+        print(db_conn)
+        # conn.close()
+    except Exception as e:
+        print( 'Unable to connect to database: ' + str(e))
     APP.run(port=config.port)  # Do not edit this port
