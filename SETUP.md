@@ -10,6 +10,15 @@ The following are the steps to set up the virtual machine from its initial stage
 # To install the database
 
 - run `sudo apt-get install postgresql`
+- switch to user 'postgres' by running `sudo su postgres`
+- run `createuser --interactive lubuntu`
+- press `y` for all questions
+- run `psql`
+- run `create database wait_management_system owner lubuntu`
+- quit with `\q`
+- press `Ctrl + D`
+- type `psql postgres`
+- run `\c wait_management_system lubuntu`
 
 # To run the frontend
 
