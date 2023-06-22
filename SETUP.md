@@ -18,5 +18,6 @@ The following are the steps to set up the virtual machine from its initial stage
 - `source ~/.bashrc`
 - to download the latest lts version of node that we are using, do `nvm install v18.16.0`
 - run `nvm use v18.16.0`
-
 - `cd ~/capstone-project-3900f18bwhatreallyhappenedjib/frontend/my-app`
+- run `npm install`
+- run `npm start`
