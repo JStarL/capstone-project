@@ -1,4 +1,5 @@
 The following are the steps to set up the virtual machine from its initial stage after being downloaded
+- every time you run `sudo <your-command> <optional-args>...`, you will be asked to type your password, which is `lubuntu`
 - run `sudo apt-get update`
 - run `sudo apt install ssh`
 - run `ssh-keygen -t rsa -P '' -f ~/.ssh/id_rsa`
@@ -14,18 +15,19 @@ The following are the steps to set up the virtual machine from its initial stage
 - run `createuser --interactive lubuntu`
 - press `y` for all questions
 - run `psql`
-- run `create database wait_management_system owner lubuntu`
+- run `create database wait_management_system owner lubuntu;`
 - quit with `\q`
 - press `Ctrl + D`
 - type `psql postgres`
 - run `\c wait_management_system lubuntu`
+- quit with '\q'
 
 # To run the backend
 
 - run `sudo apt install python3-pip`
 - run `pip install Flask`
 - open `nano ~/.bashrc` and add this to the last line of the file:
-    - `export PATH = "/home/lubuntu/.local/bin:$PATH"`
+    - `export PATH="/home/lubuntu/.local/bin:$PATH"`
 - `source ~/.bashrc`
 - run server with `python3 server.py`
 
