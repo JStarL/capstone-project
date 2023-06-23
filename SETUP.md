@@ -27,7 +27,7 @@ The following are the steps to set up the virtual machine from its initial stage
 - run `sudo apt install python3-pip`
 - run `pip install Flask`
 - open `nano ~/.bashrc` and add this to the last line of the file:
-    - `export PATH = "/home/lubuntu/.local/bin:$PATH"`
+    - `export PATH="/home/lubuntu/.local/bin:$PATH"`
 - `source ~/.bashrc`
 - run server with `python3 server.py`
 
