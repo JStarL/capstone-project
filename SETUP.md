@@ -19,6 +19,7 @@ The following are the steps to set up the virtual machine from its initial stage
 - press `Ctrl + D`
 - type `psql postgres`
 - run `\c wait_management_system lubuntu`
+- quit with '\q'
 
 # To run the backend
 
