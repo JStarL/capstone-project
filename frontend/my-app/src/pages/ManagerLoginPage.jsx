@@ -8,7 +8,6 @@ function ManagerLoginPage () {
   const [password, setPassword] = React.useState('');
   const navigate = useNavigate();
 
-
   return <>
   <div className='login-page'>
   <Paper className='paper' elevation={3}>
@@ -36,7 +35,7 @@ function ManagerLoginPage () {
       fullWidth
       value={password}
     />
-    <Button onClick={ () => { navigate('/addstaff') } }>Log In</Button>
+    <Button onClick={ () => { navigate('/manager/menu') } }>Log In</Button>
     </form>
   </Paper>
   </div>

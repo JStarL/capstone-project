@@ -45,3 +45,13 @@ Week 4
 - Working on interface between frontend and backend table which details Routes, Purpose, backend and frontend requirements, methods and exceptions
 - Adding assumptions to docs
 - Start inital pages of Frontend (very rough skeleton)
+- Plan out how we are going to organise frontend components and pages 
+- Think about what we can do prior to interface between backend and frontend is setup
+
+- Tutorial Week 4
+- Dicussion about virtual machines
+- Delegate demo 
+- Virtual machine dicusssion 
+- update from mentor: 
+  - Focus on functionality rather than the UI 
+  - Better to fully complete user stories rather than have all partially complete 
