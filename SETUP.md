@@ -1,4 +1,5 @@
 The following are the steps to set up the virtual machine from its initial stage after being downloaded
+- every time you run `sudo <your-command> <optional-args>...`, you will be asked to type your password, which is `lubuntu`
 - run `sudo apt-get update`
 - run `sudo apt install ssh`
 - run `ssh-keygen -t rsa -P '' -f ~/.ssh/id_rsa`
