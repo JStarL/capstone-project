@@ -4,10 +4,18 @@
   padding: 0;
   box-sizing: border-box;
 }
+
+.App {
+  display: flex;
+  flex-direction: column;
+}
+
 body {
   font-family: sans-serif;
-  height: 100%;
+  /* height: calc(100% + 120px); */
   text-align: center;
+  /* position: relative; */
+  /* min-height: calc(100vh - 80px); */
 }
 
 .paper {
@@ -15,6 +23,9 @@ body {
   align-items: center;
 }
 
+#root {
+  height: 100%;
+}
 .login-page {
   display: flex;
   justify-content: center;
@@ -38,29 +49,12 @@ main, footer {
   max-width: 100%;
 }
 
-/* nav {
-  width: 100%;
-  height: 100%;
-} */
-
-.dashboard {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  text-align: center;
-  flex-direction: column;
-  height: calc(100vh - 130px);
-  color: red;
-  font-size: 2em;
-}
-
 header {
   display: block;
   width: 100%;
   position: fixed;
   top: 0;
   height: 80px;
-  /* background-color: #eeeeee; */
 }
 
 .box-container {
@@ -119,17 +113,19 @@ nav {
 
 main {
   margin-top: 80px;
-  margin-bottom: 50px;
+  margin-bottom: 80px;
+  flex: 1;
 }
 
 footer {
-  position: absolute;
+  position: fixed;
   display: flex;
   align-items: center;
   justify-content: center;
-  bottom: 0;
   height: 75px;
+  bottom: 0;
   background-color: lightgrey;
+  /* margin-top: auto; */
 }
 
 .footer-container {
