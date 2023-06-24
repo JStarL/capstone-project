@@ -18,8 +18,7 @@ The following are the steps to set up the virtual machine from its initial stage
 - run `create database wait_management_system owner lubuntu;`
 - quit with `\q`
 - press `Ctrl + D`
-- type `psql postgres`
-- run `\c wait_management_system lubuntu`
+- type `psql wait_management_system -f wms_database.dump`
 - quit with '\q'
 
 # To run the backend
