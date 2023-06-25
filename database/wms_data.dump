@@ -1,0 +1,385 @@
+--
+-- PostgreSQL database dump
+--
+
+-- Dumped from database version 14.8 (Ubuntu 14.8-0ubuntu0.22.04.1)
+-- Dumped by pg_dump version 14.8 (Ubuntu 14.8-0ubuntu0.22.04.1)
+
+SET statement_timeout = 0;
+SET lock_timeout = 0;
+SET idle_in_transaction_session_timeout = 0;
+SET client_encoding = 'UTF8';
+SET standard_conforming_strings = on;
+SELECT pg_catalog.set_config('search_path', '', false);
+SET check_function_bodies = false;
+SET xmloption = content;
+SET client_min_messages = warning;
+SET row_security = off;
+
+--
+-- Name: stafftype; Type: DOMAIN; Schema: public; Owner: kscode
+--
+
+CREATE DOMAIN public.stafftype AS character(1)
+	CONSTRAINT stafftype_check CHECK ((VALUE = ANY (ARRAY['M'::bpchar, 'K'::bpchar, 'W'::bpchar])));
+
+
+ALTER DOMAIN public.stafftype OWNER TO kscode;
+
+SET default_tablespace = '';
+
+SET default_table_access_method = heap;
+
+--
+-- Name: categories; Type: TABLE; Schema: public; Owner: kscode
+--
+
+CREATE TABLE public.categories (
+    id integer NOT NULL,
+    name text NOT NULL,
+    menu_id integer NOT NULL
+);
+
+
+ALTER TABLE public.categories OWNER TO kscode;
+
+--
+-- Name: categories_id_seq; Type: SEQUENCE; Schema: public; Owner: kscode
+--
+
+CREATE SEQUENCE public.categories_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.categories_id_seq OWNER TO kscode;
+
+--
+-- Name: categories_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: kscode
+--
+
+ALTER SEQUENCE public.categories_id_seq OWNED BY public.categories.id;
+
+
+--
+-- Name: food_items; Type: TABLE; Schema: public; Owner: kscode
+--
+
+CREATE TABLE public.food_items (
+    id integer NOT NULL,
+    title text NOT NULL,
+    description text,
+    image text,
+    price double precision NOT NULL,
+    ingredients text[],
+    category_id integer NOT NULL,
+    menu_id integer NOT NULL
+);
+
+
+ALTER TABLE public.food_items OWNER TO kscode;
+
+--
+-- Name: food_items_and_categories; Type: VIEW; Schema: public; Owner: kscode
+--
+
+CREATE VIEW public.food_items_and_categories AS
+ SELECT f.id AS food_id,
+    f.title AS food_title,
+    f.description AS food_description,
+    f.image AS food_image,
+    f.price AS food_price,
+    f.ingredients AS food_ingredients,
+    c.id AS category_id,
+    c.name AS category_name,
+    c.menu_id
+   FROM (public.food_items f
+     JOIN public.categories c ON ((f.category_id = c.id)));
+
+
+ALTER TABLE public.food_items_and_categories OWNER TO kscode;
+
+--
+-- Name: food_items_id_seq; Type: SEQUENCE; Schema: public; Owner: kscode
+--
+
+CREATE SEQUENCE public.food_items_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.food_items_id_seq OWNER TO kscode;
+
+--
+-- Name: food_items_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: kscode
+--
+
+ALTER SEQUENCE public.food_items_id_seq OWNED BY public.food_items.id;
+
+
+--
+-- Name: menus; Type: TABLE; Schema: public; Owner: kscode
+--
+
+CREATE TABLE public.menus (
+    id integer NOT NULL,
+    restaurant_name text NOT NULL,
+    restaurant_loc text NOT NULL
+);
+
+
+ALTER TABLE public.menus OWNER TO kscode;
+
+--
+-- Name: menus_id_seq; Type: SEQUENCE; Schema: public; Owner: kscode
+--
+
+CREATE SEQUENCE public.menus_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.menus_id_seq OWNER TO kscode;
+
+--
+-- Name: menus_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: kscode
+--
+
+ALTER SEQUENCE public.menus_id_seq OWNED BY public.menus.id;
+
+
+--
+-- Name: staff; Type: TABLE; Schema: public; Owner: kscode
+--
+
+CREATE TABLE public.staff (
+    id integer NOT NULL,
+    email text NOT NULL,
+    name text NOT NULL,
+    password text NOT NULL,
+    menu_id integer NOT NULL,
+    staff_type public.stafftype NOT NULL,
+    CONSTRAINT staff_email_check CHECK ((email ~ '.*@.*'::text))
+);
+
+
+ALTER TABLE public.staff OWNER TO kscode;
+
+--
+-- Name: staff_id_seq; Type: SEQUENCE; Schema: public; Owner: kscode
+--
+
+CREATE SEQUENCE public.staff_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.staff_id_seq OWNER TO kscode;
+
+--
+-- Name: staff_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: kscode
+--
+
+ALTER SEQUENCE public.staff_id_seq OWNED BY public.staff.id;
+
+
+--
+-- Name: staff_with_menu; Type: VIEW; Schema: public; Owner: kscode
+--
+
+CREATE VIEW public.staff_with_menu AS
+ SELECT s.id AS staff_id,
+    s.email AS staff_email,
+    s.name AS staff_name,
+    s.staff_type,
+    m.id AS menu_id,
+    m.restaurant_name,
+    m.restaurant_loc
+   FROM (public.staff s
+     JOIN public.menus m ON ((s.menu_id = m.id)));
+
+
+ALTER TABLE public.staff_with_menu OWNER TO kscode;
+
+--
+-- Name: categories id; Type: DEFAULT; Schema: public; Owner: kscode
+--
+
+ALTER TABLE ONLY public.categories ALTER COLUMN id SET DEFAULT nextval('public.categories_id_seq'::regclass);
+
+
+--
+-- Name: food_items id; Type: DEFAULT; Schema: public; Owner: kscode
+--
+
+ALTER TABLE ONLY public.food_items ALTER COLUMN id SET DEFAULT nextval('public.food_items_id_seq'::regclass);
+
+
+--
+-- Name: menus id; Type: DEFAULT; Schema: public; Owner: kscode
+--
+
+ALTER TABLE ONLY public.menus ALTER COLUMN id SET DEFAULT nextval('public.menus_id_seq'::regclass);
+
+
+--
+-- Name: staff id; Type: DEFAULT; Schema: public; Owner: kscode
+--
+
+ALTER TABLE ONLY public.staff ALTER COLUMN id SET DEFAULT nextval('public.staff_id_seq'::regclass);
+
+
+--
+-- Data for Name: categories; Type: TABLE DATA; Schema: public; Owner: kscode
+--
+
+COPY public.categories (id, name, menu_id) FROM stdin;
+\.
+
+
+--
+-- Data for Name: food_items; Type: TABLE DATA; Schema: public; Owner: kscode
+--
+
+COPY public.food_items (id, title, description, image, price, ingredients, category_id, menu_id) FROM stdin;
+\.
+
+
+--
+-- Data for Name: menus; Type: TABLE DATA; Schema: public; Owner: kscode
+--
+
+COPY public.menus (id, restaurant_name, restaurant_loc) FROM stdin;
+1	Sample Restaurant	Sample Address
+\.
+
+
+--
+-- Data for Name: staff; Type: TABLE DATA; Schema: public; Owner: kscode
+--
+
+COPY public.staff (id, email, name, password, menu_id, staff_type) FROM stdin;
+1	test@test.com	Patrick	idk	1	M
+\.
+
+
+--
+-- Name: categories_id_seq; Type: SEQUENCE SET; Schema: public; Owner: kscode
+--
+
+SELECT pg_catalog.setval('public.categories_id_seq', 1, false);
+
+
+--
+-- Name: food_items_id_seq; Type: SEQUENCE SET; Schema: public; Owner: kscode
+--
+
+SELECT pg_catalog.setval('public.food_items_id_seq', 1, false);
+
+
+--
+-- Name: menus_id_seq; Type: SEQUENCE SET; Schema: public; Owner: kscode
+--
+
+SELECT pg_catalog.setval('public.menus_id_seq', 1, true);
+
+
+--
+-- Name: staff_id_seq; Type: SEQUENCE SET; Schema: public; Owner: kscode
+--
+
+SELECT pg_catalog.setval('public.staff_id_seq', 1, true);
+
+
+--
+-- Name: categories categories_pkey; Type: CONSTRAINT; Schema: public; Owner: kscode
+--
+
+ALTER TABLE ONLY public.categories
+    ADD CONSTRAINT categories_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: food_items food_items_pkey; Type: CONSTRAINT; Schema: public; Owner: kscode
+--
+
+ALTER TABLE ONLY public.food_items
+    ADD CONSTRAINT food_items_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: menus menus_pkey; Type: CONSTRAINT; Schema: public; Owner: kscode
+--
+
+ALTER TABLE ONLY public.menus
+    ADD CONSTRAINT menus_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: staff staff_email_key; Type: CONSTRAINT; Schema: public; Owner: kscode
+--
+
+ALTER TABLE ONLY public.staff
+    ADD CONSTRAINT staff_email_key UNIQUE (email);
+
+
+--
+-- Name: staff staff_pkey; Type: CONSTRAINT; Schema: public; Owner: kscode
+--
+
+ALTER TABLE ONLY public.staff
+    ADD CONSTRAINT staff_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: categories categories_menu_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: kscode
+--
+
+ALTER TABLE ONLY public.categories
+    ADD CONSTRAINT categories_menu_id_fkey FOREIGN KEY (menu_id) REFERENCES public.menus(id);
+
+
+--
+-- Name: food_items food_items_category_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: kscode
+--
+
+ALTER TABLE ONLY public.food_items
+    ADD CONSTRAINT food_items_category_id_fkey FOREIGN KEY (category_id) REFERENCES public.categories(id);
+
+
+--
+-- Name: food_items food_items_menu_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: kscode
+--
+
+ALTER TABLE ONLY public.food_items
+    ADD CONSTRAINT food_items_menu_id_fkey FOREIGN KEY (menu_id) REFERENCES public.menus(id);
+
+
+--
+-- Name: staff staff_menu_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: kscode
+--
+
+ALTER TABLE ONLY public.staff
+    ADD CONSTRAINT staff_menu_id_fkey FOREIGN KEY (menu_id) REFERENCES public.menus(id);
+
+
+--
+-- PostgreSQL database dump complete
+--
+
