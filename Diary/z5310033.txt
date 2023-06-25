@@ -58,4 +58,6 @@ Week 4
   - Focus on functionality rather than the UI 
   - Better to fully complete user stories rather than have all partially complete 
 
-
+Working on frontend coding: 
+- Manager Sign Up 
+- Settign up Categories

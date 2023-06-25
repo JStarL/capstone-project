@@ -1,6 +1,6 @@
 import React from 'react';
 import '../App.css';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import { Button, TextField, Typography, Paper } from '@mui/material';
 
 function ManagerLoginPage ({ onSuccess }) {
@@ -41,6 +41,7 @@ function ManagerLoginPage ({ onSuccess }) {
       value={password}
     />
     <Button onClick={login}>Log In</Button>
+    <span className="link"><Link to='/register'>New Manager? Sign Up Here!</Link></span>
     </form>
   </Paper>
   </div>
