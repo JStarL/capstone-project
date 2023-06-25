@@ -5,6 +5,7 @@ from flask_cors import CORS
 import psycopg2
 
 import sys
+import ast
 
 
 from manager import manager_view_menu, manager_view_food_item, manager_add_category, manager_delete_category, manager_add_menu_item, manager_delete_menu_item
@@ -88,7 +89,7 @@ def auth_register():
 
 @APP.route('/auth/login', methods=['POST'])
 def login_flask():
-    data = request.get_json()
+    data = ast.literal_eval(request.get_json())
     cur = db_conn.cursor()
     return_val = dumps(login_backend(cur, data['email'], data['password']))
     if 'success' in return_val:
@@ -437,7 +438,7 @@ def server_notifications_get_v1():
 if __name__ == "__main__":
     signal.signal(signal.SIGINT, quit_gracefully)  # For coverage
     try:
-        db_conn = psycopg2.connect('dbname=wait_management_system user=lubuntu password=lubuntu')
+        db_conn = psycopg2.connect('dbname=wait_management_system user=kscode password=FlowerDance1248')
         print(db_conn)
         # conn.close()
     except Exception as e:
