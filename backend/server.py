@@ -181,9 +181,9 @@ def manager_add_category_flask():
 @APP.route("/manager/delete_category", methods=['GET'])
 def manager_delete_category_flask():
     manager_id = request.args.get("manager_id")
-    category_name = request.args.get("category_name")
+    category_id = request.args.get("category_id")
     cur = cur_dict['staff'][manager_id]
-    return dumps(manager_delete_category(cur, category_name))
+    return dumps(manager_delete_category(cur, category_id))
 
 @APP.route("/manager/add_menu_item", methods=['GET'])
 def manager_add_menu_item_flask():
@@ -195,9 +195,9 @@ def manager_add_menu_item_flask():
 @APP.route("/manager/delete_menu_item", methods=['GET'])
 def manager_delete_menu_item_flask():
     manager_id = request.args.get("manager_id")
-    menu_item_name = request.args.get("menu_item_name")
+    menu_item_id = request.args.get("menu_item_id")
     cur = cur_dict['staff'][manager_id]
-    return dumps(manager_delete_menu_item(cur, menu_item_name))
+    return dumps(manager_delete_menu_item(cur, menu_item_id))
 
 
 # Customer functions
