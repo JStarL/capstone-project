@@ -16,7 +16,7 @@ create table staff (
     email       text not null unique check (email ~ '.*@.*'),
     name        text not null, -- Add an alphanumeric check?
     password    text not null,
-    menu_id     integer not null unique,
+    menu_id     integer not null,
     staff_type  ManagerType not null
 
     primary key (id),
