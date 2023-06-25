@@ -14,32 +14,30 @@ def login_backend(cur, email, password):
     invalid_password = { 'error': 'invalid password' }
     logged_in = { 'success': 'logged in' }
 
-
-    query1 = """
-    select password from managers where email = %s;
-    """
-    query2 = """
-    select password from staff where email = %s;
+    query = """
+    select password, id, menu_id, staff_type from staff where email = %s;
     """
 
-    cur.execute(query1, [email])
+    cur.execute(query, [email])
     list1 = cur.fetchall()
     
     if len(list1) == 0:
-        # Not a manager, maybe a staff
-        cur.execute(query2, [email])
-        list1 = cur.fetchall()
-        if len(list1) == 0:
-            # nobody has this email
-            return invalid_email
+        return invalid_email
+    else:
         # Access and compare staff's password
         if password == list1[0][0]:
-            return logged_in
-        else:
-            return invalid_password
-    else:
-        # Access and compare manager's password
-        if password == list1[0][0]:
+            logged_in['staff_id'] = list[0][1]
+            logged_in['menu_id'] = list[0][2]
+            
+            staff_type = list[0][3]
+            if staff_type == 'M':
+                logged_in['staff_type'] = 'manager'
+            elif staff_type == 'W':
+                logged_in['staff_type'] = 'wait'
+            elif staff_type == 'K':
+                logged_in['staff_type'] = 'kitchen'
+            else
+                logged_in['staff_type'] = 'invalid'
             return logged_in
         else:
             return invalid_password
