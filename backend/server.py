@@ -47,7 +47,7 @@ from src.standup_send_v1 import standup_send_v1
 from src.search_v1 import search_v1
 
 
-from manager import manager_view_menu, manager_view_menu_item, manager_add_category, manager_remove_category, manager_add_menu_item, manager_remove_menu_item
+from manager import manager_view_menu, manager_view_food_item, manager_add_category, manager_delete_category, manager_add_menu_item, manager_delete_menu_item
 from auth import login_backend
 
 def quit_gracefully(*args):
@@ -179,7 +179,7 @@ def manager_add_category_flask():
     return dumps(manager_add_category(cur, category_name))
 
 @APP.route("/manager/delete_category", methods=['GET'])
-def manager_delete_category_flask():
+def manager_remove_category_flask():
     manager_id = request.args.get("manager_id")
     category_id = request.args.get("category_id")
     cur = cur_dict['staff'][manager_id]
