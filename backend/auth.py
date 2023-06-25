@@ -1,5 +1,6 @@
 db_conn = None
 
+
 def login_backend(cur, email, password):
     
     # This Login is for both managers and staff
