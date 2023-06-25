@@ -76,20 +76,35 @@ APP.register_error_handler(Exception, defaultHandler)
 # NO NEED TO MODIFY ABOVE THIS POINT, EXCEPT IMPORTS
 db_conn = None
 
+# Will be changed on future sprints. ID will replace email.
 # cur_dict = {
 #     'managers': {
-#         123: cur1, # manager_id: cursor
-#         234: cur2,
+#         manager@gmail.com: cur1, # manager_email: cursor
+#         manager2@gmail.com: cur2,
 #     },
 #     'staff': {
-#         5777: cur3, # kitchen / wait staff id: cursor
-#         2993: cur4,
+#         kitchen@gmail.com: cur3, # kitchen / wait staff email: cursor
+#         wait_staff@gmail.com: cur4,
 #     },
 #     'customers': {
 #         123456: cur5, # session_id: cursor
 #         234567: cur6
 #     }
 # }
+
+cur_dict = {
+    'managers': {
+        
+    },
+    
+    'staff': {
+        
+    },
+    
+    'customers': {
+        
+    }
+}
 
 """ EXAMPLE FLASK AND SERVER FUNCTIONS """
 # LOOK AT ME!
