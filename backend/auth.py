@@ -40,11 +40,10 @@ def login_backend(cur, email, password):
         
 def register_backend(cur, email, password, name, resturant_name, location):
 
-    # NOTE: The token used is their 'email' for now,
-    # since managers and staff are stored in different tables
-    
+    # NOTE: The token used is their 'email' for now
+
     invalid_register = { 'error': 'invalid' }
-    registered = { 'success': 'Registered' }
+    registered = { 'success': 'registered' }
     
     query2 = """
     INSERT INTO menus (restaurant_name, restaurant_loc)
@@ -64,27 +63,31 @@ def register_backend(cur, email, password, name, resturant_name, location):
     """
     
     query4 = """
-    SELECT s.id, m.id 
-    FROM staff s
-    INNER JOIN menus m
-    ON s.menu_id = m.id
-    where s.email = %s
-    AND s.password = %s;
+    SELECT id 
+    FROM staff
+    where email = %s
+    ;
     """
 
     cur.execute(query2, [resturant_name, location]) #adding in the database of the menus
     cur.execute(query3, [resturant_name, location]) #grabbing the id of the menu
     list1 = cur.fetchall()
     
-    cur.execute(query, [email, name, password, list1[0][0]]) #adding in the database of the staff
-    cur.execute(query4, [email, name, password, list1[0][0]]) #grabbing the manager id and menu id
+    if len(list1) == 0:
+        return invalid_register
+    
+    menu_id = list1[0][0]
+
+    cur.execute(query, [email, name, password, menu_id]) #adding in the database of the staff
+    cur.execute(query4, [email]) #grabbing the manager id
     list1 = cur.fetchall()
     
     if len(list1) == 0: #if it breaks and didn't get anything
         return invalid_register
-    else:
-        # adding the values to be returned
-        registered_tuple = list1[0]
-        registered['manager_id'] = registered_tuple[0]
-        registered['menu_id'] = registered_tuple[1]
-        return registered
+    
+    staff_id = list1[0][0]
+    
+    # adding the values to be returned
+    registered['manager_id'] = staff_id
+    registered['menu_id'] = menu_id
+    return registered
