@@ -455,7 +455,7 @@ if __name__ == "__main__":
         # conn.close()
     except Exception as e:
         print( 'Unable to connect to database: ' + str(e))
-    port = 8880
+    port = 8880 # Default Port Number
     if len(sys.argv) > 1:
         port = int(sys.argv[1])
     APP.run(port=port)  # Do not edit this port
