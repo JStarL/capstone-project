@@ -6,46 +6,6 @@ import psycopg2
 
 from src import config
 
-from src.echo import echo_v2
-from src.other import clear_v1
-from src.auth import auth_login_v2, auth_register_v2, auth_logout_v1
-from src.channels import channels_create_v2, channels_list_v2, channels_listall_v2
-from src.channel import channel_join_v2, channel_invite_v2, channel_details_v2, channel_messages_v2
-from src.channel_leave_v1 import channel_leave_v1
-from src.channel_addowner_v1 import channel_addowner_v1
-from src.channel_removeowner_v1 import channel_removeowner_v1
-from src.dm_create_v1 import dm_create_v1
-from src.dm_list_v1 import dm_list_v1
-from src.dm_leave_v1 import dm_leave_v1
-from src.dm_remove_v1 import dm_remove_v1
-from src.dm_details_v1 import dm_details_v1
-from src.dm_messages_v1 import dm_messages_v1
-from src.message_send_v1 import message_send_v1
-from src.message_edit_v1 import message_edit_v1
-from src.message_share_v1 import message_share_v1
-from src.message_remove_v1 import message_remove_v1
-from src.message_senddm_v1 import message_senddm_v1
-from src.users import users_all_v1
-from src.user_profile_v1 import user_profile_v1
-from src.user_profile_setemail_v1 import user_profile_setemail_v1
-from src.user_profile_sethandle_v1 import user_profile_sethandle_v1
-from src.user_profile_setname_v1 import user_profile_setname_v1
-from src.admin import admin_user_remove_v1, admin_userpermission_change_v1
-from src.user_stats_v1 import user_stats_v1
-from src.users_stats_v1 import users_stats_v1
-from src.user_profile_uploadphoto_v1 import user_profile_uploadphoto_v1
-from src.notifications_get_v1 import notifications_get_v1
-from src.message_pin_v1 import message_pin_v1
-from src.message_unpin_v1 import message_unpin_v1
-from src.message_react_v1 import message_react_v1
-from src.message_unreact_v1 import message_unreact_v1
-from src.message_sendlater_v1 import message_sendlater_v1
-from src.message_sendlaterdm_v1 import message_sendlaterdm_v1
-from src.standup_start_v1 import standup_start_v1
-from src.standup_active_v1 import standup_active_v1
-from src.standup_send_v1 import standup_send_v1
-from src.search_v1 import search_v1
-
 
 from manager import manager_view_menu, manager_view_food_item, manager_add_category, manager_delete_category, manager_add_menu_item, manager_delete_menu_item
 from auth import login_backend
