@@ -7,53 +7,91 @@ import LogoutButton from './components/LogoutButton';
 import AddStaffPage from './pages/AddStaffPage';
 import ManagerMenuPage from './pages/ManagerMenuPage';
 import NewMenuItemPage from './pages/NewMenuItemPage';
+import RegisterPage from './pages/RegisterPage';
 
 function App() {
-  const Nav = () => {
+  const [id, setId] = React.useState(null);
+
+  React.useEffect(function () {
+    if (localStorage.getItem('staff_id')) {
+      setId(localStorage.getItem('staff_id'));
+    }
+  }, []);
+
+  const login = (staff_id) => {
+    setId(staff_id);
+    localStorage.setItem('staff_id', staff_id);
+  }
+
+  const logout = () => {
+    console.log('logout')
+    setId(null);
+    localStorage.removeItem('staff_id');
+    localStorage.clear()
+  }
+
+  const Nav2 = () => {
     return (
       <nav>
         <div className="nav-container">
           <div className="links-container">
-            <span className="link"><Link to='/login'>Manager Login</Link></span>
+            <span className="link"><Link to='/'>Manager Login</Link></span>
             <span className="link"><Link to='/addstaff  '>Add Staff</Link></span>
             <span className="link"><Link to='/category'>Category</Link></span>
             <span className="link"><Link to='/manager/menu'>Menu</Link></span>
             <span className="link"><Link to='/manager/addnewmenuitem'>New Menu Item</Link></span>
           </div>
         </div>
-        <LogoutButton className='logout-button'>Logout</LogoutButton>
+        <LogoutButton className='logout-button' logout={logout}>Logout</LogoutButton>
       </nav>
     )
   }
 
-  const Dashboard = () => {
+  const Nav = () => {
     return (
-      <div className="dashboard">
-        Main Screen
-      </div>
+      <nav>
+        <div className='nav-container'>
+          <div className='links-container'>
+            <span className="link"><Link to='/'>Login</Link></span>
+            <span className="link"><Link to='/register  '>Register</Link></span>
+          </div>
+        </div>
+        
+      </nav>
     )
   }
+
+  React.useEffect(function () {
+    if (localStorage.getItem('staff_id')) {
+      setId(localStorage.getItem('staff_id'));
+    }
+  }, []);
   
   return (
     <div className="App">
       <BrowserRouter>
       <header>
-        <Nav />
+        {['/', '/login', '/register', '/addstaff', '/manager/menu', '/manager/addnewmenuitem', '/manager/setup'].includes(window.location.pathname) ? (
+          id === null ? <Nav /> : <Nav2 />
+        ) : null}
       </header>
-        <main>
-          <Routes>
-            <Route path='/' element={<Dashboard />}/>
-            <Route path='/login' element={<ManagerLoginPage />}/>
-            <Route path='/addstaff' element={<AddStaffPage />}/>
-            <Route path='/manager/menu' element={<ManagerMenuPage />}/>
-            <Route path='/manager/addnewmenuitem' element={<NewMenuItemPage />}/>
-          </Routes>
-        </main>
-        <footer>
+      <main>
+        <Routes>
+          <Route path='/' element={<ManagerLoginPage onSuccess={login} />} />
+          <Route path='/register' element={<RegisterPage onSuccess={login} />} />
+          <Route path='/addstaff' element={<AddStaffPage />} />
+          <Route path='/manager/menu' element={<ManagerMenuPage />} />
+          <Route path='/manager/addnewmenuitem' element={<NewMenuItemPage />} />
+        </Routes>
+      </main>
+      <footer>
+        {id === null ? null : (
           <div className="footer-container">
             <Button><Link to='/addstaff'>Add Staff</Link></Button>
           </div>
-        </footer>
+        )}
+      </footer>
+        
       </BrowserRouter>
     </div>
   );

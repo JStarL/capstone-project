@@ -1,12 +1,17 @@
 import React from 'react';
 import '../App.css';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import { Button, TextField, Typography, Paper } from '@mui/material';
 
-function ManagerLoginPage () {
+function ManagerLoginPage ({ onSuccess }) {
   const [email, setEmail] = React.useState('');
   const [password, setPassword] = React.useState('');
   const navigate = useNavigate();
+
+  function login () {
+    onSuccess(1);
+    navigate('/manager/menu')
+  }
 
   return <>
   <div className='login-page'>
@@ -35,7 +40,8 @@ function ManagerLoginPage () {
       fullWidth
       value={password}
     />
-    <Button onClick={ () => { navigate('/manager/menu') } }>Log In</Button>
+    <Button onClick={login}>Log In</Button>
+    <span className="link"><Link to='/register'>New Manager? Sign Up Here!</Link></span>
     </form>
   </Paper>
   </div>

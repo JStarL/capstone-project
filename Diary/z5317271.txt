@@ -13,7 +13,7 @@ Meeting/Tutorial
 - Finalised due dates for each sprint
 - Finalised Novel Functions - Personalised Allergy identifying system, Best selling category in menu
 
-Individual Work
+Work Done:
 - Added acceptance criterias to each user story
 
 WEEK THREE
@@ -22,10 +22,22 @@ Meeting/Tutorial
 - Discussed possible ways a manager can register
 - Allocation of roles
 
-Individual Work
+Work Done:
 - Finalised acceptance criterias for novel functionalities
-- Made screens
+- Made screens for proposal
   - Customer - menu viewing screen, 
   - Wait staff - view pending orders, customer assistance screen
   - Kitchen staff - view pending orders screen
   - Manager - screen to edit, add, delete categories/menu items on the menu
+
+WEEK FOUR
+Meeting/Tutorial
+- Made a document with all HTTP Routes needed to connect the frontend and backend
+- Allocated tasks to work on different screens for the frontend
+- Discussed which data will be needed from the backend to the frontend
+- Dicussed how to link all HTTP requests into one function
+
+Work Done:
+- Started working on the frontend, created a frontend skeleton for login page, register page, menu page, menu update page
+- Created folders for components and pages
+- Created an interface with dummy buttons, so that when backend is ready, all we have to do is connect them both
