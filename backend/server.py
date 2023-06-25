@@ -78,7 +78,7 @@ db_conn = None
 # LOOK AT ME!
 # LOOK AT ME!
 
-def login_backend(email, password):
+def login_backend(cur, email, password):
     
     # This Login is for both managers and staff
     # whose information is stored in 2 diff tables
@@ -98,7 +98,7 @@ def login_backend(email, password):
     query2 = """
     select password from staff where email = %s
     """
-    cur = db_conn.cursor()
+
     cur.execute(query1, [email])
     list1 = cur.fetchall()
     
@@ -127,7 +127,8 @@ def login_backend(email, password):
 def login_flask():
     # For POST, it's a bit different to GET
     data = request.get_json()
-    return dumps(login_backend(data['email'], data['password']))
+    cur = db_conn.cursor()
+    return dumps(login_backend(cur, data['email'], data['password']))
 
 # LOOK AT ME!
 # LOOK AT ME!
