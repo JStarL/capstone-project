@@ -156,15 +156,14 @@ def auth_logout():
 # Manager functions
 
 @APP.route("/manager/view_menu", methods=['GET'])
-def manager_view_menu():
+def manager_view_menu_flask():
     manager_id = request.args.get("manager_id")
     menu_id = request.args.get("menu_id")
     cur = cur_dict['staff'][manager_id]
-    
     return dumps(manager_view_menu(cur, manager_id, menu_id))
 
 @APP.route("/manager/view_food_item", methods=['GET'])
-def manager_view_food_item():
+def manager_view_food_item_flask():
     manager_id = request.args.get("manager_id")
     menu_id = request.args.get("menu_id")
     food_id = request.args.get("food_id")
@@ -172,30 +171,39 @@ def manager_view_food_item():
     return dumps(manager_view_food_item(cur, manager_id, menu_id, food_id))
 
 @APP.route("/manager/add_category", methods=['GET'])
-def manager_add_category():
+def manager_add_category_flask():
+    manager_id = request.args.get("manager_id")
     category_name = request.args.get("category_name")
-    return dumps(manager_add_category(category_name))
+    cur = cur_dict['staff'][manager_id]
+    return dumps(manager_add_category(cur, category_name))
 
 @APP.route("/manager/delete_category", methods=['GET'])
-def manager_delete_category():
+def manager_delete_category_flask():
+    manager_id = request.args.get("manager_id")
     category_name = request.args.get("category_name")
-    return dumps(manager_delete_category(category_name))
+    cur = cur_dict['staff'][manager_id]
+    return dumps(manager_delete_category(cur, category_name))
 
 @APP.route("/manager/add_menu_item", methods=['GET'])
-def manager_add_menu_item():
+def manager_add_menu_item_flask():
+    manager_id = request.args.get("manager_id")
     menu_item_name = request.args.get("menu_item_name")
-    return dumps(manager_add_menu_item(menu_item_name))
+    cur = cur_dict['staff'][manager_id]
+    return dumps(manager_add_menu_item(cur, menu_item_name))
 
 @APP.route("/manager/delete_menu_item", methods=['GET'])
-def manager_delete_menu_item():
+def manager_delete_menu_item_flask():
+    manager_id = request.args.get("manager_id")
     menu_item_name = request.args.get("menu_item_name")
-    return dumps(manager_delete_menu_item(menu_item_name))
+    cur = cur_dict['staff'][manager_id]
+    return dumps(manager_delete_menu_item(cur, menu_item_name))
 
 
 # Customer functions
 
 @APP.route("/customer/view_menu", methods=['GET'])
-def customer_view_menu():
+def customer_view_menu_flask():
+    
     menu_id = request.args.get("menu_id")
     return dumps(customer_view_menu(menu_id))
 
