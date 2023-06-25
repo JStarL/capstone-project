@@ -76,6 +76,21 @@ APP.register_error_handler(Exception, defaultHandler)
 # NO NEED TO MODIFY ABOVE THIS POINT, EXCEPT IMPORTS
 db_conn = None
 
+# cur_dict = {
+#     'managers': {
+#         123: cur1, # manager_id: cursor
+#         234: cur2,
+#     },
+#     'staff': {
+#         5777: cur3, # kitchen / wait staff id: cursor
+#         2993: cur4,
+#     },
+#     'customers': {
+#         123456: cur5, # session_id: cursor
+#         234567: cur6
+#     }
+# }
+
 """ EXAMPLE FLASK AND SERVER FUNCTIONS """
 # LOOK AT ME!
 # LOOK AT ME!
@@ -86,7 +101,9 @@ def login_flask():
     # For POST, it's a bit different to GET
     data = request.get_json()
     cur = db_conn.cursor()
-    return dumps(login_backend(cur, data['email'], data['password']))
+    return_val = dumps(login_backend(cur, data['email'], data['password']))
+    cur.close()
+    return return_val
 
 # LOOK AT ME!
 # LOOK AT ME!
