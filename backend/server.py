@@ -62,36 +62,20 @@ cur_dict = {
     }
 }
 
-""" EXAMPLE FLASK AND SERVER FUNCTIONS """
-# LOOK AT ME!
-# LOOK AT ME!
-# LOOK AT ME!
-
-@APP.route('/auth/login', methods=['POST'])
-def login_flask():
-    # For POST, it's a bit different to GET
-    data = request.get_json()
-    cur = db_conn.cursor()
-    return_val = dumps(login_backend(cur, data['email'], data['password']))
-    if 'success' in return_val:
-        cur_dict['staff'][data['email']] = cur
-    return return_val
-
-# LOOK AT ME!
-# LOOK AT ME!
-# LOOK AT ME!
-
-@APP.route("/echo", methods=['GET'])
-def echo():
-    data = request.args.get('data')
-    return dumps({
-        'data': echo_v2(data)
-    })
 
 
-@APP.route('/clear/v1', methods=['DELETE'])
-def clear():
-    return dumps(clear_v1())
+
+# @APP.route("/echo", methods=['GET'])
+# def echo():
+#     data = request.args.get('data')
+#     return dumps({
+#         'data': echo_v2(data)
+#     })
+
+
+# @APP.route('/clear/v1', methods=['DELETE'])
+# def clear():
+#     return dumps(clear_v1())
 
 
 # Auth functions
@@ -102,11 +86,14 @@ def auth_register():
     data = request.get_json()
     return dumps(auth_register_v2(data['email'], data['password'], data['name_first'], data['name_last']))
 
-
-@APP.route('/auth/login/v2', methods=['POST'])
-def auth_login():
+@APP.route('/auth/login', methods=['POST'])
+def login_flask():
     data = request.get_json()
-    return dumps(auth_login_v2(data['email'], data['password']))
+    cur = db_conn.cursor()
+    return_val = dumps(login_backend(cur, data['email'], data['password']))
+    if 'success' in return_val:
+        cur_dict['staff'][data['email']] = cur
+    return return_val
 
 @APP.route('/auth/logout/v1', methods=['POST'])
 def auth_logout():
@@ -169,7 +156,7 @@ def customer_view_menu_flask():
 ##############################################################################################################################
 
 # Channels functions
-
+'''
 
 @APP.route("/channels/create/v2", methods=['POST'])
 def server_channels_create_v2():
@@ -442,7 +429,7 @@ def server_search_v1():
 def server_notifications_get_v1():
     token = request.args.get('token')
     return dumps(notifications_get_v1(token))
-
+'''
 
 # NO NEED TO MODIFY BELOW THIS POINT
 
