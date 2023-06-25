@@ -1,4 +1,4 @@
-create domain StaffType as char(1) check (value in ('M', 'K', 'W'))
+create domain StaffType as char(1) check (value in ('M', 'K', 'W'));
 -- 'M' = Manager
 -- 'K' = Kitchen Staff
 -- 'W' = Wait Staff
@@ -17,7 +17,7 @@ create table staff (
     name        text not null, -- Add an alphanumeric check?
     password    text not null,
     menu_id     integer not null,
-    staff_type  StaffType not null
+    staff_type  StaffType not null,
 
     primary key (id),
     foreign key (menu_id) references menus(id)
@@ -32,10 +32,10 @@ from staff s join menus m on (s.menu_id = m.id)
 
 create table categories (
     id          serial,
-    name        text not null
+    name        text not null,
     menu_id     integer not null, 
     
-    primary key (id)
+    primary key (id),
     foreign key (menu_id) references menus(id)
 
 );
@@ -51,8 +51,8 @@ create table food_items (
     category_id         integer not null,
     menu_id             integer not null,
 
-    primary key (id)    
-    foreign key (category_id) references categories(id)
+    primary key (id),
+    foreign key (category_id) references categories(id),
     foreign key (menu_id) references menus(id)
 );
 
