@@ -160,6 +160,7 @@ def manager_view_menu_flask():
     manager_id = request.args.get("manager_id")
     menu_id = request.args.get("menu_id")
     cur = cur_dict['staff'][manager_id]
+    
     return dumps(manager_view_menu(cur, manager_id, menu_id))
 
 @APP.route("/manager/view_food_item", methods=['GET'])
@@ -203,7 +204,6 @@ def manager_delete_menu_item_flask():
 
 @APP.route("/customer/view_menu", methods=['GET'])
 def customer_view_menu_flask():
-    
     menu_id = request.args.get("menu_id")
     return dumps(customer_view_menu(menu_id))
 
