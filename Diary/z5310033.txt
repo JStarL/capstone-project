@@ -60,4 +60,13 @@ Week 4
 
 Working on frontend coding: 
 - Manager Sign Up 
-- Settign up Categories
+- Setting up Categories
+
+Week 5
+- Meeting Monday 26/6/23
+- Planning for the demo 
+  - Delegate roles for what to present during the demo
+  - schedule demo practice run for Thursday
+- Working on manager adding a new staff page 
+
+
