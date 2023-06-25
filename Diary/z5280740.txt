@@ -40,7 +40,7 @@ We spent a considerable amount of time trying to setup the vm environment, which
 choose because of our choice of PostgreSQL. I spent a lot of time helping Rohan and Pat with VM setup,
 and created a SETUP.md file in the main branch to make everyone's life easier.
 
-Later in the week, I learnt some SQL and made the initia database schema (without data), and also discussed and
+Later in the week, I learnt some SQL and made the initial database schema (without data), and also discussed and
 made changes to some of the backend Flask wrapper functions.
 
 For next week we plan to continue coding, and I would probably help with the backend psycopg2 functions which need SQL
