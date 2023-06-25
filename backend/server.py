@@ -47,6 +47,9 @@ from src.standup_send_v1 import standup_send_v1
 from src.search_v1 import search_v1
 
 
+from manager import manager_view_menu, manager_view_menu_item, manager_add_category, manager_remove_category, manager_add_menu_item, manager_remove_menu_item
+from auth import login_backend
+
 def quit_gracefully(*args):
     '''For coverage'''
     exit(0)
@@ -77,51 +80,6 @@ db_conn = None
 # LOOK AT ME!
 # LOOK AT ME!
 # LOOK AT ME!
-
-def login_backend(email, password):
-    
-    # This Login is for both managers and staff
-    # whose information is stored in 2 diff tables
-    # so we need to check both tables
-
-    # NOTE: The token used is their 'email' for now,
-    # since managers and staff are stored in different tables
-    
-    invalid_email = { 'error': 'invalid email' }
-    invalid_password = { 'error': 'invalid password' }
-    logged_in = { 'success': 'logged in' }
-
-
-    query1 = """
-    select password from managers where email = %s
-    """
-    query2 = """
-    select password from staff where email = %s
-    """
-    cur = db_conn.cursor()
-    cur.execute(query1, [email])
-    list1 = cur.fetchall()
-    
-    if len(list1) == 0:
-        # Not a manager, maybe a staff
-        cur.execute(query2, [email])
-        list1 = cur.fetchall()
-        if len(list1) == 0:
-            # nobody has this email
-            return invalid_email
-        # Access and compare staff's password
-        if password == list1[0][0]:
-            return logged_in
-        else:
-            return invalid_password
-    else:
-        # Access and compare manager's password
-        if password == list1[0][0]:
-            return logged_in
-        else:
-            return invalid_password
-
-
 
 @APP.route('/auth/login', methods=['POST'])
 def login_flask():
@@ -160,11 +118,55 @@ def auth_login():
     data = request.get_json()
     return dumps(auth_login_v2(data['email'], data['password']))
 
-
 @APP.route('/auth/logout/v1', methods=['POST'])
 def auth_logout():
     data = request.get_json()
     return dumps(auth_logout_v1(data['token']))
+
+# Manager functions
+
+@APP.route("/manager/viewmenu", methods=['GET'])
+def manager_view_menu():
+    manager_id = request.args.get("manager_id")
+    menu_id = request.args.get("menu_id")
+    return dumps(manager_view_menu(manager_id, menu_id))
+
+@APP.route("/manager/viewfooditem", methods=['GET'])
+def manager_view_food_item():
+    manager_id = request.args.get("manager_id")
+    menu_id = request.args.get("menu_id")
+    food_id = request.args.get("food_id")
+    return dumps(manager_view_food_item(manager_id, menu_id, food_id))
+
+@APP.route("/manager/addcategory", methods=['GET'])
+def manager_add_category():
+    category_name = request.args.get("category_name")
+    return dumps(manager_add_category(category_name))
+
+@APP.route("/manager/deletecategory", methods=['GET'])
+def manager_delete_category():
+    category_name = request.args.get("category_name")
+    return dumps(manager_delete_category(category_name))
+
+@APP.route("/manager/addmenuitem", methods=['GET'])
+def manager_add_menuitem():
+    menu_item_name = request.args.get("menu_item_name")
+    return dumps(manager_add_menuitem(menu_item_name))
+
+@APP.route("/manager/deletemenuitem", methods=['GET'])
+def manager_delete_menuitem():
+    menu_item_name = request.args.get("menu_item_name")
+    return dumps(manager_delete_menuitem(menu_item_name))
+
+
+# Customer functions
+
+@APP.route("/customer/viewmenu", methods=['GET'])
+def customer_view_menu():
+    menu_id = request.args.get("menu_id")
+    return dumps(customer_view_menu(menu_id))
+
+##############################################################################################################################
 
 
 # Channels functions
