@@ -1,10 +1,6 @@
 
 
 def login_backend(cur, email, password):
-    
-    # This Login is for both managers and staff
-    # whose information is stored in 2 diff tables
-    # so we need to check both tables
 
     # NOTE: The token used is their 'email' for now,
     # since managers and staff are stored in different tables
@@ -24,11 +20,12 @@ def login_backend(cur, email, password):
         return invalid_email
     else:
         # Access and compare staff's password
-        if password == list1[0][0]:
-            logged_in['staff_id'] = list[0][1]
-            logged_in['menu_id'] = list[0][2]
+        logged_in_tuple = list1[0]
+        if password == logged_in_tuple[0]:
+            logged_in['staff_id'] = logged_in_tuple[1]
+            logged_in['menu_id'] = logged_in_tuple[2]
             
-            staff_type = list[0][3]
+            staff_type = logged_in_tuple[3]
             if staff_type == 'M':
                 logged_in['staff_type'] = 'manager'
             elif staff_type == 'W':
