@@ -1,6 +1,7 @@
 db_conn = None
 
-def login_backend(email, password):
+
+def login_backend(cur, email, password):
     
     # This Login is for both managers and staff
     # whose information is stored in 2 diff tables
@@ -20,7 +21,7 @@ def login_backend(email, password):
     query2 = """
     select password from staff where email = %s
     """
-    cur = db_conn.cursor()
+
     cur.execute(query1, [email])
     list1 = cur.fetchall()
     
