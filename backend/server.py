@@ -9,7 +9,7 @@ import ast
 
 
 from manager import manager_view_menu, manager_view_food_item, manager_add_category, manager_delete_category, manager_add_menu_item, manager_delete_menu_item
-from auth import login_backend
+from auth import login_backend, register_backend
 from customer import customer_view_menu
 
 def quit_gracefully(*args):
@@ -84,9 +84,14 @@ cur_dict = {
 
 
 @APP.route('/auth/register', methods=['POST'])
-def auth_register():
-    data = request.get_json()
-    return dumps(auth_register(data['email'], data['password'], data['name_first'], data['name_last']))
+def register_flask():
+    data = ast.literal_eval(request.get_json())
+    cur = db_conn.cursor()
+    return_val = dumps(register_backend(cur, data['email'], data['password'], data['name'], data['resturant_name'], data['location']))
+    if 'success' in return_val:
+        cur_dict['staff'][data['email']] = cur
+    db_conn.commit()
+    return return_val
 
 @APP.route('/auth/login', methods=['POST'])
 def login_flask():
