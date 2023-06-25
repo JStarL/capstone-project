@@ -16,10 +16,10 @@ def login_backend(cur, email, password):
 
 
     query1 = """
-    select password from managers where email = %s
+    select password from managers where email = %s;
     """
     query2 = """
-    select password from staff where email = %s
+    select password from staff where email = %s;
     """
 
     cur.execute(query1, [email])
