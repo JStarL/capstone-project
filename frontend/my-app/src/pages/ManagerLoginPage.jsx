@@ -2,6 +2,7 @@ import React from 'react';
 import '../App.css';
 import { useNavigate, Link } from 'react-router-dom';
 import { Button, TextField, Typography, Paper } from '@mui/material';
+import makeRequest from '../makeRequest.jsx'
 
 function ManagerLoginPage ({ onSuccess }) {
   const [email, setEmail] = React.useState('');
@@ -9,8 +10,20 @@ function ManagerLoginPage ({ onSuccess }) {
   const navigate = useNavigate();
 
   function login () {
-    onSuccess(1);
-    navigate('/manager/menu')
+    const body = JSON.stringify({
+      email,
+      password
+    })
+    makeRequest('/auth/login', 'POST', body, undefined)
+    .then(data => {
+      if (data.hasOwnProperty('success')) {
+        onSuccess(data['staff_id'])
+        navigate('/manager/menu')
+      } else {
+        alert(data['error'])
+      }
+    })
+    .catch(e => console.log('Error: ' + e))
   }
 
   return <>
@@ -41,6 +54,7 @@ function ManagerLoginPage ({ onSuccess }) {
       value={password}
     />
     <Button onClick={login}>Log In</Button>
+    <br></br>
     <span className="link"><Link to='/register'>New Manager? Sign Up Here!</Link></span>
     </form>
   </Paper>

@@ -39,6 +39,7 @@ body {
     margin: 3px;
     width: 70%;
     justify-content: flex-start;
+    text-align: left;
 }
 
 .food-item-button {

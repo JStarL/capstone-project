@@ -1,32 +1,33 @@
 // import React from 'react';
 // import PropTypes from 'prop-types';
-const configData = require('../config.json');
-const BACKEND_BASE_URL = 'http://localhost:' + configData.BACKEND_PORT;
+// const configData = require('../config.json');
+const BACKEND_PORT = 8880;
+// const BACKEND_BASE_URL = 'http://localhost:' + BACKEND_PORT;
 
-export const fetchFromBackend = (subUrl, methodType, reqBody, token) => {
-  return new Promise((resolve, reject) => {
-    const reqHeaders = new Headers();
+// export const fetchFromBackend = (subUrl, methodType, reqBody, token) => {
+//   return new Promise((resolve, reject) => {
+//     const reqHeaders = new Headers();
 
-    reqHeaders.set('accept', 'application/json');
+//     reqHeaders.set('accept', 'application/json');
 
-    if (reqBody !== undefined) {
-      reqHeaders.set('Content-Type', 'application/json');
-    }
+//     if (reqBody !== undefined) {
+//       reqHeaders.set('Content-Type', 'application/json');
+//     }
 
-    if (!(subUrl.startsWith('/admin/auth/register') || subUrl.startsWith('/admin/auth/login'))) {
-      reqHeaders.set('Authorization', 'Bearer ' + token);
-    }
+//     if (!(subUrl.startsWith('/admin/auth/register') || subUrl.startsWith('/admin/auth/login'))) {
+//       reqHeaders.set('Authorization', 'Bearer ' + token);
+//     }
 
-    fetch(BACKEND_BASE_URL + subUrl, {
-      method: methodType,
-      headers: reqHeaders,
-      body: JSON.stringify(reqBody)
-    })
-      .then(res => res.json())
-      .then(val => resolve(val))
-      .catch(err => reject(err));
-  })
-};
+//     fetch(BACKEND_BASE_URL + subUrl, {
+//       method: methodType,
+//       headers: reqHeaders,
+//       body: JSON.stringify(reqBody)
+//     })
+//       .then(res => res.json())
+//       .then(val => resolve(val))
+//       .catch(err => reject(err));
+//   })
+// };
 
 
 const makeRequest = async (route, method, body, token) => {
@@ -52,9 +53,10 @@ const makeRequest = async (route, method, body, token) => {
     options.body = JSON.stringify(body);
   }
 
-  const response = await fetch('http://localhost:5005' + route, options)
+  const response = await fetch('http://localhost:' + BACKEND_PORT + route, options)
   const data = await response.json()
-  if (data.error) {
+  if (data['error']) {
+    console.log('There was an error: ' + data['error'])
     alert(data.error);
   } else {
     return data
