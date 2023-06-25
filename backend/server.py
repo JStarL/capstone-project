@@ -81,7 +81,7 @@ db_conn = None
 #     'managers': {
 #         manager@gmail.com: cur1, # manager_email: cursor
 #         manager2@gmail.com: cur2,
-#     },
+#     }, 
 #     'staff': {
 #         kitchen@gmail.com: cur3, # kitchen / wait staff email: cursor
 #         wait_staff@gmail.com: cur4,
@@ -93,10 +93,6 @@ db_conn = None
 # }
 
 cur_dict = {
-    'managers': {
-        
-    },
-    
     'staff': {
         
     },
@@ -117,7 +113,8 @@ def login_flask():
     data = request.get_json()
     cur = db_conn.cursor()
     return_val = dumps(login_backend(cur, data['email'], data['password']))
-    cur.close()
+    if 'success' in return_val:
+        cur_dict['staff'][data['email']] = cur
     return return_val
 
 # LOOK AT ME!
@@ -158,43 +155,46 @@ def auth_logout():
 
 # Manager functions
 
-@APP.route("/manager/viewmenu", methods=['GET'])
+@APP.route("/manager/view_menu", methods=['GET'])
 def manager_view_menu():
     manager_id = request.args.get("manager_id")
     menu_id = request.args.get("menu_id")
-    return dumps(manager_view_menu(manager_id, menu_id))
+    cur = cur_dict['staff'][manager_id]
+    
+    return dumps(manager_view_menu(cur, manager_id, menu_id))
 
-@APP.route("/manager/viewfooditem", methods=['GET'])
+@APP.route("/manager/view_food_item", methods=['GET'])
 def manager_view_food_item():
     manager_id = request.args.get("manager_id")
     menu_id = request.args.get("menu_id")
     food_id = request.args.get("food_id")
-    return dumps(manager_view_food_item(manager_id, menu_id, food_id))
+    cur = cur_dict['staff'][manager_id]
+    return dumps(manager_view_food_item(cur, manager_id, menu_id, food_id))
 
-@APP.route("/manager/addcategory", methods=['GET'])
+@APP.route("/manager/add_category", methods=['GET'])
 def manager_add_category():
     category_name = request.args.get("category_name")
     return dumps(manager_add_category(category_name))
 
-@APP.route("/manager/deletecategory", methods=['GET'])
+@APP.route("/manager/delete_category", methods=['GET'])
 def manager_delete_category():
     category_name = request.args.get("category_name")
     return dumps(manager_delete_category(category_name))
 
-@APP.route("/manager/addmenuitem", methods=['GET'])
-def manager_add_menuitem():
+@APP.route("/manager/add_menu_item", methods=['GET'])
+def manager_add_menu_item():
     menu_item_name = request.args.get("menu_item_name")
-    return dumps(manager_add_menuitem(menu_item_name))
+    return dumps(manager_add_menu_item(menu_item_name))
 
-@APP.route("/manager/deletemenuitem", methods=['GET'])
-def manager_delete_menuitem():
+@APP.route("/manager/delete_menu_item", methods=['GET'])
+def manager_delete_menu_item():
     menu_item_name = request.args.get("menu_item_name")
-    return dumps(manager_delete_menuitem(menu_item_name))
+    return dumps(manager_delete_menu_item(menu_item_name))
 
 
 # Customer functions
 
-@APP.route("/customer/viewmenu", methods=['GET'])
+@APP.route("/customer/view_menu", methods=['GET'])
 def customer_view_menu():
     menu_id = request.args.get("menu_id")
     return dumps(customer_view_menu(menu_id))
