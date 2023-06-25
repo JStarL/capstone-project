@@ -438,7 +438,7 @@ def server_notifications_get_v1():
 if __name__ == "__main__":
     signal.signal(signal.SIGINT, quit_gracefully)  # For coverage
     try:
-        db_conn = psycopg2.connect('dbname=wait_management_system user=kscode password=FlowerDance1248')
+        db_conn = psycopg2.connect('dbname=wait_management_system user=lubuntu password=lubuntu')
         print(db_conn)
         # conn.close()
     except Exception as e:
