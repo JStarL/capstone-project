@@ -1,4 +1,4 @@
-create domain ManagerType as char(1) check (value in ('M', 'K', 'W'))
+create domain StaffType as char(1) check (value in ('M', 'K', 'W'))
 -- 'M' = Manager
 -- 'K' = Kitchen Staff
 -- 'W' = Wait Staff
@@ -17,7 +17,7 @@ create table staff (
     name        text not null, -- Add an alphanumeric check?
     password    text not null,
     menu_id     integer not null,
-    staff_type  ManagerType not null
+    staff_type  StaffType not null
 
     primary key (id),
     foreign key (menu_id) references menus(id)
