@@ -2,7 +2,6 @@ import signal
 from json import dumps
 from flask import Flask, request
 from flask_cors import CORS
-import psycopg2
 
 from src import config
 
@@ -47,9 +46,6 @@ from src.standup_send_v1 import standup_send_v1
 from src.search_v1 import search_v1
 
 
-from manager import manager_view_menu, manager_view_menu_item, manager_add_category, manager_remove_category, manager_add_menu_item, manager_remove_menu_item
-from auth import login_backend
-
 def quit_gracefully(*args):
     '''For coverage'''
     exit(0)
@@ -74,22 +70,9 @@ APP.config['TRAP_HTTP_EXCEPTIONS'] = True
 APP.register_error_handler(Exception, defaultHandler)
 
 # NO NEED TO MODIFY ABOVE THIS POINT, EXCEPT IMPORTS
-db_conn = None
 
-""" EXAMPLE FLASK AND SERVER FUNCTIONS """
-# LOOK AT ME!
-# LOOK AT ME!
-# LOOK AT ME!
+# Example
 
-@APP.route('/auth/login', methods=['POST'])
-def login_flask():
-    # For POST, it's a bit different to GET
-    data = request.get_json()
-    return dumps(login_backend(data['email'], data['password']))
-
-# LOOK AT ME!
-# LOOK AT ME!
-# LOOK AT ME!
 
 @APP.route("/echo", methods=['GET'])
 def echo():
@@ -118,55 +101,11 @@ def auth_login():
     data = request.get_json()
     return dumps(auth_login_v2(data['email'], data['password']))
 
+
 @APP.route('/auth/logout/v1', methods=['POST'])
 def auth_logout():
     data = request.get_json()
     return dumps(auth_logout_v1(data['token']))
-
-# Manager functions
-
-@APP.route("/manager/viewmenu", methods=['GET'])
-def manager_view_menu():
-    manager_id = request.args.get("manager_id")
-    menu_id = request.args.get("menu_id")
-    return dumps(manager_view_menu(manager_id, menu_id))
-
-@APP.route("/manager/viewfooditem", methods=['GET'])
-def manager_view_food_item():
-    manager_id = request.args.get("manager_id")
-    menu_id = request.args.get("menu_id")
-    food_id = request.args.get("food_id")
-    return dumps(manager_view_food_item(manager_id, menu_id, food_id))
-
-@APP.route("/manager/addcategory", methods=['GET'])
-def manager_add_category():
-    category_name = request.args.get("category_name")
-    return dumps(manager_add_category(category_name))
-
-@APP.route("/manager/deletecategory", methods=['GET'])
-def manager_delete_category():
-    category_name = request.args.get("category_name")
-    return dumps(manager_delete_category(category_name))
-
-@APP.route("/manager/addmenuitem", methods=['GET'])
-def manager_add_menuitem():
-    menu_item_name = request.args.get("menu_item_name")
-    return dumps(manager_add_menuitem(menu_item_name))
-
-@APP.route("/manager/deletemenuitem", methods=['GET'])
-def manager_delete_menuitem():
-    menu_item_name = request.args.get("menu_item_name")
-    return dumps(manager_delete_menuitem(menu_item_name))
-
-
-# Customer functions
-
-@APP.route("/customer/viewmenu", methods=['GET'])
-def customer_view_menu():
-    menu_id = request.args.get("menu_id")
-    return dumps(customer_view_menu(menu_id))
-
-##############################################################################################################################
 
 
 # Channels functions
@@ -450,10 +389,4 @@ def server_notifications_get_v1():
 
 if __name__ == "__main__":
     signal.signal(signal.SIGINT, quit_gracefully)  # For coverage
-    try:
-        db_conn = psycopg2.connect('dbname=wait_management_system user=lubuntu password=lubuntu')
-        print(db_conn)
-        # conn.close()
-    except Exception as e:
-        print( 'Unable to connect to database: ' + str(e))
     APP.run(port=config.port)  # Do not edit this port
