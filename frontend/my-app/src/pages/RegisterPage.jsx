@@ -7,11 +7,14 @@ function RegisterPage ({ onSuccess }) {
   const [email, setEmail] = React.useState('');
   const [name, setName] = React.useState('')
   const [password, setPassword] = React.useState('');
+  const [restaurantName, setRestaurantName] = React.useState('');
+  const [location, setLocation] = React.useState('');
+  const [description, setDescription] = React.useState('');
   const navigate = useNavigate();
 
   function register () {
     onSuccess(1);
-    navigate('/manager/setup')
+    navigate('/manager/menu')
   }
 
   return <>
@@ -47,6 +50,29 @@ function RegisterPage ({ onSuccess }) {
       sx={{ mb: 3 }}
       fullWidth
       value={password}
+    />
+    <TextField label='Restaurant Name'
+      onChange={e => setRestaurantName(e.target.value)}
+      required
+      variant="outlined"
+      sx={{ mb: 3 }}
+      fullWidth
+      value={restaurantName}
+    />
+    <TextField label='Location'
+      onChange={e => setLocation(e.target.value)}
+      required
+      variant="outlined"
+      sx={{ mb: 3 }}
+      fullWidth
+      value={location}
+    />
+    <TextField label='Description (Optional)'
+      onChange={e => setDescription(e.target.value)}
+      variant="outlined"
+      sx={{ mb: 3 }}
+      fullWidth
+      value={description}
     />
     <Button onClick={register}>Register</Button>
     </form>
