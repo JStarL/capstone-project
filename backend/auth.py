@@ -35,7 +35,7 @@ def login_backend(cur, email, password):
                 logged_in['staff_type'] = 'wait'
             elif staff_type == 'K':
                 logged_in['staff_type'] = 'kitchen'
-            else
+            else:
                 logged_in['staff_type'] = 'invalid'
             return logged_in
         else:
