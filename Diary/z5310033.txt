@@ -52,6 +52,12 @@ Week 4
 - Dicussion about virtual machines
 - Delegate demo 
 - Virtual machine dicusssion 
+- Dicussion on how to organise our CSS (styled components)
+- Continue planning for frontend skeleton
 - update from mentor: 
   - Focus on functionality rather than the UI 
   - Better to fully complete user stories rather than have all partially complete 
+
+Working on frontend coding: 
+- Manager Sign Up 
+- Settign up Categories

@@ -85,7 +85,8 @@ db_conn = None
 def login_flask():
     # For POST, it's a bit different to GET
     data = request.get_json()
-    return dumps(login_backend(data['email'], data['password']))
+    cur = db_conn.cursor()
+    return dumps(login_backend(cur, data['email'], data['password']))
 
 # LOOK AT ME!
 # LOOK AT ME!

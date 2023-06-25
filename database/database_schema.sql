@@ -1,5 +1,7 @@
 create table menus (
     id          serial,
+    restaurant_name     text not null,
+    restaurant_loc      text not null,
     
     primary key (id)
 );
