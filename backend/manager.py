@@ -109,6 +109,12 @@ def manager_update_category(cur, category_name, category_id):
         WHERE id = %s;
     """ 
     
+    cur.execute(query2, [category_id])
+    list1 = cur.fetchall()
+
+    if len(list1) == 0: # category_id does not exist
+        return invalid_category
+
     cur.execute(query1, [category_name, category_id])
     cur.execute(query2, [category_id])
     
