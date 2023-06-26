@@ -95,7 +95,11 @@ def manager_view_menu_item(cur, food_id):
 def manager_add_category(cur, category_name, menu_id):
     error = { 'error': 'adding category failed' } # error message
     category = { 'success': 'success in adding category' } # supposed to success lol
-    
+    cant_use_best_selling = { 'error': 'Not allowed to use name "Best Selling"' }
+
+    if category_name == 'Best Selling':
+        return cant_use_best_selling
+
     query1 = """
         INSERT INTO categories (name, menu_id)
         VALUES (%s, %s);
@@ -155,7 +159,11 @@ def manager_update_category(cur, category_name, category_id):
     invalid_category = { 'error': 'invalid category' } #error message
     update_name_fail = { 'error': 'failed to update name'}
     category = { 'success': 'success in removing category' } # supposed to show success lol
-    
+    cant_update_best_selling = { 'error': 'not allowed to manually update the "Best Selling" category' }
+
+    if category_name == 'Best Selling':
+        return cant_update_best_selling
+
     query1 = """
         UPDATE categories
         SET name = %s
