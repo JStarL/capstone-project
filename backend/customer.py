@@ -39,3 +39,55 @@ def customer_view_menu(cur, menu_id):
             menu.append({categ[1]: []})
         
     return menu
+
+def customer_view_category(cur, category_id):
+    invalid_category_id = { 'error': 'invalid category_id' }
+    menu_items = []
+
+    query1 = """
+    select id, title, description, image, price from menu_items where category_id = %s order by title;
+    """
+
+    cur.execute(query1, [category_id])
+    list1 = cur.fetchall()
+
+    if len(list1) == 0:
+        return invalid_category_id
+    
+    for tup in list1:
+        tmp = {}
+        tmp.update({'food_id': tup[0]})
+        tmp.update({'food_name': tup[1]})
+        tmp.update({'food_description': tup[2]})
+        tmp.update({'food_image': tup[3]})
+        tmp.update({'food_price': tup[4]})
+        menu_items.append(tmp)
+
+    return menu_items
+
+
+def customer_view_menu_item(cur, menu_item_id):
+    invalid_id = { 'error': 'invalid menu_item_id' } # error message
+    food = { 'success': 'Show food' } # supposed to show the food lol
+    
+    query1 = """
+    select title, description, image, price, ingredients, category_id from menu_items where id = %s;
+    """ 
+    
+    cur.execute(query1, [menu_item_id])
+    
+    list1 = cur.fetchall()
+    
+    if len(list1) == 0: #No menu or something went wrong with the id
+        #test
+        return invalid_id
+    else: #shows the food item
+        tup = list1[0]
+        food.update({'food_id': menu_item_id})
+        food.update({'food_name': tup[0]})
+        food.update({'food_description': tup[1]})
+        food.update({'food_image': tup[2]})
+        food.update({'food_price': tup[3]})
+        food.update({'food_ingredients': tup[4]})
+        food.update({'category_id': tup[5]})
+        return food
