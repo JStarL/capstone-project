@@ -40,7 +40,7 @@ create table categories (
 
 );
 
-create table food_items (
+create table menu_items (
     id                  serial,
     title               text not null,
     description         text, -- optional
@@ -56,7 +56,7 @@ create table food_items (
     foreign key (menu_id) references menus(id)
 );
 
-create or replace view food_items_and_categories(food_id, food_title, food_description, food_image, food_price, food_ingredients, category_id, category_name, menu_id) as
+create or replace view menu_items_and_categories(food_id, food_title, food_description, food_image, food_price, food_ingredients, category_id, category_name, menu_id) as
 select f.id, f.title, f.description, f.image, f.price, f.ingredients, c.id, c.name, c.menu_id
 from food_items f join categories c on (f.category_id = c.id)
 ;

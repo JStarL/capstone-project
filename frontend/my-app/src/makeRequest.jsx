@@ -30,14 +30,13 @@ const BACKEND_PORT = 8880;
 // };
 
 
-const makeRequest = async (route, method, body, token) => {
+const makeRequest = async (route, method, body, staff_id) => {
   let options = {};
-  if (token !== undefined) {
+  if (staff_id !== undefined) {
     options = {
       method,
       headers: {
         'Content-type': 'application/json',
-        Authorization: 'Bearer ' + token,
       }
     }
   } else {
@@ -59,6 +58,7 @@ const makeRequest = async (route, method, body, token) => {
     console.log('There was an error: ' + data['error'])
     alert(data.error);
   } else {
+    console.log(data)
     return data
   }
 }
