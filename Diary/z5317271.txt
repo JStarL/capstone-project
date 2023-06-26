@@ -41,3 +41,9 @@ Work Done:
 - Started working on the frontend, created a frontend skeleton for login page, register page, menu page, menu update page
 - Created folders for components and pages
 - Created an interface with dummy buttons, so that when backend is ready, all we have to do is connect them both
+
+WEEK FIVE
+Meeting/Tutorial
+- Finish setting up backend/frontend locally and on vm
+- Link backend and frontend together - manager page, customer page, add staff
+- Discussed how data will be shown in the frontend
