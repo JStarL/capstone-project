@@ -122,15 +122,10 @@ def auth_add_staff_flask():
     data = ast.literal_eval(request.get_json())
 
     invalid_manager = { 'error': 'invalid manager_id' }
-    invalid_staff_type = { 'error': 'invalid staff_type' }
 
     if data['manager_id'] in cur_dict['staff']:
         cur = cur_dict['staff'][data['manager_id']]
-        if data['staff_type'] == 'kitchen' or data['staff_type'] == 'wait':
-            return dumps(auth_add_staff_backend(cur, data['email'], data['password'], data['staff_type'], data['name'], data['menu_id']))
-        else:
-            return dumps(invalid_staff_type)
-
+        return dumps(auth_add_staff_backend(cur, data['email'], data['password'], data['staff_type'], data['name'], data['menu_id']))
     else:
         return dumps(invalid_manager)
 
