@@ -82,7 +82,7 @@ def manager_view_food_item(cur, food_id):
         #test
         return error
     else: #shows the food item
-        tup = list[0]
+        tup = list1[0]
         food.update({'food_id': food_id})
         food.update({'food_name': tup[0]})
         food.update({'food_description': tup[1]})
