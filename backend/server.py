@@ -103,9 +103,17 @@ def login_flask():
     return return_val
 
 @APP.route('/auth/logout', methods=['POST'])
-def auth_logout():
-    data = request.get_json()
-    return dumps(auth_logout(data['token']))
+def auth_logout_flask():
+    data = ast.literal_eval(request.get_json())
+    logged_out = { 'success': 'logged out' }
+    error = { 'error': 'invalid staff_id'}
+    
+    if data['staff_id'] in cur_dict['staff']:
+        cur = cur_dict['staff'].pop([data['staff_id']])
+        cur.close()
+        return dumps(logged_out)
+    else:
+        return dumps(error)
 
 # Manager functions
 
@@ -125,7 +133,7 @@ def manager_view_food_item_flask():
     cur = cur_dict['staff'][manager_id]
     return dumps(manager_view_food_item(cur, manager_id, menu_id, food_id))
 
-@APP.route("/manager/add_category", methods=['POST']) #this may need menu_id 
+@APP.route("/manager/add_category", methods=['POST'])
 def manager_add_category_flask():
     data = ast.literal_eval(request.get_json())
     cur = cur_dict['staff'][data['manager_id']]
