@@ -35,9 +35,9 @@ def manager_view_menu(cur, menu_id):
                 tmp.update({'food_image': menu_item[3]})
                 tmp.update({'food_price': menu_item[4]})
                 menu_items_list.append(tmp)
-            menu.append({'Best Selling': menu_items_list})
+            menu.append({str(categ_id): ['Best Selling', menu_items_list]})
         else:
-            menu.append({categ[1]: []})
+            menu.append({str(categ_id): [categ[1], []]})
         
     return menu
 
