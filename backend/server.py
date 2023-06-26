@@ -182,7 +182,11 @@ def manager_update_category_flask():
 def manager_add_menu_item_flask():
     data = ast.literal_eval(request.get_json())
     cur = cur_dict['staff'][data['manager_id']]
-    return_val = dumps(manager_add_menu_item(cur, data['title'], data['price'], data['ingredients'], data['description'], data['category_id'], data['menu_id']))
+    if 'image' not in data:
+        data['image'] = ''
+    if 'description' not in data:
+        data['description'] = ''
+    return_val = dumps(manager_add_menu_item(cur, data['title'], data['price'], data['ingredients'], data['description'], data['category_id'], data['menu_id'], data['image']))
     db_conn.commit()
     return return_val
 

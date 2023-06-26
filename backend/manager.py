@@ -190,13 +190,13 @@ def manager_update_category(cur, category_name, category_id):
             return update_name_fail
     
 
-def manager_add_menu_item(cur, menu_item_name, price, ingredients, description, category_id, menu_id):
+def manager_add_menu_item(cur, menu_item_name, price, ingredients, description, category_id, menu_id, image):
     error = { 'error': 'adding menu_item failed' }
     menu_item = {}
 
     query1 = """
-        INSERT INTO menu_items (title, description, price, ingredients, category_id, menu_id)
-        VALUES (%s, %s, %s, %s, %s, %s);
+        INSERT INTO menu_items (title, description, price, ingredients, category_id, menu_id, image)
+        VALUES (%s, %s, %s, %s, %s, %s, %s);
     """ 
     query2 = """
         SELECT id
@@ -205,7 +205,7 @@ def manager_add_menu_item(cur, menu_item_name, price, ingredients, description, 
         AND menu_id = %s;
     """ 
     
-    cur.execute(query1, [menu_item_name, description, price, ingredients, category_id, menu_id])
+    cur.execute(query1, [menu_item_name, description, price, ingredients, category_id, menu_id, image])
     cur.execute(query2, [menu_item_name, menu_id])
     
     list1 = cur.fetchall()
