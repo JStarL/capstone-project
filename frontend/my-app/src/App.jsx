@@ -8,6 +8,7 @@ import AddStaffPage from './pages/AddStaffPage';
 import ManagerMenuPage from './pages/ManagerMenuPage';
 import NewMenuItemPage from './pages/NewMenuItemPage';
 import RegisterPage from './pages/RegisterPage';
+import CustomerMenuPage from './pages/CustomerMenuPage';
 
 function App() {
   const [id, setId] = React.useState(null);
@@ -82,14 +83,17 @@ function App() {
           <Route path='/addstaff' element={<AddStaffPage />} />
           <Route path='/manager/menu' element={<ManagerMenuPage />} />
           <Route path='/manager/addnewmenuitem' element={<NewMenuItemPage />} />
+
+          <Route path='/customer/:menuId' element={<CustomerMenuPage />} />
         </Routes>
       </main>
       <footer>
-        {id === null ? null : (
-          <div className="footer-container">
+        {id === null
+          ? null
+          : (<div className="footer-container">
             <Button><Link to='/addstaff'>Add Staff</Link></Button>
-          </div>
-        )}
+            <Button><Link to='/manager/menu'>Menu</Link></Button>
+            </div>)}
       </footer>
         
       </BrowserRouter>

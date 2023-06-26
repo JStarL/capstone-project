@@ -1,7 +1,8 @@
 // import React from 'react';
 // import PropTypes from 'prop-types';
-const configData = require('../config.json');
-const BACKEND_BASE_URL = 'http://localhost:' + configData.BACKEND_PORT;
+// const configData = require('../config.json');
+const BACKEND_PORT = 8080;
+const BACKEND_BASE_URL = 'http://localhost:' + BACKEND_PORT;
 
 export const fetchFromBackend = (subUrl, methodType, reqBody, token) => {
   return new Promise((resolve, reject) => {
