@@ -125,7 +125,9 @@ def auth_add_staff_flask():
 
     if data['manager_id'] in cur_dict['staff']:
         cur = cur_dict['staff'][data['manager_id']]
-        return dumps(auth_add_staff_backend(cur, data['email'], data['password'], data['staff_type'], data['name'], data['menu_id']))
+        return_val = dumps(auth_add_staff_backend(cur, data['email'], data['password'], data['staff_type'], data['name'], data['menu_id']))
+        db_conn.commit()
+        return return_val
     else:
         return dumps(invalid_manager)
 
