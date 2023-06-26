@@ -66,7 +66,7 @@ def manager_view_category(cur, category_id):
 
     return menu_items
 
-def manager_view_food_item(cur, food_id):
+def manager_view_menu_item(cur, food_id):
     error = { 'error': 'invalid food_id' } # error message
     food = { 'success': 'Show food' } # supposed to show the food lol
     
