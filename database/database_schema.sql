@@ -57,6 +57,6 @@ create table menu_items (
 );
 
 create or replace view menu_items_and_categories(menu_item_id, title, description, image, price, ingredients, category_id, category_name, menu_id) as
-select f.id, f.title, f.description, f.image, f.price, f.ingredients, c.id, c.name, c.menu_id
+select m.id, m.title, m.description, m.image, m.price, m.ingredients, c.id, c.name, c.menu_id
 from menu_items m join categories c on (m.category_id = c.id)
 ;
