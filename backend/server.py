@@ -91,7 +91,7 @@ def register_flask():
     return_val = dumps(return_dict)
     if 'success' in return_dict:
         cur_dict['staff'][return_dict['manager_id']] = cur
-    db_conn.commit()
+        db_conn.commit()
     return return_val
 
 @APP.route('/auth/login', methods=['POST'])
