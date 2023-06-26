@@ -126,7 +126,7 @@ def manager_view_food_item_flask():
 
 @APP.route("/manager/add_category", methods=['POST']) #this may need menu_id 
 def manager_add_category_flask():
-    data = request.get_json()
+    data = ast.literal_eval(request.get_json())
     cur = cur_dict['staff'][data['manager_id']]
     return_val = dumps(manager_add_category(cur, data['category_name'], data['menu_id']))
     db_conn.commit()
@@ -134,7 +134,7 @@ def manager_add_category_flask():
 
 @APP.route("/manager/delete_category", methods=['DELETE'])
 def manager_delete_category_flask():
-    data = request.get_json()
+    data = ast.literal_eval(request.get_json())
     cur = cur_dict['staff'][data['manager_id']]
     return_val = dumps(manager_delete_category(cur, data['category_id']))
     db_conn.commit()
@@ -142,7 +142,7 @@ def manager_delete_category_flask():
 
 @APP.route("/manager/update_category", methods=['POST'])
 def manager_update_category_flask():
-    data = request.get_json()
+    data = ast.literal_eval(request.get_json())
     cur = cur_dict['staff'][data['manager_id']]
     return_val = dumps(manager_update_category(cur, data['category_name'], data['category_id']))
     db_conn.commit()
