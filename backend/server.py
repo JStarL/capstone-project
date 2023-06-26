@@ -9,7 +9,7 @@ import ast
 
 
 from manager import manager_view_menu, manager_view_category, manager_view_food_item, manager_add_category, manager_delete_category, manager_add_menu_item, manager_delete_menu_item, manager_update_category
-from auth import login_backend, register_backend
+from auth import login_backend, register_backend, auth_add_staff_backend
 from customer import customer_view_menu
 
 def quit_gracefully(*args):
@@ -116,6 +116,23 @@ def auth_logout_flask():
         return dumps(logged_out)
     else:
         return dumps(error)
+
+@APP.route('/manager/add_staff', methods=['POST'])
+def auth_add_staff_flask():
+    data = ast.literal_eval(request.get_json())
+
+    invalid_manager = { 'error': 'invalid manager_id' }
+    invalid_staff_type = { 'error': 'invalid staff_type' }
+
+    if data['manager_id'] in cur_dict['staff']:
+        cur = cur_dict['staff'][data['manager_id']]
+        if data['staff_type'] == 'kitchen' or data['staff_type'] == 'wait':
+            return dumps(auth_add_staff_backend(cur, data['email'], data['password'], data['staff_type'], data['name'], data['menu_id']))
+        else:
+            return dumps(invalid_staff_type)
+
+    else:
+        return dumps(invalid_manager)
 
 # Manager functions
 
