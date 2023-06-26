@@ -109,8 +109,8 @@ def auth_logout_flask():
     error = { 'error': 'invalid staff_id'}
     
     if data['staff_id'] in cur_dict['staff']:
-        cur_dict['staff'].pop([data['staff_id']])
-        db_conn.close()
+        cur = cur_dict['staff'].pop([data['staff_id']])
+        cur.close()
         return dumps(logged_out)
     else:
         return dumps(error)
