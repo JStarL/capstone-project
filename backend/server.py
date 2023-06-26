@@ -4,7 +4,7 @@ from flask import Flask, request
 from flask_cors import CORS
 import psycopg2
 
-from src import config
+import sys
 
 
 from manager import manager_view_menu, manager_view_food_item, manager_add_category, manager_delete_category, manager_add_menu_item, manager_delete_menu_item
@@ -455,4 +455,7 @@ if __name__ == "__main__":
         # conn.close()
     except Exception as e:
         print( 'Unable to connect to database: ' + str(e))
-    APP.run(port=config.port)  # Do not edit this port
+    port = 8880 # Default Port Number
+    if len(sys.argv) > 1:
+        port = int(sys.argv[1])
+    APP.run(port=port)  # Do not edit this port
