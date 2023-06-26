@@ -9,6 +9,10 @@ import InputAdornment from '@mui/material/InputAdornment';
 import InputLabel from '@mui/material/InputLabel';
 
 function NewMenuItem () {
+  const [foodName, setFoodName] = React.useState('')
+  const [description, setDescription] = React.useState('')
+  const [ingredients, setIngredients] = React.useState('')
+  const [price, setPrice] = React.useState(4)
   const [image, setImage] = React.useState(null);
   const [imageName, setImageName] = React.useState('')
 
@@ -32,10 +36,10 @@ function NewMenuItem () {
   return <>
   <div className='new-item-div'>
     <div className='div-section'>
-        <TextField className='long input' id='outlined-basic' label='Food Name' variant='outlined'></TextField>
+        <TextField className='long input' id='outlined-basic' label='Food Name' variant='outlined' value={foodName} onChange={e => setFoodName(e.target.value)}></TextField>
     </div>
     <div className='div-section'>
-        <TextField className='long input' id='outlined-basic' label='Description' variant='outlined' rows={3} multiline={true}></TextField>
+        <TextField className='long input' id='outlined-basic' label='Description' variant='outlined' rows={3} multiline={true} value={description} onChange={e => setDescription(e.target.value)}></TextField>
     </div>
     <div className='div-section'>
       <TextField select className='long input' label='Category' variant='outlined'>
@@ -51,11 +55,14 @@ function NewMenuItem () {
           <InputLabel htmlFor="outlined-adornment-amount">Price</InputLabel>
           <OutlinedInput
             startAdornment={<InputAdornment position="start">$</InputAdornment>}
-            label="Amount"
+            label="Price"
+            value={price}
+            onChange={e => setPrice(e.target.value)}
+            type='number'
           />
         </FormControl></div>
     <div className='div-section'>
-        <TextField className='long input' id='outlined-basic' label='Ingredients' variant='outlined' rows={3} multiline={true}></TextField>
+        <TextField className='long input' id='outlined-basic' label='Ingredients' variant='outlined' rows={3} multiline={true} value={ingredients} onChange={e => setIngredients(e.target.value)}></TextField>
     </div>
     {image
       ? <div className='image'><img style={{ height: '300px', width: '300px' }} src={image}></img></div>

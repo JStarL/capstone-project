@@ -10,7 +10,7 @@ function ManagerMenuPage () {
   const [foodDescription, setFoodDescription] = React.useState('Food Description: Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo')
   const navigate = useNavigate();
   return <>MANAGER MENU PAGE
-  <div style={{ display: 'flex'}}>
+  <div style={{ display: 'flex', flexDirection: 'row' }}>
     <div style={{ width: '20%', backgroundColor: 'white', display:'flex', flexDirection: 'column', alignItems: 'center'}}>
       <Category></Category>
       <Category></Category>
