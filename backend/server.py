@@ -10,6 +10,7 @@ import ast
 
 from manager import manager_view_menu, manager_view_food_item, manager_add_category, manager_delete_category, manager_add_menu_item, manager_delete_menu_item
 from auth import login_backend, register_backend
+from customer import customer_view_menu
 
 def quit_gracefully(*args):
     '''For coverage'''
@@ -101,10 +102,10 @@ def login_flask():
         cur_dict['staff'][data['email']] = cur
     return return_val
 
-@APP.route('/auth/logout/v1', methods=['POST'])
+@APP.route('/auth/logout', methods=['POST'])
 def auth_logout():
     data = request.get_json()
-    return dumps(auth_logout_v1(data['token']))
+    return dumps(auth_logout(data['token']))
 
 # Manager functions
 
@@ -155,10 +156,16 @@ def manager_delete_menu_item_flask():
 def customer_view_menu_flask():
     menu_id = request.args.get("menu_id")
     session_id = request.args.get("session_id")
-    return dumps(customer_view_menu(session_id, menu_id))
+    cur = None
+    if session_id in cur_dict['customers']:
+        cur = cur_dict['customers'][session_id]
+    else:
+        cur = db_conn.cursor()
+        cur_dict['customers'][session_id] = cur
+    return dumps(customer_view_menu(cur, menu_id))
 
 ##############################################################################################################################
-# OLD PROJECT STUFF ##########################################################################################################
+################################################ OLD PROJECT STUFF ###########################################################
 ##############################################################################################################################
 
 # Channels functions
