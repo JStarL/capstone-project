@@ -22,3 +22,15 @@ Week 3
 - Under some of these new 10 user stories, we had to create a new functionality (authentification) and correspondingly a new epic
 - Added child issues in the user stories for frontend developers and backend developers to know what to do.
 - Ready to start implementation of tasks in Sprint 2! Specifically, I want to start the backend of the manager user stories relating to categories.
+
+Week 4
+- This week was quite stressful as we ran into a lot of setup issues, so we actually didn't get to spend any time coding yet.
+- Although we planned on starting to implement the code, I could't yet.
+- We ran into issues because vlab didn't offer compatibility with psycopg2 and so we had to make the switch to using a vm. This process took quite long
+as we ran into errors. These errors took a while trying to fix. Then we had install all the backend, frontend and database software on the vm which was
+quite tricky as the instructions weren't super clear on how to do this. Once we installed it all, I realised I couldn't use git on my local vscode,
+so I had to install another bash terminal just to be able to use git. 
+- These obstacles were overcome by having meetings with Jibi who was able to help me.
+- It did set us back more than we liked, which slowed down the project progress.
+- In our meetings, we created an interface table and highlighted which routes corresponded to sprint 2 for us to start coding.
+- What is planned for next week is to complete the sql code for the backend user stories, and flask code for the function wrappers in server.py.
