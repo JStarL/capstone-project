@@ -142,7 +142,7 @@ def manager_add_menu_item(cur, menu_item_name, price, ingredients, description, 
     if len(list1) == 0:
         return error
     else:
-        menu_item.update({'menu_item_id' : list1[0][0]})
+        menu_item.update({'menu_item_id' : str(list1[0][0])}) # NOTE: Assumption that food item names are unique per menu
         return menu_item
 
 
