@@ -1,5 +1,6 @@
 import React from 'react';
 import '../App.css';
+import { useParams, useNavigate } from 'react-router-dom';
 import { Button, TextField, Input, Typography } from '@mui/material';
 import { fileToDataUrl } from './helperFunctions'
 import MenuItem from '@mui/material/MenuItem';
@@ -7,26 +8,44 @@ import OutlinedInput from '@mui/material/OutlinedInput';
 import FormControl from '@mui/material/FormControl';
 import InputAdornment from '@mui/material/InputAdornment';
 import InputLabel from '@mui/material/InputLabel';
+import makeRequest from '../makeRequest';
 
 function NewMenuItem () {
   const [foodName, setFoodName] = React.useState('')
   const [description, setDescription] = React.useState('')
-  const [ingredients, setIngredients] = React.useState('')
+  const [ingredients, setIngredients] = React.useState([])
   const [price, setPrice] = React.useState(4)
   const [image, setImage] = React.useState(null);
   const [imageName, setImageName] = React.useState('')
 
-  const categories = [
-    {
-      category: 'Meal',
-    },
-    {
-      category: 'Side Dishes',
-    },
-    {
-      category: 'Dessert',
-    },
-  ];
+  const params = useParams();
+  const navigate = useNavigate();
+  const manager_id = localStorage.getItem('staff_id')
+  const category_id = params.categoryId
+  const menu_id = params.menuId
+
+  console.log(menu_id)
+
+  function addMenuItem() {
+    const body = JSON.stringify({
+      'manager_id': manager_id,
+      'menu_id': menu_id,
+      'category_id': category_id,
+      'title': foodName,
+      price,
+      ingredients,
+      description,
+    });
+
+    makeRequest('/manager/add_menu_item', 'POST', body, undefined)
+      .then(data => {
+        console.log(data)
+        navigate(`/manager/menu/${menu_id}`)
+      })
+      .catch(e => console.log('Error: ' + e));
+  }
+
+  // image
 
   async function handleFileSelect (event) {
     setImageName(event.target.files[0].name)
@@ -42,13 +61,13 @@ function NewMenuItem () {
         <TextField className='long input' id='outlined-basic' label='Description' variant='outlined' rows={3} multiline={true} value={description} onChange={e => setDescription(e.target.value)}></TextField>
     </div>
     <div className='div-section'>
-      <TextField select className='long input' label='Category' variant='outlined'>
+      {/* <TextField select className='long input' label='Category' variant='outlined'>
       {categories.map((option) => (
         <MenuItem value={option.category}>
           {option.category}
         </MenuItem>
       ))}
-      </TextField>
+      </TextField> */}
       </div>
         {/* <TextField className='short input' id='outlined-basic' label='Price' variant='outlined'></TextField> */}
         <div className='div-section'><FormControl className='long input'>
@@ -77,6 +96,7 @@ function NewMenuItem () {
       </Button>
       <div><Typography variant='overline' sx={{ fontSize: '10px' }}>{imageName}</Typography></div>
     </label></div>
+    <Button onClick={addMenuItem}>ADD TO MENU</Button>
   </div>
   </>
 }
