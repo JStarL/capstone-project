@@ -9,7 +9,7 @@ def manager_view_menu(cur, menu_id):
     """
     
     query_menu_items = """
-    select id, title, description, image, price from menu_items where category_id = %s order by title;
+    select id, title, description, image, price, ingredients from menu_items where category_id = %s order by title;
     """
     cur.execute(query_categories, [menu_id])
     categories = cur.fetchall()        
@@ -34,6 +34,7 @@ def manager_view_menu(cur, menu_id):
                 tmp.update({'food_description': menu_item[2]})
                 tmp.update({'food_image': menu_item[3]})
                 tmp.update({'food_price': menu_item[4]})
+                tmp.update({'food_ingredients': menu_item[5]})
                 menu_items_list.append(tmp)
             menu.append({str(categ_id): ['Best Selling', menu_items_list]})
         else:
@@ -57,7 +58,7 @@ def manager_view_category(cur, category_id):
 
 
     query1 = """
-    select id, title, description, image, price from menu_items where category_id = %s order by title;
+    select id, title, description, image, price, ingredients from menu_items where category_id = %s order by title;
     """
 
     cur.execute(query1, [category_id])
@@ -70,6 +71,7 @@ def manager_view_category(cur, category_id):
         tmp.update({'food_description': tup[2]})
         tmp.update({'food_image': tup[3]})
         tmp.update({'food_price': tup[4]})
+        tmp.update({'food_ingredients': tup[5]})
         menu_items.append(tmp)
 
     return menu_items
