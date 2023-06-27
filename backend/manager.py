@@ -57,9 +57,9 @@ class Manager(Staff):
             AND name = %s;
         """ 
         
-        cur.execute(query1, [category_name, 'Add menu id here']) #needs menu id
+        cur.execute(query1, [category_name, menu_id])
         
-        cur.execute(query2, ['Add menu id here', category_name]) #needs menu id
+        cur.execute(query2, [menu_id, category_name])
         
         list1 = cur.fetchall()
         
