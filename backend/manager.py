@@ -210,7 +210,24 @@ def manager_update_category(cur, category_name, category_id):
 
 def manager_add_menu_item(cur, menu_item_name, price, ingredients, description, category_id, menu_id, image):
     error = { 'error': 'adding menu_item failed' }
+    invalid_category_id = { 'error': 'invalid category_id'}
+    invalid_best_selling = { 'error': 'cannot add menu items to the "Best Selling" category'}
     menu_item = {}
+
+    # Can't add new menu_items to the 'Best Selling' category
+
+    query0 = """
+        select name from categories where id = %s;
+    """
+
+    cur.execute(query0, [category_id])
+    list1 = cur.fetchall()
+
+    if len(list1) == 0:
+        return invalid_category_id
+
+    if list1[0][0] == 'Best Selling':
+        return invalid_best_selling
 
     query1 = """
         INSERT INTO menu_items (title, description, price, ingredients, category_id, menu_id, image)
@@ -238,8 +255,35 @@ def manager_add_menu_item(cur, menu_item_name, price, ingredients, description, 
 def manager_delete_menu_item(cur, menu_item_id):
     error = { 'error': 'invalid menu_item_id' }
     error2 = { 'error': 'did not delete the menu item'}
+    error3 = { 'error': 'invalid category_id' }
+    invalid_best_selling = { 'error': 'cannot delete menu items from the "Best Selling" category'}
     success = { 'success': 'success in removing menu item' }
     
+    # Can't manually delete menu items from the 'Best Selling' category
+
+    query0_1 = """
+        select category_id from menu_items where id = %s;
+    """
+    query0_2 = """
+        select name from categories where id = %s;
+    """
+    cur.execute(query0_1, [menu_item_id])
+    list1 = cur.fetchall()
+
+    if len(list1) == 0:
+        return error
+    
+    category_id = list1[0][0]
+
+    cur.execute(query0_2, [category_id])
+    list1 = cur.fetchall()
+    
+    if len(list1) == 0:
+        return error3
+
+    if list1[0][0] == 'Best Selling':
+        return invalid_best_selling
+
     query1 = """
         SELECT id
         FROM menu_items
@@ -270,8 +314,25 @@ def manager_delete_menu_item(cur, menu_item_id):
 def manager_update_menu_item(cur, menu_item_id, menu_item_name, price, ingredients, description, category_id, menu_id, image):
     invalid_menu_item = { 'error': 'invalid menu item' }
     error = { 'error': 'did not update properly'}
+    invalid_category_id = { 'error': 'invalid category_id'}
+    invalid_best_selling = { 'error': 'cannot update menu items in the "Best Selling" category'}
     menu_item = {}
     
+    # Can't manually update menu_items in the 'Best Selling' category
+
+    query0 = """
+        select name from categories where id = %s;
+    """
+
+    cur.execute(query0, [category_id])
+    list1 = cur.fetchall()
+
+    if len(list1) == 0:
+        return invalid_category_id
+
+    if list1[0][0] == 'Best Selling':
+        return invalid_best_selling
+
     query1 = """
         SELECT id
         FROM menu_items
