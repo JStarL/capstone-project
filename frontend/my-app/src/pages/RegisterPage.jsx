@@ -67,13 +67,6 @@ function RegisterPage ({ onSuccess }) {
       fullWidth
       value={location}
     />
-    <TextField label='Description (Optional)'
-      onChange={e => setDescription(e.target.value)}
-      variant="outlined"
-      sx={{ mb: 3 }}
-      fullWidth
-      value={description}
-    />
     <Button onClick={register}>Register</Button>
     </form>
   </Paper>
