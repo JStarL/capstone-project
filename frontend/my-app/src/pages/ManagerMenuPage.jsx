@@ -14,6 +14,7 @@ function ManagerMenuPage() {
   const [currentSelectedCategory, setCurrentSelectedCategory] = React.useState('Best Selling');
   const [currentSelectedCategoryId, setCurrentSelectedCategoryId] = React.useState(1);
   const [menuItems, setMenuItems] = React.useState([]); // List of Menu items for the current selected category
+  const [test, setTest] = React.useState([])
   const navigate = useNavigate();
 
   const managerId = localStorage.getItem('staff_id');
@@ -22,7 +23,7 @@ function ManagerMenuPage() {
   React.useEffect(() => {
     const fetchData = async () => {
       const data = await fetchAllMenuData();
-      if (data && data.length > 0) {
+      if (data && data?.length > 0) {
         setCurrentSelectedCategoryId(Object.keys(data[0])[0]);
       }
     };
@@ -30,21 +31,38 @@ function ManagerMenuPage() {
     fetchData();
   }, []);
 
+  React.useEffect(() => {
+    const fetchCategoryData = async () => {
+      if (currentSelectedCategoryId !== 1) {
+        console.log('selected')
+        console.log(currentSelectedCategoryId)
+        // await fetchCategoryMenuItems();
+        // setMenuItems(data)
+        // console.log(data)
+        const url = `/manager/view_category?manager_id=${managerId}&category_id=${currentSelectedCategoryId}`;
+        const data = await makeRequest(url, 'GET', undefined, undefined)
+        setMenuItems([...data])
+        fetchAllMenuData()
+      }
+    };
+    fetchCategoryData();
+  }, [currentSelectedCategoryId])
+
   async function fetchAllMenuData() {
     const url = `/manager/view_menu?manager_id=${managerId}&menu_id=${menuId}`;
     const data = await makeRequest(url, 'GET', undefined, undefined);
     console.log(data)
     setCategories(data);
     
-    for (const [key, value] of Object.entries(data)) {
-      for (const [key1, value1] of Object.entries(value)) {
-        if (value1[1].length > 0) {
-          setMenuItems(value1[1])
-        }
-        console.log(value1[1]);
-      }
+    // for (const [key, value] of Object.entries(data)) {
+    //   for (const [key1, value1] of Object.entries(value)) {
+    //     if (value1[1]?.length > 0) {
+    //       setMenuItems(value1[1])
+    //     }
+    //     console.log(value1[1]);
+    //   }
       
-    }
+    // }
     return data; // Return the fetched data
   }
 
@@ -67,10 +85,16 @@ function ManagerMenuPage() {
     const url = `/manager/view_category?manager_id=${managerId}&category_id=${currentSelectedCategoryId}`;
     const data = await makeRequest(url, 'GET', undefined, undefined)
     setMenuItems(data)
+    console.log(currentSelectedCategory)
+    console.log(currentSelectedCategoryId)
     console.log(menuItems)
     console.log(data)
+    return data
   }
 
+  React.useEffect(() => {
+    console.log(menuItems)
+  }, [menuItems]);
   if (!categories || !Array.isArray(categories)) return <>loading...</>;
   return (
     <>
@@ -87,6 +111,7 @@ function ManagerMenuPage() {
               fetchAllMenuData={fetchAllMenuData}
               setCurrentSelectedCategoryId={setCurrentSelectedCategoryId}
               setMenuItems={setMenuItems}
+              fetchCategoryMenuItems={fetchCategoryMenuItems}
             />
           ))}
           <TextField
@@ -99,12 +124,13 @@ function ManagerMenuPage() {
           <Button onClick={addNewCategory} startIcon={<AddIcon />}>Add new category</Button>
         </div>
         <div style={{ width: '80%', height: '100%' }}>
-          {menuItems?.map((menuItem) => (
+          {menuItems.map((menuItem) => (
             <ManagerFoodItem
               originalFoodName={menuItem.food_name}
               originalFoodDescription={menuItem.food_description}
               originalPrice={menuItem.food_price.toString()}
               originalImage={menuItem.food_image}
+              originalIngredients={menuItem.food_ingredients}
               foodId={menuItem.food_id.toString()}
               categoryId={currentSelectedCategoryId}
               fetchAllMenuData={fetchAllMenuData}

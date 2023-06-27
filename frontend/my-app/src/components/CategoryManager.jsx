@@ -6,6 +6,7 @@ import makeRequest from '../makeRequest';
 
 function CategoryManager(props) {
 	const [categoryName, setCategoryName] = React.useState(props.categoryName);
+  const [categoryId, setCategoryId] = React.useState(props.id)
 	const managerId = localStorage.getItem('staff_id');
   const menuId = localStorage.getItem('menu_id');
 	
@@ -42,17 +43,18 @@ function CategoryManager(props) {
 		props.setCurrentSelectedCategory(categoryName)
 	}
 
-  async function fetchCategoryMenuItems() {
-    const url = `/manager/view_category?manager_id=${managerId}&category_id=${props.id}`;
-    const data = await makeRequest(url, 'GET', undefined, undefined)
-    props.setMenuItems(data)
-    console.log(data)
-  }
+  // async function fetchCategoryMenuItems() {
+  //   const url = `/manager/view_category?manager_id=${managerId}&category_id=${props.id}`;
+  //   const data = await makeRequest(url, 'GET', undefined, undefined)
+  //   props.setMenuItems(data)
+  //   console.log(data)
+  // }
 
 	function selectCategory() {
 		props.setCurrentSelectedCategory(props.categoryName)
-		props.setCurrentSelectedCategoryId(props.id)
-    fetchCategoryMenuItems()
+		props.setCurrentSelectedCategoryId(categoryId)
+    console.log(categoryId)
+    // props.fetchCategoryMenuItems()
 	}
 	return <>
 		<Card onClick={() => selectCategory()} sx={{ m: 2, p: 7 }} variant="outlined" >

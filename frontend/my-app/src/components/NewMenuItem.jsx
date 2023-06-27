@@ -13,7 +13,7 @@ import makeRequest from '../makeRequest';
 function NewMenuItem () {
   const [foodName, setFoodName] = React.useState('')
   const [description, setDescription] = React.useState('')
-  const [ingredients, setIngredients] = React.useState([])
+  const [ingredients, setIngredients] = React.useState('')
   const [price, setPrice] = React.useState(4)
   const [image, setImage] = React.useState(null);
   const [imageName, setImageName] = React.useState('')
@@ -32,8 +32,9 @@ function NewMenuItem () {
       'menu_id': menu_id,
       'category_id': category_id,
       'title': foodName,
+      image,
       price,
-      ingredients,
+      'ingredients': ingredients,
       description,
     });
 
@@ -61,15 +62,7 @@ function NewMenuItem () {
         <TextField className='long input' id='outlined-basic' label='Description' variant='outlined' rows={3} multiline={true} value={description} onChange={e => setDescription(e.target.value)}></TextField>
     </div>
     <div className='div-section'>
-      {/* <TextField select className='long input' label='Category' variant='outlined'>
-      {categories.map((option) => (
-        <MenuItem value={option.category}>
-          {option.category}
-        </MenuItem>
-      ))}
-      </TextField> */}
       </div>
-        {/* <TextField className='short input' id='outlined-basic' label='Price' variant='outlined'></TextField> */}
         <div className='div-section'><FormControl className='long input'>
           <InputLabel htmlFor="outlined-adornment-amount">Price</InputLabel>
           <OutlinedInput
