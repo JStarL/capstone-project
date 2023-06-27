@@ -151,7 +151,8 @@ def manager_delete_menu_item_flask():
 def customer_view_menu_flask():
     menu_id = request.args.get("menu_id")
     session_id = request.args.get("session_id")
-    return dumps(customer_view_menu(session_id, menu_id))
+    cur = cur_dict['customer']['session_id']
+    return dumps(customer_view_menu(cur, session_id, menu_id))
 
 ##############################################################################################################################
 ################################################ OLD PROJECT STUFF ###########################################################
