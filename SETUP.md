@@ -21,11 +21,6 @@ The following are the steps to set up the virtual machine from its initial stage
 - type `psql wait_management_system -f wms_database.dump`
 - quit with '\q'
 
-# To install the backend to database connector
-
-- run `sudo apt install python3-dev libpq-dev`
-- run `pip install psycopg2`
-
 # To run the backend
 
 - run `sudo apt install python3-pip`
@@ -35,6 +30,11 @@ The following are the steps to set up the virtual machine from its initial stage
     - `export PATH="/home/lubuntu/.local/bin:$PATH"`
 - `source ~/.bashrc`
 - run server with `python3 server.py`
+
+# To install the backend to database connector
+
+- run `sudo apt install python3-dev libpq-dev`
+- run `pip install psycopg2`
 
 # To run the frontend
 
