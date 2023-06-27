@@ -42,7 +42,7 @@ class Manager(Staff):
         else: #shows the food item
             return food
 
-    def manager_add_category(cur, category_name):
+    def manager_add_category(cur, category_name, menu_id):
         error = { 'error': 'invalid category' } # error message
         category = { 'success': 'success in adding category' } # supposed to success lol
         
