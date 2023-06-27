@@ -8,7 +8,7 @@ import sys
 import ast
 
 
-from manager import manager_view_menu, manager_view_food_item, manager_add_category, manager_delete_category, manager_add_menu_item, manager_delete_menu_item
+from manager import manager_view_menu, manager_view_food_item, manager_add_category, manager_delete_category, manager_add_menu_item, manager_delete_menu_item, manager_update_category
 from auth import login_backend, register_backend
 
 def quit_gracefully(*args):
@@ -124,17 +124,29 @@ def manager_view_food_item_flask():
     cur = cur_dict['staff'][manager_id]
     return dumps(manager_view_food_item(cur, manager_id, menu_id, food_id))
 
-@APP.route("/manager/add_category", methods=['POST'])
+@APP.route("/manager/add_category", methods=['POST']) #this may need menu_id 
 def manager_add_category_flask():
     data = request.get_json()
     cur = cur_dict['staff'][data['manager_id']]
-    return dumps(manager_add_category(cur, data['category_name']))
+    return_val = dumps(manager_add_category(cur, data['category_name']))
+    db_conn.commit()
+    return return_val
 
 @APP.route("/manager/delete_category", methods=['DELETE'])
-def manager_remove_category_flask():
+def manager_delete_category_flask():
     data = request.get_json()
     cur = cur_dict['staff'][data['manager_id']]
-    return dumps(manager_delete_category(cur, data['category_id']))
+    return_val = dumps(manager_delete_category(cur, data['category_id']))
+    db_conn.commit()
+    return return_val
+
+@APP.route("/manager/update_category", methods=['POST'])
+def manager_update_category_flask():
+    data = request.get_json()
+    cur = cur_dict['staff'][data['manager_id']]
+    return_val = dumps(manager_update_category(cur, data['category_name'], data['category_id']))
+    db_conn.commit()
+    return return_val
 
 @APP.route("/manager/add_menu_item", methods=['POST'])
 def manager_add_menu_item_flask():
