@@ -14,8 +14,9 @@ function ManagerLoginPage ({ onSuccess }) {
       email,
       password,
     })
-    const data = makeRequest('/auth/register', 'POST', body, null)
+    const data = makeRequest('/auth/login', 'POST', body, 1)
     onSuccess(data);
+    console.log(data);
     navigate('/manager/menu')
   }
 

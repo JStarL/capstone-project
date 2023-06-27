@@ -7,7 +7,7 @@ import psycopg2
 import sys
 
 
-from manager import manager_view_menu, manager_view_food_item, manager_add_category, manager_delete_category, manager_add_menu_item, manager_delete_menu_item
+# from manager import manager_view_menu, manager_view_food_item, manager_add_category, manager_delete_category, manager_add_menu_item, manager_delete_menu_item
 from auth import login_backend
 
 def quit_gracefully(*args):
@@ -17,7 +17,7 @@ def quit_gracefully(*args):
 
 def defaultHandler(err):
     response = err.get_response()
-    print('response', err, err.get_response())
+    # print('response', err, err.get_response())
     response.data = dumps({
         "code": err.code,
         "name": "System Error",

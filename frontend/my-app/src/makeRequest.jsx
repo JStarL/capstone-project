@@ -30,14 +30,13 @@ export const fetchFromBackend = (subUrl, methodType, reqBody, token) => {
 };
 
 
-const makeRequest = async (route, method, body, token) => {
+const makeRequest = async (route, method, body, staff_id) => {
   let options = {};
-  if (token !== undefined) {
+  if (staff_id !== undefined) {
     options = {
       method,
       headers: {
         'Content-type': 'application/json',
-        Authorization: 'Bearer ' + token,
       }
     }
   } else {
@@ -52,12 +51,12 @@ const makeRequest = async (route, method, body, token) => {
   if (body !== undefined) {
     options.body = JSON.stringify(body);
   }
-
-  const response = await fetch('http://localhost:5005' + route, options)
+  const response = await fetch('http://localhost:8880' + route, options)
   const data = await response.json()
   if (data.error) {
     alert(data.error);
   } else {
+    console.log(data)
     return data
   }
 }
