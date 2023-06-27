@@ -5,10 +5,11 @@ from flask_cors import CORS
 import psycopg2
 
 import sys
+import ast
 
 
-# from manager import manager_view_menu, manager_view_food_item, manager_add_category, manager_delete_category, manager_add_menu_item, manager_delete_menu_item
-from auth import login_backend
+from manager import manager_view_menu, manager_view_food_item, manager_add_category, manager_delete_category, manager_add_menu_item, manager_delete_menu_item
+from auth import login_backend, register_backend
 
 def quit_gracefully(*args):
     '''For coverage'''
@@ -81,14 +82,19 @@ cur_dict = {
 # Auth functions
 
 
-@APP.route('/auth/register/v2', methods=['POST'])
-def auth_register():
-    data = request.get_json()
-    return dumps(auth_register_v2(data['email'], data['password'], data['name_first'], data['name_last']))
+@APP.route('/auth/register', methods=['POST'])
+def register_flask():
+    data = ast.literal_eval(request.get_json())
+    cur = db_conn.cursor()
+    return_val = dumps(register_backend(cur, data['email'], data['password'], data['name'], data['resturant_name'], data['location']))
+    if 'success' in return_val:
+        cur_dict['staff'][data['email']] = cur
+    db_conn.commit()
+    return return_val
 
 @APP.route('/auth/login', methods=['POST'])
 def login_flask():
-    data = request.get_json()
+    data = ast.literal_eval(request.get_json())
     cur = db_conn.cursor()
     return_val = dumps(login_backend(cur, data['email'], data['password']))
     if 'success' in return_val:

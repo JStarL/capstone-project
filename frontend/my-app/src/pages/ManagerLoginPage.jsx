@@ -12,12 +12,18 @@ function ManagerLoginPage ({ onSuccess }) {
   function login () {
     const body = JSON.stringify({
       email,
-      password,
+      password
     })
-    const data = makeRequest('/auth/login', 'POST', body, 1)
-    onSuccess(data);
-    console.log(data);
-    navigate('/manager/menu')
+    makeRequest('/auth/login', 'POST', body, undefined)
+    .then(data => {
+      if (data.hasOwnProperty('success')) {
+        onSuccess(data['staff_id'])
+        navigate('/manager/menu')
+      } else {
+        alert(data['error'])
+      }
+    })
+    .catch(e => console.log('Error: ' + e))
   }
 
   return <>
