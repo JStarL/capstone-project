@@ -35,6 +35,10 @@ function ManagerMenuPage() {
     const data = await makeRequest(url, 'GET', undefined, undefined);
     console.log(data)
     setCategories(data);
+    
+    for (const [key, value] of Object.entries(data)) {
+      console.log(key + ": " + value);
+}
     return data; // Return the fetched data
   }
 
