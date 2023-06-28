@@ -44,8 +44,23 @@ def register_backend(cur, email, password, name, resturant_name, location):
     # NOTE: The token used is their 'email' for now
 
     invalid_register = { 'error': 'invalid' }
+    already_registered = { 'error': 'This email is already registered'}
     registered = { 'success': 'registered' }
     
+    # Check if email is already registered
+
+    query0 = """
+    SELECT id
+    FROM staff
+    WHERE email = %s;
+    """
+
+    cur.execute(query0, [email])
+    list1 = cur.fetchall()
+    
+    if len(list1) > 0:
+        return already_registered
+
     query2 = """
     INSERT INTO menus (restaurant_name, restaurant_loc)
     VALUES (%s, %s);
