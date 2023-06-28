@@ -9,6 +9,7 @@ import ManagerMenuPage from './pages/ManagerMenuPage';
 import NewMenuItemPage from './pages/NewMenuItemPage';
 import RegisterPage from './pages/RegisterPage';
 import CustomerMenuPage from './pages/CustomerMenuPage';
+import CustomerOrStaff from './pages/CustomerOrStaff';
 
 function App() {
   const [id, setId] = React.useState(null);
@@ -43,7 +44,7 @@ function App() {
             <span className="link"><Link to='/manager/addnewmenuitem'>New Menu Item</Link></span>
           </div>
         </div>
-        <LogoutButton className='logout-button' logout={logout}>Logout</LogoutButton>
+        <Button className='logout-button' onClick={logout}><Link to='/'>Logout</Link></Button>
       </nav>
     )
   }
@@ -72,13 +73,18 @@ function App() {
     <div className="App">
       <BrowserRouter>
       <header>
-        {['/', '/login', '/register', '/addstaff', '/manager/menu', '/manager/addnewmenuitem', '/manager/setup'].includes(window.location.pathname) ? (
-          id === null ? <Nav /> : <Nav2 />
-        ) : null}
+        {['/', '/login', '/register', '/addstaff', '/manager/menu', '/manager/addnewmenuitem', '/manager/setup'].includes(window.location.pathname)
+          ? (id === null
+              ? <Nav />
+              : <Nav2 />
+            )
+          : null
+        }
       </header>
       <main>
         <Routes>
-          <Route path='/' element={<ManagerLoginPage onSuccess={login} />} />
+          <Route path='/' element={<CustomerOrStaff />} />
+          <Route path='/login' element={<ManagerLoginPage onSuccess={login} />} />
           <Route path='/register' element={<RegisterPage onSuccess={login} />} />
           <Route path='/addstaff' element={<AddStaffPage />} />
           <Route path='/manager/menu' element={<ManagerMenuPage />} />
