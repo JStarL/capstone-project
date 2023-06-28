@@ -65,7 +65,8 @@ def manager_add_category(cur, category_name, menu_id):
         return category
 
 def manager_delete_category(cur, category_id):
-    error = { 'error': 'invalid category' } # error message
+    error = { 'error': 'invalid category_id' } # error message
+    delete_fail = { 'error': 'failed to delete category' }
     category = { 'success': 'success in removing category' } # supposed to show success lol
     
     query1 = """
@@ -78,13 +79,18 @@ def manager_delete_category(cur, category_id):
         WHERE id = %s;
     """ 
     
+    cur.execute(query2, [category_id]) #check if it is there
+    list1 = cur.fetchall()
+    if len(list1) == 0:
+        return error
+    
     cur.execute(query1, [category_id])
     cur.execute(query2, [category_id])
     list1 = cur.fetchall()
     if len(list1) == 0: # id shouldn't exist, shows success message
         return category
     else: #something went wrong with deleting it
-        return error
+        return delete_fail
     
 def manager_update_category(cur, category_name, category_id):
     invalid_category = { 'error': 'invalid category' } #error message
@@ -103,6 +109,12 @@ def manager_update_category(cur, category_name, category_id):
         WHERE id = %s;
     """ 
     
+    cur.execute(query2, [category_id])
+    list1 = cur.fetchall()
+
+    if len(list1) == 0: # category_id does not exist
+        return invalid_category
+
     cur.execute(query1, [category_name, category_id])
     cur.execute(query2, [category_id])
     
@@ -110,7 +122,7 @@ def manager_update_category(cur, category_name, category_id):
     if len(list1) == 0: # id doesn't exist
         return invalid_category
     else: 
-        if category_name != list1[0][1]:
+        if category_name == list1[0][1]:
             #shows success message
             category['category_id'] = list1[0][0]
             return category

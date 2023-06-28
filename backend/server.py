@@ -87,9 +87,10 @@ cur_dict = {
 def register_flask():
     data = ast.literal_eval(request.get_json())
     cur = db_conn.cursor()
-    return_val = dumps(register_backend(cur, data['email'], data['password'], data['name'], data['restaurant_name'], data['location']))
-    if 'success' in return_val:
-        cur_dict['staff'][data['email']] = cur
+    return_dict = register_backend(cur, data['email'], data['password'], data['name'], data['restaurant_name'], data['location'])
+    return_val = dumps(return_dict)
+    if 'success' in return_dict:
+        cur_dict['staff'][return_dict['manager_id']] = cur
     db_conn.commit()
     return return_val
 
@@ -97,15 +98,24 @@ def register_flask():
 def login_flask():
     data = ast.literal_eval(request.get_json())
     cur = db_conn.cursor()
-    return_val = dumps(login_backend(cur, data['email'], data['password']))
-    if 'success' in return_val:
-        cur_dict['staff'][data['email']] = cur
+    return_dict = login_backend(cur, data['email'], data['password'])
+    return_val = dumps(return_dict)
+    if 'success' in return_dict:
+        cur_dict['staff'][return_dict['staff_id']] = cur
     return return_val
 
 @APP.route('/auth/logout', methods=['POST'])
-def auth_logout():
-    data = request.get_json()
-    return dumps(auth_logout(data['token']))
+def auth_logout_flask():
+    data = ast.literal_eval(request.get_json())
+    logged_out = { 'success': 'logged out' }
+    error = { 'error': 'invalid staff_id'}
+    
+    if data['staff_id'] in cur_dict['staff']:
+        cur = cur_dict['staff'].pop([data['staff_id']])
+        cur.close()
+        return dumps(logged_out)
+    else:
+        return dumps(error)
 
 # Manager functions
 
@@ -115,7 +125,7 @@ def manager_view_menu_flask():
     menu_id = request.args.get("menu_id")
     cur = cur_dict['staff'][manager_id]
     
-    return dumps(manager_view_menu(cur, manager_id, menu_id))
+    return dumps(manager_view_menu(cur,  menu_id))
 
 @APP.route("/manager/view_food_item", methods=['GET'])
 def manager_view_food_item_flask():
@@ -125,7 +135,7 @@ def manager_view_food_item_flask():
     cur = cur_dict['staff'][manager_id]
     return dumps(manager_view_food_item(cur, manager_id, menu_id, food_id))
 
-@APP.route("/manager/add_category", methods=['POST']) #this may need menu_id 
+@APP.route("/manager/add_category", methods=['POST'])
 def manager_add_category_flask():
     data = ast.literal_eval(request.get_json())
     cur = cur_dict['staff'][data['manager_id']]
