@@ -169,7 +169,7 @@ def manager_delete_menu_item_flask():
 def manager_update_category_flask():
     data = ast.literal_eval(request.get_json())
     cur = cur_dict['staff'][data['manager_id']]
-    return_val = dumps(manager_update_menu_item(cur, data['id'], data['title'], data['price'], data['ingredients'], data['description'], data['category_id'], data['menu_id']))
+    return_val = dumps(manager_update_menu_item(cur, data['menu_item_id'], data['title'], data['price'], data['ingredients'], data['description'], data['category_id'], data['menu_id'], data['image']))
     db_conn.commit()
     return return_val
 
