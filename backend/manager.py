@@ -66,6 +66,7 @@ def manager_add_category(cur, category_name, menu_id):
 
 def manager_delete_category(cur, category_id):
     error = { 'error': 'invalid category' } # error message
+    error2 = { 'error': 'Does not exist the category' }
     category = { 'success': 'success in removing category' } # supposed to show success lol
     
     query1 = """
@@ -77,6 +78,11 @@ def manager_delete_category(cur, category_id):
         FROM categories
         WHERE id = %s;
     """ 
+    
+    cur.execute(query2, [category_id]) #check if it is there
+    list1 = cur.fetchall()
+    if len(list1) == 0:
+        return error2
     
     cur.execute(query1, [category_id])
     cur.execute(query2, [category_id])
