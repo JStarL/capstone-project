@@ -2,7 +2,7 @@ import React from 'react';
 import { Button, TextField, Card, CardActions, CardContent} from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete';
 import MenuIcon from '@mui/icons-material/Menu';
-function Category() {
+function CategoryManager() {
 	const [categoryName, setCategoryName] = React.useState('Category 1');
 	return <>
 		<Card onClick={() => console.log('Selecting category')} sx={{m:2, p:7}} variant="outlined" >
@@ -16,4 +16,4 @@ function Category() {
 		</Card>
   </>;
 }
-export default Category;
+export default CategoryManager;
