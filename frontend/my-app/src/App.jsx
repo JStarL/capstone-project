@@ -9,6 +9,7 @@ import ManagerMenuPage from './pages/ManagerMenuPage';
 import NewMenuItemPage from './pages/NewMenuItemPage';
 import RegisterPage from './pages/RegisterPage';
 import CustomerMenuPage from './pages/CustomerMenuPage';
+import CustomerOrStaff from './pages/CustomerOrStaff';
 
 function App() {
   const [id, setId] = React.useState(null);
@@ -82,7 +83,8 @@ function App() {
       </header>
       <main>
         <Routes>
-          <Route path='/' element={<ManagerLoginPage onSuccess={login} />} />
+          <Route path='/' element={<CustomerOrStaff />} />
+          <Route path='/login' element={<ManagerLoginPage onSuccess={login} />} />
           <Route path='/register' element={<RegisterPage onSuccess={login} />} />
           <Route path='/addstaff' element={<AddStaffPage />} />
           <Route path='/manager/menu' element={<ManagerMenuPage />} />
