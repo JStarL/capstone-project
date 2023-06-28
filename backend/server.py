@@ -138,7 +138,6 @@ def manager_view_category_flask():
 @APP.route("/manager/view_menu_item", methods=['GET'])
 def manager_view_food_item_flask():
     manager_id = request.args.get("manager_id")
-    menu_id = request.args.get("menu_id")
     food_id = request.args.get("menu_item_id")
     cur = cur_dict['staff'][manager_id]
     return dumps(manager_view_food_item(cur, food_id))
