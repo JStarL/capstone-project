@@ -41,8 +41,6 @@ def login_backend(cur, email, password):
         
 def register_backend(cur, email, password, name, resturant_name, location):
 
-    # NOTE: The token used is their 'email' for now
-
     invalid_register = { 'error': 'invalid' }
     already_registered = { 'error': 'This email is already registered'}
     registered = { 'success': 'registered' }
