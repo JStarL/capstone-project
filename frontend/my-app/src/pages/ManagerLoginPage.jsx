@@ -19,6 +19,10 @@ function ManagerLoginPage ({ onSuccess }) {
       if (data.hasOwnProperty('success')) {
         onSuccess(data['staff_id'])
         navigate('/manager/menu')
+        localStorage.setItem('staff_id', data['staff_id']);
+        localStorage.setItem('menu_id', data['menu_id']);
+        localStorage.setItem('staff_type', data['staff_type']);
+        console.log(data)
       } else {
         alert(data['error'])
       }

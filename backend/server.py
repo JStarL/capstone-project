@@ -87,7 +87,7 @@ cur_dict = {
 def register_flask():
     data = ast.literal_eval(request.get_json())
     cur = db_conn.cursor()
-    return_val = dumps(register_backend(cur, data['email'], data['password'], data['name'], data['resturant_name'], data['location']))
+    return_val = dumps(register_backend(cur, data['email'], data['password'], data['name'], data['restaurant_name'], data['location']))
     if 'success' in return_val:
         cur_dict['staff'][data['email']] = cur
     db_conn.commit()

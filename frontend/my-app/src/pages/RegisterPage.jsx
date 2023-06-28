@@ -24,6 +24,9 @@ function RegisterPage({ onSuccess }) {
       .then(data => {
         if (data.hasOwnProperty('success')) {
           onSuccess(data['staff_id'])
+          localStorage.setItem('manager_id', data['manager_id']);
+          localStorage.setItem('menu_id', data['menu_id']);
+          localStorage.setItem('staff_type', 'manager');
           navigate('/manager/menu')
         } else {
           alert(data['error'])
