@@ -7,6 +7,7 @@ def login_backend(cur, email, password):
     
     invalid_email = { 'error': 'invalid email' }
     invalid_password = { 'error': 'invalid password' }
+    invalid_type = { 'error': 'invalid staff type'}
     logged_in = { 'success': 'logged in' }
 
     query = """
@@ -33,7 +34,7 @@ def login_backend(cur, email, password):
             elif staff_type == 'K':
                 logged_in['staff_type'] = 'kitchen'
             else:
-                logged_in['staff_type'] = 'invalid'
+                return invalid_type
             return logged_in
         else:
             return invalid_password
