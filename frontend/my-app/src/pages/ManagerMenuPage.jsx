@@ -5,12 +5,25 @@ import ManagerFoodItem from '../components/ManagerFoodItem'
 import { useNavigate } from 'react-router-dom';
 import CategoryManager from '../components/CategoryManager';
 import AddIcon from '@mui/icons-material/Add';
+import makeRequest from '../makeRequest';
 
 function ManagerMenuPage() {
   const [foodName, setFoodName] = React.useState('Food Name');
   const [newCategoryName, setNewCategoryName] = React.useState('');
   const [foodDescription, setFoodDescription] = React.useState('Food Description: Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo')
   const navigate = useNavigate();
+
+  // React.useEffect(async () => {
+  //   const managerId = localStorage.getItem('staff_id')
+  //   const menuId = localStorage.getItem('menu_id')
+  //   async function fetchData () {
+  //     makeRequest(`/manager/view_menu/${managerId}/${menuId}`, 'GET', undefined, managerId)
+  //     .then(data => {
+  //       console.log(data)})
+  //   }
+  //   fetchData();
+  // }, []);
+
   return <>MANAGER MENU PAGE
     <div style={{ display: 'flex', flexDirection: 'row' }}>
       <div style={{ width: '20%', backgroundColor: 'white', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>

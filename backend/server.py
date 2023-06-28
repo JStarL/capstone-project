@@ -8,9 +8,8 @@ import sys
 import ast
 
 
-from manager import manager_view_menu, manager_view_food_item, manager_add_category, manager_delete_category, manager_add_menu_item, manager_delete_menu_item, manager_update_category
-from auth import login_backend, register_backend
-from customer import customer_view_menu
+from manager import manager_view_menu, manager_view_food_item, manager_add_category, manager_delete_category, manager_add_menu_item, manager_delete_menu_item
+from auth import login_backend
 
 def quit_gracefully(*args):
     '''For coverage'''
@@ -19,7 +18,7 @@ def quit_gracefully(*args):
 
 def defaultHandler(err):
     response = err.get_response()
-    # print('response', err, err.get_response())
+    print('response', err, err.get_response())
     response.data = dumps({
         "code": err.code,
         "name": "System Error",
@@ -83,15 +82,10 @@ cur_dict = {
 # Auth functions
 
 
-@APP.route('/auth/register', methods=['POST'])
-def register_flask():
-    data = ast.literal_eval(request.get_json())
-    cur = db_conn.cursor()
-    return_val = dumps(register_backend(cur, data['email'], data['password'], data['name'], data['restaurant_name'], data['location']))
-    if 'success' in return_val:
-        cur_dict['staff'][data['email']] = cur
-    db_conn.commit()
-    return return_val
+@APP.route('/auth/register/v2', methods=['POST'])
+def auth_register():
+    data = request.get_json()
+    return dumps(auth_register_v2(data['email'], data['password'], data['name_first'], data['name_last']))
 
 @APP.route('/auth/login', methods=['POST'])
 def login_flask():
@@ -102,10 +96,10 @@ def login_flask():
         cur_dict['staff'][data['email']] = cur
     return return_val
 
-@APP.route('/auth/logout', methods=['POST'])
+@APP.route('/auth/logout/v1', methods=['POST'])
 def auth_logout():
     data = request.get_json()
-    return dumps(auth_logout(data['token']))
+    return dumps(auth_logout_v1(data['token']))
 
 # Manager functions
 
@@ -125,29 +119,17 @@ def manager_view_food_item_flask():
     cur = cur_dict['staff'][manager_id]
     return dumps(manager_view_food_item(cur, manager_id, menu_id, food_id))
 
-@APP.route("/manager/add_category", methods=['POST']) #this may need menu_id 
+@APP.route("/manager/add_category", methods=['POST'])
 def manager_add_category_flask():
-    data = ast.literal_eval(request.get_json())
+    data = request.get_json()
     cur = cur_dict['staff'][data['manager_id']]
-    return_val = dumps(manager_add_category(cur, data['category_name'], data['menu_id']))
-    db_conn.commit()
-    return return_val
+    return dumps(manager_add_category(cur, data['category_name']))
 
 @APP.route("/manager/delete_category", methods=['DELETE'])
-def manager_delete_category_flask():
-    data = ast.literal_eval(request.get_json())
+def manager_remove_category_flask():
+    data = request.get_json()
     cur = cur_dict['staff'][data['manager_id']]
-    return_val = dumps(manager_delete_category(cur, data['category_id']))
-    db_conn.commit()
-    return return_val
-
-@APP.route("/manager/update_category", methods=['POST'])
-def manager_update_category_flask():
-    data = ast.literal_eval(request.get_json())
-    cur = cur_dict['staff'][data['manager_id']]
-    return_val = dumps(manager_update_category(cur, data['category_name'], data['category_id']))
-    db_conn.commit()
-    return return_val
+    return dumps(manager_delete_category(cur, data['category_id']))
 
 @APP.route("/manager/add_menu_item", methods=['POST'])
 def manager_add_menu_item_flask():
@@ -168,16 +150,10 @@ def manager_delete_menu_item_flask():
 def customer_view_menu_flask():
     menu_id = request.args.get("menu_id")
     session_id = request.args.get("session_id")
-    cur = None
-    if session_id in cur_dict['customers']:
-        cur = cur_dict['customers'][session_id]
-    else:
-        cur = db_conn.cursor()
-        cur_dict['customers'][session_id] = cur
-    return dumps(customer_view_menu(cur, menu_id))
+    return dumps(customer_view_menu(session_id, menu_id))
 
 ##############################################################################################################################
-################################################ OLD PROJECT STUFF ###########################################################
+# OLD PROJECT STUFF ##########################################################################################################
 ##############################################################################################################################
 
 # Channels functions
