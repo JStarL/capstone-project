@@ -116,7 +116,7 @@ def manager_update_category(cur, category_name, category_id):
     if len(list1) == 0: # id doesn't exist
         return invalid_category
     else: 
-        if category_name != list1[0][1]:
+        if category_name == list1[0][1]:
             #shows success message
             category['category_id'] = list1[0][0]
             return category

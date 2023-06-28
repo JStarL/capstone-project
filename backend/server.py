@@ -125,7 +125,7 @@ def manager_view_food_item_flask():
     cur = cur_dict['staff'][manager_id]
     return dumps(manager_view_food_item(cur, manager_id, menu_id, food_id))
 
-@APP.route("/manager/add_category", methods=['POST']) #this may need menu_id 
+@APP.route("/manager/add_category", methods=['POST'])
 def manager_add_category_flask():
     data = ast.literal_eval(request.get_json())
     cur = cur_dict['staff'][data['manager_id']]
