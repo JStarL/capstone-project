@@ -103,9 +103,17 @@ def login_flask():
     return return_val
 
 @APP.route('/auth/logout', methods=['POST'])
-def auth_logout():
-    data = request.get_json()
-    return dumps(auth_logout(data['token']))
+def auth_logout_flask():
+    data = ast.literal_eval(request.get_json())
+    logged_out = { 'success': 'logged out' }
+    error = { 'error': 'invalid staff_id'}
+    
+    if data['staff_id'] in cur_dict['staff']:
+        cur_dict['staff'].pop([data['staff_id']])
+        db_conn.close()
+        return dumps(logged_out)
+    else:
+        return error
 
 # Manager functions
 
