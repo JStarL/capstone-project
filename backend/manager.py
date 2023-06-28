@@ -109,7 +109,7 @@ def manager_update_category(cur, category_name, category_id):
     list1 = cur.fetchall()
     if len(list1) == 0: # id doesn't exist
         return invalid_category
-    else: 
+    else:
         if category_name != list1[0][1]:
             #shows success message
             category['category_id'] = list1[0][0]
@@ -119,38 +119,88 @@ def manager_update_category(cur, category_name, category_id):
             return update_name_fail
     
 
-def manager_add_menu_item(cur, menu_item_name):
-    error = { 'error': 'invalid password' } # error message
-    menu = { 'success': 'success in removing category' } # supposed to show success lol
-    
-    query1 = """
-        
-    """ #empty for now as database hasn't been made yet
-    
-    cur.execute(query1, []) #empty for now
-    
-    list1 = cur.fetchall()
-    
-    if len(list1) == 0: #No menu or something went wrong with the id
-        #test
-        return error
-    else: #shows success message
-        return menu
+def manager_add_menu_item(cur, menu_item_name, price, ingredients, description, category_id, menu_id):
+    error = { 'error': 'adding menu_item failed' }
+    menu_item = {}
 
-def manager_delete_menu_item(cur, menu_item_name):
-    error = { 'error': 'invalid password' } # error message
-    menu = { 'success': 'success in removing category' } # supposed to show success lol
-    
     query1 = """
-        
-    """ #empty for now as database hasn't been made yet
+        INSERT INTO menu_items (title, description, price, ingredients, category_id, menu_id)
+        VALUES (%s, %s, %s, %s, %s, %s);
+    """ 
+    query2 = """
+        SELECT id
+        FROM menu_items
+        WHERE title = %s;
+    """ 
     
-    cur.execute(query1, []) #empty for now
+    cur.execute(query1, [menu_item_name, description, price, ingredients, category_id, menu_id])
+    cur.execute(query2, [menu_item_name])
     
     list1 = cur.fetchall()
     
-    if len(list1) == 0: #No menu or something went wrong with the id
-        #test
+    if len(list1) == 0:
         return error
-    else: #shows success message
-        return menu
+    else:
+        menu_item.update({'menu_item_id' : list1[0][0]})
+        return menu_item
+
+
+def manager_delete_menu_item(cur, menu_item_id):
+    error = { 'error': 'invalid menu_item_id' }
+    success = { 'success': 'success in removing menu item' }
+    
+    query1 = """
+        SELECT id
+        FROM menu_items
+        WHERE id = %s;
+    """ 
+
+    query2 = """
+        DELETE FROM menu_items
+        WHERE id = %s;
+    """ 
+    
+    cur.execute(query1, [menu_item_id])
+    
+    list1 = cur.fetchall()
+
+    if len(list1) == 0: # id doesn't exist
+        return error
+    else:
+        cur.execute(query2, [menu_item_id])
+        return success
+
+def manager_update_menu_item(cur, menu_item_id, menu_item_name, price, ingredients, description, category_id, menu_id):
+    invalid_menu_item = { 'error': 'invalid menu item' }
+    menu_item = {}
+    
+    query1 = """
+        SELECT id
+        FROM menu_items
+        WHERE id = %s;
+    """ 
+    
+    query2 = """
+        UPDATE menu_items
+        SET title = %s,
+            description = %s,
+            price = %s,
+            ingredients = %s,
+            category_id = %s,
+            menu_id = %s            
+        WHERE id = %s
+        ;
+    """ 
+    
+    cur.execute(query1, [menu_item_id])
+    
+    list1 = cur.fetchall()
+
+    if len(list1) == 0: # id doesn't exist
+        return invalid_menu_item
+    else: 
+        cur.execute(query2, [menu_item_name, description, price, ingredients, category_id, menu_id])
+        list1 = cur.fetchall()
+        menu_item.update({'menu_item_id' : list1[0][0]})
+        return menu_item
+    
