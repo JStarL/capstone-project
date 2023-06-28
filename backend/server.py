@@ -146,7 +146,7 @@ def manager_view_food_item_flask():
 @APP.route("/manager/add_category", methods=['POST'])
 def manager_add_category_flask():
     data = ast.literal_eval(request.get_json())
-    cur = cur_dict['staff'][data['manager_id']]
+    cur = cur_dict['staff'][data['staff_id']]
     return_val = dumps(manager_add_category(cur, data['category_name'], data['menu_id']))
     db_conn.commit()
     return return_val
@@ -154,7 +154,7 @@ def manager_add_category_flask():
 @APP.route("/manager/delete_category", methods=['DELETE'])
 def manager_delete_category_flask():
     data = ast.literal_eval(request.get_json())
-    cur = cur_dict['staff'][data['manager_id']]
+    cur = cur_dict['staff'][data['staff_id']]
     return_val = dumps(manager_delete_category(cur, data['category_id']))
     db_conn.commit()
     return return_val
@@ -162,7 +162,7 @@ def manager_delete_category_flask():
 @APP.route("/manager/update_category", methods=['POST'])
 def manager_update_category_flask():
     data = ast.literal_eval(request.get_json())
-    cur = cur_dict['staff'][data['manager_id']]
+    cur = cur_dict['staff'][data['staff_id']]
     return_val = dumps(manager_update_category(cur, data['category_name'], data['category_id']))
     db_conn.commit()
     return return_val
@@ -170,13 +170,13 @@ def manager_update_category_flask():
 @APP.route("/manager/add_menu_item", methods=['POST'])
 def manager_add_menu_item_flask():
     data = request.get_json()
-    cur = cur_dict['staff'][data['manager_id']]
+    cur = cur_dict['staff'][data['staff_id']]
     return dumps(manager_add_menu_item(cur, data['food_name']))
 
 @APP.route("/manager/delete_menu_item", methods=['DELETE'])
 def manager_delete_menu_item_flask():
     data = request.get_json()
-    cur = cur_dict['staff'][data['manager_id']]
+    cur = cur_dict['staff'][data['staff_id']]
     return dumps(manager_delete_menu_item(cur, data['food_id']))
 
 
