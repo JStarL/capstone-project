@@ -113,7 +113,7 @@ def auth_logout_flask():
         db_conn.close()
         return dumps(logged_out)
     else:
-        return error
+        return dumps(error)
 
 # Manager functions
 
