@@ -29,6 +29,7 @@ function App() {
     console.log('logout')
     setId(null);
     localStorage.removeItem('staff_id');
+    localStorage.removeItem('manager_id');
     localStorage.removeItem('menu_id');
     localStorage.removeItem('staff_type');
     localStorage.clear()
