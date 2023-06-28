@@ -90,7 +90,7 @@ def register_flask():
     return_dict = register_backend(cur, data['email'], data['password'], data['name'], data['restaurant_name'], data['location'])
     return_val = dumps(return_dict)
     if 'success' in return_dict:
-        cur_dict['staff'][return_dict['manager_id']] = cur
+        cur_dict['staff'][return_dict['staff_id']] = cur
     db_conn.commit()
     return return_val
 

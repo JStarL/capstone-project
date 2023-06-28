@@ -104,6 +104,6 @@ def register_backend(cur, email, password, name, resturant_name, location):
     staff_id = list1[0][0]
     
     # adding the values to be returned
-    registered['manager_id'] = staff_id
+    registered['staff_id'] = staff_id
     registered['menu_id'] = menu_id
     return registered
