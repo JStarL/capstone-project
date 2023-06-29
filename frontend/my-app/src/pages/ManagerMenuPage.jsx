@@ -36,8 +36,7 @@ function ManagerMenuPage() {
 
     makeRequest('/manager/add_category', 'POST', body, undefined)
       .then(data => {
-        console.log(data);
-        fetchAllMenuData();
+        fetchAllMenuData(); // basically updates/refreshes the page
       })
       .catch(e => console.log('Error: ' + e));
   }
@@ -62,6 +61,7 @@ function ManagerMenuPage() {
               key={Object.keys(category)[0]} // category id 
               id={Object.keys(category)[0]}
               setCurrentSelectedCategory={setCurrentSelectedCategory}
+              fetchAllMenuData={fetchAllMenuData}
             >
             </CategoryManager>
           ))}
