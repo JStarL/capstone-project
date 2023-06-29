@@ -3,13 +3,13 @@ import React from 'react';
 import { BrowserRouter, Routes, Route, Link, useNavigate } from 'react-router-dom';
 import { Button } from '@mui/material';
 import ManagerLoginPage from './pages/ManagerLoginPage'
-import LogoutButton from './components/LogoutButton';
 import AddStaffPage from './pages/AddStaffPage';
 import ManagerMenuPage from './pages/ManagerMenuPage';
 import NewMenuItemPage from './pages/NewMenuItemPage';
 import RegisterPage from './pages/RegisterPage';
 import CustomerMenuPage from './pages/CustomerMenuPage';
 import CustomerOrStaff from './pages/CustomerOrStaff';
+import makeRequest from './makeRequest';
 
 function App() {
   const [id, setId] = React.useState(null);
@@ -28,8 +28,17 @@ function App() {
   }
 
   const logout = () => {
-    console.log('logout')
+    const body = JSON.stringify({
+      'staff_id': id.toString(),
+    })
+    console.log(body)
+    makeRequest('/auth/logout', 'POST', body, undefined)
+    .then(data => {
+      console.log(data)
+    })
+    .catch(e => console.log('Error: ' + e))
     setId(null);
+    setStaffType(null);
     localStorage.removeItem('staff_id');
     localStorage.removeItem('manager_id');
     localStorage.removeItem('menu_id');
