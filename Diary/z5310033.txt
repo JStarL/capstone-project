@@ -69,4 +69,10 @@ Week 5
   - schedule demo practice run for Thursday
 - Working on manager adding a new staff page 
 
+Things implemented (Frontend) during the Week:
+- Added intial are you a customer or staff screen
+- Added session id for customers 
+- Local storage for staff_id, session_id, menu_id, staff_type
+- Register a new manager 
+- Working on categories
 

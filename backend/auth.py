@@ -41,11 +41,24 @@ def login_backend(cur, email, password):
         
 def register_backend(cur, email, password, name, resturant_name, location):
 
-    # NOTE: The token used is their 'email' for now
-
     invalid_register = { 'error': 'invalid' }
+    already_registered = { 'error': 'This email is already registered'}
     registered = { 'success': 'registered' }
     
+    # Check if email is already registered
+
+    query0 = """
+    SELECT id
+    FROM staff
+    WHERE email = %s;
+    """
+
+    cur.execute(query0, [email])
+    list1 = cur.fetchall()
+    
+    if len(list1) > 0:
+        return already_registered
+
     query2 = """
     INSERT INTO menus (restaurant_name, restaurant_loc)
     VALUES (%s, %s);
@@ -92,3 +105,46 @@ def register_backend(cur, email, password, name, resturant_name, location):
     registered['manager_id'] = staff_id
     registered['menu_id'] = menu_id
     return registered
+
+def auth_add_staff_backend(cur, email, password, staff_type, name, menu_id):
+    
+    invalid_staff_type = { 'error': 'invalid staff type' }
+    staff_already_exists = { 'error': 'this email has already been registered' }
+    insert_fail = { 'error': 'failed to insert new staff member'}
+    success = { 'success': 'successfully registered staff' }
+
+    staff_char = None
+    if staff_type == 'kitchen':
+        staff_char = 'K'
+    elif staff_type == 'wait':
+        staff_char = 'W'
+    else:
+        return invalid_staff_type
+    
+    query0 = """
+    select id from staff where email = %s;
+    """
+
+    cur.execute(query0, [email])
+    l1 = cur.fetchall()
+
+    if len(l1) > 0:
+        return staff_already_exists
+
+    query1 = """
+    INSERT INTO staff (email, name, password, menu_id, staff_type)
+    VALUES (%s, %s, %s, %s, %s);
+    """
+
+    cur.execute(query1, [email, name, password, menu_id, staff_char])
+
+    # Check that insert worked
+
+    cur.execute(query0, [email])
+    l1 = cur.fetchall()
+
+    if len(l1) > 0:
+        success['staff_id'] = str(l1[0][0])
+        return success
+    else:
+        return insert_fail
