@@ -41,7 +41,7 @@ function ManagerMenuPage() {
         if (value1[1].length > 0) {
           setMenuItems(value1[1])
         }
-        console.log(value1);
+        console.log(value1[1]);
       }
       
     }
