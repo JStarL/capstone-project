@@ -8,7 +8,7 @@ import sys
 import ast
 
 
-from manager import manager_view_menu, manager_view_category, manager_view_food_item, manager_add_category, manager_delete_category, manager_add_menu_item, manager_delete_menu_item, manager_update_category
+from manager import manager_view_menu, manager_view_category, manager_view_menu_item, manager_add_category, manager_delete_category, manager_add_menu_item, manager_delete_menu_item, manager_update_category
 from auth import login_backend, register_backend, auth_add_staff_backend
 from customer import customer_view_menu
 
@@ -153,11 +153,11 @@ def manager_view_category_flask():
     return dumps(manager_view_category(cur, category_id))
 
 @APP.route("/manager/view_menu_item", methods=['GET'])
-def manager_view_food_item_flask():
+def manager_view_menu_item_flask():
     manager_id = request.args.get("manager_id")
     food_id = request.args.get("menu_item_id")
     cur = cur_dict['staff'][manager_id]
-    return dumps(manager_view_food_item(cur, food_id))
+    return dumps(manager_view_menu_item(cur, food_id))
 
 @APP.route("/manager/add_category", methods=['POST'])
 def manager_add_category_flask():

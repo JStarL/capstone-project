@@ -35,9 +35,9 @@ def manager_view_menu(cur, menu_id):
                 tmp.update({'food_image': menu_item[3]})
                 tmp.update({'food_price': menu_item[4]})
                 menu_items_list.append(tmp)
-            menu.append({'Best Selling': menu_items_list})
+            menu.append({str(categ_id): ['Best Selling', menu_items_list]})
         else:
-            menu.append({categ[1]: []})
+            menu.append({str(categ_id): [categ[1], []]})
         
     return menu
 
@@ -66,7 +66,7 @@ def manager_view_category(cur, category_id):
 
     return menu_items
 
-def manager_view_food_item(cur, food_id):
+def manager_view_menu_item(cur, food_id):
     error = { 'error': 'invalid food_id' } # error message
     food = { 'success': 'Show food' } # supposed to show the food lol
     
@@ -122,6 +122,7 @@ def manager_add_category(cur, category_name, menu_id):
 def manager_delete_category(cur, category_id):
     error = { 'error': 'invalid category_id' } # error message
     delete_fail = { 'error': 'failed to delete category' }
+    delete_fail_best_selling = { 'error': 'cannot remove default category best selling' }
     category = { 'success': 'success in removing category' } # supposed to show success lol
     
     query1 = """
@@ -129,7 +130,7 @@ def manager_delete_category(cur, category_id):
         WHERE id = %s;
     """ 
     query2 = """
-        SELECT id 
+        SELECT id, name 
         FROM categories
         WHERE id = %s;
     """ 
@@ -138,6 +139,9 @@ def manager_delete_category(cur, category_id):
     list1 = cur.fetchall()
     if len(list1) == 0:
         return error
+    
+    if list1[0][1] == 'Best Selling':
+        return delete_fail_best_selling
     
     cur.execute(query1, [category_id])
     cur.execute(query2, [category_id])
