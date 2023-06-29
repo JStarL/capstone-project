@@ -43,8 +43,13 @@ function CategoryManager(props) {
 		props.setCurrentSelectedCategory(categoryName)
 	}
 
+	function selectCategory() {
+		props.setCurrentSelectedCategory(props.categoryName)
+		props.setCurrentSelectedCategoryId(props.id)
+
+	}
 	return <>
-		<Card onClick={() => props.setCurrentSelectedCategory(props.categoryName)} sx={{ m: 2, p: 7 }} variant="outlined" >
+		<Card onClick={() => selectCategory()} sx={{ m: 2, p: 7 }} variant="outlined" >
 			<CardContent>
 				<TextField className='food-item-name' value={categoryName} onChange={e => setCategoryName(e.target.value)} onBlur={() => updateCategoryName()} label='Category Name'></TextField>
 			</CardContent>
