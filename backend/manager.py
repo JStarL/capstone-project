@@ -57,7 +57,7 @@ def manager_view_category(cur, category_id):
 
 
     query1 = """
-    select id, title, description, image, price from menu_items where category_id = %s order by title;
+    select id, title, description, image, price, ingredients from menu_items where category_id = %s order by title;
     """
 
     cur.execute(query1, [category_id])
@@ -70,6 +70,7 @@ def manager_view_category(cur, category_id):
         tmp.update({'food_description': tup[2]})
         tmp.update({'food_image': tup[3]})
         tmp.update({'food_price': tup[4]})
+        tmp.update({'ingredients': tup[5]})
         menu_items.append(tmp)
 
     return menu_items
