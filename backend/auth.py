@@ -43,6 +43,7 @@ def register_backend(cur, email, password, name, resturant_name, location):
 
     invalid_register = { 'error': 'invalid' }
     already_registered = { 'error': 'This email is already registered'}
+    failed_category_insert = { 'error': 'failed to insert "Best Selling" category' }
     registered = { 'success': 'registered' }
     
     # Check if email is already registered
@@ -83,6 +84,20 @@ def register_backend(cur, email, password, name, resturant_name, location):
     ;
     """
 
+    query5 = """
+    insert into categories(name, menu_id)
+    values ('Best Selling', %s)
+    ;
+    """
+
+    query6 = """
+    select id
+    from categories
+    where name = 'Best Selling'
+    and menu_id = %s
+    ;
+    """
+
     cur.execute(query2, [resturant_name, location]) #adding in the database of the menus
     cur.execute(query3, [resturant_name, location]) #grabbing the id of the menu
     list1 = cur.fetchall()
@@ -104,7 +119,19 @@ def register_backend(cur, email, password, name, resturant_name, location):
     # adding the values to be returned
     registered['manager_id'] = staff_id
     registered['menu_id'] = menu_id
-    return registered
+
+    cur.execute(query5, [menu_id]) # inserting the default 'Best Selling' category
+
+    # Check that this insert worked
+
+    cur.execute(query6, [menu_id]) # get the category_id
+    list1 = cur.fetchall()
+
+    if len(list1) == 0:
+        return failed_category_insert
+    else:
+        registered['category_id'] = list1[0][0]
+        return registered
 
 def auth_add_staff_backend(cur, email, password, staff_type, name, menu_id):
     

@@ -8,7 +8,7 @@ import sys
 import ast
 
 
-from manager import manager_view_menu, manager_view_category, manager_view_food_item, manager_add_category, manager_delete_category, manager_add_menu_item, manager_delete_menu_item, manager_update_category
+from manager import manager_view_menu, manager_view_category, manager_view_menu_item, manager_add_category, manager_delete_category, manager_add_menu_item, manager_delete_menu_item, manager_update_category
 from auth import login_backend, register_backend, auth_add_staff_backend
 from customer import customer_view_menu
 
@@ -38,19 +38,19 @@ APP.register_error_handler(Exception, defaultHandler)
 # NO NEED TO MODIFY ABOVE THIS POINT, EXCEPT IMPORTS
 db_conn = None
 
-# Will be changed on future sprints. ID will replace email.
+# ID has replaced email
 # cur_dict = {
 #     'managers': {
-#         manager@gmail.com: cur1, # manager_email: cursor
-#         manager2@gmail.com: cur2,
+#         "1": cur1, # manager_email: cursor
+#         "5": cur2,
 #     }, 
 #     'staff': {
-#         kitchen@gmail.com: cur3, # kitchen / wait staff email: cursor
-#         wait_staff@gmail.com: cur4,
+#         "2": cur3, # kitchen / wait staff email: cursor
+#         "6": cur4,
 #     },
 #     'customers': {
-#         123456: cur5, # session_id: cursor
-#         234567: cur6
+#         "123456": cur5, # session_id: cursor
+#         "234567": cur6
 #     }
 # }
 
@@ -153,11 +153,11 @@ def manager_view_category_flask():
     return dumps(manager_view_category(cur, category_id))
 
 @APP.route("/manager/view_menu_item", methods=['GET'])
-def manager_view_food_item_flask():
+def manager_view_menu_item_flask():
     manager_id = request.args.get("manager_id")
     food_id = request.args.get("menu_item_id")
     cur = cur_dict['staff'][manager_id]
-    return dumps(manager_view_food_item(cur, food_id))
+    return dumps(manager_view_menu_item(cur, food_id))
 
 @APP.route("/manager/add_category", methods=['POST'])
 def manager_add_category_flask():
