@@ -28,7 +28,7 @@ function ManagerMenuPage() {
 
   function addNewCategory () {
     const body = JSON.stringify({
-      'manager_id': 0,
+      'staff_id': managerId,
       'menu_id': menuId,
       'category_name': newCategoryName
     })
