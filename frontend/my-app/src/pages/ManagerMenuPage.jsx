@@ -9,9 +9,7 @@ import makeRequest from '../makeRequest';
 import PropTypes from 'prop-types';
 
 function ManagerMenuPage() {
-  const [foodName, setFoodName] = React.useState('Food Name');
   const [newCategoryName, setNewCategoryName] = React.useState('');
-  const [foodDescription, setFoodDescription] = React.useState('Food Description: Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo');
   const [categories, setCategories] = React.useState([]);
   const [currentSelectedCategory, setCurrentSelectedCategory] = React.useState('Best Selling');
   const [currentSelectedCategoryId, setCurrentSelectedCategoryId] = React.useState('');
@@ -33,9 +31,18 @@ function ManagerMenuPage() {
     fetchData();
   }, []);
 
+  React.useEffect(() => {
+    if (currentSelectedCategoryId !== '') {
+      console.log('selected')
+      console.log(currentSelectedCategoryId)
+      fetchCategoryMenuItems();
+    }
+  }, [currentSelectedCategory]);
+
   async function fetchAllMenuData() {
     const url = `/manager/view_menu?manager_id=${managerId}&menu_id=${menuId}`;
     const data = await makeRequest(url, 'GET', undefined, undefined);
+    console.log(data)
     setCategories(data);
     return data; // Return the fetched data
   }
@@ -56,9 +63,11 @@ function ManagerMenuPage() {
   }
 
   async function fetchCategoryMenuItems() {
-    const url = `/manager/view_category?manager_id=${managerId}&category=${currentSelectedCategoryId}`;
+    const url = `/manager/view_category?manager_id=${managerId}&category_id=${currentSelectedCategoryId}`;
     const data = await makeRequest(url, 'GET', undefined, undefined);
     setMenuItems(data)
+    console.log(menuItems)
+    console.log(data)
   }
   if (!categories || !Array.isArray(categories)) return <>loading...</>;
   return (
@@ -87,10 +96,24 @@ function ManagerMenuPage() {
           <Button onClick={addNewCategory} startIcon={<AddIcon />}>Add new category</Button>
         </div>
         <div style={{ width: '80%', height: '100%' }}>
-            {/* Display menu items here */}
+          {menuItems === []
+            ? <div>Empty</div>
+            : <>{menuItems?.map((menuItem) => (
+              <ManagerFoodItem
+                originalFoodName={menuItem.food_name}
+                originalFoodDescription={menuItem.food_description}
+                originalPrice={menuItem.food_price.toString()}
+                originalImage={menuItem.food_image}
+                foodId={menuItem.food_id.toString()}
+                categoryId={currentSelectedCategoryId}
+                fetchAllMenuData={fetchAllMenuData}
+                fetchCategoryMenuItems={fetchCategoryMenuItems}
+              />
+            ))}</>
+          }
         </div>
       </div>
-      <Button onClick={() => { navigate('/manager/addnewmenuitem') }}>Add new menu item</Button>
+      <Button onClick={() => { navigate(`/manager/addnewmenuitem/${menuId}/${currentSelectedCategoryId}`) }}>Add new menu item</Button>
     </>
   );
 }

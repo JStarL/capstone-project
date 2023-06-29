@@ -6,7 +6,6 @@ import makeRequest from '../makeRequest';
 
 function CategoryManager(props) {
 	const [categoryName, setCategoryName] = React.useState(props.categoryName);
-	
 	const managerId = localStorage.getItem('staff_id');
   const menuId = localStorage.getItem('menu_id');
 	
@@ -46,7 +45,6 @@ function CategoryManager(props) {
 	function selectCategory() {
 		props.setCurrentSelectedCategory(props.categoryName)
 		props.setCurrentSelectedCategoryId(props.id)
-
 	}
 	return <>
 		<Card onClick={() => selectCategory()} sx={{ m: 2, p: 7 }} variant="outlined" >
