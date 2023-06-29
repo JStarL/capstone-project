@@ -44,6 +44,16 @@ def customer_view_category(cur, category_id):
     invalid_category_id = { 'error': 'invalid category_id' }
     menu_items = []
 
+    query0 = """
+    select id from categories where id = %s;
+    """
+
+    cur.execute(query0, [category_id])
+    list1 = cur.fetchall()
+
+    if len(list1) == 0:
+        return invalid_category_id
+
     query1 = """
     select id, title, description, image, price from menu_items where category_id = %s order by title;
     """
@@ -51,9 +61,6 @@ def customer_view_category(cur, category_id):
     cur.execute(query1, [category_id])
     list1 = cur.fetchall()
 
-    if len(list1) == 0:
-        return invalid_category_id
-    
     for tup in list1:
         tmp = {}
         tmp.update({'food_id': tup[0]})
