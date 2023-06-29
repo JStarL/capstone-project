@@ -1,18 +1,49 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Button, TextField, Typography, Paper, FormLabel, FormControl, Radio, RadioGroup, FormControlLabel } from '@mui/material';
+import makeRequest from '../makeRequest';
 
-function NewStaffForm() {
+function NewStaffForm({ onSuccess }) {
+	const [name, setName] = React.useState('')
 	const [email, setEmail] = React.useState('')
 	const [password, setPassword] = React.useState('')
-	const [staffType, setStaffType] = React.useState('Kitchen')
+	const [staffType, setStaffType] = React.useState('kitchen')
 	const navigate = useNavigate();
+
+	const managerId = localStorage.getItem('staff_id')
+  const menuId = localStorage.getItem('menu_id')
+	function addNewStaff () {
+		const body = JSON.stringify({
+		  'manager_id': managerId,
+		  'staff_type': staffType,
+		  'menu_id': menuId,
+		  email,
+		  password,
+		  name,
+		})
+		makeRequest('/manager/add_staff', 'POST', body, undefined)
+		.then(data => {
+      if (data.hasOwnProperty('success')) {
+        onSuccess(name, staffType)
+		    console.log(data)
+      }
+		})
+		.catch(e => console.log('Error: ' + e))
+	  }
 
 	return <>
 		<div className='login-page'>
 			<Paper className='paper' elevation={3}>
 				<form className='login-form'>
 					<Typography className='h4' variant="h4" gutterBottom>Add New Staff</Typography>
+					<TextField label='Name'
+						onChange={e => setName(e.target.value)}
+						required
+						variant="outlined"
+						sx={{ mb: 3 }}
+						fullWidth
+						value={name}
+					/>
 					<TextField label='Email'
 						onChange={e => setEmail(e.target.value)}
 						required
@@ -44,12 +75,12 @@ function NewStaffForm() {
 						value={staffType}
 						onChange={e => setStaffType(e.target.value)}
 					>
-						<FormControlLabel value="Kitchen" control={<Radio />} label="Kitchen" />
-						<FormControlLabel value="Wait" control={<Radio />} label="Wait" />
+						<FormControlLabel value="kitchen" control={<Radio />} label="Kitchen" />
+						<FormControlLabel value="wait" control={<Radio />} label="Wait" />
 					</RadioGroup>
 				</FormControl>
 				</form>
-					<Button onClick={() => navigate('/manager/menu')}>Add Staff</Button>
+					<Button onClick={addNewStaff}>Add Staff</Button>
 					<br /><br />
 			</Paper>
 			

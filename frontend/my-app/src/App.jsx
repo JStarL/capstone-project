@@ -13,6 +13,7 @@ import CustomerOrStaff from './pages/CustomerOrStaff';
 
 function App() {
   const [id, setId] = React.useState(null);
+  const [staffType, setStaffType] = React.useState(localStorage.getItem('staff_type'))
 
   React.useEffect(function () {
     if (localStorage.getItem('staff_id')) {
@@ -20,8 +21,9 @@ function App() {
     }
   }, []);
 
-  const login = (staff_id) => {
+  const login = (staff_id, staff_type) => {
     setId(staff_id);
+    setStaffType(staff_type)
     localStorage.setItem('staff_id', staff_id);
   }
 
@@ -76,12 +78,9 @@ function App() {
     <div className="App">
       <BrowserRouter>
       <header>
-        {['/', '/login', '/register', '/addstaff', '/manager/menu', '/manager/addnewmenuitem', '/manager/setup'].includes(window.location.pathname)
-          ? (id === null
-              ? <Nav />
-              : <Nav2 />
-            )
-          : null
+        {id === null
+          ? <Nav />
+          : <Nav2 />
         }
       </header>
       <main>
@@ -93,11 +92,14 @@ function App() {
           <Route path='/manager/menu' element={<ManagerMenuPage />} />
           <Route path='/manager/addnewmenuitem' element={<NewMenuItemPage />} />
 
+          <Route path='/kitchen_staff' element={<div>Kitchen Staff Logged In</div>} />
+          <Route path='/wait_staff' element={<div>Wait Staff Logged In</div>} />
+
           <Route path='/customer/:menuId' element={<CustomerMenuPage />} />
         </Routes>
       </main>
       <footer>
-        {id === null
+        {staffType !== 'manager'
           ? null
           : (<div className="footer-container">
             <Button><Link to='/addstaff'>Add Staff</Link></Button>
