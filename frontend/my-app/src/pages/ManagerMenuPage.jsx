@@ -1,6 +1,6 @@
 import React from 'react';
 import '../App.css';
-import { Button, TextField } from '@mui/material';
+import { Button, TextField, Typography } from '@mui/material';
 import ManagerFoodItem from '../components/ManagerFoodItem';
 import { useNavigate } from 'react-router-dom';
 import CategoryManager from '../components/CategoryManager';
@@ -13,6 +13,7 @@ function ManagerMenuPage() {
   const [newCategoryName, setNewCategoryName] = React.useState('');
   const [foodDescription, setFoodDescription] = React.useState('Food Description: Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo');
   const [categories, setCategories] = React.useState([]);
+  const [currentSelectedCategory, setCurrentSelectedCategory] = React.useState('Best Selling');
   const navigate = useNavigate();
 
   const managerId = localStorage.getItem('staff_id');
@@ -51,7 +52,8 @@ function ManagerMenuPage() {
 
   return (
     <>
-      MANAGER MENU PAGE
+      <Typography className='h4' variant="h4" gutterBottom>Manager Menu Page - {currentSelectedCategory}</Typography>
+      
       <div style={{ display: 'flex', flexDirection: 'row' }}>
         <div style={{ width: '20%', backgroundColor: 'white', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
           {categories.map((category) => (
@@ -59,6 +61,7 @@ function ManagerMenuPage() {
               categoryName={category[Object.keys(category)[0]][0]}
               key={Object.keys(category)[0]} // category id 
               id={Object.keys(category)[0]}
+              setCurrentSelectedCategory={setCurrentSelectedCategory}
             >
             </CategoryManager>
           ))}
