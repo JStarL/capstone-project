@@ -42,9 +42,17 @@ function CategoryManager(props) {
 		props.setCurrentSelectedCategory(categoryName)
 	}
 
+  async function fetchCategoryMenuItems() {
+    const url = `/manager/view_category?manager_id=${managerId}&category_id=${props.id}`;
+    const data = await makeRequest(url, 'GET', undefined, undefined)
+    props.setMenuItems(data)
+    console.log(data)
+  }
+
 	function selectCategory() {
 		props.setCurrentSelectedCategory(props.categoryName)
 		props.setCurrentSelectedCategoryId(props.id)
+    fetchCategoryMenuItems()
 	}
 	return <>
 		<Card onClick={() => selectCategory()} sx={{ m: 2, p: 7 }} variant="outlined" >

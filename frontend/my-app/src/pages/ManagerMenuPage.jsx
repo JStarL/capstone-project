@@ -12,9 +12,8 @@ function ManagerMenuPage() {
   const [newCategoryName, setNewCategoryName] = React.useState('');
   const [categories, setCategories] = React.useState([]);
   const [currentSelectedCategory, setCurrentSelectedCategory] = React.useState('Best Selling');
-  const [currentSelectedCategoryId, setCurrentSelectedCategoryId] = React.useState('');
+  const [currentSelectedCategoryId, setCurrentSelectedCategoryId] = React.useState(1);
   const [menuItems, setMenuItems] = React.useState([]); // List of Menu items for the current selected category
-
   const navigate = useNavigate();
 
   const managerId = localStorage.getItem('staff_id');
@@ -30,14 +29,6 @@ function ManagerMenuPage() {
 
     fetchData();
   }, []);
-
-  React.useEffect(() => {
-    if (currentSelectedCategoryId !== '') {
-      console.log('selected')
-      console.log(currentSelectedCategoryId)
-      fetchCategoryMenuItems();
-    }
-  }, [currentSelectedCategory]);
 
   async function fetchAllMenuData() {
     const url = `/manager/view_menu?manager_id=${managerId}&menu_id=${menuId}`;
@@ -64,11 +55,12 @@ function ManagerMenuPage() {
 
   async function fetchCategoryMenuItems() {
     const url = `/manager/view_category?manager_id=${managerId}&category_id=${currentSelectedCategoryId}`;
-    const data = await makeRequest(url, 'GET', undefined, undefined);
+    const data = await makeRequest(url, 'GET', undefined, undefined)
     setMenuItems(data)
     console.log(menuItems)
     console.log(data)
   }
+
   if (!categories || !Array.isArray(categories)) return <>loading...</>;
   return (
     <>
@@ -84,6 +76,7 @@ function ManagerMenuPage() {
               setCurrentSelectedCategory={setCurrentSelectedCategory}
               fetchAllMenuData={fetchAllMenuData}
               setCurrentSelectedCategoryId={setCurrentSelectedCategoryId}
+              setMenuItems={setMenuItems}
             />
           ))}
           <TextField
@@ -91,26 +84,23 @@ function ManagerMenuPage() {
             onChange={e => setNewCategoryName(e.target.value)}
             variant="outlined"
             sx={{ mb: 3 }}
-            value={newCategoryName}
+            value={newCategoryName || ''}
           />
           <Button onClick={addNewCategory} startIcon={<AddIcon />}>Add new category</Button>
         </div>
         <div style={{ width: '80%', height: '100%' }}>
-          {menuItems === []
-            ? <div>Empty</div>
-            : <>{menuItems?.map((menuItem) => (
-              <ManagerFoodItem
-                originalFoodName={menuItem.food_name}
-                originalFoodDescription={menuItem.food_description}
-                originalPrice={menuItem.food_price.toString()}
-                originalImage={menuItem.food_image}
-                foodId={menuItem.food_id.toString()}
-                categoryId={currentSelectedCategoryId}
-                fetchAllMenuData={fetchAllMenuData}
-                fetchCategoryMenuItems={fetchCategoryMenuItems}
-              />
-            ))}</>
-          }
+          {menuItems?.map((menuItem) => (
+            <ManagerFoodItem
+              originalFoodName={menuItem.food_name}
+              originalFoodDescription={menuItem.food_description}
+              originalPrice={menuItem.food_price.toString()}
+              originalImage={menuItem.food_image}
+              foodId={menuItem.food_id.toString()}
+              categoryId={currentSelectedCategoryId}
+              fetchAllMenuData={fetchAllMenuData}
+              fetchCategoryMenuItems={fetchCategoryMenuItems}
+            />
+            ))}
         </div>
       </div>
       <Button onClick={() => { navigate(`/manager/addnewmenuitem/${menuId}/${currentSelectedCategoryId}`) }}>Add new menu item</Button>
