@@ -17,12 +17,21 @@ function ManagerLoginPage ({ onSuccess }) {
     makeRequest('/auth/login', 'POST', body, undefined)
     .then(data => {
       if (data.hasOwnProperty('success')) {
-        onSuccess(data['staff_id'])
-        navigate('/manager/menu')
+        onSuccess(data['staff_id'], data['staff_type'])
+        console.log(data['staff_id'])
         localStorage.setItem('staff_id', data['staff_id']);
         localStorage.setItem('menu_id', data['menu_id']);
         localStorage.setItem('staff_type', data['staff_type']);
         console.log(data)
+        if (data['staff_type'] === 'kitchen') {
+          navigate('/kitchen_staff')
+        }
+        else if(data['staff_type'] === 'wait') {
+          navigate('/wait_staff')
+        }
+        else if (data['staff_type'] === 'manager') {
+          navigate(`/manager/menu/${data['menu_id']}`)
+        }
       } else {
         alert(data['error'])
       }

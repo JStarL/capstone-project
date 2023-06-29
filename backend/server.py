@@ -38,19 +38,19 @@ APP.register_error_handler(Exception, defaultHandler)
 # NO NEED TO MODIFY ABOVE THIS POINT, EXCEPT IMPORTS
 db_conn = None
 
-# Will be changed on future sprints. ID will replace email.
+# ID has replaced email
 # cur_dict = {
 #     'managers': {
-#         manager@gmail.com: cur1, # manager_email: cursor
-#         manager2@gmail.com: cur2,
+#         "1": cur1, # manager_email: cursor
+#         "5": cur2,
 #     }, 
 #     'staff': {
-#         kitchen@gmail.com: cur3, # kitchen / wait staff email: cursor
-#         wait_staff@gmail.com: cur4,
+#         "2": cur3, # kitchen / wait staff email: cursor
+#         "6": cur4,
 #     },
 #     'customers': {
-#         123456: cur5, # session_id: cursor
-#         234567: cur6
+#         "123456": cur5, # session_id: cursor
+#         "234567": cur6
 #     }
 # }
 
