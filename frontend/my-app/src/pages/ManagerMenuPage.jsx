@@ -36,9 +36,12 @@ function ManagerMenuPage() {
 
     makeRequest('/manager/add_category', 'POST', body, undefined)
       .then(data => {
+        setNewCategoryName('')
         fetchAllMenuData(); // basically updates/refreshes the page
       })
       .catch(e => console.log('Error: ' + e));
+    
+    
   }
 
   async function fetchAllMenuData() {
