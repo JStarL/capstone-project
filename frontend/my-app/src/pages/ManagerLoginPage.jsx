@@ -30,7 +30,7 @@ function ManagerLoginPage ({ onSuccess }) {
           navigate('/wait_staff')
         }
         else if (data['staff_type'] === 'manager') {
-          navigate('/manager/menu')
+          navigate(`/manager/menu/${data['menu_id']}`)
         }
       } else {
         alert(data['error'])

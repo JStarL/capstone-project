@@ -89,7 +89,7 @@ function App() {
           <Route path='/login' element={<ManagerLoginPage onSuccess={login} />} />
           <Route path='/register' element={<RegisterPage onSuccess={login} />} />
           <Route path='/addstaff' element={<AddStaffPage />} />
-          <Route path='/manager/menu' element={<ManagerMenuPage />} />
+          <Route path='/manager/menu/:menuId' element={<ManagerMenuPage />} />
           <Route path='/manager/addnewmenuitem' element={<NewMenuItemPage />} />
 
           <Route path='/kitchen_staff' element={<div>Kitchen Staff Logged In</div>} />
