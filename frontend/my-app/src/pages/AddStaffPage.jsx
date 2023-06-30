@@ -14,7 +14,7 @@ function AddStaffPage () {
     setSuccess(true)
     setName(user_name)
     setStaffType(staff_type)
-    navigate(`/manager/menu/${menuId}`)
+    // navigate(`/manager/menu/${menuId}`)
   }
   return <>
     <NewStaffForm onSuccess={successFunction}></NewStaffForm>

@@ -94,7 +94,7 @@ function ManagerMenuPage() {
   if (!categories || !Array.isArray(categories)) return <>loading...</>;
   return (
     <>
-      <Typography className='h4' variant="h4" gutterBottom>Manager Menu Page - {currentSelectedCategory} with ID: {currentSelectedCategoryId}</Typography>
+      <Typography className='h4' variant="h4" gutterBottom>Manager Menu Page - {currentSelectedCategory}</Typography>
 
       <div style={{ display: 'flex', flexDirection: 'row' }}>
         <div style={{ width: '20%', backgroundColor: 'white', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
