@@ -11,11 +11,19 @@ import makeRequest from '../makeRequest';
 import { useNavigate } from 'react-router-dom';
 
 function ManagerFoodItem ({ originalFoodName, originalFoodDescription, originalPrice, originalImage, foodId, categoryId, fetchAllMenuData, fetchCategoryMenuItems }) {
-  const [foodName, setFoodName] = React.useState(originalFoodName);
-  const [foodDescription, setFoodDescription] = React.useState(originalFoodDescription);
+  const [foodName, setFoodName] = React.useState('');
+  const [foodDescription, setFoodDescription] = React.useState('');
   const [ingredients, setIngredients] = React.useState([])
   const [image, setImage] = React.useState(originalImage)
   const [price, setPrice] = React.useState(originalPrice)
+
+  React.useEffect(() => {
+    setFoodName(originalFoodName)
+    setFoodDescription(originalFoodDescription)
+    setIngredients([])
+    setImage(originalImage)
+    setPrice(originalPrice)
+  }, [originalFoodDescription, originalFoodName, originalImage, originalPrice]);
 
   const navigate = useNavigate();
   async function handleFileSelect (event) {

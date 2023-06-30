@@ -42,7 +42,7 @@ function ManagerMenuPage() {
         const url = `/manager/view_category?manager_id=${managerId}&category_id=${currentSelectedCategoryId}`;
         const data = await makeRequest(url, 'GET', undefined, undefined)
         setMenuItems([...data])
-        setTest(!test)
+        fetchAllMenuData()
       }
     };
     fetchCategoryData();
@@ -92,7 +92,9 @@ function ManagerMenuPage() {
     return data
   }
 
-  console.log(menuItems)
+  React.useEffect(() => {
+    console.log(menuItems)
+  }, [menuItems]);
   if (!categories || !Array.isArray(categories)) return <>loading...</>;
   return (
     <>
@@ -122,6 +124,9 @@ function ManagerMenuPage() {
           <Button onClick={addNewCategory} startIcon={<AddIcon />}>Add new category</Button>
         </div>
         <div style={{ width: '80%', height: '100%' }}>
+        {menuItems.map((menuItem) => (
+            <div>{menuItem.food_name}</div>
+            ))}
           {menuItems.map((menuItem) => (
             <ManagerFoodItem
               originalFoodName={menuItem.food_name}
