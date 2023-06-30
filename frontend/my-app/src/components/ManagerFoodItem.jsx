@@ -14,7 +14,6 @@ function ManagerFoodItem ({ originalFoodName, originalFoodDescription, originalP
   const [foodName, setFoodName] = React.useState('');
   const [foodDescription, setFoodDescription] = React.useState('');
   const [ingredients, setIngredients] = React.useState('')
-  // const [ingredientsList, setIngredientsList] = React.useState([])
   const [image, setImage] = React.useState(originalImage)
   const [price, setPrice] = React.useState(originalPrice)
 
@@ -55,9 +54,7 @@ function ManagerFoodItem ({ originalFoodName, originalFoodDescription, originalP
 		});
 		makeRequest('/manager/update_menu_item', 'POST', body, undefined)
 			.then(data => {
-        if (data.hasOwnProperty('success')) {
-          setFoodDescription('')
-        }
+        console.log(data)
 			})
 			.catch(e => console.log('Error: ' + e));
 	}
@@ -71,7 +68,7 @@ function ManagerFoodItem ({ originalFoodName, originalFoodDescription, originalP
 		makeRequest('/manager/delete_menu_item', 'DELETE', body, undefined)
 			.then(data => {
 				console.log(data);
-        fetchAllMenuData();
+        // fetchAllMenuData();
         fetchCategoryMenuItems();
 			})
 			.catch(e => console.log('Error: ' + e));
@@ -105,7 +102,7 @@ function ManagerFoodItem ({ originalFoodName, originalFoodDescription, originalP
           value={price}
         />
       </FormControl></div>
-      <div className='div-section'><TextField className='food-item-description' rows={3} multiline={true} label='Ingredients' value={ingredients} onChange={e => ingredients(e.target.value)}></TextField></div>
+      <div className='div-section'><TextField className='food-item-description' rows={3} multiline={true} label='Ingredients' value={ingredients} onChange={e => setIngredients(e.target.value)}></TextField></div>
     </div>
     <div className='food-item-button'>
     <Button onClick={deleteFoodItem} startIcon={<DeleteIcon/>}></Button>

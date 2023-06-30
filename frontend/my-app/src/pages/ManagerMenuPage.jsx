@@ -124,9 +124,6 @@ function ManagerMenuPage() {
           <Button onClick={addNewCategory} startIcon={<AddIcon />}>Add new category</Button>
         </div>
         <div style={{ width: '80%', height: '100%' }}>
-        {menuItems.map((menuItem) => (
-            <div>{menuItem.food_description}</div>
-            ))}
           {menuItems.map((menuItem) => (
             <ManagerFoodItem
               originalFoodName={menuItem.food_name}

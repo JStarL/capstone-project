@@ -32,6 +32,7 @@ function NewMenuItem () {
       'menu_id': menu_id,
       'category_id': category_id,
       'title': foodName,
+      image,
       price,
       'ingredients': ingredients,
       description,
