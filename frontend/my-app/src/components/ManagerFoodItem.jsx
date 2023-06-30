@@ -10,7 +10,7 @@ import InputLabel from '@mui/material/InputLabel';
 import makeRequest from '../makeRequest';
 import { useNavigate } from 'react-router-dom';
 
-function ManagerFoodItem ({ originalFoodName, originalFoodDescription, originalPrice, originalImage, originalIngredients, foodId, categoryId, fetchAllMenuData, fetchCategoryMenuItems }) {
+function ManagerFoodItem ({ originalFoodName, originalFoodDescription, originalPrice, originalImage, originalIngredients, foodId, categoryId, categoryName, fetchCategoryMenuItems }) {
   const [foodName, setFoodName] = React.useState('');
   const [foodDescription, setFoodDescription] = React.useState('');
   const [ingredients, setIngredients] = React.useState('')
@@ -18,6 +18,8 @@ function ManagerFoodItem ({ originalFoodName, originalFoodDescription, originalP
   const [price, setPrice] = React.useState(originalPrice)
 
   React.useEffect(() => {
+    console.log(originalFoodDescription)
+    console.log(foodDescription)
     setFoodName(originalFoodName)
     setFoodDescription(originalFoodDescription)
     setImage(originalImage)
@@ -105,7 +107,10 @@ function ManagerFoodItem ({ originalFoodName, originalFoodDescription, originalP
       <div className='div-section'><TextField className='food-item-description' rows={3} multiline={true} label='Ingredients' value={ingredients} onChange={e => setIngredients(e.target.value)}></TextField></div>
     </div>
     <div className='food-item-button'>
-    <Button onClick={deleteFoodItem} startIcon={<DeleteIcon/>}></Button>
+      {categoryName !== 'Best Selling'
+        ? <Button onClick={deleteFoodItem} startIcon={<DeleteIcon/>}></Button>
+        : null
+      }
       <Button onClick={updateFoodItem}>UPDATE</Button>
     </div>
   </div>

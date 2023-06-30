@@ -14,7 +14,6 @@ function ManagerMenuPage() {
   const [currentSelectedCategory, setCurrentSelectedCategory] = React.useState('Best Selling');
   const [currentSelectedCategoryId, setCurrentSelectedCategoryId] = React.useState(1);
   const [menuItems, setMenuItems] = React.useState([]); // List of Menu items for the current selected category
-  const [test, setTest] = React.useState([])
   const navigate = useNavigate();
 
   const managerId = localStorage.getItem('staff_id');
@@ -124,6 +123,7 @@ function ManagerMenuPage() {
           <Button onClick={addNewCategory} startIcon={<AddIcon />}>Add new category</Button>
         </div>
         <div style={{ width: '80%', height: '100%' }}>
+          <div>
           {menuItems.map((menuItem) => (
             <ManagerFoodItem
               originalFoodName={menuItem.food_name}
@@ -133,13 +133,19 @@ function ManagerMenuPage() {
               originalIngredients={menuItem.food_ingredients}
               foodId={menuItem.food_id.toString()}
               categoryId={currentSelectedCategoryId}
+              categoryName={currentSelectedCategory}
               fetchAllMenuData={fetchAllMenuData}
               fetchCategoryMenuItems={fetchCategoryMenuItems}
             />
             ))}
+          </div>
+          <div>
+            <br></br>
+          <Button onClick={() => { navigate(`/manager/addnewmenuitem/${menuId}/${currentSelectedCategoryId}`) }}>Add new menu item</Button>
+          </div>
         </div>
       </div>
-      <Button onClick={() => { navigate(`/manager/addnewmenuitem/${menuId}/${currentSelectedCategoryId}`) }}>Add new menu item</Button>
+      {/* <Button onClick={() => { navigate(`/manager/addnewmenuitem/${menuId}/${currentSelectedCategoryId}`) }}>Add new menu item</Button> */}
     </>
   );
 }
