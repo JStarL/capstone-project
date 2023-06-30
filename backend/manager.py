@@ -367,9 +367,10 @@ def manager_update_menu_item(cur, menu_item_id, menu_item_name, price, ingredien
         cur.execute(query2, [menu_item_name, description, price, ingredients, category_id, menu_id, image, menu_item_id]) #this just updates
         cur.execute(query3, [menu_item_id]) #this grabs the id and the rest of the values to check
         list1 = cur.fetchall()
-        if menu_item_name == list1[0][1] and description == list1[0][2] and image == list1[0][3] and price == list1[0][4] and ingredients == list1[0][5] and category_id == list1[0][6] and menu_id == list1[0][7]:
-            menu_item.update({'menu_item_id' : list1[0][0]})
-            return menu_item
-        else:
-            return error
+        return menu_item
+        # if menu_item_name == list1[0][1] and description == list1[0][2] and image == list1[0][3] and price == list1[0][4] and ingredients == list1[0][5] and category_id == list1[0][6] and menu_id == list1[0][7]:
+        #     menu_item.update({'menu_item_id' : list1[0][0]})
+        #     return menu_item
+        # else:
+        #     return error
     
