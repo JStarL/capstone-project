@@ -100,7 +100,7 @@ function App() {
           <Route path='/register' element={<RegisterPage onSuccess={login} />} />
           <Route path='/addstaff' element={<AddStaffPage />} />
           <Route path='/manager/menu/:menuId' element={<ManagerMenuPage />} />
-          <Route path='/manager/addnewmenuitem/:menuId/:categoryId' element={<NewMenuItemPage />} />
+          <Route path='/manager/addnewmenuitem/:menuId/:categoryName/:categoryId' element={<NewMenuItemPage />} />
 
           <Route path='/kitchen_staff' element={<div>Kitchen Staff Logged In</div>} />
           <Route path='/wait_staff' element={<div>Wait Staff Logged In</div>} />

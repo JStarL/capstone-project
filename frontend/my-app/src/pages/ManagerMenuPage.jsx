@@ -4,6 +4,7 @@ import { Button, TextField, Typography } from '@mui/material';
 import ManagerFoodItem from '../components/ManagerFoodItem';
 import { useNavigate } from 'react-router-dom';
 import CategoryManager from '../components/CategoryManager';
+import BestSellingFoodItem from '../components/BestSellingFoodItem';
 import AddIcon from '@mui/icons-material/Add';
 import makeRequest from '../makeRequest';
 import PropTypes from 'prop-types';
@@ -35,12 +36,11 @@ function ManagerMenuPage() {
       if (currentSelectedCategoryId !== 1) {
         console.log('selected')
         console.log(currentSelectedCategoryId)
-        // await fetchCategoryMenuItems();
-        // setMenuItems(data)
-        // console.log(data)
         const url = `/manager/view_category?manager_id=${managerId}&category_id=${currentSelectedCategoryId}`;
         const data = await makeRequest(url, 'GET', undefined, undefined)
         setMenuItems(data)
+        console.log(currentSelectedCategory)
+        // fetchCategoryMenuItems()
         fetchAllMenuData()
       }
     };
@@ -91,9 +91,6 @@ function ManagerMenuPage() {
     return data
   }
 
-  React.useEffect(() => {
-    console.log(menuItems)
-  }, [menuItems]);
   if (!categories || !Array.isArray(categories)) return <>loading...</>;
   return (
     <>
@@ -124,31 +121,39 @@ function ManagerMenuPage() {
         </div>
         <div style={{ width: '80%', height: '100%' }}>
           <div>
-          {menuItems.map((menuItem) => (
-            <ManagerFoodItem
-              originalFoodName={menuItem.food_name}
-              originalFoodDescription={menuItem.food_description}
-              originalPrice={menuItem.food_price.toString()}
-              originalImage={menuItem.food_image}
-              originalIngredients={menuItem.food_ingredients}
-              foodId={menuItem.food_id.toString()}
-              categoryId={currentSelectedCategoryId}
-              categoryName={currentSelectedCategory}
-              fetchAllMenuData={fetchAllMenuData}
-              fetchCategoryMenuItems={fetchCategoryMenuItems}
-            />
-            ))}
+          {menuItems.map((menuItem) =>
+            currentSelectedCategory === 'Best Selling' ? (
+              <BestSellingFoodItem
+                originalFoodName={menuItem.food_name}
+                originalFoodDescription={menuItem.food_description}
+                originalPrice={menuItem.food_price.toString()}
+                originalImage={menuItem.food_image}
+              />
+            ) : (
+              <ManagerFoodItem
+                originalFoodName={menuItem.food_name}
+                originalFoodDescription={menuItem.food_description}
+                originalPrice={menuItem.food_price.toString()}
+                originalImage={menuItem.food_image}
+                originalIngredients={menuItem.food_ingredients}
+                foodId={menuItem.food_id.toString()}
+                categoryId={currentSelectedCategoryId}
+                categoryName={currentSelectedCategory}
+                fetchAllMenuData={fetchAllMenuData}
+                fetchCategoryMenuItems={fetchCategoryMenuItems}
+              />
+            )
+          )}
           </div>
           <div>
             <br></br>
             {currentSelectedCategory !== 'Best Selling'
-              ? <Button onClick={() => { navigate(`/manager/addnewmenuitem/${menuId}/${currentSelectedCategoryId}`) }}>Add new menu item</Button>
+              ? <Button onClick={() => { navigate(`/manager/addnewmenuitem/${menuId}/${currentSelectedCategory}/${currentSelectedCategoryId}`) }}>Add new menu item</Button>
               : null
             }
           </div>
         </div>
       </div>
-      {/* <Button onClick={() => { navigate(`/manager/addnewmenuitem/${menuId}/${currentSelectedCategoryId}`) }}>Add new menu item</Button> */}
     </>
   );
 }
