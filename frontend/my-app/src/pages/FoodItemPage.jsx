@@ -36,7 +36,7 @@ function FoodItemPage() {
 				<div className='food-item-div'>
 					<div>
 						{foodData.image
-							? <div className='image'><img style={{ height: '200px', width: '200px', margin: '5px' }} src={foodData.image}></img></div>
+							? <div className='image'><img style={{ height: '200px', width: '200px', margin: '5px' }} src={foodData.food_image}></img></div>
 							: <div className='food-item-img'>IMG</div>}
 					</div>
 					<div className='food-item-middle'>
