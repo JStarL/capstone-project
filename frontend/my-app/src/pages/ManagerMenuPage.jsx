@@ -125,7 +125,7 @@ function ManagerMenuPage() {
         </div>
         <div style={{ width: '80%', height: '100%' }}>
         {menuItems.map((menuItem) => (
-            <div>{menuItem.food_name}</div>
+            <div>{menuItem.food_description}</div>
             ))}
           {menuItems.map((menuItem) => (
             <ManagerFoodItem
@@ -133,6 +133,7 @@ function ManagerMenuPage() {
               originalFoodDescription={menuItem.food_description}
               originalPrice={menuItem.food_price.toString()}
               originalImage={menuItem.food_image}
+              originalIngredients={menuItem.food_ingredients}
               foodId={menuItem.food_id.toString()}
               categoryId={currentSelectedCategoryId}
               fetchAllMenuData={fetchAllMenuData}

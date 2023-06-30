@@ -10,21 +10,30 @@ import InputLabel from '@mui/material/InputLabel';
 import makeRequest from '../makeRequest';
 import { useNavigate } from 'react-router-dom';
 
-function ManagerFoodItem ({ originalFoodName, originalFoodDescription, originalPrice, originalImage, foodId, categoryId, fetchAllMenuData, fetchCategoryMenuItems }) {
+function ManagerFoodItem ({ originalFoodName, originalFoodDescription, originalPrice, originalImage, originalIngredients, foodId, categoryId, fetchAllMenuData, fetchCategoryMenuItems }) {
   const [foodName, setFoodName] = React.useState('');
   const [foodDescription, setFoodDescription] = React.useState('');
-  const [ingredients, setIngredients] = React.useState([])
+  const [ingredients, setIngredients] = React.useState('')
+  // const [ingredientsList, setIngredientsList] = React.useState([])
   const [image, setImage] = React.useState(originalImage)
   const [price, setPrice] = React.useState(originalPrice)
 
   React.useEffect(() => {
     setFoodName(originalFoodName)
     setFoodDescription(originalFoodDescription)
-    setIngredients([])
     setImage(originalImage)
     setPrice(originalPrice)
-  }, [originalFoodDescription, originalFoodName, originalImage, originalPrice]);
+    toStringForm();
+  }, [originalFoodDescription, originalFoodName, originalImage, originalPrice, originalIngredients]);
 
+  function toStringForm() {
+    if (originalIngredients !== "{}") {
+      setIngredients(originalIngredients)
+    }
+    else {
+      setIngredients("")
+    }
+  }
   const navigate = useNavigate();
   async function handleFileSelect (event) {
     const thumbnailUrl = await fileToDataUrl(event.target.files[0])
@@ -38,7 +47,7 @@ function ManagerFoodItem ({ originalFoodName, originalFoodDescription, originalP
       'menu_item_id': foodId,
 			'title': foodName,
       price,
-      ingredients,
+      'ingredients': ingredients,
       'description': foodDescription,
       'category_id': categoryId,
       'menu_id': menuId,
@@ -47,7 +56,7 @@ function ManagerFoodItem ({ originalFoodName, originalFoodDescription, originalP
 		makeRequest('/manager/update_menu_item', 'POST', body, undefined)
 			.then(data => {
         if (data.hasOwnProperty('success')) {
-          console.log(data);
+          setFoodDescription('')
         }
 			})
 			.catch(e => console.log('Error: ' + e));
@@ -96,7 +105,7 @@ function ManagerFoodItem ({ originalFoodName, originalFoodDescription, originalP
           value={price}
         />
       </FormControl></div>
-      <div className='div-section'><TextField className='food-item-description' rows={3} multiline={true} label='Ingredients' value={ingredients} onChange={e => setIngredients(e.target.value)}></TextField></div>
+      <div className='div-section'><TextField className='food-item-description' rows={3} multiline={true} label='Ingredients' value={ingredients} onChange={e => ingredients(e.target.value)}></TextField></div>
     </div>
     <div className='food-item-button'>
     <Button onClick={deleteFoodItem} startIcon={<DeleteIcon/>}></Button>
