@@ -56,7 +56,6 @@ def manager_view_category(cur, category_id):
     if len(list1) == 0:
         return invalid_category_id
 
-
     query1 = """
     select id, title, description, image, price, ingredients from menu_items where category_id = %s order by title;
     """
