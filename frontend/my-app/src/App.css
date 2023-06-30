@@ -77,9 +77,9 @@ header {
 }
 
 nav {
-  height: 80px;
+  height: 50px;
   width: 100%;
-  /* background-color: #eeeeee; */
+  background-color: #eeeeee;
   display: flex;
 }
 

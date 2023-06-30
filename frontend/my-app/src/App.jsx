@@ -1,6 +1,6 @@
 import './App.css';
 import React from 'react';
-import { BrowserRouter, Routes, Route, Link, useNavigate } from 'react-router-dom';
+import { BrowserRouter, Routes, Route, Link } from 'react-router-dom';
 import { Button } from '@mui/material';
 import ManagerLoginPage from './pages/ManagerLoginPage'
 import AddStaffPage from './pages/AddStaffPage';
@@ -8,6 +8,7 @@ import ManagerMenuPage from './pages/ManagerMenuPage';
 import NewMenuItemPage from './pages/NewMenuItemPage';
 import RegisterPage from './pages/RegisterPage';
 import CustomerMenuPage from './pages/CustomerMenuPage';
+import LogoutIcon from '@mui/icons-material/Logout';
 import CustomerOrStaff from './pages/CustomerOrStaff';
 import FoodItemPage from './pages/FoodItemPage';
 import makeRequest from './makeRequest';
@@ -15,6 +16,7 @@ import makeRequest from './makeRequest';
 function App() {
   const [id, setId] = React.useState(null);
   const [staffType, setStaffType] = React.useState(localStorage.getItem('staff_type'))
+  const [menuId, setMenuId] = React.useState(localStorage.getItem('menu_id'))
 
   React.useEffect(function () {
     if (localStorage.getItem('staff_id')) {
@@ -47,19 +49,12 @@ function App() {
     localStorage.clear()
   }
 
-  const Nav2 = () => {
+  const LogoutButton = () => {
     return (
       <nav>
-        <div className="nav-container">
-          <div className="links-container">
-            <span className="link"><Link to='/'>Manager Login</Link></span>
-            <span className="link"><Link to='/addstaff  '>Add Staff</Link></span>
-            <span className="link"><Link to='/category'>Category</Link></span>
-            <span className="link"><Link to='/manager/menu'>Menu</Link></span>
-            <span className="link"><Link to='/manager/addnewmenuitem'>New Menu Item</Link></span>
-          </div>
+        <div className='nav-container'>
+          <Button style={{ marginLeft: 'auto', width: '10%' }} className='logout-button' onClick={logout}><Link to='/'>Logout</Link></Button>
         </div>
-        <Button className='logout-button' onClick={logout}><Link to='/'>Logout</Link></Button>
       </nav>
     )
   }
@@ -73,7 +68,6 @@ function App() {
             <span className="link"><Link to='/register  '>Register</Link></span>
           </div>
         </div>
-        
       </nav>
     )
   }
@@ -90,7 +84,7 @@ function App() {
       <header>
         {id === null
           ? <Nav />
-          : <Nav2 />
+          : <LogoutButton className='logout-button' onClick={logout}><Link to='/'>Logout</Link></LogoutButton>
         }
       </header>
       <main>
@@ -100,7 +94,7 @@ function App() {
           <Route path='/register' element={<RegisterPage onSuccess={login} />} />
           <Route path='/addstaff' element={<AddStaffPage />} />
           <Route path='/manager/menu/:menuId' element={<ManagerMenuPage />} />
-          <Route path='/manager/addnewmenuitem/:menuId/:categoryId' element={<NewMenuItemPage />} />
+          <Route path='/manager/addnewmenuitem/:menuId/:categoryName/:categoryId' element={<NewMenuItemPage />} />
 
           <Route path='/kitchen_staff' element={<div>Kitchen Staff Logged In</div>} />
           <Route path='/wait_staff' element={<div>Wait Staff Logged In</div>} />
@@ -114,7 +108,7 @@ function App() {
           ? null
           : (<div className="footer-container">
             <Button><Link to='/addstaff'>Add Staff</Link></Button>
-            <Button><Link to='/manager/menu'>Menu</Link></Button>
+            <Button><Link to={`/manager/menu/${menuId}`}>Go to Menu</Link></Button>
             </div>)}
       </footer>
         
