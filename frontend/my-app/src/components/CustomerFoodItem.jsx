@@ -1,8 +1,11 @@
 import React from 'react';
 import './Components.css';
 import { Button } from '@mui/material';
+import { useNavigate } from 'react-router-dom';
 
 function CustomerFoodItem (props) {
+  const navigate = useNavigate();
+
   return <>
   <div className='food-item-div'>
     <div>
@@ -16,7 +19,7 @@ function CustomerFoodItem (props) {
       <div className='div-section'>Price: $ {props.originalPrice}</div>
     </div>
     <div className='food-item-button'>
-        <Button>Find out more</Button>
+        <Button onClick={() => navigate(`/customer/1/${props.foodId}`)}>Find out more</Button>
         <Button>Add to Order</Button>
     </div>
   </div>

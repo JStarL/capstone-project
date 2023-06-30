@@ -9,6 +9,7 @@ import NewMenuItemPage from './pages/NewMenuItemPage';
 import RegisterPage from './pages/RegisterPage';
 import CustomerMenuPage from './pages/CustomerMenuPage';
 import CustomerOrStaff from './pages/CustomerOrStaff';
+import FoodItemPage from './pages/FoodItemPage';
 import makeRequest from './makeRequest';
 
 function App() {
@@ -105,6 +106,7 @@ function App() {
           <Route path='/wait_staff' element={<div>Wait Staff Logged In</div>} />
 
           <Route path='/customer/:menuId' element={<CustomerMenuPage />} />
+          <Route path='/customer/:menuId/:foodId' element={<FoodItemPage />} />
         </Routes>
       </main>
       <footer>
