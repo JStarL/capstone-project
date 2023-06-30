@@ -14,6 +14,7 @@ import makeRequest from './makeRequest';
 function App() {
   const [id, setId] = React.useState(null);
   const [staffType, setStaffType] = React.useState(localStorage.getItem('staff_type'))
+  const [menuId, setMenuId] = React.useState(localStorage.getItem('menu_id'))
 
   React.useEffect(function () {
     if (localStorage.getItem('staff_id')) {
@@ -112,7 +113,7 @@ function App() {
           ? null
           : (<div className="footer-container">
             <Button><Link to='/addstaff'>Add Staff</Link></Button>
-            <Button><Link to='/manager/menu'>Menu</Link></Button>
+            <Button><Link to={`/manager/menu/${menuId}`}>Go to Menu</Link></Button>
             </div>)}
       </footer>
         

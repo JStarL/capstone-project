@@ -15,7 +15,7 @@ function NewMenuItem () {
   const [description, setDescription] = React.useState('')
   const [ingredients, setIngredients] = React.useState('')
   const [price, setPrice] = React.useState(4)
-  const [image, setImage] = React.useState(null);
+  const [image, setImage] = React.useState('');
   const [imageName, setImageName] = React.useState('')
 
   const params = useParams();
@@ -25,6 +25,7 @@ function NewMenuItem () {
   const menu_id = params.menuId
 
   console.log(menu_id)
+  console.log(category_id)
 
   function addMenuItem() {
     const body = JSON.stringify({
@@ -32,10 +33,10 @@ function NewMenuItem () {
       'menu_id': menu_id,
       'category_id': category_id,
       'title': foodName,
-      image,
+      'image': image !== null ? image : undefined,
       price,
       'ingredients': ingredients,
-      description,
+      'description': description !== null ? description : undefined,
     });
 
     makeRequest('/manager/add_menu_item', 'POST', body, undefined)

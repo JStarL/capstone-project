@@ -40,7 +40,7 @@ function ManagerMenuPage() {
         // console.log(data)
         const url = `/manager/view_category?manager_id=${managerId}&category_id=${currentSelectedCategoryId}`;
         const data = await makeRequest(url, 'GET', undefined, undefined)
-        setMenuItems([...data])
+        setMenuItems(data)
         fetchAllMenuData()
       }
     };
@@ -141,7 +141,10 @@ function ManagerMenuPage() {
           </div>
           <div>
             <br></br>
-          <Button onClick={() => { navigate(`/manager/addnewmenuitem/${menuId}/${currentSelectedCategoryId}`) }}>Add new menu item</Button>
+            {currentSelectedCategory !== 'Best Selling'
+              ? <Button onClick={() => { navigate(`/manager/addnewmenuitem/${menuId}/${currentSelectedCategoryId}`) }}>Add new menu item</Button>
+              : null
+            }
           </div>
         </div>
       </div>
