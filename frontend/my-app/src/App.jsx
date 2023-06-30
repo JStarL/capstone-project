@@ -1,6 +1,6 @@
 import './App.css';
 import React from 'react';
-import { BrowserRouter, Routes, Route, Link, useNavigate } from 'react-router-dom';
+import { BrowserRouter, Routes, Route, Link } from 'react-router-dom';
 import { Button } from '@mui/material';
 import ManagerLoginPage from './pages/ManagerLoginPage'
 import AddStaffPage from './pages/AddStaffPage';
@@ -8,6 +8,7 @@ import ManagerMenuPage from './pages/ManagerMenuPage';
 import NewMenuItemPage from './pages/NewMenuItemPage';
 import RegisterPage from './pages/RegisterPage';
 import CustomerMenuPage from './pages/CustomerMenuPage';
+import LogoutIcon from '@mui/icons-material/Logout';
 import CustomerOrStaff from './pages/CustomerOrStaff';
 import makeRequest from './makeRequest';
 
@@ -47,19 +48,12 @@ function App() {
     localStorage.clear()
   }
 
-  const Nav2 = () => {
+  const LogoutButton = () => {
     return (
       <nav>
-        <div className="nav-container">
-          <div className="links-container">
-            <span className="link"><Link to='/'>Manager Login</Link></span>
-            <span className="link"><Link to='/addstaff  '>Add Staff</Link></span>
-            <span className="link"><Link to='/category'>Category</Link></span>
-            <span className="link"><Link to='/manager/menu'>Menu</Link></span>
-            <span className="link"><Link to='/manager/addnewmenuitem'>New Menu Item</Link></span>
-          </div>
+        <div className='nav-container'>
+          <Button style={{ marginLeft: 'auto', width: '10%' }} className='logout-button' onClick={logout}><Link to='/'>Logout</Link></Button>
         </div>
-        <Button className='logout-button' onClick={logout}><Link to='/'>Logout</Link></Button>
       </nav>
     )
   }
@@ -73,7 +67,6 @@ function App() {
             <span className="link"><Link to='/register  '>Register</Link></span>
           </div>
         </div>
-        
       </nav>
     )
   }
@@ -90,7 +83,7 @@ function App() {
       <header>
         {id === null
           ? <Nav />
-          : <Nav2 />
+          : <LogoutButton className='logout-button' onClick={logout}><Link to='/'>Logout</Link></LogoutButton>
         }
       </header>
       <main>
