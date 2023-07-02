@@ -45,3 +45,18 @@ made changes to some of the backend Flask wrapper functions.
 
 For next week we plan to continue coding, and I would probably help with the backend psycopg2 functions which need SQL
 and do a little bit of frontend coding, like for the customer meu browsing screen
+
+Week 5
+This week we all put in plenty of effort to complete our sprint goals by Friday of Week 5. I had a personal
+deadline to finish all of my designated backend routes and designing the initial database schema
+by the end of Wednesday, so that Thursday could be allocated for integration and testing puropses.
+I finished my work by the end of Wednesday, and throughout Wednesday and Thursday was doing the main task of
+debugging and troubleshooting where William or Hannah would find a bug or error pop up,
+and then I would go look for the source of the issue. Some issues were frontend based, and others were backend based.
+I dealt mainly with the backend and database errors, but also helped with resolving frontend errors a little bit.
+Ultimately we achieved all of the goals we had set for this sprint, however it took till just before the lab time
+on Friday which I think can be improved on.
+
+For next week, we plan to be more organised by choosing which user stories to cover for the next sprint,
+delegating work to everyone, and then setting small deadlines through the week to complete our work,
+and then beginning to write code for some user stories.
