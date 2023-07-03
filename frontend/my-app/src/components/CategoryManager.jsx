@@ -59,11 +59,21 @@ function CategoryManager(props) {
 	return <>
 		<Card onClick={() => selectCategory()} sx={{ m: 2, p: 7 }} variant="outlined" >
 			<CardContent>
-				<TextField className='food-item-name' value={categoryName} onChange={e => setCategoryName(e.target.value)} onBlur={() => updateCategoryName()} label='Category Name'></TextField>
+        {categoryName === 'Best Sellin'
+          ? <di>Best Selling</di>
+          : <TextField className='food-item-name' value={categoryName} onChange={e => setCategoryName(e.target.value)} onBlur={() => updateCategoryName()} label='Category Name'></TextField>
+        }
+				{/* <TextField className='food-item-name' value={categoryName} onChange={e => setCategoryName(e.target.value)} onBlur={() => updateCategoryName()} label='Category Name'></TextField> */}
 			</CardContent>
 			<CardActions>
-				<Button onClick={() => deleteCategory()}startIcon={<DeleteIcon />}></Button>
-				<Button startIcon={<MenuIcon />}></Button>
+        {categoryName === 'Best Selling'
+          ? null
+          : <>
+          <Button onClick={() => deleteCategory()}startIcon={<DeleteIcon />}></Button>
+          <Button startIcon={<MenuIcon />}></Button></>
+        }
+				{/* <Button onClick={() => deleteCategory()}startIcon={<DeleteIcon />}></Button> */}
+				{/* <Button startIcon={<MenuIcon />}></Button> */}
 			</CardActions>
 		</Card>
 	</>;
