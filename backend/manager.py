@@ -167,11 +167,17 @@ def manager_delete_category(cur, category_id):
 def manager_update_category(cur, category_name, category_id):
     invalid_category = { 'error': 'invalid category' } #error message
     update_name_fail = { 'error': 'failed to update name'}
-    category = { 'success': 'success in removing category' } # supposed to show success lol
+    category = { 'success': 'success in updating category' } # supposed to show success lol
     cant_update_best_selling = { 'error': 'not allowed to manually update the "Best Selling" category' }
 
-    if category_name == 'Best Selling':
+    cur.execute(query2, [category_id])
+    list1 = cur.fetchall()
+
+    if len(list1) == 0:
+        return invalid_category
+    if list1[0][1] == 'Best Selling':
         return cant_update_best_selling
+
 
     query1 = """
         UPDATE categories
@@ -184,12 +190,6 @@ def manager_update_category(cur, category_name, category_id):
         FROM categories
         WHERE id = %s;
     """ 
-    
-    cur.execute(query2, [category_id])
-    list1 = cur.fetchall()
-
-    if len(list1) == 0: # category_id does not exist
-        return invalid_category
 
     cur.execute(query1, [category_name, category_id])
     cur.execute(query2, [category_id])
