@@ -76,3 +76,10 @@ Things implemented (Frontend) during the Week:
 - Register a new manager 
 - Working on categories
 
+Week 6 
+- Meeting Monday 3/7/23
+- Planning for the next sprint 
+  - Figuring out what users stories to include for the next sprint 
+  - Delegating roles for each user story 
+  - Improve styling -> Skeleton pages -> add in data after backend finish routes
+  - Thinking about UI design and styling 
