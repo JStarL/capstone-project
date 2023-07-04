@@ -1,7 +1,8 @@
 import React from 'react';
 import './Components.css';
-import { Button } from '@mui/material';
+import { Button, styled } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
+import { StyledButton } from '../pages/CustomerOrStaff';
 
 function CustomerFoodItem (props) {
   const navigate = useNavigate();
@@ -10,7 +11,7 @@ function CustomerFoodItem (props) {
   <div className='food-item-div'>
     <div>
       {props.originalImage
-      ? <div className='image'><img style={{ height: '200px', width: '200px', margin: '5px' }} src={props.originalImage}></img></div>
+      ? <div className='image'><img style={{ width: '20vh', height: '20vh', margin: '20px', borderRadius: '10px' }} src={props.originalImage}></img></div>
       : <div className='food-item-img'>IMG</div>}
     </div>
     <div className='food-item-middle'>
@@ -19,8 +20,8 @@ function CustomerFoodItem (props) {
       <div className='div-section'>Price: $ {props.originalPrice}</div>
     </div>
     <div className='food-item-button'>
-        <Button onClick={() => navigate(`/customer/1/${props.foodId}`)}>Find out more</Button>
-        <Button>Add to Order</Button>
+        <StyledButton variant='outlined' style={{ margin: '10px' }} onClick={() => navigate(`/customer/1/${props.foodId}`)}>Find out more</StyledButton>
+        <StyledButton variant='outlined' style={{ margin: '10px' }}>Add to Order</StyledButton>
     </div>
   </div>
   </>

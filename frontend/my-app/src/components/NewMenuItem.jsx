@@ -77,6 +77,7 @@ function NewMenuItem(props) {
           {image
             ? <div className='image'><img style={{ height: '300px', width: '300px' }} src={image}></img></div>
             : <div></div>}
+          <div><Typography variant='overline' sx={{ fontSize: '10px' }}>{imageName}</Typography></div>
           <div>
             <label htmlFor="upload-photo">
               <StyledButton sx={{ mb: 2 }} variant='outlined' aria-label="upload picture" component="label">Add Image
@@ -85,7 +86,7 @@ function NewMenuItem(props) {
                   onChange={handleFileSelect}
                 />
               </StyledButton>
-              <div><Typography variant='overline' sx={{ fontSize: '10px' }}>{imageName}</Typography></div>
+              {/* <div><Typography variant='overline' sx={{ fontSize: '10px' }}>{imageName}</Typography></div> */}
             </label></div>
           <StyledButton sx={{ mb: 2 }} variant='outlined' onClick={addMenuItem}>ADD TO MENU</StyledButton>
         </form>

@@ -75,6 +75,17 @@ header {
   height: 80px;
 }
 
+footer {
+  position: fixed;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 75px;
+  bottom: 0;
+  background-color: #002250;
+  /* margin-top: auto; */
+}
+
 .box-container {
   display: flex;
   height: calc(100vh - 130px);
@@ -134,17 +145,6 @@ main {
   margin-top: 80px;
   margin-bottom: 80px;
   flex: 1;
-}
-
-footer {
-  position: fixed;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  height: 75px;
-  bottom: 0;
-  background-color: #002250;
-  /* margin-top: auto; */
 }
 
 .footer-container {

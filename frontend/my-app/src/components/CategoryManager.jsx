@@ -71,9 +71,10 @@ function CategoryManager(props) {
       <Card
         style={{
           borderColor: props.currentSelectedCategoryId === props.id ? '#002250' : undefined,
-          boxShadow: props.currentSelectedCategoryId === props.id ? "0 2px 4px rgba(0, 0, 0, 0.2)" : undefined,
+          boxShadow: props.currentSelectedCategoryId === props.id ? "0 6px 12px rgba(0, 0, 0, 0.4)" : undefined,
           width: '300px',
-          marginRight: '0'
+          marginRight: '0',
+          borderRadius: '20px'
         }}
         className="category-box"
         onClick={() => selectCategory()}
