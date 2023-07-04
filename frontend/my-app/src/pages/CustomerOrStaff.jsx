@@ -25,7 +25,7 @@ function CustomerOrStaff() {
   }
 
   return (
-    <div className='login-page'>
+    <div className='login-page' sx={{alignItems: 'center'}}>
       <Paper elevation={10} sx={{ p: 6, borderRadius: '20px', width: '40%'}}>
         <Typography sx={{ mb: 3 }} variant="h4" gutterBottom>Are you a</Typography>
         <Grid container spacing={2} justifyContent="space-evenly">

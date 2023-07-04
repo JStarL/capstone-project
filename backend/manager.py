@@ -170,15 +170,6 @@ def manager_update_category(cur, category_name, category_id):
     category = { 'success': 'success in updating category' } # supposed to show success lol
     cant_update_best_selling = { 'error': 'not allowed to manually update the "Best Selling" category' }
 
-    cur.execute(query2, [category_id])
-    list1 = cur.fetchall()
-
-    if len(list1) == 0:
-        return invalid_category
-    if list1[0][1] == 'Best Selling':
-        return cant_update_best_selling
-
-
     query1 = """
         UPDATE categories
         SET name = %s
@@ -190,6 +181,14 @@ def manager_update_category(cur, category_name, category_id):
         FROM categories
         WHERE id = %s;
     """ 
+
+    cur.execute(query2, [category_id])
+    list1 = cur.fetchall()
+
+    if len(list1) == 0:
+        return invalid_category
+    if list1[0][1] == 'Best Selling':
+        return cant_update_best_selling
 
     cur.execute(query1, [category_name, category_id])
     cur.execute(query2, [category_id])
