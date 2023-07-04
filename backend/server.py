@@ -64,6 +64,36 @@ cur_dict = {
     }
 }
 
+# orders = [
+#     {
+#         'session_id': 123,
+#         'table_id': 24,
+#         'menu_items': [
+#             {
+#                 'menu_item_id': 12,
+#                 'menu_item_title': 'Burger'
+#             },
+#             {
+#                 'menu_item_id': 13,
+#                 'menu_item_title': 'Chips'
+#             }
+#         ]
+#     },
+#     {
+#         'session_id': 133,
+#         'table_id': 3,
+#         'menu_items': [
+#             {
+#                 'menu_item_id': 22,
+#                 'menu_item_title': 'Pasta'
+#             },
+#             {
+#                 'menu_item_id': 11,
+#                 'menu_item_title': 'Salad'
+#             }
+#         ]
+#     }
+# ]
 
 
 
