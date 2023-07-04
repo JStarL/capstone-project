@@ -64,11 +64,11 @@ cur_dict = {
     }
 }
 
-# orders = [
-#   {
+# orders = {
+#   '1': [ # menu_id is the key
+#       {  
 #       'session_id': '1234'
 #       'table_id': 24,
-#       'menu_id': 1,
 #       'menu_items': [
 #           {
 #               'menu_item_id': 12,
@@ -81,25 +81,59 @@ cur_dict = {
 #               'title': 'Fries'
 #           }
 #       ]
-#   },
-#   {
+#       },
+#       { 
 #       'session_id': '2345'
-#       'table_id': 27,
-#       'menu_id': 2,
+#       'table_id': 22,
 #       'menu_items': [
 #           {
-#               'menu_item_id': 13,
-#               'amount': 5
-#               'title': Pasta
+#               'menu_item_id': 12,
+#               'amount': 1
+#               'title': 'Burger'
+#           },
+#           {
+#               'menu_item_id': 11,
+#               'amount': 2
+#               'title': 'Coke'
+#           }
+#       ]
+#       }
+#   ],
+#   '2': [ # menu_id is the key
+#        {
+#       'session_id': '2399'
+#       'table_id': 27,
+#       'menu_items': [
+#           {
+#               'menu_item_id': 10,
+#               'amount': 3
+#               'title': 'Pasta'
 #           },
 #           {
 #               'menu_item_id': 3,
 #               'amount': 1
+#               'title': 'Fanta'
+#           }
+#       ]
+#       },
+#       {
+#       'session_id': '3479'
+#       'table_id': 13,
+#       'menu_items': [
+#           {
+#               'menu_item_id': 13,
+#               'amount': 2
+#               'title': 'Fried Rice'
+#           },
+#           {
+#               'menu_item_id': 2,
+#               'amount': 1
 #               'title': Water
 #           }
 #       ]
-#   }
-# ]
+#       }
+#   ]
+# }
 
 
 orders = []
