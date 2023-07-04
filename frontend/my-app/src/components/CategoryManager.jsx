@@ -17,6 +17,11 @@ function CategoryManager(props) {
   const menuId = localStorage.getItem('menu_id');
   const navigate = useNavigate();
 
+  function selectCategory() {
+    props.setCurrentSelectedCategory(props.categoryName);
+    props.setCurrentSelectedCategoryId(categoryId);
+  }
+
   function deleteCategory() {
     const body = JSON.stringify({
       manager_id: managerId,
@@ -32,7 +37,7 @@ function CategoryManager(props) {
           props.setCurrentSelectedCategoryId(1)
 					props.setCurrentSelectedCategory('Best Selling')
         }
-				props.fetchAllMenuData();
+			selectCategory();
       })
       .catch(e => console.log('Error: ' + e));
   }
@@ -52,11 +57,6 @@ function CategoryManager(props) {
 
     // change currently selected heading name as well
     props.setCurrentSelectedCategory(categoryName);
-  }
-
-  function selectCategory() {
-    props.setCurrentSelectedCategory(props.categoryName);
-    props.setCurrentSelectedCategoryId(categoryId);
   }
 
   return (
