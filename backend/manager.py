@@ -105,6 +105,10 @@ def manager_add_category(cur, category_name, menu_id):
     error = { 'error': 'adding category failed' } # error message
     category = { 'success': 'success in adding category' } # supposed to success lol
     cant_use_best_selling = { 'error': 'Not allowed to use name "Best Selling"' }
+    cant_set_empty_string = { 'error': 'not allowed to use the name empty string ("")' }
+
+    if category_name == '':
+        return cant_set_empty_string
 
     if category_name == 'Best Selling':
         return cant_use_best_selling
@@ -169,6 +173,10 @@ def manager_update_category(cur, category_name, category_id):
     update_name_fail = { 'error': 'failed to update name'}
     category = { 'success': 'success in updating category' } # supposed to show success lol
     cant_update_best_selling = { 'error': 'not allowed to manually update the "Best Selling" category' }
+    cant_set_empty_string = { 'error': 'not allowed to update the name to empty string' }
+
+    if category_name == '':
+        return cant_set_empty_string
 
     query1 = """
         UPDATE categories
@@ -210,7 +218,12 @@ def manager_add_menu_item(cur, menu_item_name, price, ingredients, description, 
     error = { 'error': 'adding menu_item failed' }
     invalid_category_id = { 'error': 'invalid category_id'}
     invalid_best_selling = { 'error': 'cannot add menu items to the "Best Selling" category'}
+    cant_set_empty_string = { 'error': 'not allowed to set the name to empty string' }
     menu_item = {}
+
+    if menu_item_name == '':
+        return cant_set_empty_string
+
 
     # Can't add new menu_items to the 'Best Selling' category
 
@@ -314,8 +327,13 @@ def manager_update_menu_item(cur, menu_item_id, menu_item_name, price, ingredien
     error = { 'error': 'did not update properly'}
     invalid_category_id = { 'error': 'invalid category_id'}
     invalid_best_selling = { 'error': 'cannot update menu items in the "Best Selling" category'}
+    cant_set_empty_string = { 'error': 'not allowed to update the name to empty string' }
     menu_item = {}
-    
+
+    if menu_item_name == '':
+        return cant_set_empty_string
+
+
     # Can't manually update menu_items in the 'Best Selling' category
 
     query0 = """

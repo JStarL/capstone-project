@@ -90,3 +90,6 @@ Week 6
   - Improve styling -> Skeleton pages -> add in data after backend finish routes
   - Thinking about UI design and styling 
 
+- Worked on: 
+  - Delete category bug when trying to delete a currently selected category
+  - Overall styling and aesthetics of the UI 
