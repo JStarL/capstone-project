@@ -78,5 +78,15 @@ Things implemented (Frontend) throughout the week:
 - Customer and manager menu pages 
 - Individual food pages clicking the "Find out more" button
 
-Demo
+Demo + retrospective
 - demonstrate customer menu page 
+- Work on retrospective after the demo
+
+Week 6 
+- Meeting Monday 3/7/23
+- Planning for the next sprint 
+  - Figuring out what users stories to include for the next sprint 
+  - Delegating roles for each user story 
+  - Improve styling -> Skeleton pages -> add in data after backend finish routes
+  - Thinking about UI design and styling 
+

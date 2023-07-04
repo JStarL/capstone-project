@@ -12,6 +12,7 @@ import LogoutIcon from '@mui/icons-material/Logout';
 import CustomerOrStaff from './pages/CustomerOrStaff';
 import FoodItemPage from './pages/FoodItemPage';
 import makeRequest from './makeRequest';
+import { StyledButton } from './pages/CustomerOrStaff';
 
 function App() {
   const [id, setId] = React.useState(null);
@@ -36,10 +37,10 @@ function App() {
     })
     console.log(body)
     makeRequest('/auth/logout', 'POST', body, undefined)
-    .then(data => {
-      console.log(data)
-    })
-    .catch(e => console.log('Error: ' + e))
+      .then(data => {
+        console.log(data)
+      })
+      .catch(e => console.log('Error: ' + e))
     setId(null);
     setStaffType(null);
     localStorage.removeItem('staff_id');
@@ -51,9 +52,17 @@ function App() {
 
   const LogoutButton = () => {
     return (
-      <nav>
+      <nav sx={{ display: 'flex' }}>
         <div className='nav-container'>
-          <Button style={{ marginLeft: 'auto', width: '10%' }} className='logout-button' onClick={logout}><Link to='/'>Logout</Link></Button>
+          <StyledButton sx={{
+            margin: '5px',
+            marginLeft: 'auto',
+            width: '7%',
+            height: '70%'
+          }} onClick={logout}>
+            <LogoutIcon></LogoutIcon>
+            &nbsp;
+            Logout</StyledButton>
         </div>
       </nav>
     )
@@ -77,41 +86,41 @@ function App() {
       setId(localStorage.getItem('staff_id'));
     }
   }, []);
-  
+
   return (
     <div className="App">
       <BrowserRouter>
-      <header>
-        {id === null
-          ? <Nav />
-          : <LogoutButton className='logout-button' onClick={logout}><Link to='/'>Logout</Link></LogoutButton>
-        }
-      </header>
-      <main>
-        <Routes>
-          <Route path='/' element={<CustomerOrStaff />} />
-          <Route path='/login' element={<ManagerLoginPage onSuccess={login} />} />
-          <Route path='/register' element={<RegisterPage onSuccess={login} />} />
-          <Route path='/addstaff' element={<AddStaffPage />} />
-          <Route path='/manager/menu/:menuId' element={<ManagerMenuPage />} />
-          <Route path='/manager/addnewmenuitem/:menuId/:categoryName/:categoryId' element={<NewMenuItemPage />} />
+        <header>
+          {id === null
+            ? <Nav />
+            : <LogoutButton className='logout-button' onClick={logout}></LogoutButton>
+          }
+        </header>
+        <main>
+          <Routes>
+            <Route path='/' element={<CustomerOrStaff />} />
+            <Route path='/login' element={<ManagerLoginPage onSuccess={login} />} />
+            <Route path='/register' element={<RegisterPage onSuccess={login} />} />
+            <Route path='/addstaff' element={<AddStaffPage />} />
+            <Route path='/manager/menu/:menuId' element={<ManagerMenuPage />} />
+            <Route path='/manager/addnewmenuitem/:menuId/:categoryName/:categoryId' element={<NewMenuItemPage />} />
 
-          <Route path='/kitchen_staff' element={<div>Kitchen Staff Logged In</div>} />
-          <Route path='/wait_staff' element={<div>Wait Staff Logged In</div>} />
+            <Route path='/kitchen_staff' element={<div>Kitchen Staff Logged In</div>} />
+            <Route path='/wait_staff' element={<div>Wait Staff Logged In</div>} />
 
-          <Route path='/customer/:menuId' element={<CustomerMenuPage />} />
-          <Route path='/customer/:menuId/:foodId' element={<FoodItemPage />} />
-        </Routes>
-      </main>
-      <footer>
-        {staffType !== 'manager'
-          ? null
-          : (<div className="footer-container">
-            <Button><Link to='/addstaff'>Add Staff</Link></Button>
-            <Button><Link to={`/manager/menu/${menuId}`}>Go to Menu</Link></Button>
+            <Route path='/customer/:menuId' element={<CustomerMenuPage />} />
+            <Route path='/customer/:menuId/:foodId' element={<FoodItemPage />} />
+          </Routes>
+        </main>
+        <footer>
+          {staffType !== 'manager'
+            ? null
+            : (<div className="footer-container">
+              <Button><Link to='/addstaff'>Add Staff</Link></Button>
+              <Button><Link to={`/manager/menu/${menuId}`}>Go to Menu</Link></Button>
             </div>)}
-      </footer>
-        
+        </footer>
+
       </BrowserRouter>
     </div>
   );

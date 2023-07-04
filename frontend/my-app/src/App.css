@@ -19,7 +19,7 @@ body {
 }
 
 .paper {
-  width: 70%;
+  width: 40%;
   align-items: center;
 }
 
@@ -79,7 +79,7 @@ header {
 nav {
   height: 50px;
   width: 100%;
-  background-color: #eeeeee;
+  background-color: #002250;
   display: flex;
 }
 
@@ -125,12 +125,8 @@ footer {
   justify-content: center;
   height: 75px;
   bottom: 0;
-  background-color: lightgrey;
+  background-color: #002250;
   /* margin-top: auto; */
-}
-
-.footer-container {
-/* Footer content styles */
 }
 
 @media (max-width: 800px) {
