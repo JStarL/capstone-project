@@ -88,7 +88,7 @@ function ManagerMenuPage() {
   return (
     <>
       <div style={{ display: 'flex', flexDirection: 'row'}}>
-        <div style={{ width: '20%', backgroundColor: 'white', display: 'flex', flexDirection: 'column', alignItems: 'center'}}>
+        <div style={{ width: '25%', backgroundColor: 'white', display: 'flex', flexDirection: 'column', alignItems: 'center'}}>
           {categories?.map((category) => (
             <CategoryManager
               categoryName={category[Object.keys(category)[0]][0]}
@@ -119,7 +119,7 @@ function ManagerMenuPage() {
           />
           <Button onClick={addNewCategory} startIcon={<AddIcon />}>Add new category</Button> */}
         </div>
-        <div style={{ width: '80%', height: '100%' }}>
+        <div style={{ width: '75%', height: '100%' }}>
         <Typography className='h4' variant="h4" gutterBottom>Manager Menu Page - {currentSelectedCategory}</Typography>
           <div>
           {menuItems?.map((menuItem) =>

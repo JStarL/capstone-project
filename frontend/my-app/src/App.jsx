@@ -4,6 +4,7 @@ import { BrowserRouter, Routes, Route, Link } from 'react-router-dom';
 import { Button } from '@mui/material';
 import PersonAddAlt1SharpIcon from '@mui/icons-material/PersonAddAlt1Sharp';
 import RestaurantMenuIcon from '@mui/icons-material/RestaurantMenu';
+import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 import ManagerLoginPage from './pages/ManagerLoginPage'
 import AddStaffPage from './pages/AddStaffPage';
 import ManagerMenuPage from './pages/ManagerMenuPage';
@@ -15,10 +16,12 @@ import CustomerOrStaff from './pages/CustomerOrStaff';
 import FoodItemPage from './pages/FoodItemPage';
 import makeRequest from './makeRequest';
 import { StyledButton } from './pages/CustomerOrStaff';
+import SelectTableNumber from './pages/SelectTableNumber';
+import SearchRestaurant from './pages/SearchRestaurant';
 
 function App() {
   const [id, setId] = React.useState(null);
-  const [staffType, setStaffType] = React.useState(localStorage.getItem('staff_type'))
+  const [staffType, setStaffType] = React.useState(localStorage.getItem('staffType'))
   const [menuId, setMenuId] = React.useState(localStorage.getItem('menu_id'))
 
   React.useEffect(function () {
@@ -26,6 +29,11 @@ function App() {
       setId(localStorage.getItem('staff_id'));
     }
   }, []);
+
+  // React.useEffect(function () {
+  //   console.log('staff type change')
+  //   setStaffType(localStorage.getItem('staff_type'))
+  // }, [localStorage.getItem('staff_type')]);
 
   const login = (staff_id, staff_type, menu_id) => {
     setId(staff_id);
@@ -85,12 +93,27 @@ function App() {
     )
   }
 
+  const Footer = () => {
+    if (staffType === 'manager') {
+      return <div className="footer-container">
+      <StyledButton startIcon={<PersonAddAlt1SharpIcon />}><Link to='/addstaff' className='toNavy'>Add Staff</Link></StyledButton>
+      <StyledButton startIcon={<RestaurantMenuIcon />}><Link to={`/manager/menu/${menuId}`} className='toNavy'>Go to Menu</Link></StyledButton>
+      </div>;
+    }
+    else if (staffType === 'customer') {
+      return <div className="footer-container">
+      <StyledButton startIcon={<ShoppingCartIcon />}><Link to='/view_cart' className='toNavy'>View Cart</Link></StyledButton>
+      </div>;
+    }
+  }
+
   React.useEffect(function () {
     if (localStorage.getItem('staff_id')) {
       setId(localStorage.getItem('staff_id'));
     }
   }, []);
 
+  console.log(staffType)
   return (
     <div className="App">
       <BrowserRouter>
@@ -102,9 +125,11 @@ function App() {
         </header>
         <main>
           <Routes>
-            <Route path='/' element={<CustomerOrStaff />} />
+            <Route path='/' element={<CustomerOrStaff setStaffType={setStaffType}/>} />
             <Route path='/login' element={<ManagerLoginPage onSuccess={login} />} />
             <Route path='/register' element={<RegisterPage onSuccess={login} />} />
+            <Route path='/searchrestaurant' element={<SearchRestaurant />} />
+            <Route path='/tablenumber' element={<SelectTableNumber />} />
             <Route path='/addstaff' element={<AddStaffPage />} />
             <Route path='/manager/menu/:menuId' element={<ManagerMenuPage />} />
             <Route path='/manager/addnewmenuitem/:menuId/:categoryName/:categoryId' element={<NewMenuItemPage />} />
@@ -117,12 +142,13 @@ function App() {
           </Routes>
         </main>
         <footer>
-          {staffType !== 'manager'
+          <Footer />
+          {/* {staffType !== 'manager'
             ? null
             : (<div className="footer-container">
               <StyledButton startIcon={<PersonAddAlt1SharpIcon />}><Link to='/addstaff' className='toNavy'>Add Staff</Link></StyledButton>
               <StyledButton startIcon={<RestaurantMenuIcon />}><Link to={`/manager/menu/${menuId}`} className='toNavy'>Go to Menu</Link></StyledButton>
-            </div>)}
+            </div>)} */}
         </footer>
 
       </BrowserRouter>

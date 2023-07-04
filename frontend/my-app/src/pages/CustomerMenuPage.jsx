@@ -5,6 +5,8 @@ import { useNavigate } from 'react-router-dom';
 import CategoryCustomer from '../components/CategoryCustomer';
 import makeRequest from '../makeRequest';
 import { Typography } from '@mui/material';
+import { StyledButton } from './CustomerOrStaff';
+import PersonAddAlt1SharpIcon from '@mui/icons-material/PersonAddAlt1Sharp';
 
 function CustomerMenuPage() {
   const [categories, setCategories] = React.useState([]);
@@ -75,10 +77,10 @@ function CustomerMenuPage() {
   if (!categories || !Array.isArray(categories)) return <>loading...</>;
 
   return <>
-    <Typography className='h4' variant="h4" gutterBottom>Customer Menu Page - {currentSelectedCategory} with ID: {currentSelectedCategoryId}</Typography>
+    <Typography className='h4' variant="h4" gutterBottom>Customer Menu Page - {currentSelectedCategory}</Typography>
 
     <div style={{ display: 'flex', flexDirection: 'row' }}>
-      <div style={{ width: '20%', backgroundColor: 'white', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+      <div style={{ width: '25%', backgroundColor: 'white', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
         {categories.map((category) => (
           <CategoryCustomer
             categoryName={category[Object.keys(category)[0]][0].toString()}
@@ -96,7 +98,7 @@ function CustomerMenuPage() {
 
         ))}
       </div>
-      <div style={{ width: '80%', height: '100%' }}>
+      <div style={{ width: '75%', height: '100%' }}>
         {menuItems.map((menuItem) => (
           <CustomerFoodItem
             originalFoodName={menuItem.food_name}
