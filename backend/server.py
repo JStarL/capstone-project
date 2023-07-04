@@ -288,9 +288,11 @@ def customer_menu_table_flask():
     data = ast.literal_eval(request.get_json())
     table_id = data['table_id']
     menu_id = data['menu_id']
+    session_id = data['session_id']
 
     if table_id != None:
         orders.append({
+                'session_id': session_id,
                 'table_id' : table_id,
                 'menu_id' : menu_id,
                 'menu_items' : [] })
@@ -302,66 +304,63 @@ def customer_menu_table_flask():
 @APP.route("/customer/add_menu_item", methods=['POST'])
 def customer_add_menu_item_flask():
     data = ast.literal_eval(request.get_json())
-    table_id = data['table_id']
-    menu_id = data['menu_id']
+    session_id = data['session_id']
     menu_item_id = data['menu_item_id']
     amount = data['amount']
     title = data['title']
 
-    # find the order with table_id and menu_id
-    order = next((order for order in orders if order["table_id"] == table_id and order["menu_id"] == menu_id), None)
+    # find the order with session_id
+    order_list = [order for order in orders if order["session_id"] == session_id]
     
-    if order != None:
-        order['menu_items'].append({"menu_item_id" : menu_item_id,
+    if len(order_list) > 0:
+        order_list[0]['menu_items'].append({"menu_item_id" : menu_item_id,
                                      "amount" : amount,
                                      "title" : title})
-        return {'success' : order}
+        return order_list[0]
     else:
-        return {'error': 'invalid table_id or menu_id' }
+        return {'error': 'invalid session_id' }
 
 @APP.route("/customer/remove_menu_item", methods=['DELETE'])
 def customer_remove_menu_item_flask():
     data = ast.literal_eval(request.get_json())
-    table_id = data['table_id']
-    menu_id = data['menu_id']
+    session_id = data['session_id']
     menu_item_id = data['menu_item_id']
     amount_to_be_removed = data['amount']
 
-    # find the order with table_id and menu_id 
-    order = next((order for order in orders if order["table_id"] == table_id and order["menu_id"] == menu_id), None)
+    # find the order with session_id 
+    order_list = [order for order in orders if order["session"] == session_id]
     
-    if order != None:
+    if len(order_list) > 0:
         # check that the menu_item_id is there to be deleted
-        menu_item = next((menu_item for menu_item in order['menu_items'] if menu_item['menu_item_id'] == menu_item_id), None)
-        if menu_item != None:
+        menu_item_list = [menu_item for menu_item in order_list[0]['menu_items'] if menu_item['menu_item_id'] == menu_item_id]
+        if len(menu_item_list) > 0:
 
-            remaining_amount = menu_item['amount'] - amount_to_be_removed
+            remaining_amount = menu_item_list[0]['amount'] - amount_to_be_removed
 
             if remaining_amount > 0 :
-                menu_item['amount'] = remaining_amount
+                menu_item_list[0]['amount'] = remaining_amount
             elif remaining_amount == 0:
-                order['menu_items'].remove(menu_item)
+                order_list[0]['menu_items'].remove(menu_item_list[0])
             else:
                 return {'error' : 'cant remove more menu_items than what is currently there'}
             
-            return {'success' : order} 
+            return order_list[0] 
         else:
-            return { 'error': 'menu_item_id doesnt exist'}
+            return { 'error': 'menu_item_id doesnt exist in this order'}
     else:
-        return {'error': 'invalid table_id or menu_id' }
+        return {'error': 'invalid session_id' }
 
 @APP.route("/customer/view_order", methods=['GET'])
 def customer_view_order_flask():
-    menu_id = request.args.get("menu_id")
-    table_id = request.args.get("table_id")
+    session_id = request.args.get("session_id")
 
-    # find the order with table_id and menu_id
-    order = next((order for order in orders if order["table_id"] == table_id and order["menu_id"] == menu_id), None)
+    # find the order with session_id
+    orders_list = [order for order in orders if order["session_id"] == session_id]
     
-    if order != None:
-        return order
+    if len(orders_list) > 0:
+        return orders_list[0]
     else:
-        return {'error': 'invalid table_id or menu_id' }
+        return {'error': 'invalid session_id' }
 
 ##############################################################################################################################
 ################################################ OLD PROJECT STUFF ###########################################################
