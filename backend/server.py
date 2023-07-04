@@ -424,7 +424,7 @@ def customer_remove_menu_item_flask():
 @APP.route("/customer/view_order", methods=['GET'])
 def customer_view_order_flask():
     session_id = request.args.get("session_id")
-    menu_id = request.args.get['menu_id']
+    menu_id = request.args.get('menu_id')
 
     orders_list = None
     if menu_id in orders:
