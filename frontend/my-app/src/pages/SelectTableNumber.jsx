@@ -1,17 +1,20 @@
 import React from 'react';
 import { Typography, Paper, Grid, TextField } from '@mui/material';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { StyledButton } from './CustomerOrStaff';
 
-function SelectTableNumber() {
+function SelectTableNumber({ onSuccess }) {
 	const navigate = useNavigate();
 	const [tableNumber, setTableNumber] = React.useState('');
-
+	const params = useParams()
+	const menuId = params.menuId
+	const sessionId = params.sessionId
 	function selectTableNumber() {
 		// set menu id in local storage 
 		localStorage.setItem('table_number', tableNumber)
 		// forward user to select table number 
-		navigate(`/customer/${localStorage.getItem('menu_id')}`)	
+		onSuccess(tableNumber)
+		navigate(`/customer/${sessionId}/${menuId}/${tableNumber}`)	
 	}
 	return (
 		<div className='login-page' sx={{ alignItems: 'center' }}>

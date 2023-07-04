@@ -18,11 +18,14 @@ import makeRequest from './makeRequest';
 import { StyledButton } from './pages/CustomerOrStaff';
 import SelectTableNumber from './pages/SelectTableNumber';
 import SearchRestaurant from './pages/SearchRestaurant';
+import CustomerViewOrderPage from './pages/CustomerViewOrderPage';
 
 function App() {
   const [id, setId] = React.useState(null);
   const [staffType, setStaffType] = React.useState(localStorage.getItem('staffType'))
   const [menuId, setMenuId] = React.useState(localStorage.getItem('menu_id'))
+  const [sessionId, setSessionId] = React.useState(localStorage.getItem('session_id'))
+  const [tableNumber, setTableNumber] = React.useState(localStorage.getItem('table_number'))
 
   React.useEffect(function () {
     if (localStorage.getItem('staff_id')) {
@@ -35,6 +38,16 @@ function App() {
   //   setStaffType(localStorage.getItem('staff_type'))
   // }, [localStorage.getItem('staff_type')]);
 
+  const customer = (staff_type, session_id) => {
+    setStaffType(staff_type)
+    setSessionId(session_id)
+  }
+  const restaurantSuccess = (menu_id) => {
+    setMenuId(menu_id)
+  }
+  const tableNumberSuccess = (table_number) => {
+    setTableNumber(table_number)
+  }
   const login = (staff_id, staff_type, menu_id) => {
     setId(staff_id);
     setStaffType(staff_type);
@@ -102,7 +115,8 @@ function App() {
     }
     else if (staffType === 'customer') {
       return <div className="footer-container">
-      <StyledButton startIcon={<ShoppingCartIcon />}><Link to='/view_cart' className='toNavy'>View Cart</Link></StyledButton>
+      <StyledButton startIcon={<ShoppingCartIcon />}><Link to={`/customer/${sessionId}/view_order/${menuId}/${tableNumber}`} className='toNavy'>View Cart</Link></StyledButton>
+      <StyledButton startIcon={<RestaurantMenuIcon />}><Link to={`/customer/${sessionId}/${menuId}/${tableNumber}`} className='toNavy'>Go to Menu</Link></StyledButton>
       </div>;
     }
   }
@@ -125,20 +139,23 @@ function App() {
         </header>
         <main>
           <Routes>
-            <Route path='/' element={<CustomerOrStaff setStaffType={setStaffType}/>} />
+            <Route path='/' element={<CustomerOrStaff onSuccess={customer}/>} />
             <Route path='/login' element={<ManagerLoginPage onSuccess={login} />} />
             <Route path='/register' element={<RegisterPage onSuccess={login} />} />
-            <Route path='/searchrestaurant' element={<SearchRestaurant />} />
-            <Route path='/tablenumber' element={<SelectTableNumber />} />
+            {/* <Route path='/searchrestaurant' element={<SearchRestaurant />} />
+            <Route path='/tablenumber' element={<SelectTableNumber />} /> */}
             <Route path='/addstaff' element={<AddStaffPage />} />
             <Route path='/manager/menu/:menuId' element={<ManagerMenuPage />} />
             <Route path='/manager/addnewmenuitem/:menuId/:categoryName/:categoryId' element={<NewMenuItemPage />} />
 
             <Route path='/kitchen_staff' element={<div>Kitchen Staff Logged In</div>} />
             <Route path='/wait_staff' element={<div>Wait Staff Logged In</div>} />
-
-            <Route path='/customer/:menuId' element={<CustomerMenuPage />} />
+            
+            <Route path='/customer/:sessionId/searchrestaurant' element={<SearchRestaurant onSuccess={restaurantSuccess}/>} />
+            <Route path='/customer/:sessionId/:menuId/tablenumber' element={<SelectTableNumber onSuccess={tableNumberSuccess}/>} />
+            <Route path='/customer/:sessionId/:menuId/:tableNumber' element={<CustomerMenuPage />} />
             <Route path='/customer/:menuId/:foodId' element={<FoodItemPage />} />
+            <Route path='/customer/:sessionId/view_order/:menuId/:tableNumber' element={<CustomerViewOrderPage />} />
           </Routes>
         </main>
         <footer>
