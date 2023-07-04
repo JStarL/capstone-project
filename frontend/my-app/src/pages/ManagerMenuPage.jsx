@@ -55,7 +55,6 @@ function ManagerMenuPage() {
     for (let key in data[0]) {
       setMenuItems(data[0][key][1])
     }
-
     return data; // Return the fetched data
   }
 
