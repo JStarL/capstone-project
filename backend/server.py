@@ -444,13 +444,15 @@ def customer_view_order_flask():
 def customer_menu_search_flask():
 
     session_id = request.args.get("session_id")
+    query = request.args.get("query")
+    
     cur = None
     if session_id in cur_dict['customers']:
         cur = cur_dict['customers'][session_id]
     else:
         cur = db_conn.cursor()
         cur_dict['customers'][session_id] = cur
-    return dumps(customer_menu_search(cur))
+    return dumps(customer_menu_search(cur, query))
 
 ##############################################################################################################################
 ################################################ OLD PROJECT STUFF ###########################################################

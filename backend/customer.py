@@ -101,17 +101,21 @@ def customer_view_menu_item(cur, menu_item_id):
         food.update({'category_id': tup[5]})
         return food
     
-def customer_menu_search(cur):
+def customer_menu_search(cur, query):
     invalid_menu = { 'error': 'No menus' } # error message
-    menu = { 'success': 'Show menu' } # supposed to show the food lol
+    # menu = { 'success': 'Show menu' } # supposed to show the food lol
     
+    regex = '.*' + query + '.*'
+
     query1 = """
     SELECT id, restaurant_name, restaurant_loc
-    FROM menus 
+    FROM menus
+    where restaurant_name ~* %s
+    or restaurant_loc ~* %s
     ;
     """ 
     
-    cur.execute(query1, [])
+    cur.execute(query1, [regex, regex])
     
     list1 = cur.fetchall()
     
@@ -126,5 +130,5 @@ def customer_menu_search(cur):
             dict_res.update({'restaurant_name': tup[1]})
             dict_res.update({'restaurant_address': tup[2]})
             list2.append(dict_res)
-        menu.update({'menu_list': list2})
-        return menu
+        # menu.update({'menu_list': list2})
+        return list2
