@@ -10,6 +10,16 @@
   flex-direction: column;
 }
 
+a {
+  text-decoration: none;
+  width: 150px;
+  margin: 5px;
+}
+
+a:hover {
+  color: #002250
+}
+
 body {
   font-family: sans-serif;
   /* height: calc(100% + 120px); */
@@ -127,6 +137,10 @@ footer {
   bottom: 0;
   background-color: #002250;
   /* margin-top: auto; */
+}
+
+.footer-container {
+  display: flex;
 }
 
 @media (max-width: 800px) {

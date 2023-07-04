@@ -2,6 +2,8 @@ import './App.css';
 import React from 'react';
 import { BrowserRouter, Routes, Route, Link } from 'react-router-dom';
 import { Button } from '@mui/material';
+import PersonAddAlt1SharpIcon from '@mui/icons-material/PersonAddAlt1Sharp';
+import RestaurantMenuIcon from '@mui/icons-material/RestaurantMenu';
 import ManagerLoginPage from './pages/ManagerLoginPage'
 import AddStaffPage from './pages/AddStaffPage';
 import ManagerMenuPage from './pages/ManagerMenuPage';
@@ -25,9 +27,10 @@ function App() {
     }
   }, []);
 
-  const login = (staff_id, staff_type) => {
+  const login = (staff_id, staff_type, menu_id) => {
     setId(staff_id);
-    setStaffType(staff_type)
+    setStaffType(staff_type);
+    setMenuId(menu_id)
     localStorage.setItem('staff_id', staff_id);
   }
 
@@ -54,18 +57,16 @@ function App() {
     return (
       <nav sx={{ display: 'flex' }}>
         <div className='nav-container'>
-          <Button sx={{
+          <StyledButton sx={{
             margin: '5px',
             marginLeft: 'auto',
             width: '7%',
             height: '70%',
-          }} onClick={logout}>
-            <Link to='/'>
-              <LogoutIcon/>
-              &nbsp;
+          }} onClick={logout} startIcon={<LogoutIcon/>}>
+            <a href='/'>
               Logout 
-            </Link>
-          </Button>
+            </a>
+          </StyledButton>
         </div>
       </nav>
     )
@@ -119,8 +120,8 @@ function App() {
           {staffType !== 'manager'
             ? null
             : (<div className="footer-container">
-              <Button><Link to='/addstaff'>Add Staff</Link></Button>
-              <Button><Link to={`/manager/menu/${menuId}`}>Go to Menu</Link></Button>
+              <StyledButton startIcon={<PersonAddAlt1SharpIcon />}><Link to='/addstaff'>Add Staff</Link></StyledButton>
+              <StyledButton startIcon={<RestaurantMenuIcon />}><Link to={`/manager/menu/${menuId}`}>Go to Menu</Link></StyledButton>
             </div>)}
         </footer>
 

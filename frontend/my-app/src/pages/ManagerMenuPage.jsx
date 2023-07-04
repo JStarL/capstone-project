@@ -2,7 +2,7 @@ import React from 'react';
 import '../App.css';
 import { Button, TextField, Typography } from '@mui/material';
 import ManagerFoodItem from '../components/ManagerFoodItem';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import CategoryManager from '../components/CategoryManager';
 import BestSellingFoodItem from '../components/BestSellingFoodItem';
 import AddIcon from '@mui/icons-material/Add';
@@ -16,9 +16,10 @@ function ManagerMenuPage() {
   const [currentSelectedCategoryId, setCurrentSelectedCategoryId] = React.useState(1);
   const [menuItems, setMenuItems] = React.useState([]); // List of Menu items for the current selected category
   const navigate = useNavigate();
+  const params = useParams();
 
   const managerId = localStorage.getItem('staff_id');
-  const menuId = localStorage.getItem('menu_id');
+  const menuId = params.menuId;
 
   React.useEffect(() => {
     const fetchData = async () => {

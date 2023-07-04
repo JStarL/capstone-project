@@ -24,7 +24,7 @@ function RegisterPage({ onSuccess }) {
     makeRequest('/auth/register', 'POST', body, undefined)
       .then(data => {
         if (data.hasOwnProperty('success')) {
-          onSuccess(data['staff_id'])
+          onSuccess(data['staff_id'], 'manager', data['menu_id'])
           localStorage.setItem('staff_id', data['manager_id']);
           localStorage.setItem('menu_id', data['menu_id']);
           localStorage.setItem('staff_type', 'manager');

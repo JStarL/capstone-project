@@ -59,8 +59,8 @@ function CategoryManager(props) {
 	return <>
 		<Card onClick={() => selectCategory()} sx={{ m: 2, p: 7 }} variant="outlined" >
 			<CardContent>
-        {categoryName === 'Best Sellin'
-          ? <di>Best Selling</di>
+        {categoryName === 'Best Selling'
+          ? <div>Best Selling</div>
           : <TextField className='food-item-name' value={categoryName} onChange={e => setCategoryName(e.target.value)} onBlur={() => updateCategoryName()} label='Category Name'></TextField>
         }
 				{/* <TextField className='food-item-name' value={categoryName} onChange={e => setCategoryName(e.target.value)} onBlur={() => updateCategoryName()} label='Category Name'></TextField> */}
