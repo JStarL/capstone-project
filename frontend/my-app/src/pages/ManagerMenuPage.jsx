@@ -51,18 +51,8 @@ function ManagerMenuPage() {
   async function fetchAllMenuData() {
     const url = `/manager/view_menu?manager_id=${managerId}&menu_id=${menuId}`;
     const data = await makeRequest(url, 'GET', undefined, undefined);
-    console.log(data)
     setCategories(data);
-    
-    // for (const [key, value] of Object.entries(data)) {
-    //   for (const [key1, value1] of Object.entries(value)) {
-    //     if (value1[1]?.length > 0) {
-    //       setMenuItems(value1[1])
-    //     }
-    //     console.log(value1[1]);
-    //   }
-      
-    // }
+
     return data; // Return the fetched data
   }
 
@@ -85,18 +75,12 @@ function ManagerMenuPage() {
     const url = `/manager/view_category?manager_id=${managerId}&category_id=${currentSelectedCategoryId}`;
     const data = await makeRequest(url, 'GET', undefined, undefined)
     setMenuItems(data)
-    console.log(currentSelectedCategory)
-    console.log(currentSelectedCategoryId)
-    console.log(menuItems)
-    console.log(data)
     return data
   }
 
   if (!categories || !Array.isArray(categories)) return <>loading...</>;
   return (
     <>
-      <Typography className='h4' variant="h4" gutterBottom>Manager Menu Page - {currentSelectedCategory}</Typography>
-
       <div style={{ display: 'flex', flexDirection: 'row' }}>
         <div style={{ width: '20%', backgroundColor: 'white', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
           {categories.map((category) => (
@@ -107,6 +91,7 @@ function ManagerMenuPage() {
               setCurrentSelectedCategory={setCurrentSelectedCategory}
               fetchAllMenuData={fetchAllMenuData}
               setCurrentSelectedCategoryId={setCurrentSelectedCategoryId}
+              currentSelectedCategory={currentSelectedCategory}
               setMenuItems={setMenuItems}
               fetchCategoryMenuItems={fetchCategoryMenuItems}
             />
@@ -121,6 +106,7 @@ function ManagerMenuPage() {
           <Button onClick={addNewCategory} startIcon={<AddIcon />}>Add new category</Button>
         </div>
         <div style={{ width: '80%', height: '100%' }}>
+        <Typography className='h4' variant="h4" gutterBottom>Manager Menu Page - {currentSelectedCategory}</Typography>
           <div>
           {menuItems.map((menuItem) =>
             currentSelectedCategory === 'Best Selling' ? (
