@@ -40,7 +40,7 @@ function ManagerMenuPage() {
         setMenuItems(data)
         console.log(currentSelectedCategoryId)
         console.log('here')
-        fetchAllMenuData()
+        // fetchAllMenuData()
       }
     };
     fetchCategoryData();
