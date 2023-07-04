@@ -122,16 +122,13 @@ def customer_menu_search(cur, query):
     
     list1 = cur.fetchall()
     
-    if len(list1) == 0: #No menu or something went wrong with the id
-        #test
-        return invalid_menu
-    else: 
-        list2 = []
-        for tup in list1:
-            dict_res = {}
-            dict_res.update({'menu_id': tup[0]})
-            dict_res.update({'restaurant_name': tup[1]})
-            dict_res.update({'restaurant_address': tup[2]})
-            list2.append(dict_res)
-        # menu.update({'menu_list': list2})
-        return list2
+    
+    list2 = []
+    for tup in list1:
+        dict_res = {}
+        dict_res.update({'menu_id': tup[0]})
+        dict_res.update({'restaurant_name': tup[1]})
+        dict_res.update({'restaurant_address': tup[2]})
+        list2.append(dict_res)
+    # menu.update({'menu_list': list2})
+    return list2
