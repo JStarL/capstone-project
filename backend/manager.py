@@ -392,9 +392,10 @@ def manager_update_menu_item(cur, menu_item_id, menu_item_name, price, ingredien
         
 def manager_update_category_ordering(cur, category_id, prev_ordering_id, new_ordering_id):
     invalid_category_id = { 'error': 'invalid category_id'}
-    invalid_pre_ordering = { 'error': 'Pre id is invalid'}
+    invalid_pre_ordering = { 'error': 'prev_ordering_id is invalid'}
+    database_error_no_ordering = { 'error': 'no cateogry_id found with the new_ordering_id' }
     success = { 'success': 'success in updating ordering of category' }
-    error = { 'error': 'Did not swap properly'}
+    failed_swap = { 'error': 'Did not swap properly'}
     
     # might change 'ordering' to the actual attirbute name once it is added in the database
     query0 = """
@@ -421,34 +422,39 @@ def manager_update_category_ordering(cur, category_id, prev_ordering_id, new_ord
         select id from categories where ordering = %s;
     """
     
-    cur.execute(query1, [new_ordering_id, category_id])
     cur.execute(query2, [new_ordering_id])
     
     list1 = cur.fetchall()
     
-    category_id2 = list1[0][0]
-    cur.execute(query1, [prev_ordering_id, list1[0][0]])
+    if len(list1) == 0:
+        return database_error_no_ordering
+
+    prev_category_id = list1[0][0]
+    # Swapping ordering ids
+    cur.execute(query1, [prev_ordering_id, prev_category_id])
+    cur.execute(query1, [new_ordering_id, category_id])
     
     # checking if it got swaped 
     cur.execute(query0, [category_id])
     list1 = cur.fetchall()
 
     if list1[0][0] != new_ordering_id:
-        return error
+        return failed_swap
     
-    cur.execute(query0, [category_id2])
+    cur.execute(query0, [prev_category_id])
     list1 = cur.fetchall()
     
     if list1[0][0] != prev_ordering_id:
-        return error
+        return failed_swap
     
     return success
 
 def manager_update_menu_item_ordering(cur, menu_item_id, prev_ordering_id, new_ordering_id):
     invalid_menu_id = { 'error': 'invalid menu_item_id'}
-    invalid_pre_ordering = { 'error': 'Pre id is invalid'}
+    invalid_pre_ordering = { 'error': 'prev_ordering_id is invalid'}
+    no_menu_item_with_new_ordering_id = { 'error': 'no menu item with new_ordering_id' }
     success = { 'success': 'success in updating ordering of menu items' }
-    error = { 'error': 'Did not swap properly'}
+    swap_fail = { 'error': 'Did not swap properly'}
     
     # might change 'ordering' to the actual attirbute name once it is added in the database
     query0 = """
@@ -475,25 +481,29 @@ def manager_update_menu_item_ordering(cur, menu_item_id, prev_ordering_id, new_o
         select id from menu_items where ordering = %s;
     """
     
-    cur.execute(query1, [new_ordering_id, menu_item_id])
     cur.execute(query2, [new_ordering_id])
     
     list1 = cur.fetchall()
     
+    if len(list1) == 0:
+        return no_menu_item_with_new_ordering_id
+
     menu_item_id2 = list1[0][0]
-    cur.execute(query1, [prev_ordering_id, list1[0][0]])
+    # Swap ordering ids
+    cur.execute(query1, [prev_ordering_id, menu_item_id2])
+    cur.execute(query1, [new_ordering_id, menu_item_id])
     
     # checking if it got swaped 
     cur.execute(query0, [menu_item_id])
     list1 = cur.fetchall()
 
     if list1[0][0] != new_ordering_id:
-        return error
+        return swap_fail
     
     cur.execute(query0, [menu_item_id2])
     list1 = cur.fetchall()
     
     if list1[0][0] != prev_ordering_id:
-        return error
+        return swap_fail
     
     return success
