@@ -54,15 +54,18 @@ function App() {
     return (
       <nav sx={{ display: 'flex' }}>
         <div className='nav-container'>
-          <StyledButton sx={{
+          <Button sx={{
             margin: '5px',
             marginLeft: 'auto',
             width: '7%',
-            height: '70%'
+            height: '70%',
           }} onClick={logout}>
-            <LogoutIcon></LogoutIcon>
-            &nbsp;
-            Logout</StyledButton>
+            <Link to='/'>
+              <LogoutIcon/>
+              &nbsp;
+              Logout 
+            </Link>
+          </Button>
         </div>
       </nav>
     )
