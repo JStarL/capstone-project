@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import DiningIcon from '@mui/icons-material/Dining';
 import SupervisorAccountIcon from '@mui/icons-material/SupervisorAccount';
 
-const StyledButton = styled(Button)({
+export const StyledButton = styled(Button)({
   backgroundColor: '#002250',
   color: '#fff',
   '&:hover': {
