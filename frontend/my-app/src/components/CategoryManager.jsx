@@ -49,7 +49,7 @@ function CategoryManager(props) {
 		props.setCurrentSelectedCategoryId(categoryId)
 	}
 	return <>
-		<Card style={{ borderColor: props.currentSelectedCategory === categoryName ? '#002250' : undefined }} className='category-box' onClick={() => selectCategory()} sx={{ m: 2, p: 7 }} variant="outlined" >
+		<Card style={{ borderColor: props.currentSelectedCategoryId === props.id ? '#002250' : undefined }} className='category-box' onClick={() => selectCategory()} sx={{ m: 2, p: 7 }} variant="outlined" >
 			<CardContent>
         {categoryName === 'Best Selling'
           ? <div>Best Selling</div>
