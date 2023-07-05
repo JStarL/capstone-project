@@ -64,7 +64,7 @@ cur_dict = {
     }
 }
 
-
+table_dict = {}
 
 
 # @APP.route("/echo", methods=['GET'])
@@ -245,6 +245,17 @@ def customer_view_menu_item_flask():
         cur = db_conn.cursor()
         cur_dict['customers'][session_id] = cur
     return dumps(customer_view_menu_item(cur, menu_item_id))
+
+@APP.route("/customer/menu/table", methods=['POST'])
+def customer_menu_table_flask():
+    data = ast.literal_eval(request.get_json())
+    table_id = data['table_id']
+
+    if table_id != None:
+        table_dict.update({'table_number' : data['table_id']})
+        return { 'table_id':  table_id}
+    else:
+        return { 'error': 'invalid table_id' }
 
 ##############################################################################################################################
 ################################################ OLD PROJECT STUFF ###########################################################
