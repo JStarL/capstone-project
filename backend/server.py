@@ -8,7 +8,7 @@ import sys
 import ast
 
 
-from manager import manager_view_menu, manager_view_category, manager_view_menu_item, manager_add_category, manager_delete_category, manager_add_menu_item, manager_delete_menu_item, manager_update_category, manager_update_menu_item, manager_update_category_ordering
+from manager import manager_view_menu, manager_view_category, manager_view_menu_item, manager_add_category, manager_delete_category, manager_add_menu_item, manager_delete_menu_item, manager_update_category, manager_update_menu_item, manager_update_category_ordering, manager_update_menu_item_ordering
 from auth import login_backend, register_backend, auth_add_staff_backend
 from customer import customer_view_menu, customer_view_category, customer_view_menu_item
 
@@ -241,10 +241,18 @@ def manager_update_menu_item_flask():
     return return_val
 
 @APP.route("/manager/update_category_ordering", methods=['POST'])
-def manager_update_menu_item_flask():
+def manager_update_category_ordering_flask():
     data = ast.literal_eval(request.get_json())
     cur = cur_dict['staff'][data['manager_id']]
     return_val = dumps(manager_update_category_ordering(cur, data['category_id'], data['prev_ordering_id'], data['new_ordering_id']))
+    db_conn.commit()
+    return return_val
+
+@APP.route("/manager/update_menu_item_ordering", methods=['POST'])
+def manager_update_menu_item_ordering_flask():
+    data = ast.literal_eval(request.get_json())
+    cur = cur_dict['staff'][data['manager_id']]
+    return_val = dumps(manager_update_menu_item_ordering(cur, data['menu_item_id'], data['prev_ordering_id'], data['new_ordering_id']))
     db_conn.commit()
     return return_val
 
