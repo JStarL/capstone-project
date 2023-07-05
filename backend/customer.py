@@ -8,7 +8,7 @@ def customer_view_menu(cur, menu_id):
     """
     
     query_menu_items = """
-    select id, title, description, image, price, ingredients, ordering_id from menu_items where category_id = %s order by ordering_id;
+    select id, title, description, image, price, ordering_id from menu_items where category_id = %s order by ordering_id;
     """
     cur.execute(query_categories, [menu_id])
     categories = cur.fetchall()        
@@ -33,8 +33,7 @@ def customer_view_menu(cur, menu_id):
                 tmp.update({'food_description': menu_item[2]})
                 tmp.update({'food_image': menu_item[3]})
                 tmp.update({'food_price': menu_item[4]})
-                tmp.update({'food_ingredients': menu_item[5]})
-                tmp.update({'food_ordering_id': menu_item[6]})
+                tmp.update({'food_ordering_id': menu_item[5]})
                 menu_items_list.append(tmp)
             menu.append({str(categ_id): ['Best Selling', menu_items_list, categ[2]]})
         else:
@@ -57,7 +56,7 @@ def customer_view_category(cur, category_id):
         return invalid_category_id
 
     query1 = """
-    select id, title, description, image, price, ingredients, ordering_id from menu_items where category_id = %s order by ordering_id;
+    select id, title, description, image, price, ordering_id from menu_items where category_id = %s order by ordering_id;
     """
 
     cur.execute(query1, [category_id])
@@ -70,8 +69,7 @@ def customer_view_category(cur, category_id):
         tmp.update({'food_description': tup[2]})
         tmp.update({'food_image': tup[3]})
         tmp.update({'food_price': tup[4]})
-        tmp.update({'food_ingredients': tup[5]})
-        tmp.update({'food_ordering_id': tup[6]})
+        tmp.update({'food_ordering_id': tup[5]})
         menu_items.append(tmp)
 
     return menu_items
@@ -82,7 +80,7 @@ def customer_view_menu_item(cur, menu_item_id):
     food = { 'success': 'Show food' } # supposed to show the food lol
     
     query1 = """
-    select title, description, image, price, ingredients, category_id, ordering_id from menu_items where id = %s;
+    select title, description, image, price, category_id, ordering_id from menu_items where id = %s;
     """ 
     
     cur.execute(query1, [menu_item_id])
@@ -99,9 +97,8 @@ def customer_view_menu_item(cur, menu_item_id):
         food.update({'food_description': tup[1]})
         food.update({'food_image': tup[2]})
         food.update({'food_price': tup[3]})
-        food.update({'food_ingredients': tup[4]})
-        food.update({'category_id': tup[5]})
-        food.update({'food_ordering_id': tup[6]})
+        food.update({'category_id': tup[4]})
+        food.update({'food_ordering_id': tup[5]})
         return food
     
 def customer_menu_search(cur, query):
