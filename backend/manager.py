@@ -9,7 +9,7 @@ def manager_view_menu(cur, menu_id):
     """
     
     query_menu_items = """
-    select id, title, description, image, price, ingredients, ordering_id from menu_items where category_id = %s order by ordering_id;
+    select id, title, description, image, price, ordering_id from menu_items where category_id = %s order by ordering_id;
     """
     cur.execute(query_categories, [menu_id])
     categories = cur.fetchall()        
@@ -34,8 +34,7 @@ def manager_view_menu(cur, menu_id):
                 tmp.update({'food_description': menu_item[2]})
                 tmp.update({'food_image': menu_item[3]})
                 tmp.update({'food_price': menu_item[4]})
-                tmp.update({'food_ingredients': menu_item[5]})
-                tmp.update({'food_ordering_id': menu_item[6]})
+                tmp.update({'food_ordering_id': menu_item[5]})
                 menu_items_list.append(tmp)
             menu.append({str(categ_id): ['Best Selling', menu_items_list, categ[2]]})
         else:
@@ -58,7 +57,7 @@ def manager_view_category(cur, category_id):
         return invalid_category_id
 
     query1 = """
-    select id, title, description, image, price, ingredients, ordering_id from menu_items where category_id = %s order by ordering_id;
+    select id, title, description, image, price, ordering_id from menu_items where category_id = %s order by ordering_id;
     """
 
     cur.execute(query1, [category_id])
@@ -71,8 +70,7 @@ def manager_view_category(cur, category_id):
         tmp.update({'food_description': tup[2]})
         tmp.update({'food_image': tup[3]})
         tmp.update({'food_price': tup[4]})
-        tmp.update({'food_ingredients': tup[5]})
-        tmp.update({'food_ordering_id': tup[6]})
+        tmp.update({'food_ordering_id': tup[5]})
         menu_items.append(tmp)
 
     return menu_items
@@ -82,7 +80,7 @@ def manager_view_menu_item(cur, food_id):
     food = { 'success': 'Show food' } # supposed to show the food lol
     
     query1 = """
-    select title, description, image, price, ingredients, category_id, ordering_id from menu_items where id = %s;
+    select title, description, image, price, category_id, ordering_id from menu_items where id = %s;
     """ 
     
     cur.execute(query1, [food_id]) #empty for now
@@ -99,9 +97,8 @@ def manager_view_menu_item(cur, food_id):
         food.update({'food_description': tup[1]})
         food.update({'food_image': tup[2]})
         food.update({'food_price': tup[3]})
-        food.update({'food_ingredients': tup[4]}) # I'm not sure about this line
-        food.update({'category_id': tup[5]})
-        food.update({'food_ordering_id': tup[6]})
+        food.update({'category_id': tup[4]})
+        food.update({'food_ordering_id': tup[5]})
         return food
 
 def manager_add_category(cur, category_name, menu_id):
@@ -244,8 +241,8 @@ def manager_add_menu_item(cur, menu_item_name, price, ingredients, description, 
         return invalid_best_selling
 
     query1 = """
-        INSERT INTO menu_items (title, description, price, ingredients, category_id, menu_id, image)
-        VALUES (%s, %s, %s, %s, %s, %s, %s);
+        INSERT INTO menu_items (title, description, price, category_id, menu_id, image)
+        VALUES (%s, %s, %s, %s, %s, %s);
     """ 
     query2 = """
         SELECT id
@@ -254,7 +251,7 @@ def manager_add_menu_item(cur, menu_item_name, price, ingredients, description, 
         AND menu_id = %s;
     """ 
     
-    cur.execute(query1, [menu_item_name, description, price, ingredients, category_id, menu_id, image])
+    cur.execute(query1, [menu_item_name, description, price, category_id, menu_id, image])
     cur.execute(query2, [menu_item_name, menu_id])
     
     list1 = cur.fetchall()
@@ -363,7 +360,6 @@ def manager_update_menu_item(cur, menu_item_id, menu_item_name, price, ingredien
         SET title = %s,
             description = %s,
             price = %s,
-            ingredients = %s,
             category_id = %s,
             menu_id = %s,
             image = %s            
@@ -371,7 +367,7 @@ def manager_update_menu_item(cur, menu_item_id, menu_item_name, price, ingredien
         ;
     """
     query3 = """
-        SELECT id, title, description, image, price, ingredients, category_id, menu_id
+        SELECT id, title, description, image, price, category_id, menu_id
         FROM menu_items
         WHERE id = %s;
     """ 
@@ -383,11 +379,11 @@ def manager_update_menu_item(cur, menu_item_id, menu_item_name, price, ingredien
     if len(list1) == 0: # id doesn't exist
         return invalid_menu_item
     else: 
-        cur.execute(query2, [menu_item_name, description, price, ingredients, category_id, menu_id, image, menu_item_id]) #this just updates
+        cur.execute(query2, [menu_item_name, description, price, category_id, menu_id, image, menu_item_id]) #this just updates
         cur.execute(query3, [menu_item_id]) #this grabs the id and the rest of the values to check
         list1 = cur.fetchall()
         return menu_item
-        # if menu_item_name == list1[0][1] and description == list1[0][2] and image == list1[0][3] and price == list1[0][4] and ingredients == list1[0][5] and category_id == list1[0][6] and menu_id == list1[0][7]:
+        # if menu_item_name == list1[0][1] and description == list1[0][2] and image == list1[0][3] and price == list1[0][4] and category_id == list1[0][5] and menu_id == list1[0][6]:
         #     menu_item.update({'menu_item_id' : list1[0][0]})
         #     return menu_item
         # else:
