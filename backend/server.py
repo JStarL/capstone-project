@@ -64,6 +64,39 @@ cur_dict = {
     }
 }
 
+# not sure to add name of food or session id yet
+# orders = [
+#   {
+#       'table_id': 24,
+#       'menu_id': 1,
+#       'menu_items': [
+#           {
+#               'menu_item_id': 12,
+#               'amount': 1
+#           },
+#           {
+#               'menu_item_id': 15,
+#               'amount': 2
+#           }
+#       ]
+#   },
+#   {
+#       'table_id': 27,
+#       'menu_id': 2,
+#       'menu_items': [
+#           {
+#               'menu_item_id': 13,
+#               'amount': 5
+#           },
+#           {
+#               'menu_item_id': 3,
+#               'amount': 1
+#           }
+#       ]
+#   }
+# ]
+
+
 orders = []
 
 
