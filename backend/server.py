@@ -454,6 +454,26 @@ def customer_menu_search_flask():
         cur_dict['customers'][session_id] = cur
     return dumps(customer_menu_search(cur, query))
 
+@APP.route("/get_allergies", methods=['GET'])
+def get_allergies_flask():
+    cur = db_conn.cursor()
+
+    query = """
+        select id, name, description from allergies;
+    """
+
+    cur.execute(query, [])
+
+    return_list = []
+    for tup in cur.fetchall():
+        tmp = []
+        tmp.append(tup[0])
+        tmp.append(tup[1])
+        tmp.append(tup[2])
+        return_list.append(tmp)
+
+    return dumps(return_list)
+
 ##############################################################################################################################
 ################################################ OLD PROJECT STUFF ###########################################################
 ##############################################################################################################################
