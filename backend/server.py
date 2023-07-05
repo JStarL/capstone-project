@@ -280,7 +280,7 @@ def customer_add_menu_item_flask():
     else:
         return {'error': 'invalid table_id or menu_id' }
 
-@APP.route("/customer/remove_menu_item", methods=['POST'])
+@APP.route("/customer/remove_menu_item", methods=['DELETE'])
 def customer_remove_menu_item_flask():
     data = ast.literal_eval(request.get_json())
     table_id = data['table_id']
@@ -300,6 +300,8 @@ def customer_remove_menu_item_flask():
             return { 'error': 'menu_item_id doesnt exist'}
     else:
         return {'error': 'invalid table_id or menu_id' }
+
+
 
 ##############################################################################################################################
 ################################################ OLD PROJECT STUFF ###########################################################
