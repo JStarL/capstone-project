@@ -250,12 +250,10 @@ def customer_view_menu_item_flask():
 def customer_menu_table_flask():
     data = ast.literal_eval(request.get_json())
     table_id = data['table_id']
-    session_id = data['session_id']
     menu_id = data['menu_id']
 
     if table_id != None:
-        orders.update({ 
-                'session_id' : session_id,
+        orders.update({
                 'table_id' : table_id,
                 'menu_id' : menu_id,
                 'menu_items' : [] })
@@ -313,8 +311,18 @@ def customer_remove_menu_item_flask():
     else:
         return {'error': 'invalid table_id or menu_id' }
 
-@APP.route("/customer/view_order", methods=['POST'])
-def customer_remove_menu_item_flask():
+@APP.route("/customer/view_order", methods=['GET'])
+def customer_view_order_flask():
+    menu_id = request.args.get("menu_id")
+    table_id = request.args.get("table_id")
+
+    # find the order with table_id and menu_id
+    order = next((order for order in orders if order["table_id"] == table_id and order["menu_id"] == menu_id), None)
+    
+    if order != None:
+        return order
+    else:
+        return {'error': 'invalid table_id or menu_id' }
 
 ##############################################################################################################################
 ################################################ OLD PROJECT STUFF ###########################################################
