@@ -69,10 +69,24 @@ Week 5
   - schedule demo practice run for Thursday
 - Working on manager adding a new staff page 
 
-Things implemented (Frontend) during the Week:
-- Added intial are you a customer or staff screen
+Things implemented (Frontend) throughout the week:
+- Added initial are you a customer or staff screen
 - Added session id for customers 
 - Local storage for staff_id, session_id, menu_id, staff_type
 - Register a new manager 
-- Working on categories
+- Categories add, update and select
+- Customer and manager menu pages 
+- Individual food pages clicking the "Find out more" button
+
+Demo + retrospective
+- demonstrate customer menu page 
+- Work on retrospective after the demo
+
+Week 6 
+- Meeting Monday 3/7/23
+- Planning for the next sprint 
+  - Figuring out what users stories to include for the next sprint 
+  - Delegating roles for each user story 
+  - Improve styling -> Skeleton pages -> add in data after backend finish routes
+  - Thinking about UI design and styling 
 

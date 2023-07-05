@@ -1,14 +1,23 @@
 import React from 'react';
-import { Typography, Card, CardActions, CardContent} from '@mui/material';
-function CategoryCustomer() {
+import { Typography, Card, CardActions, CardContent } from '@mui/material';
+function CategoryCustomer(props) {
+	const [categoryName, setCategoryName] = React.useState(props.categoryName);
+	const [categoryId, setCategoryId] = React.useState(props.id)
+
+	function selectCategory() {
+		props.setCurrentSelectedCategory(categoryName)
+		props.setCurrentSelectedCategoryId(categoryId)
+    console.log(categoryId)
+	}
+
 	return <>
-		<Card onClick={() => console.log('Selecting category')} sx={{m:2, p:7}} variant="outlined" >
+		<Card onClick={() => selectCategory()} sx={{ m: 2, p: 7 }} variant="outlined" >
 			<CardContent>
-				<Typography>Category 1</Typography>
+				<Typography>{categoryName}</Typography>
 			</CardContent>
 			<CardActions>
 			</CardActions>
 		</Card>
-  </>;
+	</>;
 }
 export default CategoryCustomer;

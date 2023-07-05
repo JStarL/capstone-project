@@ -8,7 +8,7 @@ def customer_view_menu(cur, menu_id):
     """
     
     query_menu_items = """
-    select id, title, description, image, price from menu_items where category_id = %s order by title;
+    select id, title, description, image, price, ingredients from menu_items where category_id = %s order by title;
     """
     cur.execute(query_categories, [menu_id])
     categories = cur.fetchall()        
@@ -33,10 +33,11 @@ def customer_view_menu(cur, menu_id):
                 tmp.update({'food_description': menu_item[2]})
                 tmp.update({'food_image': menu_item[3]})
                 tmp.update({'food_price': menu_item[4]})
+                tmp.update({'food_ingredients': menu_item[5]})
                 menu_items_list.append(tmp)
-            menu.append({'Best Selling': menu_items_list})
+            menu.append({str(categ_id): ['Best Selling', menu_items_list]})
         else:
-            menu.append({categ[1]: []})
+            menu.append({str(categ_id): [categ[1], []]})
         
     return menu
 
@@ -44,16 +45,23 @@ def customer_view_category(cur, category_id):
     invalid_category_id = { 'error': 'invalid category_id' }
     menu_items = []
 
+    query0 = """
+    select id from categories where id = %s;
+    """
+
+    cur.execute(query0, [category_id])
+    list1 = cur.fetchall()
+
+    if len(list1) == 0:
+        return invalid_category_id
+
     query1 = """
-    select id, title, description, image, price from menu_items where category_id = %s order by title;
+    select id, title, description, image, price, ingredients from menu_items where category_id = %s order by title;
     """
 
     cur.execute(query1, [category_id])
     list1 = cur.fetchall()
 
-    if len(list1) == 0:
-        return invalid_category_id
-    
     for tup in list1:
         tmp = {}
         tmp.update({'food_id': tup[0]})
@@ -61,6 +69,7 @@ def customer_view_category(cur, category_id):
         tmp.update({'food_description': tup[2]})
         tmp.update({'food_image': tup[3]})
         tmp.update({'food_price': tup[4]})
+        tmp.update({'food_ingredients': tup[5]})
         menu_items.append(tmp)
 
     return menu_items

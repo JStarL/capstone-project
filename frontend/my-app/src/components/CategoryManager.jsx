@@ -1,4 +1,5 @@
 import React from 'react';
+import './Components.css';
 import { Button, TextField, Card, CardActions, CardContent } from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete';
 import MenuIcon from '@mui/icons-material/Menu';
@@ -6,7 +7,9 @@ import makeRequest from '../makeRequest';
 
 function CategoryManager(props) {
 	const [categoryName, setCategoryName] = React.useState(props.categoryName);
-	
+  const [categoryId, setCategoryId] = React.useState(props.id)
+  const [prevCategoryName, setPrevCategoryName] = React.useState('')
+  const [isClicked, setIsClicked] = React.useState(false)
 	const managerId = localStorage.getItem('staff_id');
   const menuId = localStorage.getItem('menu_id');
 	
@@ -19,7 +22,6 @@ function CategoryManager(props) {
 
 		makeRequest('/manager/delete_category', 'DELETE', body, undefined)
 			.then(data => {
-				console.log(data);
 				props.fetchAllMenuData();
 			})
 			.catch(e => console.log('Error: ' + e));
@@ -34,7 +36,6 @@ function CategoryManager(props) {
 
 		makeRequest('/manager/update_category', 'POST', body, undefined)
 			.then(data => {
-				console.log(data);
 				props.fetchAllMenuData();
 			})
 			.catch(e => console.log('Error: ' + e));
@@ -45,17 +46,23 @@ function CategoryManager(props) {
 
 	function selectCategory() {
 		props.setCurrentSelectedCategory(props.categoryName)
-		props.setCurrentSelectedCategoryId(props.id)
-
+		props.setCurrentSelectedCategoryId(categoryId)
 	}
 	return <>
-		<Card onClick={() => selectCategory()} sx={{ m: 2, p: 7 }} variant="outlined" >
+		<Card style={{ borderColor: props.currentSelectedCategoryId === props.id ? '#002250' : undefined }} className='category-box' onClick={() => selectCategory()} sx={{ m: 2, p: 7 }} variant="outlined" >
 			<CardContent>
-				<TextField className='food-item-name' value={categoryName} onChange={e => setCategoryName(e.target.value)} onBlur={() => updateCategoryName()} label='Category Name'></TextField>
+        {categoryName === 'Best Selling'
+          ? <div>Best Selling</div>
+          : <TextField fullWidth variant="standard" className='food-item-name' value={categoryName} onChange={e => setCategoryName(e.target.value)} onBlur={() => updateCategoryName()} label='Category Name'></TextField>
+        }
 			</CardContent>
 			<CardActions>
-				<Button onClick={() => deleteCategory()}startIcon={<DeleteIcon />}></Button>
-				<Button startIcon={<MenuIcon />}></Button>
+        {categoryName === 'Best Selling'
+          ? null
+          : <>
+          <Button onClick={() => deleteCategory()}startIcon={<DeleteIcon />}>Delete</Button></>
+          // <Button startIcon={<MenuIcon />}></Button></>
+        }
 			</CardActions>
 		</Card>
 	</>;

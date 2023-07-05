@@ -7,16 +7,74 @@ import OutlinedInput from '@mui/material/OutlinedInput';
 import FormControl from '@mui/material/FormControl';
 import InputAdornment from '@mui/material/InputAdornment';
 import InputLabel from '@mui/material/InputLabel';
+import makeRequest from '../makeRequest';
+import { useNavigate } from 'react-router-dom';
 
-function ManagerFoodItem ({ originalFoodName, originalFoodDescription }) {
-  const [foodName, setFoodName] = React.useState(originalFoodName);
-  const [foodDescription, setFoodDescription] = React.useState(originalFoodDescription);
-  const [image, setImage] = React.useState(null)
-  const [price, setPrice] = React.useState('2')
+function ManagerFoodItem ({ originalFoodName, originalFoodDescription, originalPrice, originalImage, originalIngredients, foodId, categoryId, categoryName, fetchCategoryMenuItems }) {
+  const [foodName, setFoodName] = React.useState('');
+  const [foodDescription, setFoodDescription] = React.useState('');
+  const [ingredients, setIngredients] = React.useState('')
+  const [image, setImage] = React.useState(originalImage)
+  const [price, setPrice] = React.useState(originalPrice)
+
+  React.useEffect(() => {
+    console.log(originalFoodDescription)
+    console.log(foodDescription)
+    setFoodName(originalFoodName)
+    setFoodDescription(originalFoodDescription)
+    setImage(originalImage)
+    setPrice(originalPrice)
+    toStringForm();
+  }, [originalFoodDescription, originalFoodName, originalImage, originalPrice, originalIngredients]);
+
+  function toStringForm() {
+    if (originalIngredients !== "{}") {
+      setIngredients(originalIngredients)
+    }
+    else {
+      setIngredients("")
+    }
+  }
+  const navigate = useNavigate();
   async function handleFileSelect (event) {
     const thumbnailUrl = await fileToDataUrl(event.target.files[0])
     setImage(thumbnailUrl);
   }
+  const managerId = localStorage.getItem('staff_id')
+  const menuId = localStorage.getItem('menu_id')
+  function updateFoodItem() {
+		const body = JSON.stringify({
+			'manager_id': managerId,
+      'menu_item_id': foodId,
+			'title': foodName,
+      price,
+      'ingredients': ingredients,
+      'description': foodDescription,
+      'category_id': categoryId,
+      'menu_id': menuId,
+      image
+		});
+		makeRequest('/manager/update_menu_item', 'POST', body, undefined)
+			.then(data => {
+        console.log(data)
+			})
+			.catch(e => console.log('Error: ' + e));
+	}
+
+  function deleteFoodItem() {
+		const body = JSON.stringify({
+			'manager_id': managerId,
+			'menu_item_id': foodId,
+		});
+
+		makeRequest('/manager/delete_menu_item', 'DELETE', body, undefined)
+			.then(data => {
+				console.log(data);
+        // fetchAllMenuData();
+        fetchCategoryMenuItems();
+			})
+			.catch(e => console.log('Error: ' + e));
+	}
 
   return <>
   <div className='food-item-div'>
@@ -46,10 +104,14 @@ function ManagerFoodItem ({ originalFoodName, originalFoodDescription }) {
           value={price}
         />
       </FormControl></div>
+      <div className='div-section'><TextField className='food-item-description' rows={3} multiline={true} label='Ingredients' value={ingredients} onChange={e => setIngredients(e.target.value)}></TextField></div>
     </div>
     <div className='food-item-button'>
-    <Button startIcon={<DeleteIcon/>}></Button>
-      <Button>UPDATE</Button>
+      {categoryName !== 'Best Selling'
+        ? <Button onClick={deleteFoodItem} startIcon={<DeleteIcon/>}></Button>
+        : null
+      }
+      <Button onClick={updateFoodItem}>UPDATE</Button>
     </div>
   </div>
   </>

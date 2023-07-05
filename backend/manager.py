@@ -9,7 +9,7 @@ def manager_view_menu(cur, menu_id):
     """
     
     query_menu_items = """
-    select id, title, description, image, price from menu_items where category_id = %s order by title;
+    select id, title, description, image, price, ingredients from menu_items where category_id = %s order by title;
     """
     cur.execute(query_categories, [menu_id])
     categories = cur.fetchall()        
@@ -34,6 +34,7 @@ def manager_view_menu(cur, menu_id):
                 tmp.update({'food_description': menu_item[2]})
                 tmp.update({'food_image': menu_item[3]})
                 tmp.update({'food_price': menu_item[4]})
+                tmp.update({'food_ingredients': menu_item[5]})
                 menu_items_list.append(tmp)
             menu.append({str(categ_id): ['Best Selling', menu_items_list]})
         else:
@@ -45,15 +46,22 @@ def manager_view_category(cur, category_id):
     invalid_category_id = { 'error': 'invalid category_id' }
     menu_items = []
 
-    query1 = """
-    select id, title, description, image, price from menu_items where category_id = %s order by title;
+    query0 = """
+    select id from categories where id = %s;
     """
 
-    cur.execute(query1, [category_id])
+    cur.execute(query0, [category_id])
     list1 = cur.fetchall()
 
     if len(list1) == 0:
         return invalid_category_id
+
+    query1 = """
+    select id, title, description, image, price, ingredients from menu_items where category_id = %s order by title;
+    """
+
+    cur.execute(query1, [category_id])
+    list1 = cur.fetchall()
     
     for tup in list1:
         tmp = {}
@@ -62,6 +70,7 @@ def manager_view_category(cur, category_id):
         tmp.update({'food_description': tup[2]})
         tmp.update({'food_image': tup[3]})
         tmp.update({'food_price': tup[4]})
+        tmp.update({'food_ingredients': tup[5]})
         menu_items.append(tmp)
 
     return menu_items
@@ -158,11 +167,8 @@ def manager_delete_category(cur, category_id):
 def manager_update_category(cur, category_name, category_id):
     invalid_category = { 'error': 'invalid category' } #error message
     update_name_fail = { 'error': 'failed to update name'}
-    category = { 'success': 'success in removing category' } # supposed to show success lol
+    category = { 'success': 'success in updating category' } # supposed to show success lol
     cant_update_best_selling = { 'error': 'not allowed to manually update the "Best Selling" category' }
-
-    if category_name == 'Best Selling':
-        return cant_update_best_selling
 
     query1 = """
         UPDATE categories
@@ -175,12 +181,14 @@ def manager_update_category(cur, category_name, category_id):
         FROM categories
         WHERE id = %s;
     """ 
-    
+
     cur.execute(query2, [category_id])
     list1 = cur.fetchall()
 
-    if len(list1) == 0: # category_id does not exist
+    if len(list1) == 0:
         return invalid_category
+    if list1[0][1] == 'Best Selling':
+        return cant_update_best_selling
 
     cur.execute(query1, [category_name, category_id])
     cur.execute(query2, [category_id])
@@ -200,7 +208,24 @@ def manager_update_category(cur, category_name, category_id):
 
 def manager_add_menu_item(cur, menu_item_name, price, ingredients, description, category_id, menu_id, image):
     error = { 'error': 'adding menu_item failed' }
+    invalid_category_id = { 'error': 'invalid category_id'}
+    invalid_best_selling = { 'error': 'cannot add menu items to the "Best Selling" category'}
     menu_item = {}
+
+    # Can't add new menu_items to the 'Best Selling' category
+
+    query0 = """
+        select name from categories where id = %s;
+    """
+
+    cur.execute(query0, [category_id])
+    list1 = cur.fetchall()
+
+    if len(list1) == 0:
+        return invalid_category_id
+
+    if list1[0][0] == 'Best Selling':
+        return invalid_best_selling
 
     query1 = """
         INSERT INTO menu_items (title, description, price, ingredients, category_id, menu_id, image)
@@ -228,8 +253,35 @@ def manager_add_menu_item(cur, menu_item_name, price, ingredients, description, 
 def manager_delete_menu_item(cur, menu_item_id):
     error = { 'error': 'invalid menu_item_id' }
     error2 = { 'error': 'did not delete the menu item'}
+    error3 = { 'error': 'invalid category_id' }
+    invalid_best_selling = { 'error': 'cannot delete menu items from the "Best Selling" category'}
     success = { 'success': 'success in removing menu item' }
     
+    # Can't manually delete menu items from the 'Best Selling' category
+
+    query0_1 = """
+        select category_id from menu_items where id = %s;
+    """
+    query0_2 = """
+        select name from categories where id = %s;
+    """
+    cur.execute(query0_1, [menu_item_id])
+    list1 = cur.fetchall()
+
+    if len(list1) == 0:
+        return error
+    
+    category_id = list1[0][0]
+
+    cur.execute(query0_2, [category_id])
+    list1 = cur.fetchall()
+    
+    if len(list1) == 0:
+        return error3
+
+    if list1[0][0] == 'Best Selling':
+        return invalid_best_selling
+
     query1 = """
         SELECT id
         FROM menu_items
@@ -260,8 +312,25 @@ def manager_delete_menu_item(cur, menu_item_id):
 def manager_update_menu_item(cur, menu_item_id, menu_item_name, price, ingredients, description, category_id, menu_id, image):
     invalid_menu_item = { 'error': 'invalid menu item' }
     error = { 'error': 'did not update properly'}
+    invalid_category_id = { 'error': 'invalid category_id'}
+    invalid_best_selling = { 'error': 'cannot update menu items in the "Best Selling" category'}
     menu_item = {}
     
+    # Can't manually update menu_items in the 'Best Selling' category
+
+    query0 = """
+        select name from categories where id = %s;
+    """
+
+    cur.execute(query0, [category_id])
+    list1 = cur.fetchall()
+
+    if len(list1) == 0:
+        return invalid_category_id
+
+    if list1[0][0] == 'Best Selling':
+        return invalid_best_selling
+
     query1 = """
         SELECT id
         FROM menu_items
@@ -296,9 +365,10 @@ def manager_update_menu_item(cur, menu_item_id, menu_item_name, price, ingredien
         cur.execute(query2, [menu_item_name, description, price, ingredients, category_id, menu_id, image, menu_item_id]) #this just updates
         cur.execute(query3, [menu_item_id]) #this grabs the id and the rest of the values to check
         list1 = cur.fetchall()
-        if menu_item_name == list1[0][1] and description == list1[0][2] and image == list1[0][3] and price == list1[0][4] and ingredients == list1[0][5] and category_id == list1[0][6] and menu_id == list1[0][7]:
-            menu_item.update({'menu_item_id' : list1[0][0]})
-            return menu_item
-        else:
-            return error
+        return menu_item
+        # if menu_item_name == list1[0][1] and description == list1[0][2] and image == list1[0][3] and price == list1[0][4] and ingredients == list1[0][5] and category_id == list1[0][6] and menu_id == list1[0][7]:
+        #     menu_item.update({'menu_item_id' : list1[0][0]})
+        #     return menu_item
+        # else:
+        #     return error
     
