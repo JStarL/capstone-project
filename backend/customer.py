@@ -7,9 +7,7 @@ def customer_view_menu(cur, menu_id, allergies_list):
     select id, name, ordering_id from categories where menu_id = %s order by ordering_id;
     """
     
-    print(allergies_list)
     allergies_tuple = tuple(allergies_list)
-    print(allergies_tuple)
 
     query_menu_items = """
     select id, title, description, image, price, ordering_id
@@ -23,8 +21,7 @@ def customer_view_menu(cur, menu_id, allergies_list):
     )
     order by ordering_id;
     """
-    # cur.mogrify(query_categories, [menu_id, allergies_tuple])
-    cur.execute(query_categories, (menu_id, allergies_tuple))
+    cur.execute(query_categories, [menu_id])
     categories = cur.fetchall()        
     
     if len(categories) == 0:
@@ -38,7 +35,7 @@ def customer_view_menu(cur, menu_id, allergies_list):
             # give the frontend all the information on
             # food details so it can show on the UI
 
-            cur.execute(query_menu_items, [categ_id])
+            cur.execute(query_menu_items, [categ_id, allergies_tuple])
             menu_items_list = []
             for menu_item in cur.fetchall():
                 tmp = {}
