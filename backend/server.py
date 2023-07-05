@@ -99,7 +99,6 @@ cur_dict = {
 
 orders = []
 
-
 # @APP.route("/echo", methods=['GET'])
 # def echo():
 #     data = request.args.get('data')
