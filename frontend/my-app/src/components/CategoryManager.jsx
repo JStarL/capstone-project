@@ -31,8 +31,8 @@ function CategoryManager(props) {
           // deleting the currently selected category should automatically change selected category to best selling
           props.setCurrentSelectedCategoryId(1)
 					props.setCurrentSelectedCategory('Best Selling')
-					props.fetchAllMenuData();
         }
+				props.fetchAllMenuData();
       })
       .catch(e => console.log('Error: ' + e));
   }
