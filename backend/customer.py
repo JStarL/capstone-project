@@ -8,7 +8,7 @@ def customer_view_menu(cur, menu_id, allergies_list):
     """
     
     print(allergies_list)
-    allergies_tuple = str(tuple(allergies_list))
+    allergies_tuple = tuple(allergies_list)
     print(allergies_tuple)
 
     query_menu_items = """
@@ -19,7 +19,7 @@ def customer_view_menu(cur, menu_id, allergies_list):
         select
         from ingredients i
         where i.menu_item_id = m.id
-            and i.allergy_id in any (%s)
+            and i.allergy_id in %s
     )
     order by ordering_id;
     """
