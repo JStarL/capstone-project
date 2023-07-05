@@ -35,9 +35,9 @@ def manager_view_menu(cur, menu_id):
                 tmp.update({'food_image': menu_item[3]})
                 tmp.update({'food_price': menu_item[4]})
                 menu_items_list.append(tmp)
-            menu.append({'Best Selling': menu_items_list})
+            menu.append({str(categ_id): ['Best Selling', menu_items_list]})
         else:
-            menu.append({categ[1]: []})
+            menu.append({str(categ_id): [categ[1], []]})
         
     return menu
 
@@ -45,15 +45,23 @@ def manager_view_category(cur, category_id):
     invalid_category_id = { 'error': 'invalid category_id' }
     menu_items = []
 
+    query0 = """
+    select id from categories where id = %s;
+    """
+
+    cur.execute(query0, [category_id])
+    list1 = cur.fetchall()
+
+    if len(list1) == 0:
+        return invalid_category_id
+
+
     query1 = """
     select id, title, description, image, price from menu_items where category_id = %s order by title;
     """
 
     cur.execute(query1, [category_id])
     list1 = cur.fetchall()
-
-    if len(list1) == 0:
-        return invalid_category_id
     
     for tup in list1:
         tmp = {}
@@ -95,7 +103,11 @@ def manager_view_menu_item(cur, food_id):
 def manager_add_category(cur, category_name, menu_id):
     error = { 'error': 'adding category failed' } # error message
     category = { 'success': 'success in adding category' } # supposed to success lol
-    
+    cant_use_best_selling = { 'error': 'Not allowed to use name "Best Selling"' }
+
+    if category_name == 'Best Selling':
+        return cant_use_best_selling
+
     query1 = """
         INSERT INTO categories (name, menu_id)
         VALUES (%s, %s);
@@ -155,7 +167,11 @@ def manager_update_category(cur, category_name, category_id):
     invalid_category = { 'error': 'invalid category' } #error message
     update_name_fail = { 'error': 'failed to update name'}
     category = { 'success': 'success in removing category' } # supposed to show success lol
-    
+    cant_update_best_selling = { 'error': 'not allowed to manually update the "Best Selling" category' }
+
+    if category_name == 'Best Selling':
+        return cant_update_best_selling
+
     query1 = """
         UPDATE categories
         SET name = %s
@@ -190,34 +206,36 @@ def manager_update_category(cur, category_name, category_id):
             return update_name_fail
     
 
-def manager_add_menu_item(cur, menu_item_name, price, ingredients, description, category_id, menu_id):
+def manager_add_menu_item(cur, menu_item_name, price, ingredients, description, category_id, menu_id, image):
     error = { 'error': 'adding menu_item failed' }
     menu_item = {}
 
     query1 = """
-        INSERT INTO menu_items (title, description, price, ingredients, category_id, menu_id)
-        VALUES (%s, %s, %s, %s, %s, %s);
+        INSERT INTO menu_items (title, description, price, ingredients, category_id, menu_id, image)
+        VALUES (%s, %s, %s, %s, %s, %s, %s);
     """ 
     query2 = """
         SELECT id
         FROM menu_items
-        WHERE title = %s;
+        WHERE title = %s
+        AND menu_id = %s;
     """ 
     
-    cur.execute(query1, [menu_item_name, description, price, ingredients, category_id, menu_id])
-    cur.execute(query2, [menu_item_name])
+    cur.execute(query1, [menu_item_name, description, price, ingredients, category_id, menu_id, image])
+    cur.execute(query2, [menu_item_name, menu_id])
     
     list1 = cur.fetchall()
     
     if len(list1) == 0:
         return error
     else:
-        menu_item.update({'menu_item_id' : list1[0][0]})
+        menu_item.update({'menu_item_id' : str(list1[0][0])}) # NOTE: Assumption that food item names are unique per menu
         return menu_item
 
 
 def manager_delete_menu_item(cur, menu_item_id):
     error = { 'error': 'invalid menu_item_id' }
+    error2 = { 'error': 'did not delete the menu item'}
     success = { 'success': 'success in removing menu item' }
     
     query1 = """
@@ -239,10 +257,17 @@ def manager_delete_menu_item(cur, menu_item_id):
         return error
     else:
         cur.execute(query2, [menu_item_id])
-        return success
+        cur.execute(query1, [menu_item_id])
+        list1 = cur.fetchall() #check if it is actually removed
+        
+        if len(list1) == 0:
+            return success
+        else:
+            return error2
 
-def manager_update_menu_item(cur, menu_item_id, menu_item_name, price, ingredients, description, category_id, menu_id):
+def manager_update_menu_item(cur, menu_item_id, menu_item_name, price, ingredients, description, category_id, menu_id, image):
     invalid_menu_item = { 'error': 'invalid menu item' }
+    error = { 'error': 'did not update properly'}
     menu_item = {}
     
     query1 = """
@@ -258,9 +283,15 @@ def manager_update_menu_item(cur, menu_item_id, menu_item_name, price, ingredien
             price = %s,
             ingredients = %s,
             category_id = %s,
-            menu_id = %s            
+            menu_id = %s,
+            image = %s            
         WHERE id = %s
         ;
+    """
+    query3 = """
+        SELECT id, title, description, image, price, ingredients, category_id, menu_id
+        FROM menu_items
+        WHERE id = %s;
     """ 
     
     cur.execute(query1, [menu_item_id])
@@ -270,8 +301,12 @@ def manager_update_menu_item(cur, menu_item_id, menu_item_name, price, ingredien
     if len(list1) == 0: # id doesn't exist
         return invalid_menu_item
     else: 
-        cur.execute(query2, [menu_item_name, description, price, ingredients, category_id, menu_id])
+        cur.execute(query2, [menu_item_name, description, price, ingredients, category_id, menu_id, image, menu_item_id]) #this just updates
+        cur.execute(query3, [menu_item_id]) #this grabs the id and the rest of the values to check
         list1 = cur.fetchall()
-        menu_item.update({'menu_item_id' : list1[0][0]})
-        return menu_item
+        if menu_item_name == list1[0][1] and description == list1[0][2] and image == list1[0][3] and price == list1[0][4] and ingredients == list1[0][5] and category_id == list1[0][6] and menu_id == list1[0][7]:
+            menu_item.update({'menu_item_id' : list1[0][0]})
+            return menu_item
+        else:
+            return error
     

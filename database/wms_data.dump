@@ -2,8 +2,8 @@
 -- PostgreSQL database dump
 --
 
--- Dumped from database version 14.8 (Ubuntu 14.8-0ubuntu0.22.04.1)
--- Dumped by pg_dump version 14.8 (Ubuntu 14.8-0ubuntu0.22.04.1)
+-- Dumped from database version 12.15 (Ubuntu 12.15-0ubuntu0.20.04.1)
+-- Dumped by pg_dump version 12.15 (Ubuntu 12.15-0ubuntu0.20.04.1)
 
 SET statement_timeout = 0;
 SET lock_timeout = 0;
@@ -75,7 +75,7 @@ CREATE TABLE public.menu_items (
     description text,
     image text,
     price double precision NOT NULL,
-    ingredients text[],
+    ingredients text,
     category_id integer NOT NULL,
     menu_id integer NOT NULL
 );
@@ -88,17 +88,17 @@ ALTER TABLE public.menu_items OWNER TO lubuntu;
 --
 
 CREATE VIEW public.menu_items_and_categories AS
- SELECT f.id AS food_id,
-    f.title AS food_title,
-    f.description AS food_description,
-    f.image AS food_image,
-    f.price AS food_price,
-    f.ingredients AS food_ingredients,
+ SELECT m.id AS menu_item_id,
+    m.title,
+    m.description,
+    m.image,
+    m.price,
+    m.ingredients,
     c.id AS category_id,
     c.name AS category_name,
     c.menu_id
-   FROM (public.menu_items f
-     JOIN public.categories c ON ((f.category_id = c.id)));
+   FROM (public.menu_items m
+     JOIN public.categories c ON ((m.category_id = c.id)));
 
 
 ALTER TABLE public.menu_items_and_categories OWNER TO lubuntu;
@@ -250,6 +250,13 @@ ALTER TABLE ONLY public.staff ALTER COLUMN id SET DEFAULT nextval('public.staff_
 --
 
 COPY public.categories (id, name, menu_id) FROM stdin;
+1	Best Selling	1
+2	Best Selling	2
+3	Best Selling	3
+5	Main Course	2
+6	Desert	3
+4	Chef's Choice	1
+8	Category 1	1
 \.
 
 
@@ -258,6 +265,11 @@ COPY public.categories (id, name, menu_id) FROM stdin;
 --
 
 COPY public.menu_items (id, title, description, image, price, ingredients, category_id, menu_id) FROM stdin;
+2	Fries	\N	\N	6.5	\N	1	1
+4	Hakka Noodles	Classic Hakka Noodles	\N	10	\N	5	2
+5	Chowmein	The middleof nowhere's best seller!	\N	8	\N	2	2
+6	Cake	Black Forrest	\N	12.5	\N	6	3
+1	Burger	\N	\N	12.5	\N	1	1
 \.
 
 
@@ -267,6 +279,8 @@ COPY public.menu_items (id, title, description, image, price, ingredients, categ
 
 COPY public.menus (id, restaurant_name, restaurant_loc) FROM stdin;
 1	Sample Restaurant	Sample Address
+2	In the middle of nowhere	Sydney
+3	The SMalle APple	Wentworthville
 \.
 
 
@@ -276,6 +290,15 @@ COPY public.menus (id, restaurant_name, restaurant_loc) FROM stdin;
 
 COPY public.staff (id, email, name, password, menu_id, staff_type) FROM stdin;
 1	test@test.com	Patrick	idk	1	M
+2	test1@test.com	John	snMs2f7JMLc6vW3	2	M
+3	test2@test.com	Jill	snMs2f7JMLc6vW3	3	M
+35	wait_1@test.com	Jack	something	1	W
+36	wait_2@test.com	Bill	something_else	1	W
+37	kitchen_1@test.com	Bob	idkplus	1	K
+38	wait1_1@test.com	James	something	2	W
+39	wait1_2@test.com	Beejus	something_else	2	K
+40	kitchen1_1@test.com	Bobagain	idkplus	2	K
+42	jane@test.com	Jane	rand	1	K
 \.
 
 
@@ -283,28 +306,28 @@ COPY public.staff (id, email, name, password, menu_id, staff_type) FROM stdin;
 -- Name: categories_id_seq; Type: SEQUENCE SET; Schema: public; Owner: lubuntu
 --
 
-SELECT pg_catalog.setval('public.categories_id_seq', 1, false);
+SELECT pg_catalog.setval('public.categories_id_seq', 8, true);
 
 
 --
 -- Name: menu_items_id_seq; Type: SEQUENCE SET; Schema: public; Owner: lubuntu
 --
 
-SELECT pg_catalog.setval('public.menu_items_id_seq', 1, false);
+SELECT pg_catalog.setval('public.menu_items_id_seq', 6, true);
 
 
 --
 -- Name: menus_id_seq; Type: SEQUENCE SET; Schema: public; Owner: lubuntu
 --
 
-SELECT pg_catalog.setval('public.menus_id_seq', 1, true);
+SELECT pg_catalog.setval('public.menus_id_seq', 34, true);
 
 
 --
 -- Name: staff_id_seq; Type: SEQUENCE SET; Schema: public; Owner: lubuntu
 --
 
-SELECT pg_catalog.setval('public.staff_id_seq', 1, true);
+SELECT pg_catalog.setval('public.staff_id_seq', 42, true);
 
 
 --

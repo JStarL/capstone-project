@@ -8,9 +8,9 @@ import sys
 import ast
 
 
-from manager import manager_view_menu, manager_view_category, manager_view_menu_item, manager_add_category, manager_delete_category, manager_add_menu_item, manager_delete_menu_item, manager_update_category
+from manager import manager_view_menu, manager_view_category, manager_view_menu_item, manager_add_category, manager_delete_category, manager_add_menu_item, manager_delete_menu_item, manager_update_category, manager_update_menu_item
 from auth import login_backend, register_backend, auth_add_staff_backend
-from customer import customer_view_menu
+from customer import customer_view_menu, customer_view_category, customer_view_menu_item
 
 def quit_gracefully(*args):
     '''For coverage'''
@@ -122,15 +122,12 @@ def auth_add_staff_flask():
     data = ast.literal_eval(request.get_json())
 
     invalid_manager = { 'error': 'invalid manager_id' }
-    invalid_staff_type = { 'error': 'invalid staff_type' }
 
     if data['manager_id'] in cur_dict['staff']:
         cur = cur_dict['staff'][data['manager_id']]
-        if data['staff_type'] == 'kitchen' or data['staff_type'] == 'wait':
-            return dumps(auth_add_staff_backend(cur, data['email'], data['password'], data['staff_type'], data['name'], data['menu_id']))
-        else:
-            return dumps(invalid_staff_type)
-
+        return_val = dumps(auth_add_staff_backend(cur, data['email'], data['password'], data['staff_type'], data['name'], data['menu_id']))
+        db_conn.commit()
+        return return_val
     else:
         return dumps(invalid_manager)
 
@@ -187,7 +184,11 @@ def manager_update_category_flask():
 def manager_add_menu_item_flask():
     data = ast.literal_eval(request.get_json())
     cur = cur_dict['staff'][data['manager_id']]
-    return_val = dumps(manager_add_menu_item(cur, data['title'], data['price'], data['ingredients'], data['description'], data['category_id'], data['menu_id']))
+    if 'image' not in data:
+        data['image'] = ''
+    if 'description' not in data:
+        data['description'] = ''
+    return_val = dumps(manager_add_menu_item(cur, data['title'], data['price'], data['ingredients'], data['description'], data['category_id'], data['menu_id'], data['image']))
     db_conn.commit()
     return return_val
 
@@ -195,15 +196,15 @@ def manager_add_menu_item_flask():
 def manager_delete_menu_item_flask():
     data = ast.literal_eval(request.get_json())
     cur = cur_dict['staff'][data['manager_id']]
-    return_val = dumps(manager_delete_menu_item(cur, data['menu_item_name']))
+    return_val = dumps(manager_delete_menu_item(cur, data['menu_item_id']))
     db_conn.commit()
     return return_val
 
 @APP.route("/manager/update_menu_item", methods=['POST'])
-def manager_update_category_flask():
+def manager_update_menu_item_flask():
     data = ast.literal_eval(request.get_json())
     cur = cur_dict['staff'][data['manager_id']]
-    return_val = dumps(manager_update_menu_item(cur, data['id'], data['title'], data['price'], data['ingredients'], data['description'], data['category_id'], data['menu_id']))
+    return_val = dumps(manager_update_menu_item(cur, data['menu_item_id'], data['title'], data['price'], data['ingredients'], data['description'], data['category_id'], data['menu_id'], data['image']))
     db_conn.commit()
     return return_val
 
@@ -220,6 +221,30 @@ def customer_view_menu_flask():
         cur = db_conn.cursor()
         cur_dict['customers'][session_id] = cur
     return dumps(customer_view_menu(cur, menu_id))
+
+@APP.route("/customer/view_category", methods=['GET'])
+def customer_view_category_flask():
+    session_id = request.args.get("session_id")
+    category_id = request.args.get("category_id")
+    cur = None
+    if session_id in cur_dict['customers']:
+        cur = cur_dict['customers'][session_id]
+    else:
+        cur = db_conn.cursor()
+        cur_dict['customers'][session_id] = cur
+    return dumps(customer_view_category(cur, category_id))
+
+@APP.route("/customer/view_menu_item", methods=['GET'])
+def customer_view_menu_item_flask():
+    session_id = request.args.get("session_id")
+    menu_item_id = request.args.get("menu_item_id")
+    cur = None
+    if session_id in cur_dict['customers']:
+        cur = cur_dict['customers'][session_id]
+    else:
+        cur = db_conn.cursor()
+        cur_dict['customers'][session_id] = cur
+    return dumps(customer_view_menu_item(cur, menu_item_id))
 
 ##############################################################################################################################
 ################################################ OLD PROJECT STUFF ###########################################################
