@@ -314,13 +314,14 @@ def customer_view_menu_flask():
 def customer_view_category_flask():
     session_id = request.args.get("session_id")
     category_id = request.args.get("category_id")
+    allergy_ids = ast.literal_eval(request.args.get("allergies"))
     cur = None
     if session_id in cur_dict['customers']:
         cur = cur_dict['customers'][session_id]
     else:
         cur = db_conn.cursor()
         cur_dict['customers'][session_id] = cur
-    return dumps(customer_view_category(cur, category_id))
+    return dumps(customer_view_category(cur, category_id, allergy_ids))
 
 @APP.route("/customer/view_menu_item", methods=['GET'])
 def customer_view_menu_item_flask():
