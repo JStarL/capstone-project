@@ -21,7 +21,7 @@ def customer_view_menu(cur, menu_id, allergies_list):
     )
     order by ordering_id;
     """
-    print(cur.mogrify(query_categories, [menu_id, allergies_tuple]))
+    cur.mogrify(query_categories, [menu_id, allergies_tuple])
     cur.execute(query_categories, [menu_id, allergies_tuple])
     categories = cur.fetchall()        
     
