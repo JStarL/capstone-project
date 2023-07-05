@@ -2,7 +2,7 @@ import React from 'react';
 import '../App.css';
 import { Button, TextField, Typography } from '@mui/material';
 import ManagerFoodItem from '../components/ManagerFoodItem';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import CategoryManager from '../components/CategoryManager';
 import BestSellingFoodItem from '../components/BestSellingFoodItem';
 import AddIcon from '@mui/icons-material/Add';
@@ -16,9 +16,10 @@ function ManagerMenuPage() {
   const [currentSelectedCategoryId, setCurrentSelectedCategoryId] = React.useState(1);
   const [menuItems, setMenuItems] = React.useState([]); // List of Menu items for the current selected category
   const navigate = useNavigate();
+  const params = useParams();
 
   const managerId = localStorage.getItem('staff_id');
-  const menuId = localStorage.getItem('menu_id');
+  const menuId = params.menuId;
 
   React.useEffect(() => {
     const fetchData = async () => {
@@ -50,18 +51,8 @@ function ManagerMenuPage() {
   async function fetchAllMenuData() {
     const url = `/manager/view_menu?manager_id=${managerId}&menu_id=${menuId}`;
     const data = await makeRequest(url, 'GET', undefined, undefined);
-    console.log(data)
     setCategories(data);
-    
-    // for (const [key, value] of Object.entries(data)) {
-    //   for (const [key1, value1] of Object.entries(value)) {
-    //     if (value1[1]?.length > 0) {
-    //       setMenuItems(value1[1])
-    //     }
-    //     console.log(value1[1]);
-    //   }
-      
-    // }
+
     return data; // Return the fetched data
   }
 
@@ -84,21 +75,15 @@ function ManagerMenuPage() {
     const url = `/manager/view_category?manager_id=${managerId}&category_id=${currentSelectedCategoryId}`;
     const data = await makeRequest(url, 'GET', undefined, undefined)
     setMenuItems(data)
-    console.log(currentSelectedCategory)
-    console.log(currentSelectedCategoryId)
-    console.log(menuItems)
-    console.log(data)
     return data
   }
 
   if (!categories || !Array.isArray(categories)) return <>loading...</>;
   return (
     <>
-      <Typography className='h4' variant="h4" gutterBottom>Manager Menu Page - {currentSelectedCategory}</Typography>
-
       <div style={{ display: 'flex', flexDirection: 'row' }}>
         <div style={{ width: '20%', backgroundColor: 'white', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-          {categories.map((category) => (
+          {categories?.map((category) => (
             <CategoryManager
               categoryName={category[Object.keys(category)[0]][0]}
               key={Object.keys(category)[0]} // category id 
@@ -106,6 +91,7 @@ function ManagerMenuPage() {
               setCurrentSelectedCategory={setCurrentSelectedCategory}
               fetchAllMenuData={fetchAllMenuData}
               setCurrentSelectedCategoryId={setCurrentSelectedCategoryId}
+              currentSelectedCategoryId={currentSelectedCategoryId}
               setMenuItems={setMenuItems}
               fetchCategoryMenuItems={fetchCategoryMenuItems}
             />
@@ -120,8 +106,9 @@ function ManagerMenuPage() {
           <Button onClick={addNewCategory} startIcon={<AddIcon />}>Add new category</Button>
         </div>
         <div style={{ width: '80%', height: '100%' }}>
+        <Typography className='h4' variant="h4" gutterBottom>Manager Menu Page - {currentSelectedCategory}</Typography>
           <div>
-          {menuItems.map((menuItem) =>
+          {menuItems?.map((menuItem) =>
             currentSelectedCategory === 'Best Selling' ? (
               <BestSellingFoodItem
                 originalFoodName={menuItem.food_name}

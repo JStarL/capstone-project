@@ -18,7 +18,7 @@ function ManagerLoginPage({ onSuccess }) {
     makeRequest('/auth/login', 'POST', body, undefined)
       .then(data => {
         if (data.hasOwnProperty('success')) {
-          onSuccess(data['staff_id'], data['staff_type'])
+          onSuccess(data['staff_id'], data['staff_type'], data['menu_id'])
           console.log(data['staff_id'])
           localStorage.setItem('staff_id', data['staff_id']);
           localStorage.setItem('menu_id', data['menu_id']);
