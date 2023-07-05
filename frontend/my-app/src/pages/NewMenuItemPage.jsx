@@ -1,12 +1,13 @@
 import React from 'react';
 import '../App.css';
 import NewMenuItem from '../components/NewMenuItem';
-import { Button } from '@mui/material';
+import { useParams } from 'react-router-dom';
 
 function NewMenuItemPage () {
-  return <>NEW MENU ITEM PAGE
+  const params = useParams()
+  const categoryName = params.categoryName
+  return <>ADD NEW MENU ITEM TO <b>{categoryName}</b> CATEGORY
     <NewMenuItem />
-    <Button>Add to Menu</Button>
   </>
 }
 

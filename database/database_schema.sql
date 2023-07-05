@@ -46,13 +46,13 @@ create table menu_items (
     description         text, -- optional
     image               text, -- also optional
     price               float not null,
-    ingredients         text array,
+    ingredients         text,
 
     category_id         integer not null,
     menu_id             integer not null,
 
     primary key (id),
-    foreign key (category_id) references categories(id),
+    foreign key (category_id) references categories(id) on delete cascade,
     foreign key (menu_id) references menus(id)
 );
 
