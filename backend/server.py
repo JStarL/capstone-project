@@ -64,7 +64,7 @@ cur_dict = {
     }
 }
 
-table_dict = {}
+orders = []
 
 
 # @APP.route("/echo", methods=['GET'])
@@ -250,10 +250,33 @@ def customer_view_menu_item_flask():
 def customer_menu_table_flask():
     data = ast.literal_eval(request.get_json())
     table_id = data['table_id']
+    session_id = data['session_id']
 
     if table_id != None:
-        table_dict.update({'table_number' : data['table_id']})
-        return { 'table_id':  table_id}
+        orders.update({ 
+                'session_id' : session_id,
+                'table_id' : table_id,
+                'menu_items' : [] })
+        
+        return {'table_id':  table_id}
+    else:
+        return { 'error': 'invalid table_id' }
+
+@APP.route("/customer/add_menu_item", methods=['POST'])
+def customer_add_menu_item_flask():
+    data = ast.literal_eval(request.get_json())
+    table_id = data['table_id']
+    menu_id = data['menu_id']
+    menu_item_id = data['menu_item_id']
+
+    # find the order with table_number
+    order = next((order for order in orders if order["table_id"] == table_id), None)
+    
+    if order != None:
+        order['menu_items'].apppend({
+                                "menu_id" : menu_id,
+                                "menu_item_id" : menu_item_id})
+        return {'success' : order}
     else:
         return { 'error': 'invalid table_id' }
 
