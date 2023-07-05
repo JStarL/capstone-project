@@ -38,7 +38,7 @@ function CustomerFoodItem (props) {
       <div className='div-section'>Price: $ {props.originalPrice}</div>
     </div>
     <div className='food-item-button'>
-        <StyledButton variant='outlined' style={{ margin: '10px' }} onClick={() => navigate(`/customer/1/${props.foodId}`)}>Find out more</StyledButton>
+        <StyledButton variant='outlined' style={{ margin: '10px' }} onClick={() => navigate(`/customer/${sessionId}/${menuId}/${props.categoryId}/${props.foodId}`)}>Find out more</StyledButton>
         <StyledButton variant='outlined' style={{ margin: '10px' }} onClick={addToOrder}>Add to Order</StyledButton>
     </div>
   </div>
