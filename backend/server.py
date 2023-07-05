@@ -274,7 +274,7 @@ def customer_add_menu_item_flask():
     order = next((order for order in orders if order["table_id"] == table_id and order["menu_id"] == menu_id), None)
     
     if order != None:
-        order['menu_items'].apppend({"menu_item_id" : menu_item_id,
+        order['menu_items'].append({"menu_item_id" : menu_item_id,
                                      "amount" : amount})
         return {'success' : order}
     else:
