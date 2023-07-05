@@ -251,11 +251,13 @@ def customer_menu_table_flask():
     data = ast.literal_eval(request.get_json())
     table_id = data['table_id']
     session_id = data['session_id']
+    menu_id = data['menu_id']
 
     if table_id != None:
         orders.update({ 
                 'session_id' : session_id,
                 'table_id' : table_id,
+                'menu_id' : menu_id,
                 'menu_items' : [] })
         
         return {'table_id':  table_id}
@@ -264,6 +266,22 @@ def customer_menu_table_flask():
 
 @APP.route("/customer/add_menu_item", methods=['POST'])
 def customer_add_menu_item_flask():
+    data = ast.literal_eval(request.get_json())
+    table_id = data['table_id']
+    menu_id = data['menu_id']
+    menu_item_id = data['menu_item_id']
+
+    # find the order with table_number
+    order = next((order for order in orders if order["table_id"] == table_id and order["menu_id"] == menu_id), None)
+    
+    if order != None:
+        order['menu_items'].apppend({"menu_item_id" : menu_item_id})
+        return {'success' : order}
+    else:
+        return { 'error': 'invalid table_id' }
+
+@APP.route("/customer/remove_menu_item", methods=['POST'])
+def customer_remove_menu_item_flask():
     data = ast.literal_eval(request.get_json())
     table_id = data['table_id']
     menu_id = data['menu_id']
