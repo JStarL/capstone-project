@@ -64,6 +64,40 @@ cur_dict = {
     }
 }
 
+# not sure to add name of food or session id yet
+# orders = [
+#   {
+#       'table_id': 24,
+#       'menu_id': 1,
+#       'menu_items': [
+#           {
+#               'menu_item_id': 12,
+#               'amount': 1
+#           },
+#           {
+#               'menu_item_id': 15,
+#               'amount': 2
+#           }
+#       ]
+#   },
+#   {
+#       'table_id': 27,
+#       'menu_id': 2,
+#       'menu_items': [
+#           {
+#               'menu_item_id': 13,
+#               'amount': 5
+#           },
+#           {
+#               'menu_item_id': 3,
+#               'amount': 1
+#           }
+#       ]
+#   }
+# ]
+
+
+orders = []
 
 # @APP.route("/echo", methods=['GET'])
 # def echo():
@@ -243,6 +277,84 @@ def customer_view_menu_item_flask():
         cur = db_conn.cursor()
         cur_dict['customers'][session_id] = cur
     return dumps(customer_view_menu_item(cur, menu_item_id))
+
+@APP.route("/customer/menu/table", methods=['POST'])
+def customer_menu_table_flask():
+    data = ast.literal_eval(request.get_json())
+    table_id = data['table_id']
+    menu_id = data['menu_id']
+
+    if table_id != None:
+        orders.update({
+                'table_id' : table_id,
+                'menu_id' : menu_id,
+                'menu_items' : [] })
+        
+        return {'table_id':  table_id}
+    else:
+        return {'error': 'invalid table_id' }
+
+@APP.route("/customer/add_menu_item", methods=['POST'])
+def customer_add_menu_item_flask():
+    data = ast.literal_eval(request.get_json())
+    table_id = data['table_id']
+    menu_id = data['menu_id']
+    menu_item_id = data['menu_item_id']
+    amount = data['amount']
+
+    # find the order with table_id and menu_id
+    order = next((order for order in orders if order["table_id"] == table_id and order["menu_id"] == menu_id), None)
+    
+    if order != None:
+        order['menu_items'].append({"menu_item_id" : menu_item_id,
+                                     "amount" : amount})
+        return {'success' : order}
+    else:
+        return {'error': 'invalid table_id or menu_id' }
+
+@APP.route("/customer/remove_menu_item", methods=['DELETE'])
+def customer_remove_menu_item_flask():
+    data = ast.literal_eval(request.get_json())
+    table_id = data['table_id']
+    menu_id = data['menu_id']
+    menu_item_id = data['menu_item_id']
+    amount_to_be_removed = data['amount']
+
+    # find the order with table_id and menu_id 
+    order = next((order for order in orders if order["table_id"] == table_id and order["menu_id"] == menu_id), None)
+    
+    if order != None:
+        # check that the menu_item_id is there to be deleted
+        menu_item = next((menu_item for menu_item in order['menu_items'] if menu_item['menu_item_id'] == menu_item_id), None)
+        if menu_item != None:
+
+            remaining_amount = menu_item['amount'] - amount_to_be_removed
+
+            if remaining_amount > 0 :
+                menu_item['amount'] = remaining_amount
+            elif remaining_amount == 0:
+                order['menu_items'].remove(menu_item)
+            else:
+                return {'error' : 'cant remove more menu_items than what is currently there'}
+            
+            return {'success' : order} 
+        else:
+            return { 'error': 'menu_item_id doesnt exist'}
+    else:
+        return {'error': 'invalid table_id or menu_id' }
+
+@APP.route("/customer/view_order", methods=['GET'])
+def customer_view_order_flask():
+    menu_id = request.args.get("menu_id")
+    table_id = request.args.get("table_id")
+
+    # find the order with table_id and menu_id
+    order = next((order for order in orders if order["table_id"] == table_id and order["menu_id"] == menu_id), None)
+    
+    if order != None:
+        return order
+    else:
+        return {'error': 'invalid table_id or menu_id' }
 
 ##############################################################################################################################
 ################################################ OLD PROJECT STUFF ###########################################################
