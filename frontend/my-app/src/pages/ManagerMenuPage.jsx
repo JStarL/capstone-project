@@ -52,7 +52,6 @@ function ManagerMenuPage() {
     const url = `/manager/view_menu?manager_id=${managerId}&menu_id=${menuId}`;
     const data = await makeRequest(url, 'GET', undefined, undefined);
     setCategories(data);
-
     return data; // Return the fetched data
   }
 
