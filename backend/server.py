@@ -301,13 +301,14 @@ def manager_update_menu_item_ordering_flask():
 def customer_view_menu_flask():
     menu_id = request.args.get("menu_id")
     session_id = request.args.get("session_id")
+    allergy_ids = ast.literal_eval(request.args.get("allergies"))
     cur = None
     if session_id in cur_dict['customers']:
         cur = cur_dict['customers'][session_id]
     else:
         cur = db_conn.cursor()
         cur_dict['customers'][session_id] = cur
-    return dumps(customer_view_menu(cur, menu_id))
+    return dumps(customer_view_menu(cur, menu_id, allergy_ids))
 
 @APP.route("/customer/view_category", methods=['GET'])
 def customer_view_category_flask():

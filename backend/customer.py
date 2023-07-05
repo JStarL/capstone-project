@@ -1,5 +1,5 @@
 
-def customer_view_menu(cur, menu_id):
+def customer_view_menu(cur, menu_id, allergies_list):
     invalid_menu_id = { 'error': 'invalid menu id' } # error message
     menu = []
 
@@ -7,10 +7,22 @@ def customer_view_menu(cur, menu_id):
     select id, name, ordering_id from categories where menu_id = %s order by ordering_id;
     """
     
+    allergies_tuple = tuple(allergies_list)
+
     query_menu_items = """
-    select id, title, description, image, price, ordering_id from menu_items where category_id = %s order by ordering_id;
+    select id, title, description, image, price, ordering_id
+    from menu_items m
+    where category_id = %s 
+    and not exists (
+        select
+        from ingredients i
+        where i.menu_item_id = m.id
+            and i.allergy_id in any (%s)
+    )
+    order by ordering_id;
     """
-    cur.execute(query_categories, [menu_id])
+    print(cur.mogrify(query_categories, [menu_id, allergies_tuple]))
+    cur.execute(query_categories, [menu_id, allergies_tuple])
     categories = cur.fetchall()        
     
     if len(categories) == 0:
