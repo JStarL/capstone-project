@@ -262,7 +262,7 @@ def customer_menu_table_flask():
         
         return {'table_id':  table_id}
     else:
-        return { 'error': 'invalid table_id' }
+        return {'error': 'invalid table_id' }
 
 @APP.route("/customer/add_menu_item", methods=['POST'])
 def customer_add_menu_item_flask():
@@ -271,14 +271,14 @@ def customer_add_menu_item_flask():
     menu_id = data['menu_id']
     menu_item_id = data['menu_item_id']
 
-    # find the order with table_number
+    # find the order with table_id and menu_id
     order = next((order for order in orders if order["table_id"] == table_id and order["menu_id"] == menu_id), None)
     
     if order != None:
         order['menu_items'].apppend({"menu_item_id" : menu_item_id})
         return {'success' : order}
     else:
-        return { 'error': 'invalid table_id' }
+        return {'error': 'invalid table_id or menu_id' }
 
 @APP.route("/customer/remove_menu_item", methods=['POST'])
 def customer_remove_menu_item_flask():
@@ -287,16 +287,19 @@ def customer_remove_menu_item_flask():
     menu_id = data['menu_id']
     menu_item_id = data['menu_item_id']
 
-    # find the order with table_number
-    order = next((order for order in orders if order["table_id"] == table_id), None)
+    # find the order with table_id and menu_id 
+    order = next((order for order in orders if order["table_id"] == table_id and order["menu_id"] == menu_id), None)
     
     if order != None:
-        order['menu_items'].apppend({
-                                "menu_id" : menu_id,
-                                "menu_item_id" : menu_item_id})
-        return {'success' : order}
+        # check that the menu_item_id is there to be deleted
+        menu_item = next((menu_item for menu_item in order['menu_items'] if menu_item['menu_item_id'] == menu_item_id), None)
+        if menu_item != None:
+            order['menu_items'].remove(menu_item)
+            return {'success' : order}
+        else:
+            return { 'error': 'menu_item_id doesnt exist'}
     else:
-        return { 'error': 'invalid table_id' }
+        return {'error': 'invalid table_id or menu_id' }
 
 ##############################################################################################################################
 ################################################ OLD PROJECT STUFF ###########################################################
