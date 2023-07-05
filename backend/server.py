@@ -270,12 +270,14 @@ def customer_add_menu_item_flask():
     table_id = data['table_id']
     menu_id = data['menu_id']
     menu_item_id = data['menu_item_id']
+    amount = data['amount']
 
     # find the order with table_id and menu_id
     order = next((order for order in orders if order["table_id"] == table_id and order["menu_id"] == menu_id), None)
     
     if order != None:
-        order['menu_items'].apppend({"menu_item_id" : menu_item_id})
+        order['menu_items'].apppend({"menu_item_id" : menu_item_id,
+                                     "amount" : amount})
         return {'success' : order}
     else:
         return {'error': 'invalid table_id or menu_id' }
@@ -286,6 +288,7 @@ def customer_remove_menu_item_flask():
     table_id = data['table_id']
     menu_id = data['menu_id']
     menu_item_id = data['menu_item_id']
+    amount_to_be_removed = data['amount']
 
     # find the order with table_id and menu_id 
     order = next((order for order in orders if order["table_id"] == table_id and order["menu_id"] == menu_id), None)
@@ -294,14 +297,24 @@ def customer_remove_menu_item_flask():
         # check that the menu_item_id is there to be deleted
         menu_item = next((menu_item for menu_item in order['menu_items'] if menu_item['menu_item_id'] == menu_item_id), None)
         if menu_item != None:
-            order['menu_items'].remove(menu_item)
-            return {'success' : order}
+
+            remaining_amount = menu_item['amount'] - amount_to_be_removed
+
+            if remaining_amount > 0 :
+                menu_item['amount'] = remaining_amount
+            elif remaining_amount == 0:
+                order['menu_items'].remove(menu_item)
+            else:
+                return {'error' : 'cant remove more menu_items than what is currently there'}
+            
+            return {'success' : order} 
         else:
             return { 'error': 'menu_item_id doesnt exist'}
     else:
         return {'error': 'invalid table_id or menu_id' }
 
-
+@APP.route("/customer/view_order", methods=['POST'])
+def customer_remove_menu_item_flask():
 
 ##############################################################################################################################
 ################################################ OLD PROJECT STUFF ###########################################################
