@@ -7,7 +7,9 @@ def customer_view_menu(cur, menu_id, allergies_list):
     select id, name, ordering_id from categories where menu_id = %s order by ordering_id;
     """
     
+    print(allergies_list)
     allergies_tuple = str(tuple(allergies_list))
+    print(allergies_tuple)
 
     query_menu_items = """
     select id, title, description, image, price, ordering_id
