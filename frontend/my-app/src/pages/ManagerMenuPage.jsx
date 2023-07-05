@@ -13,7 +13,7 @@ function ManagerMenuPage() {
   const [newCategoryName, setNewCategoryName] = React.useState('');
   const [categories, setCategories] = React.useState([]);
   const [currentSelectedCategory, setCurrentSelectedCategory] = React.useState('Best Selling');
-  const [currentSelectedCategoryId, setCurrentSelectedCategoryId] = React.useState(1);
+  const [currentSelectedCategoryId, setCurrentSelectedCategoryId] = React.useState(-1);
   const [menuItems, setMenuItems] = React.useState([]); // List of Menu items for the current selected category
   const navigate = useNavigate();
   const params = useParams();
@@ -34,14 +34,12 @@ function ManagerMenuPage() {
 
   React.useEffect(() => {
     const fetchCategoryData = async () => {
-      if (currentSelectedCategoryId !== 1) {
-        console.log('selected')
-        console.log(currentSelectedCategoryId)
+      if (currentSelectedCategoryId !== -1) {
         const url = `/manager/view_category?manager_id=${managerId}&category_id=${currentSelectedCategoryId}`;
         const data = await makeRequest(url, 'GET', undefined, undefined)
         setMenuItems(data)
-        console.log(currentSelectedCategory)
-        // fetchCategoryMenuItems()
+        console.log(currentSelectedCategoryId)
+        console.log('here')
         fetchAllMenuData()
       }
     };

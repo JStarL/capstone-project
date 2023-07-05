@@ -26,13 +26,14 @@ function CategoryManager(props) {
 
     makeRequest('/manager/delete_category', 'DELETE', body, undefined)
       .then(data => {
-        if (props.currentSelectedCategoryId === categoryId) {
+        console.log(data)
+        // if (props.currentSelectedCategoryId === categoryId) {
 					console.log('deleting selected categoyr')
           // deleting the currently selected category should automatically change selected category to best selling
           props.setCurrentSelectedCategoryId(1)
 					props.setCurrentSelectedCategory('Best Selling')
 					props.fetchAllMenuData();
-        }
+        // }
       })
       .catch(e => console.log('Error: ' + e));
   }
