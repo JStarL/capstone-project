@@ -65,22 +65,6 @@ cur_dict = {
 }
 
 
-
-# List of tables dictionaries
-# table_list = [
-#   'table_1',
-#   'table_2',
-#   'table_3'
-# ]
-
-# Dictionary of the menu items ordered by table_1
-# table_1 = {
-#    'Burger': 1,
-#    'Chips': 2
-#}
-
-
-
 # @APP.route("/echo", methods=['GET'])
 # def echo():
 #     data = request.args.get('data')
