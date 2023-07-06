@@ -57,7 +57,7 @@ function CategoryManager(props) {
       props.setCurrentSelectedCategory(categoryName);
     } else {
       alert('Invalid category name')
-      props.setCurrentSelectedCategory(categoryName);
+      setCategoryName(props.categoryName)
     }
   }
 
