@@ -100,3 +100,31 @@ def customer_view_menu_item(cur, menu_item_id):
         food.update({'food_ingredients': tup[4]})
         food.update({'category_id': tup[5]})
         return food
+    
+def customer_menu_search(cur):
+    invalid_menu = { 'error': 'No menus' } # error message
+    menu = { 'success': 'Show menu' } # supposed to show the food lol
+    
+    query1 = """
+    SELECT id, restaurant_name, restaurant_loc
+    FROM menus 
+    ;
+    """ 
+    
+    cur.execute(query1, [])
+    
+    list1 = cur.fetchall()
+    
+    if len(list1) == 0: #No menu or something went wrong with the id
+        #test
+        return invalid_menu
+    else: 
+        list2 = []
+        for tup in list1:
+            dict_res = {}
+            dict_res.update({'menu_id': tup[0]})
+            dict_res.update({'restaurant_name': tup[1]})
+            dict_res.update({'restaurant_address': tup[2]})
+            list2.append(dict_res)
+        menu.update({'menu_list': list2})
+        return menu
