@@ -285,7 +285,7 @@ def customer_menu_table_flask():
     menu_id = data['menu_id']
 
     if table_id != None:
-        orders.update({
+        orders.append({
                 'table_id' : table_id,
                 'menu_id' : menu_id,
                 'menu_items' : [] })
