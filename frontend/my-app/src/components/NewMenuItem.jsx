@@ -1,7 +1,7 @@
 import React from 'react';
 import '../App.css';
 import { useParams, useNavigate } from 'react-router-dom';
-import { Button, TextField, Input, Typography } from '@mui/material';
+import { Button, TextField, Input, Typography, Paper } from '@mui/material';
 import { fileToDataUrl } from './helperFunctions'
 import MenuItem from '@mui/material/MenuItem';
 import OutlinedInput from '@mui/material/OutlinedInput';
@@ -9,12 +9,13 @@ import FormControl from '@mui/material/FormControl';
 import InputAdornment from '@mui/material/InputAdornment';
 import InputLabel from '@mui/material/InputLabel';
 import makeRequest from '../makeRequest';
+import { StyledButton } from '../pages/CustomerOrStaff';
 
-function NewMenuItem () {
+function NewMenuItem(props) {
   const [foodName, setFoodName] = React.useState('')
   const [description, setDescription] = React.useState('')
   const [ingredients, setIngredients] = React.useState('')
-  const [price, setPrice] = React.useState(4)
+  const [price, setPrice] = React.useState(0)
   const [image, setImage] = React.useState('');
   const [imageName, setImageName] = React.useState('')
 
@@ -49,49 +50,47 @@ function NewMenuItem () {
 
   // image
 
-  async function handleFileSelect (event) {
+  async function handleFileSelect(event) {
     setImageName(event.target.files[0].name)
     const thumbnailUrl = await fileToDataUrl(event.target.files[0])
     setImage(thumbnailUrl);
   }
   return <>
-  <div className='new-item-div'>
-    <div className='div-section'>
-        <TextField className='long input' id='outlined-basic' label='Food Name' variant='outlined' value={foodName} onChange={e => setFoodName(e.target.value)}></TextField>
+    <div className='login-page'>
+      <Paper sx={{ p: 4, borderRadius: '20px', width: '50%' }} elevation={5}>
+        <form className='login-form'>
+          <Typography className='h4' variant="h4" gutterBottom>Add new menu item to <b>{props.categoryName}</b></Typography>
+          <TextField sx={{ mb: 2 }} className='long input' label='Food Name' variant='outlined' value={foodName} onChange={e => setFoodName(e.target.value)}></TextField>
+          <TextField sx={{ mb: 2 }} className='long input' label='Description' variant='outlined' rows={3} multiline={true} value={description} onChange={e => setDescription(e.target.value)}></TextField>
+          <FormControl className='long input'>
+            <InputLabel htmlFor="outlined-adornment-amount">Price</InputLabel>
+            <OutlinedInput
+              sx={{ mb: 2 }}
+              startAdornment={<InputAdornment position="start">$</InputAdornment>}
+              label="Price"
+              value={price}
+              onChange={e => setPrice(e.target.value)}
+              type='number'
+            />
+          </FormControl>
+          <TextField sx={{ mb: 2 }} className='long input' id='outlined-basic' label='Ingredients' variant='outlined' rows={3} multiline={true} value={ingredients} onChange={e => setIngredients(e.target.value)}></TextField>
+          {image
+            ? <div className='image'><img style={{ height: '300px', width: '300px' }} src={image}></img></div>
+            : <div></div>}
+          <div>
+            <label htmlFor="upload-photo">
+              <StyledButton sx={{ mb: 2 }} variant='outlined' aria-label="upload picture" component="label">Add Image
+                <Input style={{ display: 'none' }} accept='image/png, image/jpeg'
+                  type="file"
+                  onChange={handleFileSelect}
+                />
+              </StyledButton>
+              <div><Typography variant='overline' sx={{ fontSize: '10px' }}>{imageName}</Typography></div>
+            </label></div>
+          <StyledButton sx={{ mb: 2 }} variant='outlined' onClick={addMenuItem}>ADD TO MENU</StyledButton>
+        </form>
+      </Paper>
     </div>
-    <div className='div-section'>
-        <TextField className='long input' id='outlined-basic' label='Description' variant='outlined' rows={3} multiline={true} value={description} onChange={e => setDescription(e.target.value)}></TextField>
-    </div>
-    <div className='div-section'>
-      </div>
-        <div className='div-section'><FormControl className='long input'>
-          <InputLabel htmlFor="outlined-adornment-amount">Price</InputLabel>
-          <OutlinedInput
-            startAdornment={<InputAdornment position="start">$</InputAdornment>}
-            label="Price"
-            value={price}
-            onChange={e => setPrice(e.target.value)}
-            type='number'
-          />
-        </FormControl></div>
-    <div className='div-section'>
-        <TextField className='long input' id='outlined-basic' label='Ingredients' variant='outlined' rows={3} multiline={true} value={ingredients} onChange={e => setIngredients(e.target.value)}></TextField>
-    </div>
-    {image
-      ? <div className='image'><img style={{ height: '300px', width: '300px' }} src={image}></img></div>
-      : <div></div>}
-    <div>
-    <label htmlFor="upload-photo"> 
-      <Button color="primary" aria-label="upload picture" component="label">Add Image
-        <Input style={{ display: 'none' }} accept='image/png, image/jpeg'
-          type="file"
-          onChange={handleFileSelect}
-        />
-      </Button>
-      <div><Typography variant='overline' sx={{ fontSize: '10px' }}>{imageName}</Typography></div>
-    </label></div>
-    <Button onClick={addMenuItem}>ADD TO MENU</Button>
-  </div>
   </>
 }
 
