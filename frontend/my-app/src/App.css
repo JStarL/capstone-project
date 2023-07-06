@@ -16,9 +16,17 @@ a {
   margin: 5px;
 }
 
-a:hover {
+.toNavy:hover {
   color: #002250
 }
+
+.toWhite:hover {
+  color: #fff
+}
+
+/* a:hover {
+  color: #002250
+} */
 
 body {
   font-family: sans-serif;

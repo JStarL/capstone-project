@@ -38,7 +38,7 @@ function CustomerMenuPage() {
         // console.log(data)
         const url = `/customer/view_category?session_id=${sessionId}&category_id=${currentSelectedCategoryId}`;
         const data = await makeRequest(url, 'GET', undefined, undefined)
-        setMenuItems([...data])
+        setMenuItems(data)
         fetchAllMenuData()
       }
     };
@@ -85,6 +85,7 @@ function CustomerMenuPage() {
             key={Object.keys(category)[0]} // category id 
             id={Object.keys(category)[0]}
             setCurrentSelectedCategory={setCurrentSelectedCategory}
+            currentSelectedCategoryId={currentSelectedCategoryId}
             fetchAllMenuData={fetchAllMenuData}
             setCurrentSelectedCategoryId={setCurrentSelectedCategoryId}
             setMenuItems={setMenuItems}

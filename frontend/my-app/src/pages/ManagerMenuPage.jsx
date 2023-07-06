@@ -8,6 +8,7 @@ import BestSellingFoodItem from '../components/BestSellingFoodItem';
 import AddIcon from '@mui/icons-material/Add';
 import makeRequest from '../makeRequest';
 import PropTypes from 'prop-types';
+import NewCategoryField from '../components/NewCategoryField';
 
 function ManagerMenuPage() {
   const [newCategoryName, setNewCategoryName] = React.useState('');
@@ -100,14 +101,22 @@ function ManagerMenuPage() {
               fetchCategoryMenuItems={fetchCategoryMenuItems}
             />
           ))}
-          <TextField
+          <NewCategoryField
+            // newCategoryName={newCategoryName}
+            // setNewCategoryName={setNewCategoryName}
+            // addNewCategory={addNewCategory}
+            menuId={menuId}
+            managerId={managerId}
+            fetchAllMenuData={fetchAllMenuData}
+          />
+          {/* <TextField
             label='New Category Name'
             onChange={e => setNewCategoryName(e.target.value)}
             variant="outlined"
             sx={{ mb: 3 }}
             value={newCategoryName || ''}
           />
-          <Button onClick={addNewCategory} startIcon={<AddIcon />}>Add new category</Button>
+          <Button onClick={addNewCategory} startIcon={<AddIcon />}>Add new category</Button> */}
         </div>
         <div style={{ width: '80%', height: '100%' }}>
         <Typography className='h4' variant="h4" gutterBottom>Manager Menu Page - {currentSelectedCategory}</Typography>
