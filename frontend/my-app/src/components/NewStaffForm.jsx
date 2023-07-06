@@ -2,6 +2,16 @@ import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Button, TextField, Typography, Paper, FormLabel, FormControl, Radio, RadioGroup, FormControlLabel } from '@mui/material';
 import makeRequest from '../makeRequest';
+import { StyledButton } from '../pages/CustomerOrStaff';
+import { styled } from '@mui/material';
+
+const StyledRadio = styled(Radio) ({
+	color: 'black',// Replace with your desired color
+	'&.Mui-checked': {
+	  color: '#002250',// Replace with your desired color when the radio button is checked
+	}
+})
+
 
 function NewStaffForm({ onSuccess }) {
 	const [name, setName] = React.useState('')
@@ -33,7 +43,7 @@ function NewStaffForm({ onSuccess }) {
 
 	return <>
 		<div className='login-page'>
-			<Paper className='paper' elevation={3}>
+			<Paper sx={{ p: 4, borderRadius: '20px', width: "40%" }} className='paper' elevation={5}>
 				<form className='login-form'>
 					<Typography className='h4' variant="h4" gutterBottom>Add New Staff</Typography>
 					<TextField label='Name'
@@ -75,12 +85,12 @@ function NewStaffForm({ onSuccess }) {
 						value={staffType}
 						onChange={e => setStaffType(e.target.value)}
 					>
-						<FormControlLabel value="kitchen" control={<Radio />} label="Kitchen" />
-						<FormControlLabel value="wait" control={<Radio />} label="Wait" />
+						<FormControlLabel value="kitchen" control={<StyledRadio />} label="Kitchen" />
+						<FormControlLabel value="wait" control={<StyledRadio />} label="Wait" />
 					</RadioGroup>
 				</FormControl>
 				</form>
-					<Button onClick={addNewStaff}>Add Staff</Button>
+					<StyledButton sx={{ mb: 2, p:1.5, width: "95%" }} variant="outlined" onClick={addNewStaff}>Add Staff</StyledButton>
 					<br /><br />
 			</Paper>
 			

@@ -55,7 +55,7 @@ function App() {
 
   const LogoutButton = () => {
     return (
-      <nav sx={{ display: 'flex' }}>
+      <nav sx={{ display: 'flex'}}>
         <div className='nav-container'>
           <StyledButton sx={{
             margin: '5px',
@@ -75,7 +75,7 @@ function App() {
   const Nav = () => {
     return (
       <nav>
-        <div className='nav-container'>
+        <div className='nav-container' sx={{zIndex:100}}>
           <div className='links-container'>
             <span className="link"><Link to='/'>Login</Link></span>
             <span className="link"><Link to='/register  '>Register</Link></span>

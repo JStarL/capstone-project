@@ -13,7 +13,7 @@ function ManagerMenuPage() {
   const [newCategoryName, setNewCategoryName] = React.useState('');
   const [categories, setCategories] = React.useState([]);
   const [currentSelectedCategory, setCurrentSelectedCategory] = React.useState('Best Selling');
-  const [currentSelectedCategoryId, setCurrentSelectedCategoryId] = React.useState(1);
+  const [currentSelectedCategoryId, setCurrentSelectedCategoryId] = React.useState(-1);
   const [menuItems, setMenuItems] = React.useState([]); // List of Menu items for the current selected category
   const navigate = useNavigate();
   const params = useParams();
@@ -34,15 +34,13 @@ function ManagerMenuPage() {
 
   React.useEffect(() => {
     const fetchCategoryData = async () => {
-      if (currentSelectedCategoryId !== 1) {
-        console.log('selected')
-        console.log(currentSelectedCategoryId)
+      if (currentSelectedCategoryId !== -1) {
         const url = `/manager/view_category?manager_id=${managerId}&category_id=${currentSelectedCategoryId}`;
         const data = await makeRequest(url, 'GET', undefined, undefined)
         setMenuItems(data)
-        console.log(currentSelectedCategory)
-        // fetchCategoryMenuItems()
-        fetchAllMenuData()
+        console.log(currentSelectedCategoryId)
+        console.log('here')
+        // fetchAllMenuData()
       }
     };
     fetchCategoryData();
@@ -52,7 +50,9 @@ function ManagerMenuPage() {
     const url = `/manager/view_menu?manager_id=${managerId}&menu_id=${menuId}`;
     const data = await makeRequest(url, 'GET', undefined, undefined);
     setCategories(data);
-
+    // for (let key in data[0]) {
+    //   setMenuItems(data[0][key][1])
+    // }
     return data; // Return the fetched data
   }
 
@@ -63,12 +63,16 @@ function ManagerMenuPage() {
       'category_name': newCategoryName
     });
 
-    makeRequest('/manager/add_category', 'POST', body, undefined)
-      .then(data => {
-        setNewCategoryName('')
-        fetchAllMenuData(); // basically updates/refreshes the page
-      })
-      .catch(e => console.log('Error: ' + e));
+    if (newCategoryName !== '') {
+      makeRequest('/manager/add_category', 'POST', body, undefined)
+        .then(data => {
+          setNewCategoryName('')
+          fetchAllMenuData(); // basically updates/refreshes the page
+        })
+        .catch(e => console.log('Error: ' + e));
+    } else {
+      alert('Invalid category name')
+    }
   }
 
   async function fetchCategoryMenuItems() {
@@ -81,8 +85,8 @@ function ManagerMenuPage() {
   if (!categories || !Array.isArray(categories)) return <>loading...</>;
   return (
     <>
-      <div style={{ display: 'flex', flexDirection: 'row' }}>
-        <div style={{ width: '20%', backgroundColor: 'white', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+      <div style={{ display: 'flex', flexDirection: 'row'}}>
+        <div style={{ width: '20%', backgroundColor: 'white', display: 'flex', flexDirection: 'column', alignItems: 'center'}}>
           {categories?.map((category) => (
             <CategoryManager
               categoryName={category[Object.keys(category)[0]][0]}

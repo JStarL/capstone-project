@@ -6,8 +6,8 @@ import { useParams } from 'react-router-dom';
 function NewMenuItemPage () {
   const params = useParams()
   const categoryName = params.categoryName
-  return <>ADD NEW MENU ITEM TO <b>{categoryName}</b> CATEGORY
-    <NewMenuItem />
+  return <>
+    <NewMenuItem categoryName={categoryName}/>
   </>
 }
 
