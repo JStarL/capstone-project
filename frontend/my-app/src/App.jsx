@@ -63,7 +63,7 @@ function App() {
             width: '7%',
             height: '70%',
           }} onClick={logout} startIcon={<LogoutIcon/>}>
-            <a href='/'>
+            <a className='toNavy' href='/'>
               Logout 
             </a>
           </StyledButton>
@@ -120,8 +120,8 @@ function App() {
           {staffType !== 'manager'
             ? null
             : (<div className="footer-container">
-              <StyledButton startIcon={<PersonAddAlt1SharpIcon />}><Link to='/addstaff'>Add Staff</Link></StyledButton>
-              <StyledButton startIcon={<RestaurantMenuIcon />}><Link to={`/manager/menu/${menuId}`}>Go to Menu</Link></StyledButton>
+              <StyledButton startIcon={<PersonAddAlt1SharpIcon />}><Link to='/addstaff' className='toNavy'>Add Staff</Link></StyledButton>
+              <StyledButton startIcon={<RestaurantMenuIcon />}><Link to={`/manager/menu/${menuId}`} className='toNavy'>Go to Menu</Link></StyledButton>
             </div>)}
         </footer>
 

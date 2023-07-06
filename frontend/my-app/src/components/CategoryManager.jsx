@@ -70,7 +70,10 @@ function CategoryManager(props) {
     <Box display="flex" alignItems="center">
       <Card
         style={{
-          borderColor: props.currentSelectedCategoryId === props.id ? '#002250' : undefined
+          borderColor: props.currentSelectedCategoryId === props.id ? '#002250' : undefined,
+          boxShadow: props.currentSelectedCategoryId === props.id ? "0 2px 4px rgba(0, 0, 0, 0.2)" : undefined,
+          width: '300px',
+          marginRight: '0'
         }}
         className="category-box"
         onClick={() => selectCategory()}
@@ -93,8 +96,8 @@ function CategoryManager(props) {
           )}
         </CardContent>
       </Card>
-      {categoryName === 'Best Selling' ? null : (
-        <Box display="flex" justifyContent='center' flexDirection="column">
+      {categoryName === 'Best Selling' ? <div style={{ width: "55px" }}></div> : (
+        <Box style={{ width: "55px" }} display="flex" justifyContent='center' flexDirection="column">
           <Button sx={{color: '#002250'}} onClick={() => deleteCategory()} startIcon={<DeleteIcon />} />
           <Button sx={{color: '#002250'}} onClick={() => console.log(`moving ${categoryName} up`)} startIcon={<ArrowUpwardIcon/>} />
 					<Button sx={{color: '#002250'}} onClick={() => console.log(`moving ${categoryName} down`)} startIcon={<ArrowDownwardIcon/>} />

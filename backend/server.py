@@ -128,7 +128,7 @@ cur_dict = {
 #           {
 #               'menu_item_id': 2,
 #               'amount': 1
-#               'title': Water
+#               'title': 'Water'
 #           }
 #       ]
 #       }
@@ -136,7 +136,7 @@ cur_dict = {
 # }
 
 
-orders = []
+orders = {}
 
 # @APP.route("/echo", methods=['GET'])
 # def echo():
@@ -341,11 +341,16 @@ def customer_menu_table_flask():
     session_id = data['session_id']
 
     if table_id != None:
-        orders.append({
-                'session_id': session_id,
-                'table_id' : table_id,
-                'menu_id' : menu_id,
-                'menu_items' : [] })
+        
+        if menu_id not in orders:
+            orders[menu_id] = []
+        orders[menu_id].append(
+            {
+            'session_id': session_id,
+            'table_id' : table_id,
+            'menu_items' : []
+            }
+        )
         
         return {'table_id':  table_id}
     else:
@@ -355,17 +360,26 @@ def customer_menu_table_flask():
 def customer_add_menu_item_flask():
     data = ast.literal_eval(request.get_json())
     session_id = data['session_id']
+    menu_id = data['menu_id']
     menu_item_id = data['menu_item_id']
     amount = data['amount']
     title = data['title']
 
+    orders_list = None
+    if menu_id in orders:
+        orders_list = orders[menu_id]
+    else:
+        return { 'error': 'no orders with the given menu_id'}
+
     # find the order with session_id
-    order_list = [order for order in orders if order["session_id"] == session_id]
+    order_list = [order for order in orders_list if order["session_id"] == session_id]
     
     if len(order_list) > 0:
-        order_list[0]['menu_items'].append({"menu_item_id" : menu_item_id,
-                                     "amount" : amount,
-                                     "title" : title})
+        order_list[0]['menu_items'].append( {
+            "menu_item_id" : menu_item_id,
+            "amount" : amount,
+            "title" : title
+        } )
         return order_list[0]
     else:
         return {'error': 'invalid session_id' }
@@ -374,11 +388,18 @@ def customer_add_menu_item_flask():
 def customer_remove_menu_item_flask():
     data = ast.literal_eval(request.get_json())
     session_id = data['session_id']
+    menu_id = data['menu_id']
     menu_item_id = data['menu_item_id']
     amount_to_be_removed = data['amount']
 
+    orders_list = None
+    if menu_id in orders:
+        orders_list = orders[menu_id]
+    else:
+        return { 'error': 'no orders with the given menu_id'}
+
     # find the order with session_id 
-    order_list = [order for order in orders if order["session"] == session_id]
+    order_list = [order for order in orders_list if order["session"] == session_id]
     
     if len(order_list) > 0:
         # check that the menu_item_id is there to be deleted
@@ -403,12 +424,19 @@ def customer_remove_menu_item_flask():
 @APP.route("/customer/view_order", methods=['GET'])
 def customer_view_order_flask():
     session_id = request.args.get("session_id")
+    menu_id = request.args.get['menu_id']
+
+    orders_list = None
+    if menu_id in orders:
+        orders_list = orders[menu_id]
+    else:
+        return { 'error': 'no orders with the given menu_id'}
 
     # find the order with session_id
-    orders_list = [order for order in orders if order["session_id"] == session_id]
+    order_list = [order for order in orders_list if order["session_id"] == session_id]
     
-    if len(orders_list) > 0:
-        return orders_list[0]
+    if len(order_list) > 0:
+        return order_list[0]
     else:
         return {'error': 'invalid session_id' }
 

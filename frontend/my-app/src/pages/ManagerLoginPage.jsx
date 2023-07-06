@@ -69,7 +69,7 @@ function ManagerLoginPage({ onSuccess }) {
           /> 
           <StyledButton variant="outlined" sx={{ mb: 2, p:1.5, width: "100%" }} onClick={login}>Log In</StyledButton>
           <br></br>
-          <span className="link"><Link to='/register'>New Manager? Sign Up Here!</Link></span>
+          <span className="link"><Link to='/register' style={{ color: '#002250' }}>New Manager? Sign Up Here!</Link></span>
         </form>
       </Paper>
     </div>
