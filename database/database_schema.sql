@@ -60,3 +60,21 @@ create or replace view menu_items_and_categories(menu_item_id, title, descriptio
 select m.id, m.title, m.description, m.image, m.price, m.ingredients, c.id, c.name, c.menu_id
 from menu_items m join categories c on (m.category_id = c.id)
 ;
+
+create table allergies (
+    id                  serial,
+    name                text not null unique,
+    description         text,
+
+    primary key (id)
+);
+
+create table ingredients (
+    menu_item_id        integer not null,
+    name                text not null,
+    allergy_id          integer null,
+
+    primary key (menu_item_id, name),
+    foreign key (menu_item_id) references menu_items(id),
+    foreign key (allergy_id) references allergies(id)
+);
