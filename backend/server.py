@@ -73,10 +73,12 @@ cur_dict = {
 #           {
 #               'menu_item_id': 12,
 #               'amount': 1
+#               'title': Burger
 #           },
 #           {
 #               'menu_item_id': 15,
 #               'amount': 2
+#               'title': Fries
 #           }
 #       ]
 #   },
@@ -87,10 +89,12 @@ cur_dict = {
 #           {
 #               'menu_item_id': 13,
 #               'amount': 5
+#               'title': Pasta
 #           },
 #           {
 #               'menu_item_id': 3,
 #               'amount': 1
+#               'title': Water
 #           }
 #       ]
 #   }
@@ -301,13 +305,15 @@ def customer_add_menu_item_flask():
     menu_id = data['menu_id']
     menu_item_id = data['menu_item_id']
     amount = data['amount']
+    title = data['title']
 
     # find the order with table_id and menu_id
     order = next((order for order in orders if order["table_id"] == table_id and order["menu_id"] == menu_id), None)
     
     if order != None:
         order['menu_items'].append({"menu_item_id" : menu_item_id,
-                                     "amount" : amount})
+                                     "amount" : amount,
+                                     "title" : title})
         return {'success' : order}
     else:
         return {'error': 'invalid table_id or menu_id' }
