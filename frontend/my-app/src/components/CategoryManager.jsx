@@ -46,15 +46,19 @@ function CategoryManager(props) {
       category_name: categoryName,
       category_id: props.id
     });
-
-    makeRequest('/manager/update_category', 'POST', body, undefined)
-      .then(data => {
-        props.fetchAllMenuData();
-      })
-      .catch(e => console.log('Error: ' + e));
-
-    // change currently selected heading name as well
-    props.setCurrentSelectedCategory(categoryName);
+    if (categoryName !== '') {
+      makeRequest('/manager/update_category', 'POST', body, undefined)
+        .then(data => {
+          props.fetchAllMenuData();
+        })
+        .catch(e => console.log('Error: ' + e));
+  
+      // change currently selected heading name as well
+      props.setCurrentSelectedCategory(categoryName);
+    } else {
+      alert('Invalid category name')
+      props.setCurrentSelectedCategory(categoryName);
+    }
   }
 
   function selectCategory() {

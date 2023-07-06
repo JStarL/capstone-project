@@ -63,12 +63,16 @@ function ManagerMenuPage() {
       'category_name': newCategoryName
     });
 
-    makeRequest('/manager/add_category', 'POST', body, undefined)
-      .then(data => {
-        setNewCategoryName('')
-        fetchAllMenuData(); // basically updates/refreshes the page
-      })
-      .catch(e => console.log('Error: ' + e));
+    if (newCategoryName !== '') {
+      makeRequest('/manager/add_category', 'POST', body, undefined)
+        .then(data => {
+          setNewCategoryName('')
+          fetchAllMenuData(); // basically updates/refreshes the page
+        })
+        .catch(e => console.log('Error: ' + e));
+    } else {
+      alert('Invalid category name')
+    }
   }
 
   async function fetchCategoryMenuItems() {
