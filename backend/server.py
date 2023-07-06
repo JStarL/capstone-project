@@ -8,7 +8,7 @@ import sys
 import ast
 
 
-from manager import manager_view_menu, manager_view_category, manager_view_menu_item, manager_add_category, manager_delete_category, manager_add_menu_item, manager_delete_menu_item, manager_update_category, manager_update_menu_item
+from manager import manager_view_menu, manager_view_category, manager_view_menu_item, manager_add_category, manager_delete_category, manager_add_menu_item, manager_delete_menu_item, manager_update_category, manager_update_menu_item, manager_update_category_ordering, manager_update_menu_item_ordering
 from auth import login_backend, register_backend, auth_add_staff_backend
 from customer import customer_view_menu, customer_view_category, customer_view_menu_item
 
@@ -64,11 +64,11 @@ cur_dict = {
     }
 }
 
-# orders = [
-#   {
+# orders = {
+#   '1': [ # menu_id is the key
+#       {  
 #       'session_id': '1234'
 #       'table_id': 24,
-#       'menu_id': 1,
 #       'menu_items': [
 #           {
 #               'menu_item_id': 12,
@@ -81,28 +81,62 @@ cur_dict = {
 #               'title': 'Fries'
 #           }
 #       ]
-#   },
-#   {
+#       },
+#       { 
 #       'session_id': '2345'
-#       'table_id': 27,
-#       'menu_id': 2,
+#       'table_id': 22,
 #       'menu_items': [
 #           {
-#               'menu_item_id': 13,
-#               'amount': 5
-#               'title': Pasta
+#               'menu_item_id': 12,
+#               'amount': 1
+#               'title': 'Burger'
+#           },
+#           {
+#               'menu_item_id': 11,
+#               'amount': 2
+#               'title': 'Coke'
+#           }
+#       ]
+#       }
+#   ],
+#   '2': [ # menu_id is the key
+#        {
+#       'session_id': '2399'
+#       'table_id': 27,
+#       'menu_items': [
+#           {
+#               'menu_item_id': 10,
+#               'amount': 3
+#               'title': 'Pasta'
 #           },
 #           {
 #               'menu_item_id': 3,
 #               'amount': 1
-#               'title': Water
+#               'title': 'Fanta'
 #           }
 #       ]
-#   }
-# ]
+#       },
+#       {
+#       'session_id': '3479'
+#       'table_id': 13,
+#       'menu_items': [
+#           {
+#               'menu_item_id': 13,
+#               'amount': 2
+#               'title': 'Fried Rice'
+#           },
+#           {
+#               'menu_item_id': 2,
+#               'amount': 1
+#               'title': 'Water'
+#           }
+#       ]
+#       }
+#   ]
+# }
 
 
-orders = []
+orders = {}
 
 # @APP.route("/echo", methods=['GET'])
 # def echo():
@@ -245,6 +279,22 @@ def manager_update_menu_item_flask():
     db_conn.commit()
     return return_val
 
+@APP.route("/manager/update_category_ordering", methods=['POST'])
+def manager_update_category_ordering_flask():
+    data = ast.literal_eval(request.get_json())
+    cur = cur_dict['staff'][data['manager_id']]
+    return_val = dumps(manager_update_category_ordering(cur, data['category_id'], data['prev_ordering_id'], data['new_ordering_id']))
+    db_conn.commit()
+    return return_val
+
+@APP.route("/manager/update_menu_item_ordering", methods=['POST'])
+def manager_update_menu_item_ordering_flask():
+    data = ast.literal_eval(request.get_json())
+    cur = cur_dict['staff'][data['manager_id']]
+    return_val = dumps(manager_update_menu_item_ordering(cur, data['menu_item_id'], data['prev_ordering_id'], data['new_ordering_id']))
+    db_conn.commit()
+    return return_val
+
 # Customer functions
 
 @APP.route("/customer/view_menu", methods=['GET'])
@@ -291,11 +341,16 @@ def customer_menu_table_flask():
     session_id = data['session_id']
 
     if table_id != None:
-        orders.append({
-                'session_id': session_id,
-                'table_id' : table_id,
-                'menu_id' : menu_id,
-                'menu_items' : [] })
+        
+        if menu_id not in orders:
+            orders[menu_id] = []
+        orders[menu_id].append(
+            {
+            'session_id': session_id,
+            'table_id' : table_id,
+            'menu_items' : []
+            }
+        )
         
         return {'table_id':  table_id}
     else:
@@ -305,17 +360,26 @@ def customer_menu_table_flask():
 def customer_add_menu_item_flask():
     data = ast.literal_eval(request.get_json())
     session_id = data['session_id']
+    menu_id = data['menu_id']
     menu_item_id = data['menu_item_id']
     amount = data['amount']
     title = data['title']
 
+    orders_list = None
+    if menu_id in orders:
+        orders_list = orders[menu_id]
+    else:
+        return { 'error': 'no orders with the given menu_id'}
+
     # find the order with session_id
-    order_list = [order for order in orders if order["session_id"] == session_id]
+    order_list = [order for order in orders_list if order["session_id"] == session_id]
     
     if len(order_list) > 0:
-        order_list[0]['menu_items'].append({"menu_item_id" : menu_item_id,
-                                     "amount" : amount,
-                                     "title" : title})
+        order_list[0]['menu_items'].append( {
+            "menu_item_id" : menu_item_id,
+            "amount" : amount,
+            "title" : title
+        } )
         return order_list[0]
     else:
         return {'error': 'invalid session_id' }
@@ -324,11 +388,18 @@ def customer_add_menu_item_flask():
 def customer_remove_menu_item_flask():
     data = ast.literal_eval(request.get_json())
     session_id = data['session_id']
+    menu_id = data['menu_id']
     menu_item_id = data['menu_item_id']
     amount_to_be_removed = data['amount']
 
+    orders_list = None
+    if menu_id in orders:
+        orders_list = orders[menu_id]
+    else:
+        return { 'error': 'no orders with the given menu_id'}
+
     # find the order with session_id 
-    order_list = [order for order in orders if order["session"] == session_id]
+    order_list = [order for order in orders_list if order["session"] == session_id]
     
     if len(order_list) > 0:
         # check that the menu_item_id is there to be deleted
@@ -353,12 +424,19 @@ def customer_remove_menu_item_flask():
 @APP.route("/customer/view_order", methods=['GET'])
 def customer_view_order_flask():
     session_id = request.args.get("session_id")
+    menu_id = request.args.get['menu_id']
+
+    orders_list = None
+    if menu_id in orders:
+        orders_list = orders[menu_id]
+    else:
+        return { 'error': 'no orders with the given menu_id'}
 
     # find the order with session_id
-    orders_list = [order for order in orders if order["session_id"] == session_id]
+    order_list = [order for order in orders_list if order["session_id"] == session_id]
     
-    if len(orders_list) > 0:
-        return orders_list[0]
+    if len(order_list) > 0:
+        return order_list[0]
     else:
         return {'error': 'invalid session_id' }
 
