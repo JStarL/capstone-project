@@ -253,7 +253,7 @@ def customer_menu_table_flask():
     menu_id = data['menu_id']
 
     if table_id != None:
-        orders.update({
+        orders.append({
                 'table_id' : table_id,
                 'menu_id' : menu_id,
                 'menu_items' : [] })
@@ -274,7 +274,7 @@ def customer_add_menu_item_flask():
     order = next((order for order in orders if order["table_id"] == table_id and order["menu_id"] == menu_id), None)
     
     if order != None:
-        order['menu_items'].apppend({"menu_item_id" : menu_item_id,
+        order['menu_items'].append({"menu_item_id" : menu_item_id,
                                      "amount" : amount})
         return {'success' : order}
     else:
