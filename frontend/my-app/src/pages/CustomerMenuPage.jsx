@@ -50,6 +50,7 @@ function CustomerMenuPage() {
   async function fetchAllMenuData() {
     const url = `/customer/view_menu?session_id=${sessionId}&menu_id=${menuId}`;
     const data = await makeRequest(url, 'GET', undefined, undefined);
+    console.log(data)
     setCategories(data);
 
     // for (const [key, value] of Object.entries(data)) {
