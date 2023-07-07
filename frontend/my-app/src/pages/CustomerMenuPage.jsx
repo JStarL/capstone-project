@@ -17,7 +17,7 @@ function CustomerMenuPage() {
   const navigate = useNavigate();
 
   const sessionId = localStorage.getItem('session_id');
-  const menuId = 1 // hard code for now but update this when we implement search restaurant
+  const menuId = localStorage.getItem('menu_id') // hard code for now but update this when we implement search restaurant
   // localStorage.getItem('menu_id');
 
   React.useEffect(() => {

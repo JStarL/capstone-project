@@ -24,7 +24,7 @@ function SearchRestaurant({ onSuccess }) {
 		setRestaurants(data);
 		return data; // Return the fetched data
 	}
-	
+
 	return (
 		<div className='login-page' sx={{ alignItems: 'center' }}>
 			<Paper elevation={10} sx={{ p: 6, borderRadius: '20px', width: '60%' }}>
