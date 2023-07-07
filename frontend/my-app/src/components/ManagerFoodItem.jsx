@@ -9,6 +9,7 @@ import InputAdornment from '@mui/material/InputAdornment';
 import InputLabel from '@mui/material/InputLabel';
 import makeRequest from '../makeRequest';
 import { useNavigate } from 'react-router-dom';
+import { StyledButton } from '../pages/CustomerOrStaff';
 
 function ManagerFoodItem ({ originalFoodName, originalFoodDescription, originalPrice, originalImage, originalIngredients, foodId, categoryId, categoryName, fetchCategoryMenuItems }) {
   const [foodName, setFoodName] = React.useState('');
@@ -84,12 +85,12 @@ function ManagerFoodItem ({ originalFoodName, originalFoodDescription, originalP
       : <div className='food-item-img'>IMG</div>}
       <div>
       <label htmlFor="upload-photo"> 
-        <Button color="primary" aria-label="upload picture" component="label">Edit Image
+        <StyledButton sx={{width:'70%', m:1}} aria-label="upload picture" component="label">Edit Image
           <Input style={{ display: 'none' }} accept='image/png, image/jpeg'
             type="file"
             onChange={handleFileSelect}
           />
-        </Button>
+        </StyledButton>
       </label></div>
     </div>
     <div className='food-item-middle'>
@@ -108,10 +109,10 @@ function ManagerFoodItem ({ originalFoodName, originalFoodDescription, originalP
     </div>
     <div className='food-item-button'>
       {categoryName !== 'Best Selling'
-        ? <Button onClick={deleteFoodItem} startIcon={<DeleteIcon/>}></Button>
+        ? <Button sx={{color: '#002250'}} onClick={deleteFoodItem} startIcon={<DeleteIcon/>}></Button>
         : null
       }
-      <Button onClick={updateFoodItem}>UPDATE</Button>
+      <StyledButton sx={{width: '35%'}}onClick={updateFoodItem}>UPDATE</StyledButton>
     </div>
   </div>
   </>

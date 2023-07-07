@@ -9,6 +9,7 @@ import AddIcon from '@mui/icons-material/Add';
 import makeRequest from '../makeRequest';
 import PropTypes from 'prop-types';
 import NewCategoryField from '../components/NewCategoryField';
+import { StyledButton } from './CustomerOrStaff';
 
 function ManagerMenuPage() {
   const [newCategoryName, setNewCategoryName] = React.useState('');
@@ -148,7 +149,7 @@ function ManagerMenuPage() {
           <div>
             <br></br>
             {currentSelectedCategory !== 'Best Selling'
-              ? <Button onClick={() => { navigate(`/manager/addnewmenuitem/${menuId}/${currentSelectedCategory}/${currentSelectedCategoryId}`) }}>Add new menu item</Button>
+              ? <StyledButton sx={{width: '25%'}} onClick={() => { navigate(`/manager/addnewmenuitem/${menuId}/${currentSelectedCategory}/${currentSelectedCategoryId}`) }}>Add new menu item</StyledButton>
               : null
             }
           </div>
