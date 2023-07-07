@@ -1,17 +1,20 @@
 import React from 'react';
 import { Typography, Paper, Grid, TextField } from '@mui/material';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { StyledButton } from './CustomerOrStaff';
 
-function SearchRestaurant() {
+function SearchRestaurant({ onSuccess }) {
 	const navigate = useNavigate();
+	const params = useParams();
 	const [menuId, setMenuId] = React.useState(1) 
-
+	const sessionId = params.sessionId
 	function selectRestaurant() {
 		// set menu id in local storage 
 		localStorage.setItem('menu_id', menuId)
+		onSuccess(menuId)
+		// setMenuId
 		// forward user to select table number 
-		navigate('/tablenumber')
+		navigate(`/customer/${sessionId}/${menuId}/tablenumber`)
 	}
 
 	return (
