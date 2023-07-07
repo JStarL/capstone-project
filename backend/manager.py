@@ -5,11 +5,11 @@ def manager_view_menu(cur, menu_id):
     menu = []
 
     query_categories = """
-    select id, name from categories where menu_id = %s order by id;
+    select id, name, ordering_id from categories where menu_id = %s order by ordering_id;
     """
     
     query_menu_items = """
-    select id, title, description, image, price, ingredients from menu_items where category_id = %s order by title;
+    select id, title, description, image, price, ingredients, ordering_id from menu_items where category_id = %s order by ordering_id;
     """
     cur.execute(query_categories, [menu_id])
     categories = cur.fetchall()        
@@ -35,10 +35,11 @@ def manager_view_menu(cur, menu_id):
                 tmp.update({'food_image': menu_item[3]})
                 tmp.update({'food_price': menu_item[4]})
                 tmp.update({'food_ingredients': menu_item[5]})
+                tmp.update({'food_ordering_id': menu_item[6]})
                 menu_items_list.append(tmp)
-            menu.append({str(categ_id): ['Best Selling', menu_items_list]})
+            menu.append({str(categ_id): ['Best Selling', menu_items_list, categ[2]]})
         else:
-            menu.append({str(categ_id): [categ[1], []]})
+            menu.append({str(categ_id): [categ[1], [], categ[2]]})
         
     return menu
 
@@ -57,7 +58,7 @@ def manager_view_category(cur, category_id):
         return invalid_category_id
 
     query1 = """
-    select id, title, description, image, price, ingredients from menu_items where category_id = %s order by title;
+    select id, title, description, image, price, ingredients, ordering_id from menu_items where category_id = %s order by ordering_id;
     """
 
     cur.execute(query1, [category_id])
@@ -71,6 +72,7 @@ def manager_view_category(cur, category_id):
         tmp.update({'food_image': tup[3]})
         tmp.update({'food_price': tup[4]})
         tmp.update({'food_ingredients': tup[5]})
+        tmp.update({'food_ordering_id': tup[6]})
         menu_items.append(tmp)
 
     return menu_items
@@ -80,7 +82,7 @@ def manager_view_menu_item(cur, food_id):
     food = { 'success': 'Show food' } # supposed to show the food lol
     
     query1 = """
-    select title, description, image, price, ingredients, category_id from menu_items where id = %s;
+    select title, description, image, price, ingredients, category_id, ordering_id from menu_items where id = %s;
     """ 
     
     cur.execute(query1, [food_id]) #empty for now
@@ -99,6 +101,7 @@ def manager_view_menu_item(cur, food_id):
         food.update({'food_price': tup[3]})
         food.update({'food_ingredients': tup[4]}) # I'm not sure about this line
         food.update({'category_id': tup[5]})
+        food.update({'food_ordering_id': tup[6]})
         return food
 
 def manager_add_category(cur, category_name, menu_id):
