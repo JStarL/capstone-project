@@ -10,7 +10,7 @@ import ast
 
 from manager import manager_view_menu, manager_view_category, manager_view_menu_item, manager_add_category, manager_delete_category, manager_add_menu_item, manager_delete_menu_item, manager_update_category, manager_update_menu_item, manager_update_category_ordering, manager_update_menu_item_ordering
 from auth import login_backend, register_backend, auth_add_staff_backend
-from customer import customer_view_menu, customer_view_category, customer_view_menu_item
+from customer import customer_view_menu, customer_view_category, customer_view_menu_item, customer_menu_search
 
 def quit_gracefully(*args):
     '''For coverage'''
@@ -439,6 +439,20 @@ def customer_view_order_flask():
         return order_list[0]
     else:
         return {'error': 'invalid session_id' }
+    
+@APP.route("/customer/menu/search", methods=['GET'])
+def customer_menu_search_flask():
+
+    session_id = request.args.get("session_id")
+    query = request.args.get("query")
+    
+    cur = None
+    if session_id in cur_dict['customers']:
+        cur = cur_dict['customers'][session_id]
+    else:
+        cur = db_conn.cursor()
+        cur_dict['customers'][session_id] = cur
+    return dumps(customer_menu_search(cur, query))
 
 ##############################################################################################################################
 ################################################ OLD PROJECT STUFF ###########################################################
