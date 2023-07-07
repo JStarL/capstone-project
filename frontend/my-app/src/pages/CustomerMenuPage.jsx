@@ -91,7 +91,6 @@ function CustomerMenuPage() {
             setMenuItems={setMenuItems}
             fetchCategoryMenuItems={fetchCategoryMenuItems}
           >
-            {console.log()}
           </CategoryCustomer>
 
         ))}
