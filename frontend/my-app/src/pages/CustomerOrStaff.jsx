@@ -27,7 +27,7 @@ function CustomerOrStaff({ setStaffType }) {
     localStorage.setItem('staff_type', 'customer')
     setStaffType('customer')
     console.log(timestamp);
-    navigate('/customer/1');
+    navigate('/searchrestaurant');
   }
 
   return (

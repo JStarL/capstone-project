@@ -16,6 +16,8 @@ import CustomerOrStaff from './pages/CustomerOrStaff';
 import FoodItemPage from './pages/FoodItemPage';
 import makeRequest from './makeRequest';
 import { StyledButton } from './pages/CustomerOrStaff';
+import SelectTableNumber from './pages/SelectTableNumber';
+import SearchRestaurant from './pages/SearchRestaurant';
 
 function App() {
   const [id, setId] = React.useState(null);
@@ -126,6 +128,8 @@ function App() {
             <Route path='/' element={<CustomerOrStaff setStaffType={setStaffType}/>} />
             <Route path='/login' element={<ManagerLoginPage onSuccess={login} />} />
             <Route path='/register' element={<RegisterPage onSuccess={login} />} />
+            <Route path='/searchrestaurant' element={<SearchRestaurant />} />
+            <Route path='/tablenumber' element={<SelectTableNumber />} />
             <Route path='/addstaff' element={<AddStaffPage />} />
             <Route path='/manager/menu/:menuId' element={<ManagerMenuPage />} />
             <Route path='/manager/addnewmenuitem/:menuId/:categoryName/:categoryId' element={<NewMenuItemPage />} />
