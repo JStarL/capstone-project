@@ -21,7 +21,7 @@ function CustomerOrStaff() {
     const timestamp = Math.floor(Date.now() / 1000);
     localStorage.setItem('session_id', timestamp);
     console.log(timestamp);
-    navigate('/customer/1');
+    navigate('/searchrestaurant');
   }
 
   return (
