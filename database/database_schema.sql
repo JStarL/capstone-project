@@ -33,7 +33,8 @@ from staff s join menus m on (s.menu_id = m.id)
 create table categories (
     id          serial,
     name        text not null,
-    menu_id     integer not null, 
+    menu_id     integer not null,
+    ordering_id serial not null,
     
     primary key (id),
     foreign key (menu_id) references menus(id)
@@ -47,7 +48,7 @@ create table menu_items (
     image               text, -- also optional
     price               float not null,
     ingredients         text,
-
+    ordering_id         serial not null,
     category_id         integer not null,
     menu_id             integer not null,
 
