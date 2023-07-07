@@ -18,6 +18,12 @@ function SearchRestaurant({ onSuccess }) {
 		fetchData();
 	}, [searchQuery]);
 
+	// function selectRestaurant() {
+	// 	// set menu id in local storage 
+	// 	localStorage.setItem('menu_id', menuId)
+	// 	// forward user to select table number 
+	// 	navigate('/tablenumber')
+	// }
 	async function fetchRestaurants() {
 		const url = `/customer/menu/search?session_id=${localStorage.getItem('session_id')}&query=${searchQuery}`;
 		const data = await makeRequest(url, 'GET', undefined, undefined);
