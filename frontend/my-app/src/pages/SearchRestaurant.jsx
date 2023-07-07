@@ -43,7 +43,7 @@ function SearchRestaurant({ onSuccess }) {
 					value={searchQuery}
 				/>
 				<div>
-					{restaurants.map((restaurant) => (
+					{restaurants?.map((restaurant) => (
 						<RestaurantDetails
 							key={restaurant.menu_id}
 							restaurantName={restaurant.restaurant_name}

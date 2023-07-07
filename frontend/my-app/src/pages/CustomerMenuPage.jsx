@@ -11,7 +11,7 @@ import PersonAddAlt1SharpIcon from '@mui/icons-material/PersonAddAlt1Sharp';
 function CustomerMenuPage() {
   const [categories, setCategories] = React.useState([]);
   const [currentSelectedCategory, setCurrentSelectedCategory] = React.useState('Best Selling');
-  const [currentSelectedCategoryId, setCurrentSelectedCategoryId] = React.useState(1);
+  const [currentSelectedCategoryId, setCurrentSelectedCategoryId] = React.useState(-1);
   const [menuItems, setMenuItems] = React.useState([]); // List of Menu items for the current selected category
 
   const navigate = useNavigate();
@@ -34,10 +34,7 @@ function CustomerMenuPage() {
 
   React.useEffect(() => {
     const fetchCategoryData = async () => {
-      if (currentSelectedCategoryId !== 1) {
-        // await fetchCategoryMenuItems();
-        // setMenuItems(data)
-        // console.log(data)
+      if (currentSelectedCategoryId !== -1) {
         const url = `/customer/view_category?session_id=${sessionId}&category_id=${currentSelectedCategoryId}`;
         const data = await makeRequest(url, 'GET', undefined, undefined)
         setMenuItems(data)
@@ -71,9 +68,6 @@ function CustomerMenuPage() {
     setMenuItems(data)
     return data
   }
-
-  React.useEffect(() => {
-  }, [menuItems]);
 
   if (!categories || !Array.isArray(categories)) return <>loading...</>;
 

@@ -31,6 +31,12 @@ function App() {
     if (localStorage.getItem('staff_id')) {
       setId(localStorage.getItem('staff_id'));
     }
+    if (localStorage.getItem('staff_type')) {
+      setStaffType(localStorage.getItem('staff_type'));
+    }
+    if (localStorage.getItem('menu_id')) {
+      setStaffType(localStorage.getItem('menu_id'));
+    }
   }, []);
 
   // React.useEffect(function () {
@@ -160,7 +166,7 @@ function App() {
         </main>
         <footer>
           <Footer />
-          {/* {staffType !== 'manager'
+          {/* {localStorage.getItem('staff_type') !== 'manager'
             ? null
             : (<div className="footer-container">
               <StyledButton startIcon={<PersonAddAlt1SharpIcon />}><Link to='/addstaff' className='toNavy'>Add Staff</Link></StyledButton>
