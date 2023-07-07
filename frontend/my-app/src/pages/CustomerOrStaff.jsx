@@ -14,12 +14,18 @@ export const StyledButton = styled(Button)({
   width: '100%'
 });
 
-function CustomerOrStaff() {
+function CustomerOrStaff({ setStaffType }) {
   const navigate = useNavigate();
+
+  React.useEffect(function () {
+    setStaffType(null)
+  }, []);
 
   function selectCustomer() {
     const timestamp = Math.floor(Date.now() / 1000);
     localStorage.setItem('session_id', timestamp);
+    localStorage.setItem('staff_type', 'customer')
+    setStaffType('customer')
     console.log(timestamp);
     navigate('/customer/1');
   }
