@@ -1,11 +1,12 @@
 .food-item-div {
     border: solid 1px;
     display: flex;
-    margin: 5px;
+    margin: 15px;
     border-color: lightgrey;
     padding: 3px;
-    border-radius: 3px;
+    border-radius: 20px;
     height: 100%;
+    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.4);
 }
 
 body {
@@ -18,13 +19,14 @@ body {
 }
 
 .food-item-img {
-    margin: 3px;
-    height: 200px;
-    width: 200px;
-    border: solid 1px;
+    margin: 15px;
+    height: 20vh;
+    width: 20vh;
     justify-content: center;
     display: flex;
     flex-direction: column;
+    border-radius: 20px;
+    border: solid 1px black;
 }
 
 .food-item-name {
@@ -55,9 +57,9 @@ body {
 }
 
 .food-item-button {
-    margin: 3px;
     width: 20%;
     align-self: center;
+    margin-right: 30px;
 }
 
 .new-item-div {

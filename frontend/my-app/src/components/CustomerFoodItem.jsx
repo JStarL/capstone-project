@@ -11,7 +11,7 @@ function CustomerFoodItem (props) {
   <div className='food-item-div'>
     <div>
       {props.originalImage
-      ? <div className='image'><img style={{ height: '200px', width: '200px', margin: '5px' }} src={props.originalImage}></img></div>
+      ? <div className='image'><img style={{ width: '20vh', height: '20vh', margin: '20px', borderRadius: '10px' }} src={props.originalImage}></img></div>
       : <div className='food-item-img'>IMG</div>}
     </div>
     <div className='food-item-middle'>
@@ -20,8 +20,8 @@ function CustomerFoodItem (props) {
       <div className='div-section'>Price: $ {props.originalPrice}</div>
     </div>
     <div className='food-item-button'>
-        <StyledButton style={{ margin: '5px' }} onClick={() => navigate(`/customer/1/${props.foodId}`)}>Find out more</StyledButton>
-        <StyledButton style={{ margin: '5px' }}>Add to Order</StyledButton>
+        <StyledButton variant='outlined' style={{ margin: '10px' }} onClick={() => navigate(`/customer/1/${props.foodId}`)}>Find out more</StyledButton>
+        <StyledButton variant='outlined' style={{ margin: '10px' }}>Add to Order</StyledButton>
     </div>
   </div>
   </>
