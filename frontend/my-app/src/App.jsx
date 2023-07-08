@@ -5,6 +5,7 @@ import { Button } from '@mui/material';
 import PersonAddAlt1SharpIcon from '@mui/icons-material/PersonAddAlt1Sharp';
 import RestaurantMenuIcon from '@mui/icons-material/RestaurantMenu';
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
+import SettingsIcon from '@mui/icons-material/Settings';
 import ManagerLoginPage from './pages/ManagerLoginPage'
 import AddStaffPage from './pages/AddStaffPage';
 import ManagerMenuPage from './pages/ManagerMenuPage';
@@ -19,6 +20,7 @@ import { StyledButton } from './pages/CustomerOrStaff';
 import SelectTableNumber from './pages/SelectTableNumber';
 import SearchRestaurant from './pages/SearchRestaurant';
 import CustomerViewOrderPage from './pages/CustomerViewOrderPage';
+import PersonalisePage from './pages/PersonalisePage';
 
 function App() {
   const [id, setId] = React.useState(null);
@@ -93,16 +95,16 @@ function App() {
 
   const LogoutButton = () => {
     return (
-      <nav sx={{ display: 'flex'}}>
+      <nav sx={{ display: 'flex' }}>
         <div className='nav-container'>
           <StyledButton sx={{
             margin: '5px',
             marginLeft: 'auto',
             width: '7%',
             height: '70%',
-          }} onClick={logout} startIcon={<LogoutIcon/>}>
+          }} onClick={logout} startIcon={<LogoutIcon />}>
             <a className='toNavy' href='/'>
-              Logout 
+              Logout
             </a>
           </StyledButton>
         </div>
@@ -113,7 +115,7 @@ function App() {
   const Nav = () => {
     return (
       <nav>
-        <div className='nav-container' sx={{zIndex:100}}>
+        <div className='nav-container' sx={{ zIndex: 100 }}>
           <div className='links-container'>
             <span className="link"><Link to='/'>Login</Link></span>
             <span className="link"><Link to='/register  '>Register</Link></span>
@@ -125,18 +127,38 @@ function App() {
 
   const Footer = () => {
     if (staffType === 'manager') {
-      return <div className="footer-container">
-      <StyledButton startIcon={<PersonAddAlt1SharpIcon />}><Link to='/addstaff' className='toNavy'>Add Staff</Link></StyledButton>
-      <StyledButton startIcon={<RestaurantMenuIcon />}><Link to={`/manager/menu/${menuId}`} className='toNavy'>Go to Menu</Link></StyledButton>
-      </div>;
+      return (
+        <div className="footer-container">
+          <StyledButton startIcon={<PersonAddAlt1SharpIcon />}>
+            <Link to="/addstaff" className="toNavy">Add Staff</Link>
+          </StyledButton>
+          <StyledButton startIcon={<RestaurantMenuIcon />}>
+            <Link to={`/manager/menu/${menuId}`} className="toNavy">Go to Menu</Link>
+          </StyledButton>
+        </div>
+      );
+    } else if (staffType === 'customer' && menuId !== null && tableNumber !== null) {
+      console.log(menuId);
+      console.log(tableNumber);
+      return (
+        <div className="footer-container">
+          <StyledButton startIcon={<ShoppingCartIcon />}>
+            <Link to={`/customer/${sessionId}/view_order/${menuId}/${tableNumber}`} className="toNavy">View Cart</Link>
+          </StyledButton>
+          <StyledButton startIcon={<RestaurantMenuIcon />}>
+            <Link to={`/customer/${sessionId}/${menuId}/${tableNumber}`} className="toNavy">Go to Menu</Link>
+          </StyledButton>
+          <StyledButton startIcon={<SettingsIcon />}>
+            <Link to={`/customer/${sessionId}/${menuId}/personalise`} className="toNavy">Personalise</Link>
+          </StyledButton>
+        </div>
+      );
+    } else {
+      return null; // Render nothing if menuId or tableNumber is missing
     }
-    else if (localStorage.getItem('staff_type') === 'customer') {
-      return <div className="footer-container">
-      <StyledButton startIcon={<ShoppingCartIcon />}><Link to={`/customer/${sessionId}/view_order/${menuId}/${tableNumber}`} className='toNavy'>View Cart</Link></StyledButton>
-      <StyledButton startIcon={<RestaurantMenuIcon />}><Link to={`/customer/${sessionId}/${menuId}/${tableNumber}`} className='toNavy'>Go to Menu</Link></StyledButton>
-      </div>;
-    }
-  }
+  };
+
+
 
   React.useEffect(function () {
     if (localStorage.getItem('staff_id')) {
@@ -167,11 +189,12 @@ function App() {
 
             <Route path='/kitchen_staff' element={<div>Kitchen Staff Logged In</div>} />
             <Route path='/wait_staff' element={<div>Wait Staff Logged In</div>} />
-            
-            <Route path='/customer/:sessionId/searchrestaurant' element={<SearchRestaurant onSuccess={restaurantSuccess}/>} />
-            <Route path='/customer/:sessionId/:menuId/tablenumber' element={<SelectTableNumber onSuccess={tableNumberSuccess}/>} />
+
+            <Route path='/customer/:sessionId/searchrestaurant' element={<SearchRestaurant onSuccess={restaurantSuccess} />} />
+            <Route path='/customer/:sessionId/:menuId/tablenumber' element={<SelectTableNumber onSuccess={tableNumberSuccess} />} />
             <Route path='/customer/:sessionId/:menuId/:tableNumber' element={<CustomerMenuPage />} />
             <Route path='/customer/:sessionId/:menuId/:categoryId/:foodId' element={<FoodItemPage />} />
+            <Route path='/customer/:sessionId/:menuId/personalise' element={<PersonalisePage />} />
             <Route path='/customer/:sessionId/view_order/:menuId/:tableNumber' element={<CustomerViewOrderPage />} />
           </Routes>
         </main>
