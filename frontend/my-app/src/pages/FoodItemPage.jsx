@@ -9,6 +9,9 @@ import { StyledButton } from './CustomerOrStaff';
 function FoodItemPage() {
   const navigate = useNavigate();
   const sessionId = localStorage.getItem('session_id');
+  const menuId = localStorage.getItem('menu_id');
+  const tableNumber = localStorage.getItem('table_number');
+
   const [foodData, setFoodData] = React.useState({});
   const params = useParams();
   const [foodId, setFoodId] = React.useState(params.foodId);
@@ -31,7 +34,7 @@ function FoodItemPage() {
     <>
       <div className='login-page'>
         <Paper className='paper' elevation={5} sx={{ p: 4, mb: 2, position: 'relative', borderRadius:'20px'}}>
-          <StyledButton variant='outlined' onClick={() => navigate('/customer/1')} startIcon={<ArrowBackIcon size='large' />} sx={{ position: 'absolute', top: '16px', left: '16px', width:'auto' }}>
+          <StyledButton variant='outlined' onClick={() => navigate(`/customer/${sessionId}/${menuId}/${tableNumber}`)} startIcon={<ArrowBackIcon size='large' />} sx={{ position: 'absolute', top: '16px', left: '16px', width:'auto' }}>
             menu
           </StyledButton>
           <Typography className='h4' variant='h4' gutterBottom>
