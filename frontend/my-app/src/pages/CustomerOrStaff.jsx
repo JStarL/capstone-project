@@ -14,11 +14,12 @@ export const StyledButton = styled(Button)({
   width: '100%'
 });
 
-function CustomerOrStaff({ onSuccess }) {
+function CustomerOrStaff({ onSuccess, reset }) {
   const navigate = useNavigate();
 
   React.useEffect(function () {
-    onSuccess(null, null)
+    reset(null, null, null, null)
+    localStorage.clear()
   }, []);
 
   function selectCustomer() {

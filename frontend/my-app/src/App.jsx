@@ -33,11 +33,14 @@ function App() {
     }
     if (localStorage.getItem('staff_type')) {
       setStaffType(localStorage.getItem('staff_type'));
+      console.log(staffType)
     }
     if (localStorage.getItem('menu_id')) {
       setStaffType(localStorage.getItem('menu_id'));
     }
   }, []);
+
+  console.log(localStorage.getItem('staff_type'))
 
   // React.useEffect(function () {
   //   console.log('staff type change')
@@ -48,7 +51,15 @@ function App() {
     setStaffType(staff_type)
     setSessionId(session_id)
   }
+
+  const reset = (staff_type, session_id, menu_id, table_number) => {
+    setStaffType(staff_type)
+    setSessionId(session_id)
+    setMenuId(menu_id)
+    setTableNumber(table_number)
+  }
   const restaurantSuccess = (menu_id) => {
+    console.log(menu_id)
     setMenuId(menu_id)
   }
   const tableNumberSuccess = (table_number) => {
@@ -119,7 +130,7 @@ function App() {
       <StyledButton startIcon={<RestaurantMenuIcon />}><Link to={`/manager/menu/${menuId}`} className='toNavy'>Go to Menu</Link></StyledButton>
       </div>;
     }
-    else if (staffType === 'customer') {
+    else if (localStorage.getItem('staff_type') === 'customer') {
       return <div className="footer-container">
       <StyledButton startIcon={<ShoppingCartIcon />}><Link to={`/customer/${sessionId}/view_order/${menuId}/${tableNumber}`} className='toNavy'>View Cart</Link></StyledButton>
       <StyledButton startIcon={<RestaurantMenuIcon />}><Link to={`/customer/${sessionId}/${menuId}/${tableNumber}`} className='toNavy'>Go to Menu</Link></StyledButton>
@@ -145,7 +156,7 @@ function App() {
         </header>
         <main>
           <Routes>
-            <Route path='/' element={<CustomerOrStaff onSuccess={customer}/>} />
+            <Route path='/' element={<CustomerOrStaff onSuccess={customer} reset={reset}/>} />
             <Route path='/login' element={<ManagerLoginPage onSuccess={login} />} />
             <Route path='/register' element={<RegisterPage onSuccess={login} />} />
             {/* <Route path='/searchrestaurant' element={<SearchRestaurant />} />

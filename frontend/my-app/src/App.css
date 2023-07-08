@@ -50,6 +50,13 @@ body {
   width: 100%;
 }
 
+.view-order-page {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  flex-direction: column;
+}
+
 .login-form {
   width: 100%;
   padding: 20px;
