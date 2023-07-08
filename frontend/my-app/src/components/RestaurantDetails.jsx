@@ -12,6 +12,7 @@ function RestaurantDetails(props) {
 	function selectRestaurant() {
 		// set menu id in local storage 
 		localStorage.setItem('menu_id', props.menuId)
+		props.onSuccess(props.menuId)
 		// forward user to select table number 
 		navigate(`/customer/${sessionId}/${props.menuId}/tablenumber`)
 	}

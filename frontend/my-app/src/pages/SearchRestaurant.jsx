@@ -49,6 +49,7 @@ function SearchRestaurant({ onSuccess }) {
 							restaurantName={restaurant.restaurant_name}
 							restaurantAddress={restaurant.restaurant_address}
 							menuId={restaurant.menu_id}
+							onSuccess={onSuccess}
 						>
 						</RestaurantDetails>
 					))}
