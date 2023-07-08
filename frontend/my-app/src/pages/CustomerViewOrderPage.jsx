@@ -2,6 +2,7 @@ import React from 'react';
 import { Typography, Paper } from '@mui/material';
 import { useNavigate, useParams } from 'react-router-dom';
 import makeRequest from '../makeRequest';
+import OrderItem from '../components/OrderItem';
 
 function CustomerViewOrderPage() {
     const [orders, setOrders] = React.useState([])
@@ -10,7 +11,8 @@ function CustomerViewOrderPage() {
     const sessionId = params.sessionId;
 
     React.useEffect(() => {
-        fetchOrder();
+        const data = fetchOrder();
+        setOrders(data)
       }, [])
     
     async function fetchOrder() {
@@ -23,9 +25,7 @@ function CustomerViewOrderPage() {
         <>
         <div>CUSTOMER VIEW ORDER</div>
 		<div className='login-page' style={{ width: '100%' }}sx={{ alignItems: 'center' }}>
-			<Paper elevation={10} sx={{ p: 6, borderRadius: '20px', width: '40%' }}>
-				Food Details
-			</Paper>
+            <OrderItem />
 		</div></>
 	);
 }
