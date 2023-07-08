@@ -82,7 +82,7 @@ function ManagerFoodItem({ originalFoodName, originalFoodDescription, originalPr
       <div>
         {image ? (
           <div>
-            <img style={{ width: '30vh', height: '30vh', margin: '20px', borderRadius: '10px' }} src={image} alt='Food Item' />
+            <img style={{ width: '20vh', height: '20vh', margin: '20px', borderRadius: '10px' }} src={image} alt='Food Item' />
           </div>
         ) : (
           <div className='food-item-img'>IMG</div>

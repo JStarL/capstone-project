@@ -35,7 +35,7 @@ function SearchRestaurant({ onSuccess }) {
 		<div className='login-page' sx={{ alignItems: 'center' }}>
 			<Paper elevation={10} sx={{ p: 6, borderRadius: '20px', width: '60%' }}>
 				<Typography sx={{ mb: 3 }} variant="h4" gutterBottom>Select Restaurant</Typography>
-				<TextField label='Restaurant Name'
+				<TextField label='Search by Restaurant Name or Location'
 					onChange={e => setSearchQuery(e.target.value)}
 					variant="outlined"
 					sx={{ mb: 3 }}

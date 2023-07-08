@@ -160,7 +160,7 @@ function App() {
             <Route path='/customer/:sessionId/searchrestaurant' element={<SearchRestaurant onSuccess={restaurantSuccess}/>} />
             <Route path='/customer/:sessionId/:menuId/tablenumber' element={<SelectTableNumber onSuccess={tableNumberSuccess}/>} />
             <Route path='/customer/:sessionId/:menuId/:tableNumber' element={<CustomerMenuPage />} />
-            <Route path='/customer/:menuId/:foodId' element={<FoodItemPage />} />
+            <Route path='/customer/:sessionId/:menuId/:categoryId/:foodId' element={<FoodItemPage />} />
             <Route path='/customer/:sessionId/view_order/:menuId/:tableNumber' element={<CustomerViewOrderPage />} />
           </Routes>
         </main>
