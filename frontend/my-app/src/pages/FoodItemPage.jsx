@@ -25,7 +25,13 @@ function FoodItemPage() {
     const url = `/customer/view_menu_item?session_id=${sessionId}&menu_item_id=${foodId}`;
     const data = await makeRequest(url, 'GET', undefined, undefined);
     console.log(data);
+   
     setFoodData(data);
+  }
+
+  function backToMenu() {
+    navigate(`/customer/${sessionId}/${menuId}/${tableNumber}`)
+    console.log(params.categoryId) // set this to currently selected
   }
 
   if (!foodData) return <>loading...</>;
@@ -34,7 +40,7 @@ function FoodItemPage() {
     <>
       <div className='login-page'>
         <Paper className='paper' elevation={5} sx={{ p: 4, mb: 2, position: 'relative', borderRadius:'20px'}}>
-          <StyledButton variant='outlined' onClick={() => navigate(`/customer/${sessionId}/${menuId}/${tableNumber}`)} startIcon={<ArrowBackIcon size='large' />} sx={{ position: 'absolute', top: '16px', left: '16px', width:'auto' }}>
+          <StyledButton variant='outlined' onClick={() => backToMenu()} startIcon={<ArrowBackIcon size='large' />} sx={{ position: 'absolute', top: '16px', left: '16px', width:'auto' }}>
             menu
           </StyledButton>
           <Typography className='h4' variant='h4' gutterBottom>

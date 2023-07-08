@@ -71,44 +71,45 @@ function CustomerMenuPage() {
 
   if (!categories || !Array.isArray(categories)) return <>loading...</>;
 
-  return <>
-    <Typography className='h4' variant="h4" gutterBottom>Customer Menu Page - {currentSelectedCategory}</Typography>
+  return (
+    <>
+      <Typography className='h4' variant="h4" gutterBottom>Customer Menu Page - {currentSelectedCategory}</Typography>
 
-    <div style={{ display: 'flex', flexDirection: 'row' }}>
-      <div style={{ width: '25%', backgroundColor: 'white', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-        {categories.map((category) => (
-          <CategoryCustomer
-            categoryName={category[Object.keys(category)[0]][0].toString()}
-            key={Object.keys(category)[0]} // category id 
-            id={Object.keys(category)[0]}
-            setCurrentSelectedCategory={setCurrentSelectedCategory}
-            currentSelectedCategoryId={currentSelectedCategoryId}
-            fetchAllMenuData={fetchAllMenuData}
-            setCurrentSelectedCategoryId={setCurrentSelectedCategoryId}
-            setMenuItems={setMenuItems}
-            fetchCategoryMenuItems={fetchCategoryMenuItems}
-          >
-          </CategoryCustomer>
-
-        ))}
+      <div style={{ display: 'flex', flexDirection: 'row' }}>
+        <div style={{ width: '25%', backgroundColor: 'white', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+          {categories.map((category) => (
+            <CategoryCustomer
+              categoryName={category[Object.keys(category)[0]][0].toString()}
+              key={Object.keys(category)[0]} // category id 
+              id={Object.keys(category)[0]}
+              setCurrentSelectedCategory={setCurrentSelectedCategory}
+              currentSelectedCategoryId={currentSelectedCategoryId}
+              fetchAllMenuData={fetchAllMenuData}
+              setCurrentSelectedCategoryId={setCurrentSelectedCategoryId}
+              setMenuItems={setMenuItems}
+              fetchCategoryMenuItems={fetchCategoryMenuItems}
+            >
+            </CategoryCustomer>
+          ))}
+        </div>
+        <div style={{ width: '75%', height: '100%' }}>
+          {menuItems.map((menuItem) => (
+            <CustomerFoodItem
+              originalFoodName={menuItem.food_name}
+              originalFoodDescription={menuItem.food_description}
+              originalPrice={menuItem.food_price.toString()}
+              originalImage={menuItem.food_image}
+              originalIngredients={menuItem.food_ingredients}
+              foodId={menuItem.food_id.toString()}
+              categoryId={currentSelectedCategoryId}
+              fetchAllMenuData={fetchAllMenuData}
+              fetchCategoryMenuItems={fetchCategoryMenuItems}
+            />
+          ))}
+        </div>
       </div>
-      <div style={{ width: '75%', height: '100%' }}>
-        {menuItems.map((menuItem) => (
-          <CustomerFoodItem
-            originalFoodName={menuItem.food_name}
-            originalFoodDescription={menuItem.food_description}
-            originalPrice={menuItem.food_price.toString()}
-            originalImage={menuItem.food_image}
-            originalIngredients={menuItem.food_ingredients}
-            foodId={menuItem.food_id.toString()}
-            categoryId={currentSelectedCategoryId}
-            fetchAllMenuData={fetchAllMenuData}
-            fetchCategoryMenuItems={fetchCategoryMenuItems}
-          />
-        ))}
-      </div>
-    </div>
-  </>
+    </>
+  );
 }
 
 export default CustomerMenuPage;
