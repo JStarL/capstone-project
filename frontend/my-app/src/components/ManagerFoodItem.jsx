@@ -115,7 +115,7 @@ function ManagerFoodItem({ originalFoodName, originalFoodDescription, originalPr
           ? <Button sx={{ color: '#002250' }} onClick={deleteFoodItem} startIcon={<DeleteIcon />}></Button>
           : null
         }
-        <StyledButton sx={{ width: '35%' }} onClick={updateFoodItem}>UPDATE</StyledButton>
+        <StyledButton sx={{ width: '45%' }} onClick={updateFoodItem}>UPDATE</StyledButton>
       </div>
     </div>
   </>
