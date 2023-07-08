@@ -2,6 +2,7 @@ import React from 'react';
 import { Typography, Paper, Grid, TextField } from '@mui/material';
 import { useNavigate, useParams } from 'react-router-dom';
 import { StyledButton } from './CustomerOrStaff';
+import makeRequest from '../makeRequest';
 
 function SelectTableNumber({ onSuccess }) {
 	const navigate = useNavigate();
@@ -10,11 +11,20 @@ function SelectTableNumber({ onSuccess }) {
 	const menuId = params.menuId
 	const sessionId = params.sessionId
 	function selectTableNumber() {
-		// set menu id in local storage 
-		localStorage.setItem('table_number', tableNumber)
-		// forward user to select table number 
-		onSuccess(tableNumber)
-		navigate(`/customer/${sessionId}/${menuId}/${tableNumber}`)	
+		const body = JSON.stringify({
+			'session_id': sessionId,
+			'menu_id': menuId,
+			'table_id': tableNumber,
+		})
+		makeRequest('/customer/menu/table', 'POST', body, undefined)
+			.then(data => {
+				console.log(data)
+				localStorage.setItem('table_number', tableNumber)
+				// forward user to select table number
+				onSuccess(tableNumber)
+				navigate(`/customer/${sessionId}/${menuId}/${tableNumber}`)	
+			})
+			.catch(e => console.log('Error: ' + e))
 	}
 	return (
 		<div className='login-page' sx={{ alignItems: 'center' }}>
@@ -28,7 +38,7 @@ function SelectTableNumber({ onSuccess }) {
 							inputProps={{ min: 0 }}
 							sx={{m:2, width: '100%'}}
 							value={tableNumber}
-              onChange={e => setTableNumber(e.target.value)}
+              				onChange={e => setTableNumber(e.target.value)}
 						/>
 						<StyledButton sx={{m:2, width:'100%'}} variant="outlined" onClick={() => selectTableNumber()}>
 							Confirm

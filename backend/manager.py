@@ -397,15 +397,29 @@ def manager_update_category_ordering(cur, category_id, prev_ordering_id, new_ord
     invalid_category_id = { 'error': 'invalid category_id'}
     invalid_pre_ordering = { 'error': 'prev_ordering_id is invalid'}
     database_error_no_ordering = { 'error': 'no cateogry_id found with the new_ordering_id' }
+    cant_swap_best_selling = { 'error': 'cannot swap with "Best Selling"'}
     success = { 'success': 'success in updating ordering of category' }
     failed_swap = { 'error': 'Did not swap properly'}
     
-    # might change 'ordering' to the actual attirbute name once it is added in the database
-    query0 = """
-        select ordering from categories where id = %s;
+    # Can't swap the order with the Best Selling category
+
+    query0_0 = """
+        select name from categories where ordering_id = %s;
+    """
+    cur.execute(query0_0, [new_ordering_id])
+    list1 = cur.fetchall()
+
+    if len(list1) == 0:
+        return database_error_no_ordering
+
+    if list1[0][0] == 'Best Selling':
+        return cant_swap_best_selling
+
+    query0_1 = """
+        select ordering_id from categories where id = %s;
     """
 
-    cur.execute(query0, [category_id])
+    cur.execute(query0_1, [category_id])
     list1 = cur.fetchall()
 
     if len(list1) == 0:
@@ -413,16 +427,14 @@ def manager_update_category_ordering(cur, category_id, prev_ordering_id, new_ord
 
     if list1[0][0] != prev_ordering_id:
         return invalid_pre_ordering
-    # might change 'ordering' to the actual attirbute name once it is added in the database
     query1 = """
         UPDATE categories
-        SET ordering = %s           
+        SET ordering_id = %s           
         WHERE id = %s
         ;
     """
-    # might change 'ordering' to the actual attirbute name once it is added in the database
     query2 = """
-        select id from categories where ordering = %s;
+        select id from categories where ordering_id = %s;
     """
     
     cur.execute(query2, [new_ordering_id])
@@ -438,13 +450,13 @@ def manager_update_category_ordering(cur, category_id, prev_ordering_id, new_ord
     cur.execute(query1, [new_ordering_id, category_id])
     
     # checking if it got swaped 
-    cur.execute(query0, [category_id])
+    cur.execute(query0_1, [category_id])
     list1 = cur.fetchall()
 
     if list1[0][0] != new_ordering_id:
         return failed_swap
     
-    cur.execute(query0, [prev_category_id])
+    cur.execute(query0_1, [prev_category_id])
     list1 = cur.fetchall()
     
     if list1[0][0] != prev_ordering_id:
@@ -459,9 +471,8 @@ def manager_update_menu_item_ordering(cur, menu_item_id, prev_ordering_id, new_o
     success = { 'success': 'success in updating ordering of menu items' }
     swap_fail = { 'error': 'Did not swap properly'}
     
-    # might change 'ordering' to the actual attirbute name once it is added in the database
     query0 = """
-        select ordering from menu_items where id = %s;
+        select ordering_id from menu_items where id = %s;
     """
 
     cur.execute(query0, [menu_item_id])
@@ -472,16 +483,16 @@ def manager_update_menu_item_ordering(cur, menu_item_id, prev_ordering_id, new_o
 
     if list1[0][0] != prev_ordering_id:
         return invalid_pre_ordering
-    # might change 'ordering' to the actual attirbute name once it is added in the database
+
     query1 = """
         UPDATE menu_items
-        SET ordering = %s           
+        SET ordering_id = %s           
         WHERE id = %s
         ;
     """
-    # might change 'ordering' to the actual attirbute name once it is added in the database
+
     query2 = """
-        select id from menu_items where ordering = %s;
+        select id from menu_items where ordering_id = %s;
     """
     
     cur.execute(query2, [new_ordering_id])
