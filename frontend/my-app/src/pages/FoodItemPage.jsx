@@ -8,6 +8,7 @@ import { StyledButton } from './CustomerOrStaff';
 
 function FoodItemPage() {
   const navigate = useNavigate();
+  // Change to get from params
   const sessionId = localStorage.getItem('session_id');
   const menuId = localStorage.getItem('menu_id');
   const tableNumber = localStorage.getItem('table_number');
@@ -32,6 +33,21 @@ function FoodItemPage() {
   function backToMenu() {
     navigate(`/customer/${sessionId}/${menuId}/${tableNumber}`)
     console.log(params.categoryId) // set this to currently selected
+  }
+
+  function addToOrder() {
+    const body = JSON.stringify({
+      'session_id': sessionId,
+      'menu_id': menuId,
+      'menu_item_id': foodId,
+      'amount': 1,
+      'title': foodData.food_name
+    })
+    makeRequest('/customer/add_menu_item', 'POST', body, undefined)
+      .then(data => {
+        console.log(data)
+      })
+      .catch(e => console.log('Error: ' + e))
   }
 
   if (!foodData) return <>loading...</>;
@@ -78,7 +94,7 @@ function FoodItemPage() {
             </Typography>
           </div>
           <Box mt={2}>
-            <StyledButton variant='outlined'>
+            <StyledButton onClick={addToOrder} variant='outlined'>
               Add to Order
             </StyledButton>
           </Box>
