@@ -35,7 +35,7 @@ function CustomerMenuPage() {
   React.useEffect(() => {
     const fetchCategoryData = async () => {
       if (currentSelectedCategoryId !== -1) {
-        const url = `/customer/view_category?session_id=${sessionId}&category_id=${currentSelectedCategoryId}`;
+        const url = `/customer/view_category?session_id=${sessionId}&category_id=${currentSelectedCategoryId}&allergies=[]`;
         const data = await makeRequest(url, 'GET', undefined, undefined)
         setMenuItems(data)
         fetchAllMenuData()
@@ -45,7 +45,7 @@ function CustomerMenuPage() {
   }, [currentSelectedCategoryId])
 
   async function fetchAllMenuData() {
-    const url = `/customer/view_menu?session_id=${sessionId}&menu_id=${menuId}`;
+    const url = `/customer/view_menu?session_id=${sessionId}&menu_id=${menuId}&allergies=[]`;
     const data = await makeRequest(url, 'GET', undefined, undefined);
     console.log(data)
     setCategories(data);
