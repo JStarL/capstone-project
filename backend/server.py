@@ -401,7 +401,7 @@ def customer_remove_menu_item_flask():
         return { 'error': 'no orders with the given menu_id'}
 
     # find the order with session_id 
-    order_list = [order for order in orders_list if order["session"] == session_id]
+    order_list = [order for order in orders_list if order["session_id"] == session_id]
     
     if len(order_list) > 0:
         # check that the menu_item_id is there to be deleted
