@@ -10,6 +10,7 @@ function CustomerFoodItem (props) {
   const params = useParams();
   const sessionId = localStorage.getItem('session_id')
   const menuId = params.menuId
+
   function addToOrder() {
     const body = JSON.stringify({
       'session_id': sessionId,

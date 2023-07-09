@@ -1,6 +1,6 @@
 import './App.css';
 import React from 'react';
-import { BrowserRouter, Routes, Route, Link } from 'react-router-dom';
+import { BrowserRouter, Routes, Route, Link, useParams } from 'react-router-dom';
 import { Button } from '@mui/material';
 import PersonAddAlt1SharpIcon from '@mui/icons-material/PersonAddAlt1Sharp';
 import RestaurantMenuIcon from '@mui/icons-material/RestaurantMenu';
@@ -29,6 +29,8 @@ function App() {
   const [sessionId, setSessionId] = React.useState(localStorage.getItem('session_id'))
   const [tableNumber, setTableNumber] = React.useState(localStorage.getItem('table_number'))
 
+  const params = useParams();
+  console.log(params.sessionId)
   React.useEffect(function () {
     if (localStorage.getItem('staff_id')) {
       setId(localStorage.getItem('staff_id'));
