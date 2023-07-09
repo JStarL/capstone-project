@@ -474,6 +474,7 @@ def get_allergies_flask():
         tmp.append(tup[2])
         return_list.append(tmp)
 
+    cur.close()
     return dumps(return_list)
 
 ##############################################################################################################################
