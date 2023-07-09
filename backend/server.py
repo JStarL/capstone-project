@@ -367,6 +367,9 @@ def customer_add_menu_item_flask():
     amount = data['amount']
     title = data['title']
 
+    if int(amount) < 0:
+        return { 'error': 'amount cannot be negative' }
+
     orders_list = None
     if menu_id in orders:
         orders_list = orders[menu_id]
@@ -377,11 +380,16 @@ def customer_add_menu_item_flask():
     order_list = [order for order in orders_list if order["session_id"] == session_id]
     
     if len(order_list) > 0:
-        order_list[0]['menu_items'].append( {
-            "menu_item_id" : menu_item_id,
-            "amount" : amount,
-            "title" : title
-        } )
+        menu_item_list = [menu_item for menu_item in order_list[0]['menu_items'] if menu_item['menu_item_id'] == menu_item_id]
+        
+        if len(menu_item_list) > 0:
+            menu_item_list[0]['amount'] += amount
+        else:
+            order_list[0]['menu_items'].append( {
+                "menu_item_id" : menu_item_id,
+                "amount" : amount,
+                "title" : title
+            } )
         return order_list[0]
     else:
         return {'error': 'invalid session_id' }
