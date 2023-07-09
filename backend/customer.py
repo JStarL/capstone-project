@@ -7,20 +7,30 @@ def customer_view_menu(cur, menu_id, allergies_list):
     select id, name, ordering_id from categories where menu_id = %s order by ordering_id;
     """
     
-    allergies_tuple = tuple(allergies_list)
+    query_menu_items = None
+    if len(allergies_list) == 0:
+        query_menu_items = """
+            select id, title, description, image, price, ordering_id
+            from menu_items
+            where category_id = %s
+            order by ordering_id
+            ;
+        """
+    else:
+        allergies_tuple = tuple(allergies_list)
 
-    query_menu_items = """
-    select id, title, description, image, price, ordering_id
-    from menu_items m
-    where category_id = %s 
-    and not exists (
-        select *
-        from ingredients i
-        where i.menu_item_id = m.id
-            and i.allergy_id in %s
-    )
-    order by ordering_id;
-    """
+        query_menu_items = """
+            select id, title, description, image, price, ordering_id
+            from menu_items m
+            where category_id = %s 
+            and not exists (
+                select *
+                from ingredients i
+                where i.menu_item_id = m.id
+                    and i.allergy_id in %s
+            )
+            order by ordering_id;
+         """
     cur.execute(query_categories, [menu_id])
     categories = cur.fetchall()        
     
@@ -35,7 +45,10 @@ def customer_view_menu(cur, menu_id, allergies_list):
             # give the frontend all the information on
             # food details so it can show on the UI
 
-            cur.execute(query_menu_items, [categ_id, allergies_tuple])
+            if len(allergies_list) == 0:
+                cur.execute(query_menu_items, [categ_id])
+            else:
+                cur.execute(query_menu_items, [categ_id, allergies_tuple])
             menu_items_list = []
             for menu_item in cur.fetchall():
                 tmp = {}
@@ -66,21 +79,34 @@ def customer_view_category(cur, category_id, allergies_list):
     if len(list1) == 0:
         return invalid_category_id
 
-    query1 = """
-    select id, title, description, image, price, ordering_id
-    from menu_items m
-    where category_id = %s
-    and not exists (
-        select *
-        from ingredients i
-        where i.menu_item_id = m.id
-            and i.allergy_id in %s
-    )
-    order by ordering_id;
-    """
+    query1 = None
+    if len(allergies_list) == 0:
+        query1 = """
+            select id, title, description, image, price, ordering_id
+            from menu_items
+            where category_id = %s
+            order by ordering_id
+            ;
+        """
+    else:
+        allergies_tuple = tuple(allergies_list)
+        query1 = """
+            select id, title, description, image, price, ordering_id
+            from menu_items m
+            where category_id = %s
+            and not exists (
+                select *
+                from ingredients i
+                where i.menu_item_id = m.id
+                    and i.allergy_id in %s
+            )
+            order by ordering_id;
+        """
 
-    allergies_tuple = tuple(allergies_list)
-    cur.execute(query1, [category_id, allergies_tuple])
+    if len(allergies_list) == 0:
+        cur.execute(query1, [category_id])
+    else:
+        cur.execute(query1, [category_id, allergies_tuple])
     list1 = cur.fetchall()
 
     for tup in list1:
