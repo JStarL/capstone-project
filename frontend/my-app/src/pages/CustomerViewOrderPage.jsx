@@ -14,17 +14,18 @@ function CustomerViewOrderPage() {
     React.useEffect(() => {
       async function fetchData() {
         const data = await fetchOrder();
-        setOrders(data.menu_items)
+        // setOrders(data.menu_items)
         console.log(data.menu_items)
       }
       fetchData();
       }, [])
     
     async function fetchOrder() {
-        const url = `/customer/view_order?session_id=${sessionId}&menu_id=${menuId}`;
-        const data = await makeRequest(url, 'GET', undefined, undefined)
-        console.log(data.menu_items)
-        return data;
+      const url = `/customer/view_order?session_id=${sessionId}&menu_id=${menuId}`;
+      const data = await makeRequest(url, 'GET', undefined, undefined)
+      console.log(data.menu_items)
+      setOrders(data.menu_items)
+      return data;
     }
 	return (
     <>
@@ -35,6 +36,7 @@ function CustomerViewOrderPage() {
           amount={order.amount}
           menu_item_id={order.menu_item_id}
           foodName={order.title}
+          fetchOrder={fetchOrder}
         >
         </OrderItem>
       ))}

@@ -14,6 +14,7 @@ function OrderItem (props) {
   const params = useParams();
   const menuId = params.menuId;
   const sessionId = params.sessionId;
+  console.log(`Menu Item Id ${props.menu_item_id}`)
 
   React.useEffect(() => {
     async function fetchMenuDetails() {
@@ -27,6 +28,7 @@ function OrderItem (props) {
     }, [])
 
   React.useEffect(() => {
+    console.log(menuId)
     if (amount < prevAmount) {
       removeFromOrder(1);
     }
@@ -47,20 +49,22 @@ function OrderItem (props) {
     makeRequest('/customer/add_menu_item', 'POST', body, undefined)
       .then(data => {
         console.log(data)
+        props.fetchOrder()
       })
       .catch(e => console.log('Error: ' + e))
   }
 
-  function removeFromOrder(amount) {
+  function removeFromOrder(amountNum) {
     const body = JSON.stringify({
       'session_id': sessionId,
       'menu_id': menuId,
       'menu_item_id': order.food_id,
-      'amount': amount,
+      'amount': amountNum,
     })
     makeRequest('/customer/remove_menu_item', 'DELETE', body, undefined)
       .then(data => {
         console.log(data)
+        props.fetchOrder()
       })
       .catch(e => console.log('Error: ' + e))
   }
@@ -79,7 +83,7 @@ function OrderItem (props) {
     </div>
     <div className='food-item-end' style={{ flexDirection: 'column', alignItems:'center', justifyContent:'center'}}>
       {/* <div> */}
-        <StyledButton style={{ width: '50%', marginTop: '25%', marginRight: '10px' }}><DeleteIcon /></StyledButton>
+        <StyledButton onClick={() => removeFromOrder(amount)}style={{ width: '50%', marginTop: '25%', marginBottom: '5px', marginRight: '10px' }}><DeleteIcon /></StyledButton>
       {/* </div> */}
         <TextField
         label="Amount"
