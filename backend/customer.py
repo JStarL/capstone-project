@@ -30,7 +30,12 @@ def customer_view_menu(cur, menu_id, allergies_list):
                     and i.allergy_id in %s
             )
             order by ordering_id;
-         """
+        """
+    
+    query_ingredients = """
+    select name, allergy_id from ingredients where menu_item_id = %s;
+    """     
+    
     cur.execute(query_categories, [menu_id])
     categories = cur.fetchall()        
     
@@ -49,8 +54,15 @@ def customer_view_menu(cur, menu_id, allergies_list):
                 cur.execute(query_menu_items, [categ_id])
             else:
                 cur.execute(query_menu_items, [categ_id, allergies_tuple])
-            menu_items_list = []
-            for menu_item in cur.fetchall():
+            menu_items_list = cur.fetchall()
+            return_items_list = []
+            for menu_item in menu_items_list:
+                
+                cur.execute(query_ingredients, [menu_item[0]])
+                ingredients_list = []
+                for ingredient in cur.fetchall():
+                    ingredients_list.append([ingredient[0], ingredient[1]])
+                
                 tmp = {}
                 tmp.update({'food_id': menu_item[0]})
                 tmp.update({'food_name': menu_item[1]})
@@ -58,8 +70,9 @@ def customer_view_menu(cur, menu_id, allergies_list):
                 tmp.update({'food_image': menu_item[3]})
                 tmp.update({'food_price': menu_item[4]})
                 tmp.update({'food_ordering_id': menu_item[5]})
-                menu_items_list.append(tmp)
-            menu.append({str(categ_id): ['Best Selling', menu_items_list, categ[2]]})
+                tmp.update({'food_ingredients': ingredients_list})
+                return_items_list.append(tmp)
+            menu.append({str(categ_id): ['Best Selling', return_items_list, categ[2]]})
         else:
             menu.append({str(categ_id): [categ[1], [], categ[2]]})
         
@@ -110,6 +123,15 @@ def customer_view_category(cur, category_id, allergies_list):
     list1 = cur.fetchall()
 
     for tup in list1:
+        
+        query_ingredients = """
+        select name, allergy_id from ingredients where menu_item_id = %s;
+        """
+        cur.execute(query_ingredients, [tup[0]])
+        ingredients_list = []
+        for ingredient in cur.fetchall():
+            ingredients_list.append([ingredient[0], ingredient[1]])
+        
         tmp = {}
         tmp.update({'food_id': tup[0]})
         tmp.update({'food_name': tup[1]})
@@ -117,6 +139,7 @@ def customer_view_category(cur, category_id, allergies_list):
         tmp.update({'food_image': tup[3]})
         tmp.update({'food_price': tup[4]})
         tmp.update({'food_ordering_id': tup[5]})
+        tmp.update({'food_ingredients': ingredients_list})
         menu_items.append(tmp)
 
     return menu_items
@@ -139,6 +162,15 @@ def customer_view_menu_item(cur, menu_item_id):
         return invalid_id
     else: #shows the food item
         tup = list1[0]
+
+        query_ingredients = """
+        select name, allergy_id from ingredients where menu_item_id = %s;
+        """
+        cur.execute(query_ingredients, [menu_item_id])
+        ingredients_list = []
+        for ingredient in cur.fetchall():
+            ingredients_list.append([ingredient[0], ingredient[1]])
+
         food.update({'food_id': menu_item_id})
         food.update({'food_name': tup[0]})
         food.update({'food_description': tup[1]})
@@ -146,6 +178,7 @@ def customer_view_menu_item(cur, menu_item_id):
         food.update({'food_price': tup[3]})
         food.update({'category_id': tup[4]})
         food.update({'food_ordering_id': tup[5]})
+        food.update({'food_ingredients': ingredients_list})
         return food
     
 def customer_menu_search(cur, query):
