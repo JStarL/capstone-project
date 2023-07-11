@@ -301,25 +301,27 @@ def manager_update_menu_item_ordering_flask():
 def customer_view_menu_flask():
     menu_id = request.args.get("menu_id")
     session_id = request.args.get("session_id")
+    allergy_ids = ast.literal_eval(request.args.get("allergies"))
     cur = None
     if session_id in cur_dict['customers']:
         cur = cur_dict['customers'][session_id]
     else:
         cur = db_conn.cursor()
         cur_dict['customers'][session_id] = cur
-    return dumps(customer_view_menu(cur, menu_id))
+    return dumps(customer_view_menu(cur, menu_id, allergy_ids))
 
 @APP.route("/customer/view_category", methods=['GET'])
 def customer_view_category_flask():
     session_id = request.args.get("session_id")
     category_id = request.args.get("category_id")
+    allergy_ids = ast.literal_eval(request.args.get("allergies"))
     cur = None
     if session_id in cur_dict['customers']:
         cur = cur_dict['customers'][session_id]
     else:
         cur = db_conn.cursor()
         cur_dict['customers'][session_id] = cur
-    return dumps(customer_view_category(cur, category_id))
+    return dumps(customer_view_category(cur, category_id, allergy_ids))
 
 @APP.route("/customer/view_menu_item", methods=['GET'])
 def customer_view_menu_item_flask():
@@ -365,6 +367,9 @@ def customer_add_menu_item_flask():
     amount = data['amount']
     title = data['title']
 
+    if int(amount) < 0:
+        return { 'error': 'amount cannot be negative' }
+
     orders_list = None
     if menu_id in orders:
         orders_list = orders[menu_id]
@@ -375,11 +380,16 @@ def customer_add_menu_item_flask():
     order_list = [order for order in orders_list if order["session_id"] == session_id]
     
     if len(order_list) > 0:
-        order_list[0]['menu_items'].append( {
-            "menu_item_id" : menu_item_id,
-            "amount" : amount,
-            "title" : title
-        } )
+        menu_item_list = [menu_item for menu_item in order_list[0]['menu_items'] if menu_item['menu_item_id'] == menu_item_id]
+        
+        if len(menu_item_list) > 0:
+            menu_item_list[0]['amount'] += amount
+        else:
+            order_list[0]['menu_items'].append( {
+                "menu_item_id" : menu_item_id,
+                "amount" : amount,
+                "title" : title
+            } )
         return order_list[0]
     else:
         return {'error': 'invalid session_id' }
@@ -399,7 +409,7 @@ def customer_remove_menu_item_flask():
         return { 'error': 'no orders with the given menu_id'}
 
     # find the order with session_id 
-    order_list = [order for order in orders_list if order["session"] == session_id]
+    order_list = [order for order in orders_list if order["session_id"] == session_id]
     
     if len(order_list) > 0:
         # check that the menu_item_id is there to be deleted
@@ -424,7 +434,7 @@ def customer_remove_menu_item_flask():
 @APP.route("/customer/view_order", methods=['GET'])
 def customer_view_order_flask():
     session_id = request.args.get("session_id")
-    menu_id = request.args.get['menu_id']
+    menu_id = request.args.get('menu_id')
 
     orders_list = None
     if menu_id in orders:
@@ -453,6 +463,27 @@ def customer_menu_search_flask():
         cur = db_conn.cursor()
         cur_dict['customers'][session_id] = cur
     return dumps(customer_menu_search(cur, query))
+
+@APP.route("/get_allergies", methods=['GET'])
+def get_allergies_flask():
+    cur = db_conn.cursor()
+
+    query = """
+        select id, name, description from allergies;
+    """
+
+    cur.execute(query, [])
+
+    return_list = []
+    for tup in cur.fetchall():
+        tmp = []
+        tmp.append(tup[0])
+        tmp.append(tup[1])
+        tmp.append(tup[2])
+        return_list.append(tmp)
+
+    cur.close()
+    return dumps(return_list)
 
 ##############################################################################################################################
 ################################################ OLD PROJECT STUFF ###########################################################

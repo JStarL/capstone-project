@@ -62,6 +62,12 @@ body {
     margin-right: 30px;
 }
 
+.food-item-end {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+}
+
 .new-item-div {
     /* border: solid; */
     display: flex;

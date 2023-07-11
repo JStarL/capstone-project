@@ -93,3 +93,7 @@ Week 6
 - Worked on: 
   - Delete category bug when trying to delete a currently selected category
   - Overall styling and aesthetics of the UI 
+  - Search restaurant 
+  - Selecting Table number 
+  - Personalisation
+  

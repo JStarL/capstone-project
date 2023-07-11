@@ -11,13 +11,13 @@ import PersonAddAlt1SharpIcon from '@mui/icons-material/PersonAddAlt1Sharp';
 function CustomerMenuPage() {
   const [categories, setCategories] = React.useState([]);
   const [currentSelectedCategory, setCurrentSelectedCategory] = React.useState('Best Selling');
-  const [currentSelectedCategoryId, setCurrentSelectedCategoryId] = React.useState(1);
+  const [currentSelectedCategoryId, setCurrentSelectedCategoryId] = React.useState(-1);
   const [menuItems, setMenuItems] = React.useState([]); // List of Menu items for the current selected category
 
   const navigate = useNavigate();
 
   const sessionId = localStorage.getItem('session_id');
-  const menuId = 1 // hard code for now but update this when we implement search restaurant
+  const menuId = localStorage.getItem('menu_id') // hard code for now but update this when we implement search restaurant
   // localStorage.getItem('menu_id');
 
   React.useEffect(() => {
@@ -34,11 +34,8 @@ function CustomerMenuPage() {
 
   React.useEffect(() => {
     const fetchCategoryData = async () => {
-      if (currentSelectedCategoryId !== 1) {
-        // await fetchCategoryMenuItems();
-        // setMenuItems(data)
-        // console.log(data)
-        const url = `/customer/view_category?session_id=${sessionId}&category_id=${currentSelectedCategoryId}`;
+      if (currentSelectedCategoryId !== -1) {
+        const url = `/customer/view_category?session_id=${sessionId}&category_id=${currentSelectedCategoryId}&allergies=[]`;
         const data = await makeRequest(url, 'GET', undefined, undefined)
         setMenuItems(data)
         fetchAllMenuData()
@@ -48,8 +45,9 @@ function CustomerMenuPage() {
   }, [currentSelectedCategoryId])
 
   async function fetchAllMenuData() {
-    const url = `/customer/view_menu?session_id=${sessionId}&menu_id=${menuId}`;
+    const url = `/customer/view_menu?session_id=${sessionId}&menu_id=${menuId}&allergies=[]`;
     const data = await makeRequest(url, 'GET', undefined, undefined);
+    console.log(data)
     setCategories(data);
 
     // for (const [key, value] of Object.entries(data)) {
@@ -71,50 +69,47 @@ function CustomerMenuPage() {
     return data
   }
 
-  React.useEffect(() => {
-  }, [menuItems]);
-
   if (!categories || !Array.isArray(categories)) return <>loading...</>;
 
-  return <>
-    <Typography className='h4' variant="h4" gutterBottom>Customer Menu Page - {currentSelectedCategory}</Typography>
+  return (
+    <>
+      <Typography className='h4' variant="h4" gutterBottom>Customer Menu Page - {currentSelectedCategory}</Typography>
 
-    <div style={{ display: 'flex', flexDirection: 'row' }}>
-      <div style={{ width: '25%', backgroundColor: 'white', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-        {categories.map((category) => (
-          <CategoryCustomer
-            categoryName={category[Object.keys(category)[0]][0].toString()}
-            key={Object.keys(category)[0]} // category id 
-            id={Object.keys(category)[0]}
-            setCurrentSelectedCategory={setCurrentSelectedCategory}
-            currentSelectedCategoryId={currentSelectedCategoryId}
-            fetchAllMenuData={fetchAllMenuData}
-            setCurrentSelectedCategoryId={setCurrentSelectedCategoryId}
-            setMenuItems={setMenuItems}
-            fetchCategoryMenuItems={fetchCategoryMenuItems}
-          >
-            {console.log()}
-          </CategoryCustomer>
-
-        ))}
+      <div style={{ display: 'flex', flexDirection: 'row' }}>
+        <div style={{ width: '25%', backgroundColor: 'white', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+          {categories.map((category) => (
+            <CategoryCustomer
+              categoryName={category[Object.keys(category)[0]][0].toString()}
+              key={Object.keys(category)[0]} // category id 
+              id={Object.keys(category)[0]}
+              setCurrentSelectedCategory={setCurrentSelectedCategory}
+              currentSelectedCategoryId={currentSelectedCategoryId}
+              fetchAllMenuData={fetchAllMenuData}
+              setCurrentSelectedCategoryId={setCurrentSelectedCategoryId}
+              setMenuItems={setMenuItems}
+              fetchCategoryMenuItems={fetchCategoryMenuItems}
+            >
+            </CategoryCustomer>
+          ))}
+        </div>
+        <div style={{ width: '75%', height: '100%' }}>
+          {menuItems.map((menuItem) => (
+            <CustomerFoodItem
+              originalFoodName={menuItem.food_name}
+              originalFoodDescription={menuItem.food_description}
+              originalPrice={menuItem.food_price.toString()}
+              originalImage={menuItem.food_image}
+              originalIngredients={menuItem.food_ingredients}
+              foodId={menuItem.food_id.toString()}
+              categoryId={currentSelectedCategoryId}
+              fetchAllMenuData={fetchAllMenuData}
+              fetchCategoryMenuItems={fetchCategoryMenuItems}
+            />
+          ))}
+        </div>
       </div>
-      <div style={{ width: '75%', height: '100%' }}>
-        {menuItems.map((menuItem) => (
-          <CustomerFoodItem
-            originalFoodName={menuItem.food_name}
-            originalFoodDescription={menuItem.food_description}
-            originalPrice={menuItem.food_price.toString()}
-            originalImage={menuItem.food_image}
-            originalIngredients={menuItem.food_ingredients}
-            foodId={menuItem.food_id.toString()}
-            categoryId={currentSelectedCategoryId}
-            fetchAllMenuData={fetchAllMenuData}
-            fetchCategoryMenuItems={fetchCategoryMenuItems}
-          />
-        ))}
-      </div>
-    </div>
-  </>
+    </>
+  );
 }
 
 export default CustomerMenuPage;
