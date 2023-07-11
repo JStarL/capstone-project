@@ -1,5 +1,5 @@
 
-def customer_view_menu(cur, menu_id):
+def customer_view_menu(cur, menu_id, allergies_list):
     invalid_menu_id = { 'error': 'invalid menu id' } # error message
     menu = []
 
@@ -7,9 +7,35 @@ def customer_view_menu(cur, menu_id):
     select id, name, ordering_id from categories where menu_id = %s order by ordering_id;
     """
     
-    query_menu_items = """
-    select id, title, description, image, price, ingredients, ordering_id from menu_items where category_id = %s order by ordering_id;
-    """
+    query_menu_items = None
+    if len(allergies_list) == 0:
+        query_menu_items = """
+            select id, title, description, image, price, ordering_id
+            from menu_items
+            where category_id = %s
+            order by ordering_id
+            ;
+        """
+    else:
+        allergies_tuple = tuple(allergies_list)
+
+        query_menu_items = """
+            select id, title, description, image, price, ordering_id
+            from menu_items m
+            where category_id = %s 
+            and not exists (
+                select *
+                from ingredients i
+                where i.menu_item_id = m.id
+                    and i.allergy_id in %s
+            )
+            order by ordering_id;
+        """
+    
+    query_ingredients = """
+    select name, allergy_id from ingredients where menu_item_id = %s;
+    """     
+    
     cur.execute(query_categories, [menu_id])
     categories = cur.fetchall()        
     
@@ -24,25 +50,35 @@ def customer_view_menu(cur, menu_id):
             # give the frontend all the information on
             # food details so it can show on the UI
 
-            cur.execute(query_menu_items, [categ_id])
-            menu_items_list = []
-            for menu_item in cur.fetchall():
+            if len(allergies_list) == 0:
+                cur.execute(query_menu_items, [categ_id])
+            else:
+                cur.execute(query_menu_items, [categ_id, allergies_tuple])
+            menu_items_list = cur.fetchall()
+            return_items_list = []
+            for menu_item in menu_items_list:
+                
+                cur.execute(query_ingredients, [menu_item[0]])
+                ingredients_list = []
+                for ingredient in cur.fetchall():
+                    ingredients_list.append([ingredient[0], ingredient[1]])
+                
                 tmp = {}
                 tmp.update({'food_id': menu_item[0]})
                 tmp.update({'food_name': menu_item[1]})
                 tmp.update({'food_description': menu_item[2]})
                 tmp.update({'food_image': menu_item[3]})
                 tmp.update({'food_price': menu_item[4]})
-                tmp.update({'food_ingredients': menu_item[5]})
-                tmp.update({'food_ordering_id': menu_item[6]})
-                menu_items_list.append(tmp)
-            menu.append({str(categ_id): ['Best Selling', menu_items_list, categ[2]]})
+                tmp.update({'food_ordering_id': menu_item[5]})
+                tmp.update({'food_ingredients': ingredients_list})
+                return_items_list.append(tmp)
+            menu.append({str(categ_id): ['Best Selling', return_items_list, categ[2]]})
         else:
             menu.append({str(categ_id): [categ[1], [], categ[2]]})
         
     return menu
 
-def customer_view_category(cur, category_id):
+def customer_view_category(cur, category_id, allergies_list):
     invalid_category_id = { 'error': 'invalid category_id' }
     menu_items = []
 
@@ -56,22 +92,54 @@ def customer_view_category(cur, category_id):
     if len(list1) == 0:
         return invalid_category_id
 
-    query1 = """
-    select id, title, description, image, price, ingredients, ordering_id from menu_items where category_id = %s order by ordering_id;
-    """
+    query1 = None
+    if len(allergies_list) == 0:
+        query1 = """
+            select id, title, description, image, price, ordering_id
+            from menu_items
+            where category_id = %s
+            order by ordering_id
+            ;
+        """
+    else:
+        allergies_tuple = tuple(allergies_list)
+        query1 = """
+            select id, title, description, image, price, ordering_id
+            from menu_items m
+            where category_id = %s
+            and not exists (
+                select *
+                from ingredients i
+                where i.menu_item_id = m.id
+                    and i.allergy_id in %s
+            )
+            order by ordering_id;
+        """
 
-    cur.execute(query1, [category_id])
+    if len(allergies_list) == 0:
+        cur.execute(query1, [category_id])
+    else:
+        cur.execute(query1, [category_id, allergies_tuple])
     list1 = cur.fetchall()
 
     for tup in list1:
+        
+        query_ingredients = """
+        select name, allergy_id from ingredients where menu_item_id = %s;
+        """
+        cur.execute(query_ingredients, [tup[0]])
+        ingredients_list = []
+        for ingredient in cur.fetchall():
+            ingredients_list.append([ingredient[0], ingredient[1]])
+        
         tmp = {}
         tmp.update({'food_id': tup[0]})
         tmp.update({'food_name': tup[1]})
         tmp.update({'food_description': tup[2]})
         tmp.update({'food_image': tup[3]})
         tmp.update({'food_price': tup[4]})
-        tmp.update({'food_ingredients': tup[5]})
-        tmp.update({'food_ordering_id': tup[6]})
+        tmp.update({'food_ordering_id': tup[5]})
+        tmp.update({'food_ingredients': ingredients_list})
         menu_items.append(tmp)
 
     return menu_items
@@ -82,7 +150,7 @@ def customer_view_menu_item(cur, menu_item_id):
     food = { 'success': 'Show food' } # supposed to show the food lol
     
     query1 = """
-    select title, description, image, price, ingredients, category_id, ordering_id from menu_items where id = %s;
+    select title, description, image, price, category_id, ordering_id from menu_items where id = %s;
     """ 
     
     cur.execute(query1, [menu_item_id])
@@ -94,14 +162,23 @@ def customer_view_menu_item(cur, menu_item_id):
         return invalid_id
     else: #shows the food item
         tup = list1[0]
+
+        query_ingredients = """
+        select name, allergy_id from ingredients where menu_item_id = %s;
+        """
+        cur.execute(query_ingredients, [menu_item_id])
+        ingredients_list = []
+        for ingredient in cur.fetchall():
+            ingredients_list.append([ingredient[0], ingredient[1]])
+
         food.update({'food_id': menu_item_id})
         food.update({'food_name': tup[0]})
         food.update({'food_description': tup[1]})
         food.update({'food_image': tup[2]})
         food.update({'food_price': tup[3]})
-        food.update({'food_ingredients': tup[4]})
-        food.update({'category_id': tup[5]})
-        food.update({'food_ordering_id': tup[6]})
+        food.update({'category_id': tup[4]})
+        food.update({'food_ordering_id': tup[5]})
+        food.update({'food_ingredients': ingredients_list})
         return food
     
 def customer_menu_search(cur, query):
@@ -122,16 +199,13 @@ def customer_menu_search(cur, query):
     
     list1 = cur.fetchall()
     
-    if len(list1) == 0: #No menu or something went wrong with the id
-        #test
-        return invalid_menu
-    else: 
-        list2 = []
-        for tup in list1:
-            dict_res = {}
-            dict_res.update({'menu_id': tup[0]})
-            dict_res.update({'restaurant_name': tup[1]})
-            dict_res.update({'restaurant_address': tup[2]})
-            list2.append(dict_res)
-        # menu.update({'menu_list': list2})
-        return list2
+    
+    list2 = []
+    for tup in list1:
+        dict_res = {}
+        dict_res.update({'menu_id': tup[0]})
+        dict_res.update({'restaurant_name': tup[1]})
+        dict_res.update({'restaurant_address': tup[2]})
+        list2.append(dict_res)
+    # menu.update({'menu_list': list2})
+    return list2

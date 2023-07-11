@@ -1,12 +1,31 @@
 import React from 'react';
 import './Components.css';
 import { Button, styled } from '@mui/material';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { StyledButton } from '../pages/CustomerOrStaff';
+import makeRequest from '../makeRequest';
 
 function CustomerFoodItem (props) {
   const navigate = useNavigate();
+  const params = useParams();
+  const sessionId = localStorage.getItem('session_id')
+  const menuId = params.menuId
 
+  function addToOrder() {
+    const body = JSON.stringify({
+      'session_id': sessionId,
+      'menu_id': menuId,
+      'menu_item_id': props.foodId,
+      'amount': 1,
+      'title': props.originalFoodName
+    })
+    makeRequest('/customer/add_menu_item', 'POST', body, undefined)
+      .then(data => {
+        console.log(data)
+      })
+      .catch(e => console.log('Error: ' + e))
+  }
+  
   return <>
   <div className='food-item-div'>
     <div>
@@ -20,8 +39,8 @@ function CustomerFoodItem (props) {
       <div className='div-section'>Price: $ {props.originalPrice}</div>
     </div>
     <div className='food-item-button'>
-        <StyledButton variant='outlined' style={{ margin: '10px' }} onClick={() => navigate(`/customer/1/${props.foodId}`)}>Find out more</StyledButton>
-        <StyledButton variant='outlined' style={{ margin: '10px' }}>Add to Order</StyledButton>
+        <StyledButton variant='outlined' style={{ margin: '10px' }} onClick={() => navigate(`/customer/${sessionId}/${menuId}/${props.categoryId}/${props.foodId}`)}>Find out more</StyledButton>
+        <StyledButton variant='outlined' style={{ margin: '10px' }} onClick={addToOrder}>Add to Order</StyledButton>
     </div>
   </div>
   </>

@@ -14,20 +14,25 @@ export const StyledButton = styled(Button)({
   width: '100%'
 });
 
-function CustomerOrStaff({ setStaffType }) {
+function CustomerOrStaff({ onSuccess, reset }) {
   const navigate = useNavigate();
 
   React.useEffect(function () {
-    setStaffType(null)
+    reset(null, null, null, null)
+    localStorage.clear()
   }, []);
 
   function selectCustomer() {
     const timestamp = Math.floor(Date.now() / 1000);
     localStorage.setItem('session_id', timestamp);
     localStorage.setItem('staff_type', 'customer')
-    setStaffType('customer')
+    localStorage.removeItem('menu_id')
+    localStorage.removeItem('table_number')
+    onSuccess('customer', timestamp)
+    // setStaffType('customer')
+    // setSessionId(timestamp)
     console.log(timestamp);
-    navigate('/searchrestaurant');
+    navigate(`/customer/${timestamp}/searchrestaurant`);
   }
 
   return (

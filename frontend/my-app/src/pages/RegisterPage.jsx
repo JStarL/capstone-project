@@ -28,7 +28,7 @@ function RegisterPage({ onSuccess }) {
           localStorage.setItem('staff_id', data['manager_id']);
           localStorage.setItem('menu_id', data['menu_id']);
           localStorage.setItem('staff_type', 'manager');
-          navigate('/manager/menu/1')
+          navigate(`/manager/menu/${localStorage.getItem('menu_id')}`)
         } else {
           alert(data['error'])
         }

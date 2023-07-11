@@ -47,7 +47,6 @@ create table menu_items (
     description         text, -- optional
     image               text, -- also optional
     price               float not null,
-    ingredients         text,
     ordering_id         serial not null,
     category_id         integer not null,
     menu_id             integer not null,
@@ -57,8 +56,8 @@ create table menu_items (
     foreign key (menu_id) references menus(id)
 );
 
-create or replace view menu_items_and_categories(menu_item_id, title, description, image, price, ingredients, category_id, category_name, menu_id) as
-select m.id, m.title, m.description, m.image, m.price, m.ingredients, c.id, c.name, c.menu_id
+create or replace view menu_items_and_categories(menu_item_id, title, description, image, price, category_id, category_name, menu_id) as
+select m.id, m.title, m.description, m.image, m.price, c.id, c.name, c.menu_id
 from menu_items m join categories c on (m.category_id = c.id)
 ;
 

@@ -10,14 +10,16 @@ import InputAdornment from '@mui/material/InputAdornment';
 import InputLabel from '@mui/material/InputLabel';
 import makeRequest from '../makeRequest';
 import { StyledButton } from '../pages/CustomerOrStaff';
+import AddIcon from '@mui/icons-material/Add';
 
 function NewMenuItem(props) {
   const [foodName, setFoodName] = React.useState('')
   const [description, setDescription] = React.useState('')
-  const [ingredients, setIngredients] = React.useState('')
+  const [ingredient, setIngredient] = React.useState('')
   const [price, setPrice] = React.useState(0)
   const [image, setImage] = React.useState('');
   const [imageName, setImageName] = React.useState('')
+  const [ingredientAndAllergyList, setIngredientAndAllergyList] = React.useState([])
 
   const params = useParams();
   const navigate = useNavigate();
@@ -36,7 +38,7 @@ function NewMenuItem(props) {
       'title': foodName,
       'image': image !== null ? image : undefined,
       price,
-      'ingredients': ingredients,
+      'ingredients': ingredient,
       'description': description !== null ? description : undefined,
     });
 
@@ -73,7 +75,12 @@ function NewMenuItem(props) {
               type='number'
             />
           </FormControl>
-          <TextField sx={{ mb: 2 }} className='long input' id='outlined-basic' label='Ingredients' variant='outlined' rows={3} multiline={true} value={ingredients} onChange={e => setIngredients(e.target.value)}></TextField>
+          <div style={{ display: 'flex', flexDirection: 'row', alignItems:'center'}}>
+              <TextField sx={{ mb:2 }} fullWidth label='Add Ingredient' variant='outlined' value={ingredient} onChange={e => setIngredient(e.target.value)}></TextField>
+              <TextField sx={{ mb:2, ml: 2}} fullWidth label='Add Allergy CHANGE TO DROP DOWN MENU WHEN FIXED' variant='outlined' value={ingredient} onChange={e => setIngredient(e.target.value)}></TextField>
+              <StyledButton sx={{ mb: 2, ml: 2, width: '10vh', height: '5vh'}} onClick={() => console.log(`add ingredient`)} startIcon={<AddIcon/>}></StyledButton>
+          </div>
+
           {image
             ? <div className='image'><img style={{ height: '300px', width: '300px' }} src={image}></img></div>
             : <div></div>}
