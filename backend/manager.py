@@ -217,6 +217,7 @@ def manager_update_category(cur, category_name, category_id):
 def manager_add_menu_item(cur, menu_item_name, price, ingredients, description, category_id, menu_id, image):
     error = { 'error': 'adding menu_item failed' }
     invalid_category_id = { 'error': 'invalid category_id'}
+    invalid_ingredients_update = { 'error': 'Failed to add all ingredients' }
     invalid_best_selling = { 'error': 'cannot add menu items to the "Best Selling" category'}
     cant_set_empty_string = { 'error': 'not allowed to set the name to empty string' }
     menu_item = {}
@@ -255,10 +256,36 @@ def manager_add_menu_item(cur, menu_item_name, price, ingredients, description, 
     cur.execute(query2, [menu_item_name, menu_id])
     
     list1 = cur.fetchall()
-    
+
     if len(list1) == 0:
         return error
     else:
+        menu_item_id = list1[0][0]
+
+        query3 = """
+            insert into ingredients (menu_item_id, name, allergy_id) values (%s, %s, %s);
+        """
+        
+        for ingredient in ingredients:
+            cur.execute(query3, [menu_item_id, ingredient[0], ingredient[1]])
+
+        # Check that all ingredients were inserted:
+
+        query4 = """
+            select count(*)
+            from ingredients
+            where menu_item_id = %s
+            group by menu_item_id
+            ;
+        """
+
+        cur.execute(query4, [menu_item_id])
+
+        query4_res = cur.fetchall()
+
+        if query4_res[0][0] != len(ingredients):
+            return invalid_ingredients_update
+
         menu_item.update({'menu_item_id' : str(list1[0][0])}) # NOTE: Assumption that food item names are unique per menu
         return menu_item
 
@@ -325,6 +352,7 @@ def manager_delete_menu_item(cur, menu_item_id):
 def manager_update_menu_item(cur, menu_item_id, menu_item_name, price, ingredients, description, category_id, menu_id, image):
     invalid_menu_item = { 'error': 'invalid menu item' }
     error = { 'error': 'did not update properly'}
+    invalid_ingredients_update = { 'error': 'Failed to add all ingredients' }
     invalid_category_id = { 'error': 'invalid category_id'}
     invalid_best_selling = { 'error': 'cannot update menu items in the "Best Selling" category'}
     cant_set_empty_string = { 'error': 'not allowed to update the name to empty string' }
@@ -380,9 +408,41 @@ def manager_update_menu_item(cur, menu_item_id, menu_item_name, price, ingredien
         return invalid_menu_item
     else: 
         cur.execute(query2, [menu_item_name, description, price, category_id, menu_id, image, menu_item_id]) #this just updates
-        cur.execute(query3, [menu_item_id]) #this grabs the id and the rest of the values to check
-        list1 = cur.fetchall()
+        
+        query4 = """
+            delete
+            from ingredients
+            where menu_item_id = %s
+            ;
+        """
+        
+        cur.execute(query4, [menu_item_id])
+
+        query5 = """
+            insert into ingredients (menu_item_id, name, allergy_id) values (%s, %s, %s);
+        """
+        
+        for ingredient in ingredients:
+            cur.execute(query5, [menu_item_id, ingredient[0], ingredient[1]])
+
+        # Check that all ingredients were inserted:
+
+        query6 = """
+            select count(*)
+            from ingredients
+            where menu_item_id = %s
+            group by menu_item_id
+            ;
+        """
+        cur.execute(query6, [menu_item_id])
+        query6_res = cur.fetchall()
+
+        if query6_res[0][0] != len(ingredients):
+            return invalid_ingredients_update
+
         return menu_item
+        # cur.execute(query3, [menu_item_id]) #this grabs the id and the rest of the values to check
+        # list1 = cur.fetchall()
         # if menu_item_name == list1[0][1] and description == list1[0][2] and image == list1[0][3] and price == list1[0][4] and category_id == list1[0][5] and menu_id == list1[0][6]:
         #     menu_item.update({'menu_item_id' : list1[0][0]})
         #     return menu_item
