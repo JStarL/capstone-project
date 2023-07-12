@@ -496,11 +496,11 @@ def get_allergies_flask():
 @APP.route("/kitchen_staff/get_order_list", methods=['GET'])
 def kitchen_staff_get_order_list_flask():   
     data = ast.literal_eval(request.get_json())
-    cur = cur_dict['staff'][data['kitchen_staff_id']]
     kitchen_id = data['kitchen_staff_id']
+    cur = cur_dict['staff'][kitchen_id]
     
     invalid_id = { 'error': 'invalid kitchen_staff_id' } # error message
-    output = {'orders': []}
+    output = []
     
     query_find_staff_menu = """
         SELECT menu_id
@@ -536,7 +536,7 @@ def kitchen_staff_get_order_list_flask():
                 temp_dict.update({'table_id': customer_order['table_id']})
                 temp_dict.update({'status': customer_order['status']})
                 temp_dict.update({'menu_items': temp_list})
-                output['orders'].append(temp_dict)
+                output.append(temp_dict)
     
         
     return dumps(output)
