@@ -21,12 +21,15 @@ function CustomerMenuPage({ personas }) {
   // localStorage.getItem('menu_id');
 
   React.useEffect(() => {
+    console.log('About to get data')
     const fetchData = async () => {
       const data = await fetchAllMenuData();
       if (data && data?.length > 0) {
         setCurrentSelectedCategoryId(Object.keys(data[0])[0]);
         console.log(data)
+        console.log('ID: ' + currentSelectedCategoryId)
       }
+      console.log('outside if')
     };
 
     fetchData();
