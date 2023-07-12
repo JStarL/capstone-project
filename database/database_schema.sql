@@ -81,8 +81,8 @@ begin
             _ordering_id := _ordering_id + 1;
         end loop;
 
-    return new;
     end if;
+    return new;
 
 end;
 $$ language plpgsql;
