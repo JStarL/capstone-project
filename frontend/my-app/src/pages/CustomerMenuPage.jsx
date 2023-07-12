@@ -65,7 +65,7 @@ function CustomerMenuPage({ personas }) {
     const data = await makeRequest(url, 'GET', undefined, undefined);
     console.log(data)
     setCategories(data);
-  
+    return data;
   }
 
   const handlePersonaChange = (persona) => {
