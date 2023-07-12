@@ -213,17 +213,29 @@ def auth_add_staff_flask():
 def manager_view_menu_flask():
     manager_id = request.args.get("manager_id")
     menu_id = request.args.get("menu_id")
+    excluded_ids = [-1]
+    if 'excluded_cat_ids' in request.args:
+        excluded_ids = ast.literal_eval(request.args.get("excluded_cat_ids"))
+    top_k = 100
+    if 'top_k' in request.args:
+        top_k = request.args.get('top_k')
     cur = cur_dict['staff'][manager_id]
     
-    return dumps(manager_view_menu(cur,  menu_id))
+    return dumps(manager_view_menu(cur,  menu_id, excluded_ids, top_k))
 
 @APP.route("/manager/view_category", methods=['GET'])
 def manager_view_category_flask():
     manager_id = request.args.get("manager_id")
     category_id = request.args.get("category_id")
+    excluded_ids = [-1]
+    if 'excluded_cat_ids' in request.args:
+        excluded_ids = ast.literal_eval(request.args.get("excluded_cat_ids"))
+    top_k = 100
+    if 'top_k' in request.args:
+        top_k = request.args.get('top_k')
     cur = cur_dict['staff'][manager_id]
 
-    return dumps(manager_view_category(cur, category_id))
+    return dumps(manager_view_category(cur, category_id, excluded_ids, top_k))
 
 @APP.route("/manager/view_menu_item", methods=['GET'])
 def manager_view_menu_item_flask():
@@ -307,26 +319,42 @@ def customer_view_menu_flask():
     menu_id = request.args.get("menu_id")
     session_id = request.args.get("session_id")
     allergy_ids = ast.literal_eval(request.args.get("allergies"))
+    
+    excluded_cat_ids = [-1]
+    if 'excluded_cat_ids' in request.args:
+        excluded_cat_ids = ast.literal_eval(request.args.get("excluded_cat_ids"))
+    top_k = 100
+    if 'top_k' in request.args:
+        top_k = request.args.get('top_k')
+
     cur = None
     if session_id in cur_dict['customers']:
         cur = cur_dict['customers'][session_id]
     else:
         cur = db_conn.cursor()
         cur_dict['customers'][session_id] = cur
-    return dumps(customer_view_menu(cur, menu_id, allergy_ids))
+    return dumps(customer_view_menu(cur, menu_id, allergy_ids, excluded_cat_ids, top_k))
 
 @APP.route("/customer/view_category", methods=['GET'])
 def customer_view_category_flask():
     session_id = request.args.get("session_id")
     category_id = request.args.get("category_id")
     allergy_ids = ast.literal_eval(request.args.get("allergies"))
+
+    excluded_cat_ids = [-1]
+    if 'excluded_cat_ids' in request.args:
+        excluded_cat_ids = ast.literal_eval(request.args.get("excluded_cat_ids"))
+    top_k = 100
+    if 'top_k' in request.args:
+        top_k = request.args.get('top_k')
+
     cur = None
     if session_id in cur_dict['customers']:
         cur = cur_dict['customers'][session_id]
     else:
         cur = db_conn.cursor()
         cur_dict['customers'][session_id] = cur
-    return dumps(customer_view_category(cur, category_id, allergy_ids))
+    return dumps(customer_view_category(cur, category_id, allergy_ids, excluded_cat_ids, top_k))
 
 @APP.route("/customer/view_menu_item", methods=['GET'])
 def customer_view_menu_item_flask():

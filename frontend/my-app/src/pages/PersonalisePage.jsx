@@ -10,7 +10,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import makeRequest from '../makeRequest';
 import { StyledButton } from './CustomerOrStaff';
 
-function PersonalisePage() {
+function PersonalisePage({ handlePersonas }) {
 	const [allergies, setAllergies] = React.useState([]);
 	const [selectedAllergies, setSelectedAllergies] = React.useState([]);
 
@@ -45,6 +45,7 @@ function PersonalisePage() {
 
 	const handleFormSubmit = (event) => {
 		event.preventDefault();
+		handlePersonas(selectedAllergies)
 		console.log(selectedAllergies);
 	};
 
@@ -60,8 +61,8 @@ function PersonalisePage() {
 							style={{
 								display: 'flex',
 								flexDirection: 'column',
-								justifyContent:'center', 
-								alignItems:'center'
+								justifyContent: 'center',
+								alignItems: 'center'
 							}}
 						>
 							{allergies?.map((allergy) => (
@@ -78,7 +79,7 @@ function PersonalisePage() {
 											padding: '10px',
 											margin: '10px',
 											boxShadow: '0 3px 6px rgba(0, 0, 0, 0.4)',
-											borderRadius: '20px', 
+											borderRadius: '20px',
 											width: '70vh'
 										}}>
 											<Typography
@@ -97,7 +98,7 @@ function PersonalisePage() {
 								/>
 							))}
 						</div>
-						<StyledButton sx={{width:'80%', p:1, mt:2}} variant='outlined' type="submit" color="primary">
+						<StyledButton sx={{ width: '80%', p: 1, mt: 2 }} variant='outlined' type="submit" color="primary">
 							Add Persona
 						</StyledButton>
 					</form>

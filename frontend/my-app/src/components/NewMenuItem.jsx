@@ -1,7 +1,7 @@
 import React from 'react';
 import '../App.css';
 import { useParams, useNavigate } from 'react-router-dom';
-import { Button, TextField, Input, Typography, Paper } from '@mui/material';
+import { Select, TextField, Input, Typography, Paper } from '@mui/material';
 import { fileToDataUrl } from './helperFunctions'
 import MenuItem from '@mui/material/MenuItem';
 import OutlinedInput from '@mui/material/OutlinedInput';
@@ -13,22 +13,21 @@ import { StyledButton } from '../pages/CustomerOrStaff';
 import AddIcon from '@mui/icons-material/Add';
 
 function NewMenuItem(props) {
-  const [foodName, setFoodName] = React.useState('')
-  const [description, setDescription] = React.useState('')
-  const [ingredient, setIngredient] = React.useState('')
-  const [price, setPrice] = React.useState(0)
+  const [foodName, setFoodName] = React.useState('');
+  const [description, setDescription] = React.useState('');
+  const [ingredient, setIngredient] = React.useState('');
+  const [price, setPrice] = React.useState(0);
   const [image, setImage] = React.useState('');
-  const [imageName, setImageName] = React.useState('')
-  const [ingredientAndAllergyList, setIngredientAndAllergyList] = React.useState([])
+  const [imageName, setImageName] = React.useState('');
+  const [ingredientAndAllergyList, setIngredientAndAllergyList] = React.useState([]);
+  const [allergies, setAllergies] = React.useState([[0, 'None', 'No allergies']]);
+  const [selectedAllergy, setSelectedAllergy] = React.useState(0); // New state variable for selected allergy
 
   const params = useParams();
   const navigate = useNavigate();
-  const manager_id = localStorage.getItem('staff_id')
-  const category_id = params.categoryId
-  const menu_id = params.menuId
-
-  console.log(menu_id)
-  console.log(category_id)
+  const manager_id = localStorage.getItem('staff_id');
+  const category_id = params.categoryId;
+  const menu_id = params.menuId;
 
   function addMenuItem() {
     const body = JSON.stringify({
@@ -38,68 +37,188 @@ function NewMenuItem(props) {
       'title': foodName,
       'image': image !== null ? image : undefined,
       price,
-      'ingredients': ingredient,
+      'ingredients': ingredientAndAllergyList,
       'description': description !== null ? description : undefined,
     });
 
     makeRequest('/manager/add_menu_item', 'POST', body, undefined)
       .then(data => {
-        console.log(data)
-        navigate(`/manager/menu/${menu_id}`)
+        console.log(data);
+        navigate(`/manager/menu/${menu_id}`);
       })
       .catch(e => console.log('Error: ' + e));
   }
 
-  // image
+  React.useEffect(() => {
+    const fetchData = async () => {
+      const data = await fetchAllergies();
+      console.log(data);
+    };
+    fetchData();
+  }, []);
+
+  async function fetchAllergies() {
+    const url = '/get_allergies';
+    const data = await makeRequest(url, 'GET', undefined, undefined);
+    setAllergies([...allergies, ...data]);
+    console.log(allergies)
+    return data;
+  }
 
   async function handleFileSelect(event) {
-    setImageName(event.target.files[0].name)
-    const thumbnailUrl = await fileToDataUrl(event.target.files[0])
+    setImageName(event.target.files[0].name);
+    const thumbnailUrl = await fileToDataUrl(event.target.files[0]);
     setImage(thumbnailUrl);
   }
-  return <>
-    <div className='login-page'>
-      <Paper sx={{ p: 4, borderRadius: '20px', width: '50%' }} elevation={5}>
-        <form className='login-form'>
-          <Typography className='h4' variant="h4" gutterBottom>Add new menu item to <b>{props.categoryName}</b></Typography>
-          <TextField sx={{ mb: 2 }} className='long input' label='Food Name' variant='outlined' value={foodName} onChange={e => setFoodName(e.target.value)}></TextField>
-          <TextField sx={{ mb: 2 }} className='long input' label='Description' variant='outlined' rows={3} multiline={true} value={description} onChange={e => setDescription(e.target.value)}></TextField>
-          <FormControl className='long input'>
-            <InputLabel htmlFor="outlined-adornment-amount">Price</InputLabel>
-            <OutlinedInput
-              sx={{ mb: 2 }}
-              startAdornment={<InputAdornment position="start">$</InputAdornment>}
-              label="Price"
-              value={price}
-              onChange={e => setPrice(e.target.value)}
-              type='number'
-            />
-          </FormControl>
-          <div style={{ display: 'flex', flexDirection: 'row', alignItems:'center'}}>
-              <TextField sx={{ mb:2 }} fullWidth label='Add Ingredient' variant='outlined' value={ingredient} onChange={e => setIngredient(e.target.value)}></TextField>
-              <TextField sx={{ mb:2, ml: 2}} fullWidth label='Add Allergy CHANGE TO DROP DOWN MENU WHEN FIXED' variant='outlined' value={ingredient} onChange={e => setIngredient(e.target.value)}></TextField>
-              <StyledButton sx={{ mb: 2, ml: 2, width: '10vh', height: '5vh'}} onClick={() => console.log(`add ingredient`)} startIcon={<AddIcon/>}></StyledButton>
-          </div>
 
-          {image
-            ? <div className='image'><img style={{ height: '300px', width: '300px' }} src={image}></img></div>
-            : <div></div>}
-          <div><Typography variant='overline' sx={{ fontSize: '10px' }}>{imageName}</Typography></div>
-          <div>
-            <label htmlFor="upload-photo">
-              <StyledButton sx={{ mb: 2 }} variant='outlined' aria-label="upload picture" component="label">Add Image
-                <Input style={{ display: 'none' }} accept='image/png, image/jpeg'
-                  type="file"
-                  onChange={handleFileSelect}
+  function addIngredientAllergyPair() {
+    setIngredientAndAllergyList([...ingredientAndAllergyList, [ingredient, selectedAllergy]])
+    setSelectedAllergy(0)
+    setIngredient('')
+  }
+
+  return (
+    <>
+      <div className='login-page'>
+        <Paper sx={{ p: 4, borderRadius: '20px', width: '50%' }} elevation={5}>
+          <form className='login-form'>
+            <Typography className='h4' variant="h4" gutterBottom>
+              Add new menu item to <b>{props.categoryName}</b>
+            </Typography>
+            <TextField
+              sx={{ mb: 2 }}
+              className='long input'
+              label='Food Name'
+              variant='outlined'
+              value={foodName}
+              onChange={e => setFoodName(e.target.value)}
+            />
+            <TextField
+              sx={{ mb: 2 }}
+              className='long input'
+              label='Description'
+              variant='outlined'
+              rows={3}
+              multiline={true}
+              value={description}
+              onChange={e => setDescription(e.target.value)}
+            />
+            <FormControl className='long input'>
+              <InputLabel htmlFor="outlined-adornment-amount">Price</InputLabel>
+              <OutlinedInput
+                sx={{ mb: 2 }}
+                startAdornment={<InputAdornment position="start">$</InputAdornment>}
+                label="Price"
+                value={price}
+                onChange={e => setPrice(e.target.value)}
+                type='number'
+              />
+            </FormControl>
+            <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
+              <TextField
+                sx={{ mb: 2 }}
+                fullWidth
+                label='Add New Ingredient'
+                variant='outlined'
+                value={ingredient}
+                onChange={e => setIngredient(e.target.value)}
+              />
+              <FormControl sx={{ mb: 2, ml: 2 }} fullWidth>
+                <InputLabel id="allergy-select-label">Add Allergy</InputLabel>
+                <Select
+                  labelId="allergy-select-label"
+                  id="allergy-select"
+                  value={selectedAllergy}
+                  onChange={e => setSelectedAllergy(e.target.value)}
+                  label="Add Allergy"
+                >
+                  {allergies.map(allergy => (
+                    <MenuItem key={allergy[0]} value={allergy[0]}>
+                      {allergy[1]}
+                    </MenuItem>
+                  ))}
+                </Select>
+              </FormControl>
+              <StyledButton
+                sx={{ mb: 2, ml: 2, width: '10%', height: '20%' }}
+                onClick={() => addIngredientAllergyPair()}
+                startIcon={<AddIcon />}
+              ></StyledButton>
+              {console.log(ingredientAndAllergyList)}
+            </div>
+
+            <Typography variant="h6" gutterBottom>Ingredient and Allergy List:</Typography>
+
+            {ingredientAndAllergyList?.map((ingredientAllergyPair, index) => (
+
+              <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }} key={index}>
+                <TextField
+                  sx={{ mb: 2 }}
+                  fullWidth
+                  label='Ingredient Name'
+                  variant='outlined'
+                  value={ingredientAllergyPair[0]}
+                  onChange={e => {
+                    const updatedList = [...ingredientAndAllergyList];
+                    updatedList[index][0] = e.target.value;
+                    setIngredientAndAllergyList(updatedList);
+                  }}
                 />
-              </StyledButton>
-              {/* <div><Typography variant='overline' sx={{ fontSize: '10px' }}>{imageName}</Typography></div> */}
-            </label></div>
-          <StyledButton sx={{ mb: 2 }} variant='outlined' onClick={addMenuItem}>ADD TO MENU</StyledButton>
-        </form>
-      </Paper>
-    </div>
-  </>
+                <FormControl sx={{ mb: 2, ml: 2 }} fullWidth>
+                  <InputLabel id="allergy-select-label">Allergy</InputLabel>
+                  <Select
+                    labelId="allergy-select-label"
+                    id="allergy-select"
+                    value={ingredientAllergyPair[1]}
+                    onChange={e => {
+                      const updatedList = [...ingredientAndAllergyList];
+                      updatedList[index][1] = e.target.value;
+                      setIngredientAndAllergyList(updatedList);
+                    }}
+                    label="Allergy"
+                  >
+                    {allergies.map(allergy => (
+                      <MenuItem key={allergy[0]} value={allergy[0]}>
+                        {allergy[1]}
+                      </MenuItem>
+                    ))}
+                  </Select>
+                </FormControl>
+              </div>
+            ))}
+
+
+            {image ? (
+              <div className='image'>
+                <img style={{ height: '300px', width: '300px' }} src={image} alt="Item Image" />
+              </div>
+            ) : (
+              <div></div>
+            )}
+            <div>
+              <Typography variant='overline' sx={{ fontSize: '10px' }}>{imageName}</Typography>
+            </div>
+            <div>
+              <label htmlFor="upload-photo">
+                <StyledButton sx={{ mb: 2 }} variant='outlined' aria-label="upload picture" component="label">
+                  Add Image
+                  <Input
+                    style={{ display: 'none' }}
+                    accept='image/png, image/jpeg'
+                    type="file"
+                    onChange={handleFileSelect}
+                  />
+                </StyledButton>
+              </label>
+            </div>
+            <StyledButton sx={{ mb: 2 }} variant='outlined' onClick={addMenuItem}>
+              ADD TO MENU
+            </StyledButton>
+          </form>
+        </Paper>
+      </div>
+    </>
+  );
 }
 
 export default NewMenuItem;

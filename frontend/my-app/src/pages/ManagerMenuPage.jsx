@@ -17,6 +17,7 @@ function ManagerMenuPage() {
   const [currentSelectedCategory, setCurrentSelectedCategory] = React.useState('Best Selling');
   const [currentSelectedCategoryId, setCurrentSelectedCategoryId] = React.useState(-1);
   const [menuItems, setMenuItems] = React.useState([]); // List of Menu items for the current selected category
+  const [allergies, setAllergies] = React.useState([[0, 'None', 'No allergies']]);
   const navigate = useNavigate();
   const params = useParams();
 
@@ -40,9 +41,6 @@ function ManagerMenuPage() {
         const url = `/manager/view_category?manager_id=${managerId}&category_id=${currentSelectedCategoryId}`;
         const data = await makeRequest(url, 'GET', undefined, undefined)
         setMenuItems(data)
-        console.log(currentSelectedCategoryId)
-        console.log('here')
-        // fetchAllMenuData()
       }
     };
     fetchCategoryData();
@@ -52,10 +50,22 @@ function ManagerMenuPage() {
     const url = `/manager/view_menu?manager_id=${managerId}&menu_id=${menuId}`;
     const data = await makeRequest(url, 'GET', undefined, undefined);
     setCategories(data);
-    // for (let key in data[0]) {
-    //   setMenuItems(data[0][key][1])
-    // }
     return data; // Return the fetched data
+  }
+
+  React.useEffect(() => {
+    const fetchData = async () => {
+      const data = await fetchAllergies();
+      console.log(data);
+    };
+    fetchData();
+  }, []);
+
+  async function fetchAllergies() {
+    const url = '/get_allergies';
+    const data = await makeRequest(url, 'GET', undefined, undefined);
+    setAllergies([...allergies, ...data]);
+    return data;
   }
 
   function addNewCategory() {
@@ -103,21 +113,10 @@ function ManagerMenuPage() {
             />
           ))}
           <NewCategoryField
-            // newCategoryName={newCategoryName}
-            // setNewCategoryName={setNewCategoryName}
-            // addNewCategory={addNewCategory}
             menuId={menuId}
             managerId={managerId}
             fetchAllMenuData={fetchAllMenuData}
           />
-          {/* <TextField
-            label='New Category Name'
-            onChange={e => setNewCategoryName(e.target.value)}
-            variant="outlined"
-            sx={{ mb: 3 }}
-            value={newCategoryName || ''}
-          />
-          <Button onClick={addNewCategory} startIcon={<AddIcon />}>Add new category</Button> */}
         </div>
         <div style={{ width: '75%', height: '100%' }}>
         <Typography className='h4' variant="h4" gutterBottom>Manager Menu Page - {currentSelectedCategory}</Typography>
@@ -125,6 +124,7 @@ function ManagerMenuPage() {
           {menuItems?.map((menuItem) =>
             currentSelectedCategory === 'Best Selling' ? (
               <BestSellingFoodItem
+                key={menuItem.food_id}
                 originalFoodName={menuItem.food_name}
                 originalFoodDescription={menuItem.food_description}
                 originalPrice={menuItem.food_price.toString()}
@@ -142,6 +142,7 @@ function ManagerMenuPage() {
                 categoryName={currentSelectedCategory}
                 fetchAllMenuData={fetchAllMenuData}
                 fetchCategoryMenuItems={fetchCategoryMenuItems}
+                allergies={allergies}
               />
             )
           )}

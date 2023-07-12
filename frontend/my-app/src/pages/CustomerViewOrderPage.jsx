@@ -27,6 +27,9 @@ function CustomerViewOrderPage() {
       setOrders(data.menu_items)
       return data;
     }
+  
+  if (!orders || !Array.isArray(orders)) return <>loading...</>;
+
 	return (
     <>
     <div>CUSTOMER VIEW ORDER</div>

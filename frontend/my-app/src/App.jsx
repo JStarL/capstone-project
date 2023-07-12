@@ -29,6 +29,7 @@ function App() {
   const [sessionId, setSessionId] = React.useState(localStorage.getItem('session_id'))
   const [tableNumber, setTableNumber] = React.useState(localStorage.getItem('table_number'))
 
+  const [personas, setPersonas] = React.useState([[null]])
   const params = useParams();
   console.log(params.sessionId)
   React.useEffect(function () {
@@ -46,10 +47,10 @@ function App() {
 
   console.log(localStorage.getItem('staff_type'))
 
-  // React.useEffect(function () {
-  //   console.log('staff type change')
-  //   setStaffType(localStorage.getItem('staff_type'))
-  // }, [localStorage.getItem('staff_type')]);
+  const handlePersonas = (allergies) => {
+    setPersonas([...personas, allergies])
+    console.log(personas)
+  }
 
   const customer = (staff_type, session_id) => {
     setStaffType(staff_type)
@@ -194,9 +195,9 @@ function App() {
 
             <Route path='/customer/:sessionId/searchrestaurant' element={<SearchRestaurant onSuccess={restaurantSuccess} />} />
             <Route path='/customer/:sessionId/:menuId/tablenumber' element={<SelectTableNumber onSuccess={tableNumberSuccess} />} />
-            <Route path='/customer/:sessionId/:menuId/:tableNumber' element={<CustomerMenuPage />} />
+            <Route path='/customer/:sessionId/:menuId/:tableNumber' element={<CustomerMenuPage personas={personas}/>} />
             <Route path='/customer/:sessionId/:menuId/:categoryId/:foodId' element={<FoodItemPage />} />
-            <Route path='/customer/:sessionId/:menuId/personalise' element={<PersonalisePage />} />
+            <Route path='/customer/:sessionId/:menuId/personalise' element={<PersonalisePage handlePersonas={handlePersonas}/>} />
             <Route path='/customer/:sessionId/view_order/:menuId/:tableNumber' element={<CustomerViewOrderPage />} />
           </Routes>
         </main>
