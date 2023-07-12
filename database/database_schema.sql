@@ -67,7 +67,7 @@ begin
 
     if (new.points <> old.points) then
     
-        delete * from best_selling_items
+        delete from best_selling_items
         where menu_id=old.menu_id;
         
         for _menu_item in
