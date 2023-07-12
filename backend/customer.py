@@ -1,5 +1,5 @@
 
-def customer_view_menu(cur, menu_id, allergies_list):
+def customer_view_menu(cur, menu_id, allergies_list, excluded_cat_list, top_k):
     invalid_menu_id = { 'error': 'invalid menu id' } # error message
     menu = []
 
@@ -10,26 +10,31 @@ def customer_view_menu(cur, menu_id, allergies_list):
     query_menu_items = None
     if len(allergies_list) == 0:
         query_menu_items = """
-            select id, title, description, image, price, ordering_id
-            from menu_items
-            where category_id = %s
-            order by ordering_id
+            select m.id, m.title, m.description, m.image, m.price, b.ordering_id
+            from menu_items m join best_selling_items b on (m.menu_id = b.menu_id and m.id = b.menu_item_id)
+            where m.menu_id = %s
+            and m.category_id not in %s
+            order by b.ordering_id, m.title
+            limit %s
             ;
         """
     else:
         allergies_tuple = tuple(allergies_list)
 
         query_menu_items = """
-            select id, title, description, image, price, ordering_id
-            from menu_items m
-            where category_id = %s 
+            select m.id, m.title, m.description, m.image, m.price, b.ordering_id
+            from menu_items m join best_selling_items b on (m.menu_id = b.menu_id and m.id = b.menu_item_id)
+            where m.menu_id = %s
+            and m.category_id not in %s
             and not exists (
                 select *
                 from ingredients i
                 where i.menu_item_id = m.id
                     and i.allergy_id in %s
             )
-            order by ordering_id;
+            order by b.ordering_id, m.title
+            limit %s
+            ;
         """
     
     query_ingredients = """
@@ -50,10 +55,11 @@ def customer_view_menu(cur, menu_id, allergies_list):
             # give the frontend all the information on
             # food details so it can show on the UI
 
+            excluded_cat_tuple = tuple(excluded_cat_list)
             if len(allergies_list) == 0:
-                cur.execute(query_menu_items, [categ_id])
+                cur.execute(query_menu_items, [menu_id, excluded_cat_tuple, top_k])
             else:
-                cur.execute(query_menu_items, [categ_id, allergies_tuple])
+                cur.execute(query_menu_items, [menu_id, excluded_cat_tuple, allergies_tuple, top_k])
             menu_items_list = cur.fetchall()
             return_items_list = []
             for menu_item in menu_items_list:
@@ -78,12 +84,12 @@ def customer_view_menu(cur, menu_id, allergies_list):
         
     return menu
 
-def customer_view_category(cur, category_id, allergies_list):
+def customer_view_category(cur, category_id, allergies_list, excluded_cat_list, top_k):
     invalid_category_id = { 'error': 'invalid category_id' }
     menu_items = []
 
     query0 = """
-    select id from categories where id = %s;
+    select id, name, menu_id from categories where id = %s;
     """
 
     cur.execute(query0, [category_id])
@@ -92,34 +98,71 @@ def customer_view_category(cur, category_id, allergies_list):
     if len(list1) == 0:
         return invalid_category_id
 
+    best_selling = False
+    if list1[0][1] == 'Best Selling':
+        best_selling = True
+
     query1 = None
     if len(allergies_list) == 0:
-        query1 = """
-            select id, title, description, image, price, ordering_id
-            from menu_items
-            where category_id = %s
-            order by ordering_id
-            ;
-        """
+        if (best_selling):
+            query1 = """
+                select m.id, m.title, m.description, m.image, m.price, b.ordering_id
+                from menu_items m join best_selling_items b on (m.menu_id = b.menu_id and m.id = b.menu_item_id)
+                where m.menu_id = %s
+                and m.category_id not in %s
+                order by b.ordering_id, m.title
+                limit %s
+                ;
+            """
+            excluded_cat_tuple = tuple(excluded_cat_list)
+            cur.execute(query1, [list1[0][2], excluded_cat_tuple, top_k])
+        else:
+            query1 = """
+                select id, title, description, image, price, ordering_id
+                from menu_items
+                where category_id = %s
+                order by ordering_id
+                limit %s
+                ;
+            """
+            cur.execute(query1, [category_id, top_k])
     else:
         allergies_tuple = tuple(allergies_list)
-        query1 = """
-            select id, title, description, image, price, ordering_id
-            from menu_items m
-            where category_id = %s
-            and not exists (
-                select *
-                from ingredients i
-                where i.menu_item_id = m.id
-                    and i.allergy_id in %s
-            )
-            order by ordering_id;
-        """
+        if (best_selling):
+            query1 = """
+                select m.id, m.title, m.description, m.image, m.price, b.ordering_id
+                from menu_items m join best_selling_items b on (m.menu_id = b.menu_id and m.id = b.menu_item_id)
+                where m.menu_id = %s
+                and m.category_id not in %s
+                and not exists (
+                    select *
+                    from ingredients i
+                    where i.menu_item_id = m.id
+                        and i.allergy_id in %s
+                )
+                order by b.ordering_id, m.title
+                limit %s
+                ;
+            """
+            excluded_cat_tuple = tuple(excluded_cat_list)
+            cur.execute(query1, [list1[0][2], excluded_cat_tuple, allergies_tuple, top_k])
+        else:
+            query1 = """
+                select id, title, description, image, price, ordering_id
+                from menu_items m
+                where category_id = %s
+                and not exists (
+                    select *
+                    from ingredients i
+                    where i.menu_item_id = m.id
+                        and i.allergy_id in %s
+                )
+                order by ordering_id
+                limit %s
+                ;
+            """
+            cur.execute(query1, [category_id, allergies_tuple, top_k])
 
-    if len(allergies_list) == 0:
-        cur.execute(query1, [category_id])
-    else:
-        cur.execute(query1, [category_id, allergies_tuple])
     list1 = cur.fetchall()
 
     for tup in list1:
