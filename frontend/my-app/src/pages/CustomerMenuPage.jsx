@@ -24,6 +24,7 @@ function CustomerMenuPage({ personas }) {
     console.log('About to get data')
     const fetchData = async () => {
       const data = await fetchAllMenuData();
+      console.log('The data is: ' + data)
       if (data && data?.length > 0) {
         setCurrentSelectedCategoryId(Object.keys(data[0])[0]);
         console.log(data)
