@@ -10,7 +10,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import makeRequest from '../makeRequest';
 import { StyledButton } from './CustomerOrStaff';
 
-function PersonalisePage() {
+function PersonalisePage({ handlePersonas }) {
 	const [allergies, setAllergies] = React.useState([]);
 	const [selectedAllergies, setSelectedAllergies] = React.useState([]);
 
@@ -45,6 +45,7 @@ function PersonalisePage() {
 
 	const handleFormSubmit = (event) => {
 		event.preventDefault();
+    handlePersonas(selectedAllergies)
 		console.log(selectedAllergies);
 	};
 
