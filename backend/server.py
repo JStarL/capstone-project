@@ -494,12 +494,11 @@ def get_allergies_flask():
 
 @APP.route("/wait_staff/get_order_list", methods=['GET'])
 def wait_staff_get_order_list_flask():   
-    data = ast.literal_eval(request.get_json())
-    cur = cur_dict['staff'][data['wait_staff_id']]
-    wait_id = data['wait_staff_id']
+    wait_id = request.args.get('wait_staff_id')
+    cur = cur_dict['staff'][wait_id]
     
     invalid_id = { 'error': 'invalid wait_staff_id' } # error message
-    output = {'orders': []}
+    output = []
 
     query_find_staff_menu = """
         SELECT menu_id
@@ -514,7 +513,7 @@ def wait_staff_get_order_list_flask():
     if len(menu_id) == 0:
         return dumps(invalid_id)
     
-    menu_id = menu_id[0] # grabbing it from the list
+    menu_id = menu_id[0][0] # grabbing it from the list
     
     order = orders[menu_id] # grabbing the orders from the dictionary
     
@@ -535,7 +534,7 @@ def wait_staff_get_order_list_flask():
                 temp_dict.update({'table_id': customer_order['table_id']})
                 temp_dict.update({'status': customer_order['status']})
                 temp_dict.update({'menu_items': temp_list})
-                output['orders'].append(temp_dict)
+                output.append(temp_dict)
     
         
     return dumps(output)
@@ -544,8 +543,8 @@ def wait_staff_get_order_list_flask():
 @APP.route("/wait_staff/mark_order_complete", methods=['DELETE'])
 def wait_staff_mark_order_complete_flask():   
     data = ast.literal_eval(request.get_json())
-    cur = cur_dict['staff'][data['wait_staff_id']]
     wait_id = data['wait_staff_id']
+    cur = cur_dict['staff'][wait_id]
     
     invalid_id = { 'error': 'invalid wait_staff_id' } # error message
     success = {'success': 'Order removed from orders'}
@@ -564,7 +563,7 @@ def wait_staff_mark_order_complete_flask():
     if len(menu_id) == 0:
         return dumps(invalid_id)
     
-    menu_id = menu_id[0] # grabbing it from the list
+    menu_id = menu_id[0][0] # grabbing it from the list
     
     customer_orders = orders[menu_id] # grabbing the orders from the dictionary
     
