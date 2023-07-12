@@ -69,12 +69,12 @@ cur_dict = {
 #       {  
 #       'session_id': '1234'
 #       'table_id': 24,
-#       'status': 'customer'
 #       'menu_items': [
 #           {
 #               'menu_item_id': 12,
 #               'amount': 1
 #               'title': 'Burger'
+#               
 #           },
 #           {
 #               'menu_item_id': 15,
@@ -86,7 +86,6 @@ cur_dict = {
 #       { 
 #       'session_id': '2345'
 #       'table_id': 22,
-#       'status': 'kitchen'
 #       'menu_items': [
 #           {
 #               'menu_item_id': 12,
@@ -105,7 +104,6 @@ cur_dict = {
 #        {
 #       'session_id': '2399'
 #       'table_id': 27,
-#       'status': 'wait'
 #       'menu_items': [
 #           {
 #               'menu_item_id': 10,
@@ -122,7 +120,6 @@ cur_dict = {
 #       {
 #       'session_id': '3479'
 #       'table_id': 13,
-#       'status': 'wait'
 #       'menu_items': [
 #           {
 #               'menu_item_id': 13,
@@ -212,17 +209,29 @@ def auth_add_staff_flask():
 def manager_view_menu_flask():
     manager_id = request.args.get("manager_id")
     menu_id = request.args.get("menu_id")
+    excluded_ids = [-1]
+    if 'excluded_cat_ids' in request.args:
+        excluded_ids = ast.literal_eval(request.args.get("excluded_cat_ids"))
+    top_k = 100
+    if 'top_k' in request.args:
+        top_k = request.args.get('top_k')
     cur = cur_dict['staff'][manager_id]
     
-    return dumps(manager_view_menu(cur,  menu_id))
+    return dumps(manager_view_menu(cur,  menu_id, excluded_ids, top_k))
 
 @APP.route("/manager/view_category", methods=['GET'])
 def manager_view_category_flask():
     manager_id = request.args.get("manager_id")
     category_id = request.args.get("category_id")
+    excluded_ids = [-1]
+    if 'excluded_cat_ids' in request.args:
+        excluded_ids = ast.literal_eval(request.args.get("excluded_cat_ids"))
+    top_k = 100
+    if 'top_k' in request.args:
+        top_k = request.args.get('top_k')
     cur = cur_dict['staff'][manager_id]
 
-    return dumps(manager_view_category(cur, category_id))
+    return dumps(manager_view_category(cur, category_id, excluded_ids, top_k))
 
 @APP.route("/manager/view_menu_item", methods=['GET'])
 def manager_view_menu_item_flask():
@@ -306,26 +315,42 @@ def customer_view_menu_flask():
     menu_id = request.args.get("menu_id")
     session_id = request.args.get("session_id")
     allergy_ids = ast.literal_eval(request.args.get("allergies"))
+    
+    excluded_cat_ids = [-1]
+    if 'excluded_cat_ids' in request.args:
+        excluded_cat_ids = ast.literal_eval(request.args.get("excluded_cat_ids"))
+    top_k = 100
+    if 'top_k' in request.args:
+        top_k = request.args.get('top_k')
+
     cur = None
     if session_id in cur_dict['customers']:
         cur = cur_dict['customers'][session_id]
     else:
         cur = db_conn.cursor()
         cur_dict['customers'][session_id] = cur
-    return dumps(customer_view_menu(cur, menu_id, allergy_ids))
+    return dumps(customer_view_menu(cur, menu_id, allergy_ids, excluded_cat_ids, top_k))
 
 @APP.route("/customer/view_category", methods=['GET'])
 def customer_view_category_flask():
     session_id = request.args.get("session_id")
     category_id = request.args.get("category_id")
     allergy_ids = ast.literal_eval(request.args.get("allergies"))
+
+    excluded_cat_ids = [-1]
+    if 'excluded_cat_ids' in request.args:
+        excluded_cat_ids = ast.literal_eval(request.args.get("excluded_cat_ids"))
+    top_k = 100
+    if 'top_k' in request.args:
+        top_k = request.args.get('top_k')
+
     cur = None
     if session_id in cur_dict['customers']:
         cur = cur_dict['customers'][session_id]
     else:
         cur = db_conn.cursor()
         cur_dict['customers'][session_id] = cur
-    return dumps(customer_view_category(cur, category_id, allergy_ids))
+    return dumps(customer_view_category(cur, category_id, allergy_ids, excluded_cat_ids, top_k))
 
 @APP.route("/customer/view_menu_item", methods=['GET'])
 def customer_view_menu_item_flask():
@@ -354,7 +379,6 @@ def customer_menu_table_flask():
             {
             'session_id': session_id,
             'table_id' : table_id,
-            'status' : 'customer',
             'menu_items' : []
             }
         )
@@ -490,6 +514,94 @@ def get_allergies_flask():
     cur.close()
     return dumps(return_list)
 
+# Kitchen Staff functions
+
+@APP.route("/kitchen_staff/get_order_list", methods=['GET'])
+def kitchen_staff_get_order_list_flask():   
+    kitchen_id = request.args.get('kitchen_staff_id')
+    cur = cur_dict['staff'][kitchen_id]
+    
+    invalid_id = { 'error': 'invalid kitchen_staff_id' } # error message
+    output = []
+    
+    query_find_staff_menu = """
+        SELECT menu_id
+        FROM staff
+        WHERE id = %s;
+    """
+    
+    cur.execute(query_find_staff_menu, [kitchen_id])
+    
+    menu_id = cur.fetchall()
+    
+    if len(menu_id) == 0:
+        return dumps(invalid_id)
+    
+    menu_id = menu_id[0][0] # grabbing it from the list
+    
+    order = orders[menu_id] # grabbing the orders from the dictionary
+    
+    for customer_order in order:
+        temp_dict = {}
+        
+        temp_list = []
+        if customer_order['status'] == 'kitchen':
+            for menu_item in customer_order['menu_items']:
+                temp_list_dict = {}
+                temp_list_dict.update({'food_id': menu_item['food_id']})
+                temp_list_dict.update({'food_name': menu_item['food_name']})
+                temp_list_dict.update({'amount': menu_item['amount']})
+                temp_list.append(temp_list_dict)
+                    
+            if len(temp_list) != 0:
+                temp_dict.update({'session_id': customer_order['session_id']})
+                temp_dict.update({'table_id': customer_order['table_id']})
+                temp_dict.update({'status': customer_order['status']})
+                temp_dict.update({'menu_items': temp_list})
+                output.append(temp_dict)
+    
+        
+    return dumps(output)
+
+@APP.route("/kitchen_staff/mark_order_complete", methods=['POST'])
+def kitchen_staff_mark_order_complete_flask():   
+    data = ast.literal_eval(request.get_json())
+    cur = cur_dict['staff'][data['kitchen_staff_id']]
+    kitchen_id = data['kitchen_staff_id']
+    
+    invalid_id = { 'error': 'invalid kitchen_staff_id' } # error message
+    success = {'success': 'Order sent to wait staff'}
+    fail = {'fail': 'could not change order status'}
+    
+    query_find_staff_menu = """
+        SELECT menu_id
+        FROM staff
+        WHERE id = %s;
+    """
+    
+    cur.execute(query_find_staff_menu, [kitchen_id])
+    
+    menu_id = cur.fetchall()
+    
+    if len(menu_id) == 0:
+        return dumps(invalid_id)
+    
+    menu_id = menu_id[0][0] # grabbing it from the list
+    
+    order = orders[menu_id] # grabbing the orders from the dictionary
+    
+    for customer_order in order:
+        if customer_order['session_id'] == data['session_id'] and customer_order['status'] == 'kitchen':
+            customer_order['status'] = 'wait'
+            
+    for customer_order in order: #check if it got changed
+        if customer_order['session_id'] == data['session_id'] and customer_order['status'] != 'wait':
+            return dumps(fail)
+            
+    return dumps(success)
+            
+    
+        
 # Wait Staff functions
 
 @APP.route("/wait_staff/get_order_list", methods=['GET'])

@@ -96,4 +96,9 @@ Week 6
   - Search restaurant 
   - Selecting Table number 
   - Personalisation
+
+Week 7 
+- Working on: 
+  - Personalise 
+  - Add / update new menu item as we changed the structure of ingredients to link with allergies 
   
