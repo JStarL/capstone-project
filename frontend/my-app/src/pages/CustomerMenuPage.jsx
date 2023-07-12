@@ -30,6 +30,18 @@ function CustomerMenuPage({ personas }) {
     };
 
     fetchData();
+  }, []);
+
+  React.useEffect(() => {
+    const fetchData = async () => {
+      const data = await fetchAllMenuData();
+      if (data && data?.length > 0) {
+        setCurrentSelectedCategoryId(Object.keys(data[0])[0]);
+        console.log(data)
+      }
+    };
+
+    fetchData();
   }, [currentlySelectedPersona]);
 
   React.useEffect(() => {
