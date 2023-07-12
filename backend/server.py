@@ -523,8 +523,7 @@ def get_allergies_flask():
 
 @APP.route("/kitchen_staff/get_order_list", methods=['GET'])
 def kitchen_staff_get_order_list_flask():   
-    data = ast.literal_eval(request.get_json())
-    kitchen_id = data['kitchen_staff_id']
+    kitchen_id = request.args.get('kitchen_staff_id')
     cur = cur_dict['staff'][kitchen_id]
     
     invalid_id = { 'error': 'invalid kitchen_staff_id' } # error message
@@ -543,7 +542,7 @@ def kitchen_staff_get_order_list_flask():
     if len(menu_id) == 0:
         return dumps(invalid_id)
     
-    menu_id = menu_id[0] # grabbing it from the list
+    menu_id = menu_id[0][0] # grabbing it from the list
     
     order = orders[menu_id] # grabbing the orders from the dictionary
     
@@ -592,7 +591,7 @@ def kitchen_staff_mark_order_complete_flask():
     if len(menu_id) == 0:
         return dumps(invalid_id)
     
-    menu_id = menu_id[0] # grabbing it from the list
+    menu_id = menu_id[0][0] # grabbing it from the list
     
     order = orders[menu_id] # grabbing the orders from the dictionary
     
