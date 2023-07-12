@@ -208,17 +208,29 @@ def auth_add_staff_flask():
 def manager_view_menu_flask():
     manager_id = request.args.get("manager_id")
     menu_id = request.args.get("menu_id")
+    excluded_ids = [-1]
+    if 'excluded_cat_ids' in request.args:
+        excluded_ids = ast.literal_eval(request.args.get("excluded_cat_ids"))
+    top_k = 100
+    if 'top_k' in request.args:
+        top_k = request.args.get('top_k')
     cur = cur_dict['staff'][manager_id]
     
-    return dumps(manager_view_menu(cur,  menu_id))
+    return dumps(manager_view_menu(cur,  menu_id, excluded_ids, top_k))
 
 @APP.route("/manager/view_category", methods=['GET'])
 def manager_view_category_flask():
     manager_id = request.args.get("manager_id")
     category_id = request.args.get("category_id")
+    excluded_ids = [-1]
+    if 'excluded_cat_ids' in request.args:
+        excluded_ids = ast.literal_eval(request.args.get("excluded_cat_ids"))
+    top_k = 100
+    if 'top_k' in request.args:
+        top_k = request.args.get('top_k')
     cur = cur_dict['staff'][manager_id]
 
-    return dumps(manager_view_category(cur, category_id))
+    return dumps(manager_view_category(cur, category_id, excluded_ids, top_k))
 
 @APP.route("/manager/view_menu_item", methods=['GET'])
 def manager_view_menu_item_flask():
