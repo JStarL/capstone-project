@@ -86,7 +86,7 @@ begin
 end;
 $$ language plpgsql;
 
-create or replace trigger update_best_selling_trigger
+create trigger update_best_selling_trigger
 after update on menu_items
 for each row
 execute procedure update_best_selling_function();
