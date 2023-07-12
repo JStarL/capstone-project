@@ -74,8 +74,8 @@ begin
             select id, menu_id from menu_items order by points desc title asc
         loop
             insert into best_selling_items(menu_id, menu_item_id, ordering id)
-            values (_menu_item.menu_id, _menu_item.id, _ordering_id)
-            _ordering_id := _ordering_id + 1
+            values (_menu_item.menu_id, _menu_item.id, _ordering_id);
+            _ordering_id := _ordering_id + 1;
         end loop;
 
     end if;
