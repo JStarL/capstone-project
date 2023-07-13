@@ -358,6 +358,7 @@ def customer_menu_table_flask():
             {
             'session_id': session_id,
             'table_id' : table_id,
+            "status": "customer",
             'menu_items' : []
             }
         )
@@ -396,8 +397,7 @@ def customer_add_menu_item_flask():
             order_list[0]['menu_items'].append( {
                 "menu_item_id" : menu_item_id,
                 "amount" : amount,
-                "title" : title,
-                "status": "customer"
+                "title" : title
             } )
         return order_list[0]
     else:
@@ -526,24 +526,63 @@ def kitchen_staff_get_order_list_flask():
         temp_dict = {}
         
         temp_list = []
-        for menu_item in customer_order['menu_items']:
-            if menu_item['status'] == 'kitchen':
+        if customer_order['status'] == 'kitchen':
+            for menu_item in customer_order['menu_items']:
                 temp_list_dict = {}
                 temp_list_dict.update({'food_id': menu_item['food_id']})
                 temp_list_dict.update({'food_name': menu_item['food_name']})
                 temp_list_dict.update({'amount': menu_item['amount']})
-                temp_list_dict.update({'status': menu_item['status']})
                 temp_list.append(temp_list_dict)
-                
-        if len(temp_list) != 0:
-            temp_dict.update({'session_id': customer_order['session_id']})
-            temp_dict.update({'table_id': customer_order['table_id']})
-            temp_dict.update({'menu_items': temp_list})
-            output['orders'].append(temp_dict)
+                    
+            if len(temp_list) != 0:
+                temp_dict.update({'session_id': customer_order['session_id']})
+                temp_dict.update({'table_id': customer_order['table_id']})
+                temp_dict.update({'status': customer_order['status']})
+                temp_dict.update({'menu_items': temp_list})
+                output['orders'].append(temp_dict)
     
         
     return dumps(output)
 
+@APP.route("/kitchen_staff/mark_order_complete", methods=['POST'])
+def kitchen_staff_mark_order_complete_flask():   
+    data = ast.literal_eval(request.get_json())
+    cur = cur_dict['staff'][data['kitchen_staff_id']]
+    kitchen_id = data['kitchen_staff_id']
+    
+    invalid_id = { 'error': 'invalid kitchen_staff_id' } # error message
+    success = {'success': 'Order sent to wait staff'}
+    fail = {'fail': 'could not change order status'}
+    
+    query_find_staff_menu = """
+        SELECT menu_id
+        FROM staff
+        WHERE id = %s;
+    """
+    
+    cur.execute(query_find_staff_menu, [kitchen_id])
+    
+    menu_id = cur.fetchall()
+    
+    if len(menu_id) == 0:
+        return dumps(invalid_id)
+    
+    menu_id = menu_id[0] # grabbing it from the list
+    
+    order = orders[menu_id] # grabbing the orders from the dictionary
+    
+    for customer_order in order:
+        if customer_order['session_id'] == data['session_id']:
+            customer_order['status'] = 'wait'
+            
+    for customer_order in order: #check if it got changed
+        if customer_order['session_id'] == data['session_id'] and customer_order['status'] != 'wait':
+            return dumps(fail)
+            
+    return dumps(success)
+            
+    
+        
 ##############################################################################################################################
 ################################################ OLD PROJECT STUFF ###########################################################
 ##############################################################################################################################
