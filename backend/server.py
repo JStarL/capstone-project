@@ -569,7 +569,7 @@ def kitchen_staff_mark_order_complete_flask():
     order = orders[menu_id] # grabbing the orders from the dictionary
     
     for customer_order in order:
-        if customer_order['session_id'] == data['session_id']:
+        if customer_order['session_id'] == data['session_id'] and customer_order['status'] == 'kitchen':
             customer_order['status'] = 'wait'
             
     for customer_order in order: #check if it got changed
