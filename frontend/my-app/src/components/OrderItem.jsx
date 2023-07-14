@@ -25,7 +25,7 @@ function OrderItem (props) {
       // return data;
     }
     fetchMenuDetails();
-    }, [])
+    }, [props.menu_item_id])
 
   React.useEffect(() => {
     console.log(menuId)
