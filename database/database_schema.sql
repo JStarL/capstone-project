@@ -50,11 +50,46 @@ create table menu_items (
     ordering_id         serial not null,
     category_id         integer not null,
     menu_id             integer not null,
+    points              integer default 0,
 
     primary key (id),
     foreign key (category_id) references categories(id) on delete cascade,
     foreign key (menu_id) references menus(id)
 );
+
+create or replace function update_best_selling_function()
+returns trigger
+as $$
+declare
+    _menu_item      record;
+    _ordering_id    integer := 1;
+begin
+
+    if (new.points <> old.points) then
+    
+        delete * from best_selling_items
+        where menu_id=old.menu_id;
+        
+        for _menu_item in
+            select id, menu_id
+            from menu_items m
+            where m.menu_id = old.menu_id
+            order by points desc, title asc
+        loop
+            insert into best_selling_items(menu_id, menu_item_id, ordering id)
+            values (_menu_item.menu_id, _menu_item.id, _ordering_id);
+            _ordering_id := _ordering_id + 1;
+        end loop;
+
+    end if;
+
+end;
+$$ language plpgsql;
+
+create or replace trigger update_best_selling_trigger
+after update on menu_items
+for each row
+execute procedure update_best_selling_function();
 
 create or replace view menu_items_and_categories(menu_item_id, title, description, image, price, category_id, category_name, menu_id) as
 select m.id, m.title, m.description, m.image, m.price, c.id, c.name, c.menu_id
@@ -77,4 +112,15 @@ create table ingredients (
     primary key (menu_item_id, name),
     foreign key (menu_item_id) references menu_items(id),
     foreign key (allergy_id) references allergies(id)
+);
+
+create table best_selling_items (
+    menu_id             integer not null,
+    menu_item_id        integer not null,
+    ordering_id         serial not null,
+
+    primary key (menu_id, menu_item_id),
+    foreign key (menu_id) references menus(id),
+    foreign key (menu_item_id) references menu_items(id)
+
 );
