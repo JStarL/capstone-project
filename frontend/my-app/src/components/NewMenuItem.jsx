@@ -20,8 +20,8 @@ function NewMenuItem(props) {
   const [image, setImage] = React.useState('');
   const [imageName, setImageName] = React.useState('');
   const [ingredientAndAllergyList, setIngredientAndAllergyList] = React.useState([]);
-  const [allergies, setAllergies] = React.useState([]);
-  const [selectedAllergy, setSelectedAllergy] = React.useState(''); // New state variable for selected allergy
+  const [allergies, setAllergies] = React.useState([[0, 'None', 'No allergies']]);
+  const [selectedAllergy, setSelectedAllergy] = React.useState(0); // New state variable for selected allergy
 
   const params = useParams();
   const navigate = useNavigate();
@@ -60,8 +60,8 @@ function NewMenuItem(props) {
   async function fetchAllergies() {
     const url = '/get_allergies';
     const data = await makeRequest(url, 'GET', undefined, undefined);
-    setAllergies(data);
-    console.log(data)
+    setAllergies([...allergies, ...data]);
+    console.log(allergies)
     return data;
   }
 

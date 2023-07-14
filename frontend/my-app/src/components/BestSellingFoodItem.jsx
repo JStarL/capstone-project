@@ -7,7 +7,7 @@ function BestSellingFoodItem (props) {
   <div className='food-item-div'>
     <div>
       {props.originalImage
-      ? <div className='image'><img style={{ height: '200px', width: '200px', margin: '5px' }} src={props.originalImage}></img></div>
+      ? <div className='image'><img style={{ width: '20vh', height: '20vh', margin: '20px', borderRadius: '10px' }} src={props.originalImage}></img></div>
       : <div className='food-item-img'>IMG</div>}
     </div>
     <div className='food-item-middle'>
