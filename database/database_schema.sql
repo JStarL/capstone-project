@@ -67,7 +67,7 @@ begin
 
     if (new.points <> old.points) then
     
-        delete * from best_selling_items
+        delete from best_selling_items
         where menu_id=old.menu_id;
         
         for _menu_item in
@@ -76,17 +76,18 @@ begin
             where m.menu_id = old.menu_id
             order by points desc, title asc
         loop
-            insert into best_selling_items(menu_id, menu_item_id, ordering id)
+            insert into best_selling_items(menu_id, menu_item_id, ordering_id)
             values (_menu_item.menu_id, _menu_item.id, _ordering_id);
             _ordering_id := _ordering_id + 1;
         end loop;
 
     end if;
+    return new;
 
 end;
 $$ language plpgsql;
 
-create or replace trigger update_best_selling_trigger
+create trigger update_best_selling_trigger
 after update on menu_items
 for each row
 execute procedure update_best_selling_function();

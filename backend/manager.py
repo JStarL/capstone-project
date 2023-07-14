@@ -1,6 +1,6 @@
 
 
-def manager_view_menu(cur, menu_id):
+def manager_view_menu(cur, menu_id, excluded_cat_list, top_k):
     invalid_menu_id = { 'error': 'invalid menu id' } # error message
     menu = []
 
@@ -8,8 +8,14 @@ def manager_view_menu(cur, menu_id):
     select id, name, ordering_id from categories where menu_id = %s order by ordering_id;
     """
     
-    query_menu_items = """
-    select id, title, description, image, price, ordering_id from menu_items where category_id = %s order by ordering_id;
+    query_best_selling_items = """
+        select m.id, m.title, m.description, m.image, m.price, b.ordering_id
+        from menu_items m join best_selling_items b on (m.menu_id = b.menu_id and m.id = b.menu_item_id)
+        where m.menu_id = %s
+        and m.category_id not in %s
+        order by b.ordering_id, m.title
+        limit %s
+        ;
     """
 
     query_ingredients = """
@@ -29,7 +35,11 @@ def manager_view_menu(cur, menu_id):
             # give the frontend all the information on
             # food details so it can show on the UI
 
-            cur.execute(query_menu_items, [categ_id])
+            if str(type(excluded_cat_list)) != "<class 'list'>":
+                return { 'error': 'excluded category ids is not a list'} 
+            excluded_cat_tuple = tuple(excluded_cat_list)
+
+            cur.execute(query_best_selling_items, [menu_id, excluded_cat_tuple, top_k])
             menu_items_list = cur.fetchall()
             return_menu_list = []
             for menu_item in menu_items_list:
@@ -54,12 +64,12 @@ def manager_view_menu(cur, menu_id):
         
     return menu
 
-def manager_view_category(cur, category_id):
+def manager_view_category(cur, category_id, excluded_cat_list, top_k):
     invalid_category_id = { 'error': 'invalid category_id' }
     menu_items = []
 
     query0 = """
-    select id from categories where id = %s;
+    select id, name, menu_id from categories where id = %s;
     """
 
     cur.execute(query0, [category_id])
@@ -68,11 +78,26 @@ def manager_view_category(cur, category_id):
     if len(list1) == 0:
         return invalid_category_id
 
-    query1 = """
-    select id, title, description, image, price, ordering_id from menu_items where category_id = %s order by ordering_id;
-    """
+    if list1[0][1] == 'Best Selling':
+        query_best_selling_items = """
+        select m.id, m.title, m.description, m.image, m.price, b.ordering_id
+        from menu_items m join best_selling_items b on (m.menu_id = b.menu_id and m.id = b.menu_item_id)
+        where m.menu_id = %s
+        and m.category_id not in %s
+        order by b.ordering_id, m.title
+        limit %s
+        ;
+        """
+        if str(type(excluded_cat_list)) != "<class 'list'>":
+            return { 'error': 'excluded category ids is not a list'} 
+        excluded_cat_tuple = tuple(excluded_cat_list)
+        cur.execute(query_best_selling_items, [list1[0][2], excluded_cat_tuple, top_k])
+    else:
+        query1 = """
+        select id, title, description, image, price, ordering_id from menu_items where category_id = %s order by ordering_id limit %s;
+        """
+        cur.execute(query1, [category_id, top_k])
 
-    cur.execute(query1, [category_id])
     list1 = cur.fetchall()
     
     for tup in list1:
