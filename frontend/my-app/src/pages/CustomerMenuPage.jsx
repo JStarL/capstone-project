@@ -8,13 +8,13 @@ import { Typography } from '@mui/material';
 import { StyledButton } from './CustomerOrStaff';
 import PersonAddAlt1SharpIcon from '@mui/icons-material/PersonAddAlt1Sharp';
 
-function CustomerMenuPage() {
+function CustomerMenuPage({ personas }) {
   const [categories, setCategories] = React.useState([]);
   const [currentSelectedCategory, setCurrentSelectedCategory] = React.useState('Best Selling');
   const [currentSelectedCategoryId, setCurrentSelectedCategoryId] = React.useState(-1);
   const [menuItems, setMenuItems] = React.useState([]); // List of Menu items for the current selected category
-
-  const navigate = useNavigate();
+  const [currentlySelectedPersona, setCurrentlySelectedPersona] = React.useState([])
+  console.log(personas)
 
   const sessionId = localStorage.getItem('session_id');
   const menuId = localStorage.getItem('menu_id') // hard code for now but update this when we implement search restaurant
@@ -30,12 +30,12 @@ function CustomerMenuPage() {
     };
 
     fetchData();
-  }, []);
+  }, [currentlySelectedPersona]);
 
   React.useEffect(() => {
     const fetchCategoryData = async () => {
       if (currentSelectedCategoryId !== -1) {
-        const url = `/customer/view_category?session_id=${sessionId}&category_id=${currentSelectedCategoryId}&allergies=[]`;
+        const url = `/customer/view_category?session_id=${sessionId}&category_id=${currentSelectedCategoryId}&allergies=[${currentlySelectedPersona}]`;
         const data = await makeRequest(url, 'GET', undefined, undefined)
         setMenuItems(data)
         fetchAllMenuData()
@@ -45,21 +45,16 @@ function CustomerMenuPage() {
   }, [currentSelectedCategoryId])
 
   async function fetchAllMenuData() {
-    const url = `/customer/view_menu?session_id=${sessionId}&menu_id=${menuId}&allergies=[]`;
+    const url = `/customer/view_menu?session_id=${sessionId}&menu_id=${menuId}&allergies=[${currentlySelectedPersona}]`;
     const data = await makeRequest(url, 'GET', undefined, undefined);
     console.log(data)
     setCategories(data);
+  
+  }
 
-    // for (const [key, value] of Object.entries(data)) {
-    //   for (const [key1, value1] of Object.entries(value)) {
-    //     if (value1[1]?.length > 0) {
-    //       setMenuItems(value1[1])
-    //     }
-    //     console.log(value1[1]);
-    //   }
-
-    // }
-    return data; // Return the fetched data
+  const handlePersonaChange = (persona) => {
+    setCurrentlySelectedPersona(persona)
+    console.log(persona)
   }
 
   async function fetchCategoryMenuItems() {
@@ -74,6 +69,13 @@ function CustomerMenuPage() {
   return (
     <>
       <Typography className='h4' variant="h4" gutterBottom>Customer Menu Page - {currentSelectedCategory}</Typography>
+      <select value={currentlySelectedPersona} onChange={(e) => handlePersonaChange(e.target.value)}>
+        {personas.map((persona, index) => (
+          <option key={persona} value={persona}>
+            {`Persona ${index}`}
+          </option>
+        ))}
+      </select>
 
       <div style={{ display: 'flex', flexDirection: 'row' }}>
         <div style={{ width: '25%', backgroundColor: 'white', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
