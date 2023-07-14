@@ -541,7 +541,7 @@ def wait_staff_get_order_list_flask():
     return dumps(output)
 
 
-@APP.route("/wait_staff/mark_order_complete", methods=['POST'])
+@APP.route("/wait_staff/mark_order_complete", methods=['DELETE'])
 def wait_staff_mark_order_complete_flask():   
     data = ast.literal_eval(request.get_json())
     cur = cur_dict['staff'][data['wait_staff_id']]
