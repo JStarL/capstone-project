@@ -69,36 +69,35 @@ cur_dict = {
 #       {  
 #       'session_id': '1234'
 #       'table_id': 24,
+#       'status': 'kitchen',
 #       'menu_items': [
 #           {
 #               'menu_item_id': 12,
 #               'amount': 1
 #               'title': 'Burger'
-#               'status': 'kitchen'
+#               
 #           },
 #           {
 #               'menu_item_id': 15,
 #               'amount': 2
 #               'title': 'Fries'
-#               'status': 'wait'
 #           }
 #       ]
 #       },
 #       { 
 #       'session_id': '2345'
 #       'table_id': 22,
+#       'status': 'wait',
 #       'menu_items': [
 #           {
 #               'menu_item_id': 12,
 #               'amount': 1
 #               'title': 'Burger'
-#               'status': 'wait'
 #           },
 #           {
 #               'menu_item_id': 11,
 #               'amount': 2
 #               'title': 'Coke'
-#               'status': 'wait'
 #           }
 #       ]
 #       }
@@ -107,36 +106,34 @@ cur_dict = {
 #        {
 #       'session_id': '2399'
 #       'table_id': 27,
+#       'status': 'customer',
 #       'menu_items': [
 #           {
 #               'menu_item_id': 10,
 #               'amount': 3
 #               'title': 'Pasta'
-#               'status': 'kitchen'
 #           },
 #           {
 #               'menu_item_id': 3,
 #               'amount': 1
 #               'title': 'Fanta'
-#               'status': 'kitchen'
 #           }
 #       ]
 #       },
 #       {
 #       'session_id': '3479'
 #       'table_id': 13,
+#       'status': 'kitchen',
 #       'menu_items': [
 #           {
 #               'menu_item_id': 13,
 #               'amount': 2
 #               'title': 'Fried Rice'
-#               'status': 'kitchen'
 #           },
 #           {
 #               'menu_item_id': 2,
 #               'amount': 1
 #               'title': 'Water'
-#               'status': 'kitchen'
 #           }
 #       ]
 #       }
