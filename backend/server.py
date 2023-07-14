@@ -566,13 +566,13 @@ def wait_staff_mark_order_complete_flask():
     
     menu_id = menu_id[0] # grabbing it from the list
     
-    orders = orders[menu_id] # grabbing the orders from the dictionary
+    customer_orders = orders[menu_id] # grabbing the orders from the dictionary
     
-    for customer_order in orders:
+    for customer_order in customer_orders:
         if customer_order['session_id'] == data['session_id'] and customer_order['status'] == 'wait':
-            orders.remove(customer_order) # once marked as completed, remove it from the dictionary of orders
+            customer_orders.remove(customer_order) # once marked as completed, remove it from the dictionary of orders
             
-    for customer_order in orders: #check if it got removed
+    for customer_order in customer_orders: #check if it got removed
         if customer_order['session_id'] == data['session_id'] and customer_order['status'] == 'wait':
             return dumps(fail)
             
