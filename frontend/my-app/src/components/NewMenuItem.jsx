@@ -37,7 +37,7 @@ function NewMenuItem(props) {
       'title': foodName,
       'image': image !== null ? image : undefined,
       price,
-      'ingredients': ingredient,
+      'ingredients': ingredientAndAllergyList,
       'description': description !== null ? description : undefined,
     });
 
@@ -69,6 +69,12 @@ function NewMenuItem(props) {
     setImageName(event.target.files[0].name);
     const thumbnailUrl = await fileToDataUrl(event.target.files[0]);
     setImage(thumbnailUrl);
+  }
+
+  function addIngredientAllergyPair() {
+    setIngredientAndAllergyList([...ingredientAndAllergyList, [ingredient, selectedAllergy]])
+    setSelectedAllergy(0)
+    setIngredient('')
   }
 
   return (
@@ -108,16 +114,16 @@ function NewMenuItem(props) {
                 type='number'
               />
             </FormControl>
-            <div style={{ display: 'flex', flexDirection: 'row', alignItems:'center'}}>
+            <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
               <TextField
-                sx={{ mb:2 }}
+                sx={{ mb: 2 }}
                 fullWidth
-                label='Add Ingredient'
+                label='Add New Ingredient'
                 variant='outlined'
                 value={ingredient}
                 onChange={e => setIngredient(e.target.value)}
               />
-              <FormControl sx={{ mb:2, ml: 2 }} fullWidth>
+              <FormControl sx={{ mb: 2, ml: 2 }} fullWidth>
                 <InputLabel id="allergy-select-label">Add Allergy</InputLabel>
                 <Select
                   labelId="allergy-select-label"
@@ -134,11 +140,53 @@ function NewMenuItem(props) {
                 </Select>
               </FormControl>
               <StyledButton
-                sx={{ mb: 2, ml: 2, width: '10%', height: '20%'}}
-                onClick={() => console.log('add ingredient')}
+                sx={{ mb: 2, ml: 2, width: '10%', height: '20%' }}
+                onClick={() => addIngredientAllergyPair()}
                 startIcon={<AddIcon />}
               ></StyledButton>
+              {console.log(ingredientAndAllergyList)}
             </div>
+
+            <Typography variant="h6" gutterBottom>Ingredient and Allergy List:</Typography>
+
+            {ingredientAndAllergyList?.map((ingredientAllergyPair, index) => (
+
+              <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }} key={index}>
+                <TextField
+                  sx={{ mb: 2 }}
+                  fullWidth
+                  label='Ingredient Name'
+                  variant='outlined'
+                  value={ingredientAllergyPair[0]}
+                  onChange={e => {
+                    const updatedList = [...ingredientAndAllergyList];
+                    updatedList[index][0] = e.target.value;
+                    setIngredientAndAllergyList(updatedList);
+                  }}
+                />
+                <FormControl sx={{ mb: 2, ml: 2 }} fullWidth>
+                  <InputLabel id="allergy-select-label">Allergy</InputLabel>
+                  <Select
+                    labelId="allergy-select-label"
+                    id="allergy-select"
+                    value={ingredientAllergyPair[1]}
+                    onChange={e => {
+                      const updatedList = [...ingredientAndAllergyList];
+                      updatedList[index][1] = e.target.value;
+                      setIngredientAndAllergyList(updatedList);
+                    }}
+                    label="Allergy"
+                  >
+                    {allergies.map(allergy => (
+                      <MenuItem key={allergy[0]} value={allergy[0]}>
+                        {allergy[1]}
+                      </MenuItem>
+                    ))}
+                  </Select>
+                </FormControl>
+              </div>
+            ))}
+
 
             {image ? (
               <div className='image'>

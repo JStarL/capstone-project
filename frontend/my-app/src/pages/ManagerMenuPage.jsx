@@ -28,6 +28,8 @@ function ManagerMenuPage() {
       const data = await fetchAllMenuData();
       if (data && data?.length > 0) {
         setCurrentSelectedCategoryId(Object.keys(data[0])[0]);
+        console.log('selected category id:' + currentSelectedCategoryId)
+
       }
     };
 
@@ -40,10 +42,10 @@ function ManagerMenuPage() {
         const url = `/manager/view_category?manager_id=${managerId}&category_id=${currentSelectedCategoryId}`;
         const data = await makeRequest(url, 'GET', undefined, undefined)
         setMenuItems(data)
-        console.log(currentSelectedCategoryId)
         console.log('here')
         // fetchAllMenuData()
       }
+      console.log('selected category id:' + currentSelectedCategoryId)
     };
     fetchCategoryData();
   }, [currentSelectedCategoryId])

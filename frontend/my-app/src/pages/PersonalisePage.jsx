@@ -45,7 +45,7 @@ function PersonalisePage({ handlePersonas }) {
 
 	const handleFormSubmit = (event) => {
 		event.preventDefault();
-    handlePersonas(selectedAllergies)
+		handlePersonas(selectedAllergies)
 		console.log(selectedAllergies);
 	};
 
@@ -61,8 +61,8 @@ function PersonalisePage({ handlePersonas }) {
 							style={{
 								display: 'flex',
 								flexDirection: 'column',
-								justifyContent:'center', 
-								alignItems:'center'
+								justifyContent: 'center',
+								alignItems: 'center'
 							}}
 						>
 							{allergies?.map((allergy) => (
@@ -79,7 +79,7 @@ function PersonalisePage({ handlePersonas }) {
 											padding: '10px',
 											margin: '10px',
 											boxShadow: '0 3px 6px rgba(0, 0, 0, 0.4)',
-											borderRadius: '20px', 
+											borderRadius: '20px',
 											width: '70vh'
 										}}>
 											<Typography
@@ -98,7 +98,7 @@ function PersonalisePage({ handlePersonas }) {
 								/>
 							))}
 						</div>
-						<StyledButton sx={{width:'80%', p:1, mt:2}} variant='outlined' type="submit" color="primary">
+						<StyledButton sx={{ width: '80%', p: 1, mt: 2 }} variant='outlined' type="submit" color="primary">
 							Add Persona
 						</StyledButton>
 					</form>

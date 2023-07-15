@@ -1,7 +1,8 @@
 import React from 'react';
 import './Components.css';
-import { Button, TextField, Input } from '@mui/material';
+import { Button, TextField, Input, Select } from '@mui/material';
 import { fileToDataUrl } from './helperFunctions';
+import MenuItem from '@mui/material/MenuItem';
 import DeleteIcon from '@mui/icons-material/Delete';
 import OutlinedInput from '@mui/material/OutlinedInput';
 import FormControl from '@mui/material/FormControl';
@@ -14,9 +15,10 @@ import { StyledButton } from '../pages/CustomerOrStaff';
 function ManagerFoodItem({ originalFoodName, originalFoodDescription, originalPrice, originalImage, originalIngredients, foodId, categoryId, categoryName, fetchCategoryMenuItems }) {
   const [foodName, setFoodName] = React.useState('');
   const [foodDescription, setFoodDescription] = React.useState('');
-  const [ingredients, setIngredients] = React.useState('')
+  const [ingredientAndAllergyList, setIngredientAndAllergyList] = React.useState(originalIngredients);
   const [image, setImage] = React.useState(originalImage)
   const [price, setPrice] = React.useState(originalPrice)
+  const [allergies, setAllergies] = React.useState([[0, 'None', 'No allergies']]);
 
   React.useEffect(() => {
     console.log(originalFoodDescription)
@@ -25,17 +27,24 @@ function ManagerFoodItem({ originalFoodName, originalFoodDescription, originalPr
     setFoodDescription(originalFoodDescription)
     setImage(originalImage)
     setPrice(originalPrice)
-    toStringForm();
   }, [originalFoodDescription, originalFoodName, originalImage, originalPrice, originalIngredients]);
 
-  function toStringForm() {
-    if (originalIngredients !== "{}") {
-      setIngredients(originalIngredients)
-    }
-    else {
-      setIngredients("")
-    }
+  React.useEffect(() => {
+    const fetchData = async () => {
+      const data = await fetchAllergies();
+      console.log(data);
+    };
+    fetchData();
+  }, []);
+
+  async function fetchAllergies() {
+    const url = '/get_allergies';
+    const data = await makeRequest(url, 'GET', undefined, undefined);
+    setAllergies([...allergies, ...data]);
+    console.log(allergies)
+    return data;
   }
+
   const navigate = useNavigate();
   async function handleFileSelect(event) {
     const thumbnailUrl = await fileToDataUrl(event.target.files[0])
@@ -49,7 +58,7 @@ function ManagerFoodItem({ originalFoodName, originalFoodDescription, originalPr
       'menu_item_id': foodId,
       'title': foodName,
       price,
-      'ingredients': ingredients,
+      'ingredients': ingredientAndAllergyList,
       'description': foodDescription,
       'category_id': categoryId,
       'menu_id': menuId,
@@ -108,8 +117,42 @@ function ManagerFoodItem({ originalFoodName, originalFoodDescription, originalPr
             value={price}
           />
         </FormControl></div>
-        <div className='div-section'><TextField className='food-item-description' rows={3} multiline={true} label='Ingredients' value={ingredients} onChange={e => setIngredients(e.target.value)}></TextField></div>
-      </div>
+        {ingredientAndAllergyList?.map((ingredientAllergyPair, index) => (
+          <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }} key={index}>
+            <TextField
+              sx={{ mb: 2 }}
+              fullWidth
+              label='Ingredient Name'
+              variant='outlined'
+              value={ingredientAllergyPair[0]}
+              onChange={e => {
+                const updatedList = [...ingredientAndAllergyList];
+                updatedList[index][0] = e.target.value;
+                setIngredientAndAllergyList(updatedList);
+              }}
+            />
+            <FormControl sx={{ mb: 2, ml: 2 }} fullWidth>
+              <InputLabel id="allergy-select-label">Allergy</InputLabel>
+              <Select
+                labelId="allergy-select-label"
+                id="allergy-select"
+                value={ingredientAllergyPair[1]}
+                onChange={e => {
+                  const updatedList = [...ingredientAndAllergyList];
+                  updatedList[index][1] = e.target.value;
+                  setIngredientAndAllergyList(updatedList);
+                }}
+                label="Allergy"
+              >
+                {allergies.map(allergy => (
+                  <MenuItem key={allergy[0]} value={allergy[0]}>
+                    {allergy[1]}
+                  </MenuItem>
+                ))}
+              </Select>
+            </FormControl>
+          </div>
+        ))}      </div>
       <div className='food-item-button'>
         {categoryName !== 'Best Selling'
           ? <Button sx={{ color: '#002250' }} onClick={deleteFoodItem} startIcon={<DeleteIcon />}></Button>
