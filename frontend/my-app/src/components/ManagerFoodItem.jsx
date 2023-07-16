@@ -18,7 +18,7 @@ function ManagerFoodItem({ allergies, originalFoodName, originalFoodDescription,
   const [ingredientAndAllergyList, setIngredientAndAllergyList] = React.useState(originalIngredients);
   const [image, setImage] = React.useState(originalImage)
   const [price, setPrice] = React.useState(originalPrice)
-  const [isListVisible, setListVisible] = React.useState(true);
+  const [isListVisible, setListVisible] = React.useState(false);
 
   React.useEffect(() => {
     setFoodName(originalFoodName)
