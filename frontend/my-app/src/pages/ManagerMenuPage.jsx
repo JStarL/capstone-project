@@ -17,7 +17,7 @@ function ManagerMenuPage() {
   const [currentSelectedCategory, setCurrentSelectedCategory] = React.useState('Best Selling');
   const [currentSelectedCategoryId, setCurrentSelectedCategoryId] = React.useState(-1);
   const [menuItems, setMenuItems] = React.useState([]); // List of Menu items for the current selected category
-  const [allergies, setAllergies] = React.useState([[0, 'None', 'No allergies']]);
+  const [allergies, setAllergies] = React.useState([]);
   const navigate = useNavigate();
   const params = useParams();
 

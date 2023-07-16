@@ -1,6 +1,6 @@
 import React from 'react';
 import './Components.css';
-import { Button, TextField, Input, Select } from '@mui/material';
+import { Typography, Button, TextField, Input, Select } from '@mui/material';
 import { fileToDataUrl } from './helperFunctions';
 import MenuItem from '@mui/material/MenuItem';
 import DeleteIcon from '@mui/icons-material/Delete';
@@ -18,12 +18,14 @@ function ManagerFoodItem({ allergies, originalFoodName, originalFoodDescription,
   const [ingredientAndAllergyList, setIngredientAndAllergyList] = React.useState(originalIngredients);
   const [image, setImage] = React.useState(originalImage)
   const [price, setPrice] = React.useState(originalPrice)
+  const [isListVisible, setListVisible] = React.useState(true);
 
   React.useEffect(() => {
     setFoodName(originalFoodName)
     setFoodDescription(originalFoodDescription)
     setImage(originalImage)
     setPrice(originalPrice)
+    setIngredientAndAllergyList(originalIngredients)
   }, [originalFoodDescription, originalFoodName, originalImage, originalPrice, originalIngredients]);
 
   const navigate = useNavigate();
@@ -66,8 +68,13 @@ function ManagerFoodItem({ allergies, originalFoodName, originalFoodDescription,
       .catch(e => console.log('Error: ' + e));
   }
 
+  function toggleListVisibility() {
+    setListVisible(!isListVisible);
+  }
+
   return (
     <>
+      {console.log(originalIngredients)}
       <div className='food-item-div'>
         <div>
           {image ? (
@@ -116,42 +123,50 @@ function ManagerFoodItem({ allergies, originalFoodName, originalFoodDescription,
               />
             </FormControl>
           </div>
-          {ingredientAndAllergyList?.map((ingredientAllergyPair, index) => (
-            <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }} key={index}>
-              <TextField
-                sx={{ mb: 2 }}
-                fullWidth
-                label='Ingredient Name'
-                variant='outlined'
-                value={ingredientAllergyPair[0]}
-                onChange={e => {
-                  const updatedList = [...ingredientAndAllergyList];
-                  updatedList[index][0] = e.target.value;
-                  setIngredientAndAllergyList(updatedList);
-                }}
-              />
-              <FormControl sx={{ mb: 2, ml: 2 }} fullWidth>
-                <InputLabel id="allergy-select-label">Allergy</InputLabel>
-                <Select
-                  labelId="allergy-select-label"
-                  id="allergy-select"
-                  value={ingredientAllergyPair[1]}
+          <div className='div-section'>
+            <div style={{display:'flex', flexDirection:'row', alignItems: 'center'}}>
+              <Typography variant="h6" gutterBottom>Ingredients and Allergy List:</Typography>
+              <StyledButton variant="outlined" onClick={toggleListVisibility} style={{width: 'auto', margin: '10px'}}>
+                {isListVisible ? 'Hide Ingredients' : 'Show Ingredients'}
+              </StyledButton>
+            </div>
+            {isListVisible && ingredientAndAllergyList?.map((ingredientAllergyPair, index) => (
+              <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }} key={index}>
+                <TextField
+                  sx={{ mb: 2 }}
+                  fullWidth
+                  label='Ingredient Name'
+                  variant='outlined'
+                  value={ingredientAllergyPair[0]}
                   onChange={e => {
                     const updatedList = [...ingredientAndAllergyList];
-                    updatedList[index][1] = e.target.value;
+                    updatedList[index][0] = e.target.value;
                     setIngredientAndAllergyList(updatedList);
                   }}
-                  label="Allergy"
-                >
-                  {allergies.map(allergy => (
-                    <MenuItem key={allergy[0]} value={allergy[0]}>
-                      {allergy[1]}
-                    </MenuItem>
-                  ))}
-                </Select>
-              </FormControl>
-            </div>
-          ))}
+                />
+                <FormControl sx={{ mb: 2, ml: 2 }} fullWidth>
+                  <InputLabel id="allergy-select-label">Allergy</InputLabel>
+                  <Select
+                    labelId="allergy-select-label"
+                    id="allergy-select"
+                    value={ingredientAllergyPair[1]}
+                    onChange={e => {
+                      const updatedList = [...ingredientAndAllergyList];
+                      updatedList[index][1] = e.target.value;
+                      setIngredientAndAllergyList(updatedList);
+                    }}
+                    label="Allergy"
+                  >
+                    {allergies.map(allergy => (
+                      <MenuItem key={allergy[0]} value={allergy[0]}>
+                        {allergy[1]}
+                      </MenuItem>
+                    ))}
+                  </Select>
+                </FormControl>
+              </div>
+            ))}
+          </div>
         </div>
         <div className='food-item-button'>
           {categoryName !== 'Best Selling' && (
