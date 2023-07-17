@@ -102,7 +102,7 @@ function CustomerMenuPage({ personas }) {
           ))}
         </div>
         <div style={{ width: '75%', height: '100%' }}>
-        <div style={{ display: 'flex' }}>
+        <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100%' }}>
           <div style={{ width: '85%' }}>
           <Typography className='h4' variant="h4" gutterBottom>Customer Menu Page - {currentSelectedCategory}</Typography>
           </div>

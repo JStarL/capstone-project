@@ -100,6 +100,7 @@ function ManagerMenuPage() {
       <div style={{ display: 'flex', flexDirection: 'row'}}>
         <div style={{ width: '25%', backgroundColor: 'white', display: 'flex', flexDirection: 'column', alignItems: 'center'}}>
           {categories?.map((category) => (
+            
             <CategoryManager
               categoryName={category[Object.keys(category)[0]][0]}
               key={Object.keys(category)[0]} // category id 
@@ -110,7 +111,10 @@ function ManagerMenuPage() {
               currentSelectedCategoryId={currentSelectedCategoryId}
               setMenuItems={setMenuItems}
               fetchCategoryMenuItems={fetchCategoryMenuItems}
-            />
+              orderingId={category[Object.keys(category)[0]][2]}
+            >
+              {console.log(category)}
+            </CategoryManager>
           ))}
           <NewCategoryField
             menuId={menuId}
