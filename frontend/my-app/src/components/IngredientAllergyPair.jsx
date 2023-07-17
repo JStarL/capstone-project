@@ -2,6 +2,7 @@ import React from 'react';
 import { TextField, FormControl, InputLabel, Select, MenuItem, Button } from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { StyledButton } from '../pages/CustomerOrStaff';
+
 function IngredientAllergyPair({ ingredientAllergyPair, allergies, handleAllergyChange, handleIngredientChange, handleDelete, ingredientLabel, allergyLabel }) {
 	return (
 		<div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
