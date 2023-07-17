@@ -11,6 +11,7 @@ import InputLabel from '@mui/material/InputLabel';
 import makeRequest from '../makeRequest';
 import { StyledButton } from '../pages/CustomerOrStaff';
 import AddIcon from '@mui/icons-material/Add';
+import IngredientAllergyPair from './IngredientAllergyPair';
 
 function NewMenuItem(props) {
   const [foodName, setFoodName] = React.useState('');
@@ -116,42 +117,53 @@ function NewMenuItem(props) {
             </FormControl>
             {ingredientAndAllergyList.length === 0
               ? <Typography style={{
-                color: 'red', 
+                color: 'red',
                 borderColor: props.currentSelectedCategoryId === props.id ? '#002250' : undefined,
                 boxShadow: props.currentSelectedCategoryId === props.id ? "0 3px 6px rgba(0, 0, 0, 0.4)" : undefined,
                 borderRadius: '10px',
-                padding: '5px', 
+                padding: '5px',
                 marginBottom: '30px'
               }} variant="h6" gutterBottom>You have not added any ingredients! Please use the plus button below to add ingredients ↓</Typography>
-          : <Typography variant="h6" gutterBottom>Ingredients and Allergy List:</Typography>
+              : <Typography variant="h6" gutterBottom>Ingredients and Allergy List:</Typography>
             }
-          {ingredientAndAllergyList?.map((ingredientAllergyPair, index) => (
-
-            <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }} key={index}>
-              <TextField
-                sx={{ mb: 2 }}
-                fullWidth
-                label='Ingredient Name'
-                variant='outlined'
-                value={ingredientAllergyPair[0]}
-                onChange={e => {
-                  const updatedList = [...ingredientAndAllergyList];
-                  updatedList[index][0] = e.target.value;
-                  setIngredientAndAllergyList(updatedList);
-                }}
-              />
-              <FormControl sx={{ mb: 2, ml: 2 }} fullWidth>
-                <InputLabel id="allergy-select-label">Allergy</InputLabel>
-                <Select
-                  labelId="allergy-select-label"
-                  id="allergy-select"
-                  value={ingredientAllergyPair[1]}
-                  onChange={e => {
+            {ingredientAndAllergyList?.map((ingredientAllergyPair, index) => (
+              <>
+                <IngredientAllergyPair
+                  ingredientAllergyPair={ingredientAllergyPair}
+                  handleIngredientChange={e => {
+                    const updatedList = [...ingredientAndAllergyList];
+                    updatedList[index][0] = e.target.value;
+                    setIngredientAndAllergyList(updatedList);
+                  }}
+                  handleAllergyChange={e => {
                     const updatedList = [...ingredientAndAllergyList];
                     updatedList[index][1] = e.target.value;
                     setIngredientAndAllergyList(updatedList);
                   }}
-                  label="Allergy"
+                  allergies={allergies}
+                  ingredientLabel='Ingredient Name'
+                  allergyLabel='Allergy'
+                />
+              </>
+            ))}
+
+            <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
+              <TextField
+                sx={{ mb: 2 }}
+                fullWidth
+                label='Add New Ingredient'
+                variant='outlined'
+                value={ingredient}
+                onChange={e => setIngredient(e.target.value)}
+              />
+              <FormControl sx={{ mb: 2, ml: 2 }} fullWidth>
+                <InputLabel id="allergy-select-label">Add Allergy</InputLabel>
+                <Select
+                  labelId="allergy-select-label"
+                  id="allergy-select"
+                  value={selectedAllergy}
+                  onChange={e => setSelectedAllergy(e.target.value)}
+                  label="Add Allergy"
                 >
                   {allergies.map(allergy => (
                     <MenuItem key={allergy[0]} value={allergy[0]}>
@@ -160,70 +172,43 @@ function NewMenuItem(props) {
                   ))}
                 </Select>
               </FormControl>
+              <StyledButton
+                sx={{ mb: 2, ml: 2, width: '10%', height: '20%' }}
+                onClick={() => addIngredientAllergyPair()}
+                startIcon={<AddIcon />}
+              ></StyledButton>
+              {console.log(ingredientAndAllergyList)}
             </div>
-          ))}
-          <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
-            <TextField
-              sx={{ mb: 2 }}
-              fullWidth
-              label='Add New Ingredient'
-              variant='outlined'
-              value={ingredient}
-              onChange={e => setIngredient(e.target.value)}
-            />
-            <FormControl sx={{ mb: 2, ml: 2 }} fullWidth>
-              <InputLabel id="allergy-select-label">Add Allergy</InputLabel>
-              <Select
-                labelId="allergy-select-label"
-                id="allergy-select"
-                value={selectedAllergy}
-                onChange={e => setSelectedAllergy(e.target.value)}
-                label="Add Allergy"
-              >
-                {allergies.map(allergy => (
-                  <MenuItem key={allergy[0]} value={allergy[0]}>
-                    {allergy[1]}
-                  </MenuItem>
-                ))}
-              </Select>
-            </FormControl>
-            <StyledButton
-              sx={{ mb: 2, ml: 2, width: '10%', height: '20%' }}
-              onClick={() => addIngredientAllergyPair()}
-              startIcon={<AddIcon />}
-            ></StyledButton>
-            {console.log(ingredientAndAllergyList)}
-          </div>
 
-          {image ? (
-            <div className='image'>
-              <img style={{ height: '300px', width: '300px' }} src={image} alt="Item Image" />
+            {image ? (
+              <div className='image'>
+                <img style={{ height: '300px', width: '300px' }} src={image} alt="Item Image" />
+              </div>
+            ) : (
+              <div></div>
+            )}
+            <div>
+              <Typography variant='overline' sx={{ fontSize: '10px' }}>{imageName}</Typography>
             </div>
-          ) : (
-            <div></div>
-          )}
-          <div>
-            <Typography variant='overline' sx={{ fontSize: '10px' }}>{imageName}</Typography>
-          </div>
-          <div>
-            <label htmlFor="upload-photo">
-              <StyledButton sx={{ mb: 2 }} variant='outlined' aria-label="upload picture" component="label">
-                Add Image
-                <Input
-                  style={{ display: 'none' }}
-                  accept='image/png, image/jpeg'
-                  type="file"
-                  onChange={handleFileSelect}
-                />
-              </StyledButton>
-            </label>
-          </div>
-          <StyledButton sx={{ mb: 2 }} variant='outlined' onClick={addMenuItem}>
-            ADD TO MENU
-          </StyledButton>
-        </form>
-      </Paper>
-    </div >
+            <div>
+              <label htmlFor="upload-photo">
+                <StyledButton sx={{ mb: 2 }} variant='outlined' aria-label="upload picture" component="label">
+                  Add Image
+                  <Input
+                    style={{ display: 'none' }}
+                    accept='image/png, image/jpeg'
+                    type="file"
+                    onChange={handleFileSelect}
+                  />
+                </StyledButton>
+              </label>
+            </div>
+            <StyledButton sx={{ mb: 2 }} variant='outlined' onClick={addMenuItem}>
+              ADD TO MENU
+            </StyledButton>
+          </form>
+        </Paper>
+      </div >
     </>
   );
 }
