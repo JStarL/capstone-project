@@ -66,8 +66,10 @@ def customer_view_menu(cur, menu_id, allergies_list, excluded_cat_list, top_k):
                 
                 cur.execute(query_ingredients, [menu_item[0]])
                 ingredients_list = []
-                for ingredient in cur.fetchall():
-                    ingredients_list.append([ingredient[0], ingredient[1]])
+                ingredients_list_input = cur.fetchall()
+                if len(ingredients_list_input) > 0:
+                    for ingredient in ingredients_list_input:
+                        ingredients_list.append([ingredient[0], ingredient[1]])
                 
                 tmp = {}
                 tmp.update({'food_id': menu_item[0]})
@@ -172,8 +174,11 @@ def customer_view_category(cur, category_id, allergies_list, excluded_cat_list, 
         """
         cur.execute(query_ingredients, [tup[0]])
         ingredients_list = []
-        for ingredient in cur.fetchall():
-            ingredients_list.append([ingredient[0], ingredient[1]])
+        ingredients_list_input = cur.fetchall()
+
+        if len(ingredients_list_input) > 0:
+            for ingredient in ingredients_list_input:
+                ingredients_list.append([ingredient[0], ingredient[1]])
         
         tmp = {}
         tmp.update({'food_id': tup[0]})
@@ -211,8 +216,11 @@ def customer_view_menu_item(cur, menu_item_id):
         """
         cur.execute(query_ingredients, [menu_item_id])
         ingredients_list = []
-        for ingredient in cur.fetchall():
-            ingredients_list.append([ingredient[0], ingredient[1]])
+        ingredients_list_input = cur.fetchall()
+
+        if len(ingredients_list_input) > 0:
+            for ingredient in ingredients_list_input:
+                ingredients_list.append([ingredient[0], ingredient[1]])
 
         food.update({'food_id': menu_item_id})
         food.update({'food_name': tup[0]})

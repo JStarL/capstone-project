@@ -57,14 +57,14 @@ create table menu_items (
     foreign key (menu_id) references menus(id)
 );
 
-create or replace function update_best_selling_function(_isOldThere boolean)
+create or replace function update_best_selling_function()
 returns trigger
 as $$
 declare
     _menu_item      record;
     _ordering_id    integer := 1;
 begin
-    if (_isOldThere) then
+    if (tg_argv[0]) then
         if (new.points = old.points) then
             return new;
         end if;
@@ -97,7 +97,7 @@ execute procedure update_best_selling_function(true);
 create trigger insert_best_selling_trigger
 after insert on menu_items
 for each row
-execute procedure update_best_selling_function(false)
+execute procedure update_best_selling_function(false);
 
 create or replace view menu_items_and_categories(menu_item_id, title, description, image, price, category_id, category_name, menu_id) as
 select m.id, m.title, m.description, m.image, m.price, c.id, c.name, c.menu_id
