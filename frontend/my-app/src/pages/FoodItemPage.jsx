@@ -1,6 +1,6 @@
 import React from 'react';
 import '../App.css';
-import { Button, TextField, Typography, Paper, Box } from '@mui/material';
+import { Button, TextField, Typography, Paper, Box, Snackbar, Alert } from '@mui/material';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import { useNavigate, useParams } from 'react-router-dom';
 import makeRequest from '../makeRequest';
@@ -16,6 +16,7 @@ function FoodItemPage() {
   const [foodData, setFoodData] = React.useState({});
   const params = useParams();
   const [foodId, setFoodId] = React.useState(params.foodId);
+  const [isSnackbarOpen, setSnackbarOpen] = React.useState(false);
 
   React.useEffect(() => {
     setFoodId(params.foodId);
@@ -31,24 +32,30 @@ function FoodItemPage() {
   }
 
   function backToMenu() {
-    navigate(`/customer/${sessionId}/${menuId}/${tableNumber}`)
-    console.log(params.categoryId) // set this to currently selected
+    navigate(`/customer/${sessionId}/${menuId}/${tableNumber}`);
+    console.log(params.categoryId); // set this to currently selected
   }
 
   function addToOrder() {
     const body = JSON.stringify({
-      'session_id': sessionId,
-      'menu_id': menuId,
-      'menu_item_id': foodId,
-      'amount': 1,
-      'title': foodData.food_name
-    })
+      session_id: sessionId,
+      menu_id: menuId,
+      menu_item_id: foodId,
+      amount: 1,
+      title: foodData.food_name
+    });
+
     makeRequest('/customer/add_menu_item', 'POST', body, undefined)
       .then(data => {
-        console.log(data)
+        console.log(data);
+        setSnackbarOpen(true);
       })
-      .catch(e => console.log('Error: ' + e))
+      .catch(e => console.log('Error: ' + e));
   }
+
+  const handleSnackbarClose = () => {
+    setSnackbarOpen(false);
+  };
 
   if (!foodData) return <>loading...</>;
 
@@ -80,7 +87,6 @@ function FoodItemPage() {
                   : "No ingredients"}
               </Typography>
             )}
-
           </div>
           <div className='div-section'>
             <Typography variant='subtitle1' fontWeight='bold'>
@@ -104,6 +110,15 @@ function FoodItemPage() {
             </StyledButton>
           </Box>
         </Paper>
+        <Snackbar
+          open={isSnackbarOpen}
+          autoHideDuration={4000}
+          onClose={handleSnackbarClose}
+        >
+          <Alert onClose={handleSnackbarClose} severity="success" sx={{ fontSize: '2rem', width: '50vh' }}>
+            Item successfully added to order!
+          </Alert>
+        </Snackbar>
       </div>
     </>
   );
