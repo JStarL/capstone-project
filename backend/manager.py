@@ -310,7 +310,8 @@ def manager_add_menu_item(cur, menu_item_name, price, ingredients, description, 
         WHERE title = %s
         AND menu_id = %s;
     """ 
-    
+    # NOTE: Assumption that food item names are unique per menu
+
     cur.execute(query1, [menu_item_name, description, price, category_id, menu_id, image])
     cur.execute(query2, [menu_item_name, menu_id])
     
@@ -321,31 +322,32 @@ def manager_add_menu_item(cur, menu_item_name, price, ingredients, description, 
     else:
         menu_item_id = list1[0][0]
 
-        query3 = """
-            insert into ingredients (menu_item_id, name, allergy_id) values (%s, %s, %s);
-        """
-        
-        for ingredient in ingredients:
-            cur.execute(query3, [menu_item_id, ingredient[0], ingredient[1]])
+        if len(ingredients) > 0:
+            query3 = """
+                insert into ingredients (menu_item_id, name, allergy_id) values (%s, %s, %s);
+            """
+            
+            for ingredient in ingredients:
+                cur.execute(query3, [menu_item_id, ingredient[0], ingredient[1]])
 
-        # Check that all ingredients were inserted:
+            # Check that all ingredients were inserted:
 
-        query4 = """
-            select count(*)
-            from ingredients
-            where menu_item_id = %s
-            group by menu_item_id
-            ;
-        """
+            query4 = """
+                select count(*)
+                from ingredients
+                where menu_item_id = %s
+                group by menu_item_id
+                ;
+            """
 
-        cur.execute(query4, [menu_item_id])
+            cur.execute(query4, [menu_item_id])
 
-        query4_res = cur.fetchall()
+            query4_res = cur.fetchall()
 
-        if query4_res[0][0] != len(ingredients):
-            return invalid_ingredients_update
+            if query4_res[0][0] != len(ingredients):
+                return invalid_ingredients_update
 
-        menu_item.update({'menu_item_id' : str(list1[0][0])}) # NOTE: Assumption that food item names are unique per menu
+        menu_item.update({'menu_item_id' : str(menu_item_id)})
         return menu_item
 
 
