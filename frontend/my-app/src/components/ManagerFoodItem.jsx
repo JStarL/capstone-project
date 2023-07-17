@@ -18,7 +18,7 @@ function ManagerFoodItem({ allergies, originalFoodName, originalFoodDescription,
   const [foodDescription, setFoodDescription] = React.useState('');
   const [ingredientAndAllergyList, setIngredientAndAllergyList] = React.useState(originalIngredients);
   const [image, setImage] = React.useState(originalImage)
-  const [price, setPrice] = React.useState(originalPrice)
+  const [price, setPrice] = React.useState(originalPrice);
   const [isListVisible, setListVisible] = React.useState(false);
 
   React.useEffect(() => {
@@ -36,6 +36,7 @@ function ManagerFoodItem({ allergies, originalFoodName, originalFoodDescription,
   }
   const managerId = localStorage.getItem('staff_id')
   const menuId = localStorage.getItem('menu_id')
+
   function updateFoodItem() {
     const body = JSON.stringify({
       'manager_id': managerId,
@@ -71,6 +72,12 @@ function ManagerFoodItem({ allergies, originalFoodName, originalFoodDescription,
 
   function toggleListVisibility() {
     setListVisible(!isListVisible);
+  }
+
+  function handleDeleteIngredientAllergyPair(index) {
+    const updatedList = [...ingredientAndAllergyList];
+    updatedList.splice(index, 1);
+    setIngredientAndAllergyList(updatedList);
   }
 
   return (
@@ -132,24 +139,24 @@ function ManagerFoodItem({ allergies, originalFoodName, originalFoodDescription,
               </StyledButton>
             </div>
             {isListVisible && ingredientAndAllergyList?.map((ingredientAllergyPair, index) => (
-              <>
-                <IngredientAllergyPair
-                  ingredientAllergyPair={ingredientAllergyPair}
-                  handleIngredientChange={e => {
-                    const updatedList = [...ingredientAndAllergyList];
-                    updatedList[index][0] = e.target.value;
-                    setIngredientAndAllergyList(updatedList);
-                  }}
-                  handleAllergyChange={e => {
-                    const updatedList = [...ingredientAndAllergyList];
-                    updatedList[index][1] = e.target.value;
-                    setIngredientAndAllergyList(updatedList);
-                  }}
-                  allergies={allergies}
-                  ingredientLabel='Ingredient Name'
-                  allergyLabel='Allergy'
-                />
-              </>
+              <IngredientAllergyPair
+                key={index}
+                ingredientAllergyPair={ingredientAllergyPair}
+                handleIngredientChange={e => {
+                  const updatedList = [...ingredientAndAllergyList];
+                  updatedList[index][0] = e.target.value;
+                  setIngredientAndAllergyList(updatedList);
+                }}
+                handleAllergyChange={e => {
+                  const updatedList = [...ingredientAndAllergyList];
+                  updatedList[index][1] = e.target.value;
+                  setIngredientAndAllergyList(updatedList);
+                }}
+                handleDelete={() => handleDeleteIngredientAllergyPair(index)}
+                allergies={allergies}
+                ingredientLabel='Ingredient Name'
+                allergyLabel='Allergy'
+              />
             ))}
           </div>
         </div>

@@ -4,7 +4,7 @@ import { Button } from '@mui/material';
 
 function BestSellingFoodItem (props) {
   return <>
-  <div key={props.foodId} className='food-item-div'>
+  <div className='food-item-div'>
     <div>
       {props.originalImage
       ? <div className='image'><img style={{ width: '20vh', height: '20vh', margin: '20px', borderRadius: '10px' }} src={props.originalImage}></img></div>

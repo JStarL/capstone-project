@@ -1,7 +1,7 @@
 import React from 'react';
 import '../App.css';
 import { useParams, useNavigate } from 'react-router-dom';
-import { Select, TextField, Input, Typography, Paper } from '@mui/material';
+import { Select, TextField, Input, Typography, Paper, IconButton } from '@mui/material';
 import { fileToDataUrl } from './helperFunctions'
 import MenuItem from '@mui/material/MenuItem';
 import OutlinedInput from '@mui/material/OutlinedInput';
@@ -78,6 +78,12 @@ function NewMenuItem(props) {
     setIngredient('')
   }
 
+  function handleDelete(index) {
+    const updatedList = [...ingredientAndAllergyList];
+    updatedList.splice(index, 1);
+    setIngredientAndAllergyList(updatedList);
+  }
+
   return (
     <>
       <div className='login-page'>
@@ -127,24 +133,24 @@ function NewMenuItem(props) {
               : <Typography variant="h6" gutterBottom>Ingredients and Allergy List:</Typography>
             }
             {ingredientAndAllergyList?.map((ingredientAllergyPair, index) => (
-              <>
-                <IngredientAllergyPair
-                  ingredientAllergyPair={ingredientAllergyPair}
-                  handleIngredientChange={e => {
-                    const updatedList = [...ingredientAndAllergyList];
-                    updatedList[index][0] = e.target.value;
-                    setIngredientAndAllergyList(updatedList);
-                  }}
-                  handleAllergyChange={e => {
-                    const updatedList = [...ingredientAndAllergyList];
-                    updatedList[index][1] = e.target.value;
-                    setIngredientAndAllergyList(updatedList);
-                  }}
-                  allergies={allergies}
-                  ingredientLabel='Ingredient Name'
-                  allergyLabel='Allergy'
-                />
-              </>
+              <IngredientAllergyPair
+                key={index}
+                ingredientAllergyPair={ingredientAllergyPair}
+                handleIngredientChange={e => {
+                  const updatedList = [...ingredientAndAllergyList];
+                  updatedList[index][0] = e.target.value;
+                  setIngredientAndAllergyList(updatedList);
+                }}
+                handleAllergyChange={e => {
+                  const updatedList = [...ingredientAndAllergyList];
+                  updatedList[index][1] = e.target.value;
+                  setIngredientAndAllergyList(updatedList);
+                }}
+                handleDelete={() => handleDelete(index)}
+                allergies={allergies}
+                ingredientLabel='Ingredient Name'
+                allergyLabel='Allergy'
+              />
             ))}
 
             <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
