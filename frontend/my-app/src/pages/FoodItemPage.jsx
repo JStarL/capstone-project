@@ -73,9 +73,14 @@ function FoodItemPage() {
             <Typography variant='subtitle1' fontWeight='bold'>
               Ingredients:
             </Typography>
-            <Typography>
-              {foodData.food_ingredients.map(ingredients => ingredients[0]).join(', ')}
-            </Typography>
+            {foodData.food_ingredients !== undefined && (
+              <Typography>
+                {foodData.food_ingredients.length > 0
+                  ? foodData.food_ingredients.map(ingredients => ingredients[0]).join(', ')
+                  : "No ingredients"}
+              </Typography>
+            )}
+
           </div>
           <div className='div-section'>
             <Typography variant='subtitle1' fontWeight='bold'>
