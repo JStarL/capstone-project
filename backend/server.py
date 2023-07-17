@@ -537,6 +537,31 @@ def get_allergies_flask():
     cur.close()
     return dumps(return_list)
 
+@APP.route("/customer/finalise_order", methods=['POST'])
+def customer_finalise_order_flask():
+    session_id = request.args.get("session_id")
+    menu_id = request.args.get("menu_id")
+    
+    orders_list = None
+    if menu_id in orders:
+        orders_list = orders[menu_id]
+    else:
+        return { 'error': 'no orders with the given menu_id'}
+
+    # find the order with session_id
+    order_list = [order for order in orders_list if order["session_id"] == session_id]
+    
+    if len(order_list) > 0:
+        if order_list['status'] == 'kitchen':
+            return { 'error': 'Already sent to kitchen'}
+        else:
+            order_list['status'] = 'kitchen'
+        
+        return {'success': 'order finalised'}
+    else:
+        return {'error': 'invalid session_id' }
+    
+
 # Kitchen Staff functions
 
 @APP.route("/kitchen_staff/get_order_list", methods=['GET'])
