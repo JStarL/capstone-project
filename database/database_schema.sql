@@ -57,31 +57,33 @@ create table menu_items (
     foreign key (menu_id) references menus(id)
 );
 
-create or replace function update_best_selling_function()
+create or replace function update_best_selling_function(_isOldThere boolean)
 returns trigger
 as $$
 declare
     _menu_item      record;
     _ordering_id    integer := 1;
 begin
-
-    if (new.points <> old.points) then
-    
-        delete from best_selling_items
-        where menu_id=old.menu_id;
-        
-        for _menu_item in
-            select id, menu_id
-            from menu_items m
-            where m.menu_id = old.menu_id
-            order by points desc, title asc
-        loop
-            insert into best_selling_items(menu_id, menu_item_id, ordering_id)
-            values (_menu_item.menu_id, _menu_item.id, _ordering_id);
-            _ordering_id := _ordering_id + 1;
-        end loop;
-
+    if (_isOldThere) then
+        if (new.points = old.points) then
+            return new;
+        end if;
     end if;
+
+    delete from best_selling_items
+    where menu_id=new.menu_id;
+    
+    for _menu_item in
+        select id, menu_id
+        from menu_items m
+        where m.menu_id = new.menu_id
+        order by points desc, title asc
+    loop
+        insert into best_selling_items(menu_id, menu_item_id, ordering_id)
+        values (_menu_item.menu_id, _menu_item.id, _ordering_id);
+        _ordering_id := _ordering_id + 1;
+    end loop;
+    
     return new;
 
 end;
@@ -90,7 +92,12 @@ $$ language plpgsql;
 create trigger update_best_selling_trigger
 after update on menu_items
 for each row
-execute procedure update_best_selling_function();
+execute procedure update_best_selling_function(true);
+
+create trigger insert_best_selling_trigger
+after insert on menu_items
+for each row
+execute procedure update_best_selling_function(false)
 
 create or replace view menu_items_and_categories(menu_item_id, title, description, image, price, category_id, category_name, menu_id) as
 select m.id, m.title, m.description, m.image, m.price, c.id, c.name, c.menu_id
