@@ -69,33 +69,47 @@ cur_dict = {
 #       {  
 #       'session_id': '1234'
 #       'table_id': 24,
+#       'status': 'kitchen',
 #       'menu_items': [
 #           {
 #               'menu_item_id': 12,
 #               'amount': 1
 #               'title': 'Burger'
+#               'price': 1
+#               'image': string
+#               'description': tis food
 #               
 #           },
 #           {
 #               'menu_item_id': 15,
 #               'amount': 2
 #               'title': 'Fries'
+#               'price': 1
+#               'image': string
+#               'description': tis food
 #           }
 #       ]
 #       },
 #       { 
 #       'session_id': '2345'
 #       'table_id': 22,
+#       'status': 'customer',
 #       'menu_items': [
 #           {
 #               'menu_item_id': 12,
 #               'amount': 1
 #               'title': 'Burger'
+#               'price': 1
+#               'image': string
+#               'description': tis food
 #           },
 #           {
 #               'menu_item_id': 11,
 #               'amount': 2
 #               'title': 'Coke'
+#               'price': 1
+#               'image': string
+#               'description': tis food
 #           }
 #       ]
 #       }
@@ -104,32 +118,46 @@ cur_dict = {
 #        {
 #       'session_id': '2399'
 #       'table_id': 27,
+#       'status': 'wait',
 #       'menu_items': [
 #           {
 #               'menu_item_id': 10,
 #               'amount': 3
 #               'title': 'Pasta'
+#               'price': 1
+#               'image': string
+#               'description': tis food
 #           },
 #           {
 #               'menu_item_id': 3,
 #               'amount': 1
 #               'title': 'Fanta'
+#               'price': 1
+#               'image': string
+#               'description': tis food
 #           }
 #       ]
 #       },
 #       {
 #       'session_id': '3479'
 #       'table_id': 13,
+#       'status': 'kitchen',
 #       'menu_items': [
 #           {
 #               'menu_item_id': 13,
 #               'amount': 2
 #               'title': 'Fried Rice'
+#               'price': 1
+#               'image': string
+#               'description': tis food
 #           },
 #           {
 #               'menu_item_id': 2,
 #               'amount': 1
 #               'title': 'Water'
+#               'price': 1
+#               'image': string
+#               'description': tis food
 #           }
 #       ]
 #       }
