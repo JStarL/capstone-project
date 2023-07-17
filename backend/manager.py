@@ -180,7 +180,7 @@ def manager_add_category(cur, category_name, menu_id):
 
     if category_name == 'Best Selling':
         return cant_use_best_selling
-
+    #need to change this to add ordering and new query to get the biggest ordering number
     query1 = """
         INSERT INTO categories (name, menu_id)
         VALUES (%s, %s);
