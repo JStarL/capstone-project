@@ -101,4 +101,6 @@ Week 7
 - Working on: 
   - Personalise 
   - Add / update new menu item as we changed the structure of ingredients to link with allergies 
+  - Hiding and showing ingredient and allergies list 
+  - Make ingredient and allergy pair component
   

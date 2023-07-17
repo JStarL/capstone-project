@@ -11,6 +11,7 @@ import InputLabel from '@mui/material/InputLabel';
 import makeRequest from '../makeRequest';
 import { useNavigate } from 'react-router-dom';
 import { StyledButton } from '../pages/CustomerOrStaff';
+import IngredientAllergyPair from './IngredientAllergyPair';
 
 function ManagerFoodItem({ allergies, originalFoodName, originalFoodDescription, originalPrice, originalImage, originalIngredients, foodId, categoryId, categoryName, fetchCategoryMenuItems }) {
   const [foodName, setFoodName] = React.useState('');
@@ -124,47 +125,31 @@ function ManagerFoodItem({ allergies, originalFoodName, originalFoodDescription,
             </FormControl>
           </div>
           <div className='div-section'>
-            <div style={{display:'flex', flexDirection:'row', alignItems: 'center'}}>
+            <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
               <Typography variant="h6" gutterBottom>Ingredients and Allergy List:</Typography>
-              <StyledButton variant="outlined" onClick={toggleListVisibility} style={{width: 'auto', margin: '10px'}}>
+              <StyledButton variant="outlined" onClick={toggleListVisibility} style={{ width: 'auto', margin: '10px' }}>
                 {isListVisible ? 'Hide Ingredients' : 'Show Ingredients'}
               </StyledButton>
             </div>
             {isListVisible && ingredientAndAllergyList?.map((ingredientAllergyPair, index) => (
-              <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }} key={index}>
-                <TextField
-                  sx={{ mb: 2 }}
-                  fullWidth
-                  label='Ingredient Name'
-                  variant='outlined'
-                  value={ingredientAllergyPair[0]}
-                  onChange={e => {
+              <>
+                <IngredientAllergyPair
+                  ingredientAllergyPair={ingredientAllergyPair}
+                  handleIngredientChange={e => {
                     const updatedList = [...ingredientAndAllergyList];
                     updatedList[index][0] = e.target.value;
                     setIngredientAndAllergyList(updatedList);
                   }}
+                  handleAllergyChange={e => {
+                    const updatedList = [...ingredientAndAllergyList];
+                    updatedList[index][1] = e.target.value;
+                    setIngredientAndAllergyList(updatedList);
+                  }}
+                  allergies={allergies}
+                  ingredientLabel='Ingredient Name'
+                  allergyLabel='Allergy'
                 />
-                <FormControl sx={{ mb: 2, ml: 2 }} fullWidth>
-                  <InputLabel id="allergy-select-label">Allergy</InputLabel>
-                  <Select
-                    labelId="allergy-select-label"
-                    id="allergy-select"
-                    value={ingredientAllergyPair[1]}
-                    onChange={e => {
-                      const updatedList = [...ingredientAndAllergyList];
-                      updatedList[index][1] = e.target.value;
-                      setIngredientAndAllergyList(updatedList);
-                    }}
-                    label="Allergy"
-                  >
-                    {allergies.map(allergy => (
-                      <MenuItem key={allergy[0]} value={allergy[0]}>
-                        {allergy[1]}
-                      </MenuItem>
-                    ))}
-                  </Select>
-                </FormControl>
-              </div>
+              </>
             ))}
           </div>
         </div>
