@@ -76,3 +76,15 @@ we had been debugging a series of bugs as they popped up, and modified the front
 
 The plan for next week is to work on the Best Selling Automation, and assist in debugging and testing to make sure that
 the frontend and backend integration is working as intended.
+
+Week 7
+Our overall progress was towards the completion of Sprint 2, with mostly the frontend tasks remaining. The backend and I worked on
+a few more routes while we each reviewed each others' work. I continued working on the Best Selling Automation from the previous
+week by adding a plpgsql function and trigger to the database, which appears to work for now, but requires adjustments after
+more testing with the frontend. Besides this i helped the frontend debug errors as they popped up in various parts of both frontend, backend and the database layers, including one error which was actually a UI/UX misunderstanding!
+
+Technical obstacles faced were the usual occassional VM malfunctions and the local environment throwing errors. Besides this, a lot of this week
+was dedicated to debugging the various errors that popped up after implementing the novel functionalities, due to several combinations of factors.
+
+Next week's plan is to review what we've completed so far and complete the remaining user stories for Sprint 2, work on debugging remaining issues and practising for Demo B, as well as prepare for Retrospective B.
+

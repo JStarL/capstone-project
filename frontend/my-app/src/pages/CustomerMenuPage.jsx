@@ -20,21 +20,21 @@ function CustomerMenuPage({ personas }) {
   const menuId = localStorage.getItem('menu_id') // hard code for now but update this when we implement search restaurant
   // localStorage.getItem('menu_id');
 
-  React.useEffect(() => {
-    console.log('About to get data')
-    const fetchData = async () => {
-      const data = await fetchAllMenuData();
-      console.log('The data is: ' + data)
-      if (data && data?.length > 0) {
-        setCurrentSelectedCategoryId(Object.keys(data[0])[0]);
-        console.log(data)
-        console.log('ID: ' + currentSelectedCategoryId)
-      }
-      console.log('outside if')
-    };
+  // React.useEffect(() => {
+  //   console.log('About to get data')
+  //   const fetchData = async () => {
+  //     const data = await fetchAllMenuData();
+  //     console.log('The data is: ' + data)
+  //     if (data && data?.length > 0) {
+  //       setCurrentSelectedCategoryId(Object.keys(data[0])[0]);
+  //       console.log(data)
+  //       console.log('ID: ' + currentSelectedCategoryId)
+  //     }
+  //     console.log('outside if')
+  //   };
 
-    fetchData();
-  }, []);
+  //   fetchData();
+  // }, []);
 
   React.useEffect(() => {
     const fetchData = async () => {
@@ -84,15 +84,6 @@ function CustomerMenuPage({ personas }) {
 
   return (
     <>
-      <Typography className='h4' variant="h4" gutterBottom>Customer Menu Page - {currentSelectedCategory}</Typography>
-      <select value={currentlySelectedPersona} onChange={(e) => handlePersonaChange(e.target.value)}>
-        {personas.map((persona, index) => (
-          <option key={persona} value={persona}>
-            {`Persona ${index}`}
-          </option>
-        ))}
-      </select>
-
       <div style={{ display: 'flex', flexDirection: 'row' }}>
         <div style={{ width: '25%', backgroundColor: 'white', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
           {categories.map((category) => (
@@ -111,7 +102,23 @@ function CustomerMenuPage({ personas }) {
           ))}
         </div>
         <div style={{ width: '75%', height: '100%' }}>
-          {menuItems.map((menuItem) => (
+        <div style={{ display: 'flex' }}>
+          <div style={{ width: '85%' }}>
+          <Typography className='h4' variant="h4" gutterBottom>Customer Menu Page - {currentSelectedCategory}</Typography>
+          </div>
+          <div  style={{ width: '15%' }}>
+            <select value={currentlySelectedPersona} onChange={(e) => handlePersonaChange(e.target.value)}>
+            {personas.map((persona, index) => (
+              <option key={persona} value={persona}>
+                {`Persona ${index}`}
+              </option>
+            ))}
+            </select>
+          </div>
+        </div>
+        
+        
+          {menuItems?.map((menuItem) => (
             <CustomerFoodItem
               originalFoodName={menuItem.food_name}
               originalFoodDescription={menuItem.food_description}

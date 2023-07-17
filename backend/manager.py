@@ -46,8 +46,11 @@ def manager_view_menu(cur, menu_id, excluded_cat_list, top_k):
                 
                 cur.execute(query_ingredients, [menu_item[0]])
                 ingredients_list = []
-                for ingredient in cur.fetchall():
-                    ingredients_list.append([ingredient[0], ingredient[1]])
+                ingredients_list_input = cur.fetchall()
+
+                if len(ingredients_list_input) > 0:
+                    for ingredient in ingredients_list_input:
+                        ingredients_list.append([ingredient[0], ingredient[1]])
                 
                 tmp = {}
                 tmp.update({'food_id': menu_item[0]})
@@ -108,8 +111,11 @@ def manager_view_category(cur, category_id, excluded_cat_list, top_k):
         cur.execute(query2, [tup[0]])
 
         ingredients_list = []
-        for ingredient in cur.fetchall():
-            ingredients_list.append([ingredient[0], ingredient[1]])
+        ingredients_list_input = cur.fetchall()
+
+        if len(ingredients_list_input) > 0:
+            for ingredient in ingredients_list_input:
+                ingredients_list.append([ingredient[0], ingredient[1]])
 
         tmp = {}
         tmp.update({'food_id': tup[0]})
@@ -147,8 +153,11 @@ def manager_view_menu_item(cur, food_id):
         cur.execute(query2, [food_id])
 
         ingredients_list = []
-        for ingredient in cur.fetchall():
-            ingredients_list.append([ingredient[0], ingredient[1]])
+        ingredients_list_input = cur.fetchall()
+
+        if len(ingredients_list_input) > 0:
+            for ingredient in ingredients_list_input:
+                ingredients_list.append([ingredient[0], ingredient[1]])
 
         food.update({'food_id': food_id})
         food.update({'food_name': tup[0]})
@@ -310,7 +319,8 @@ def manager_add_menu_item(cur, menu_item_name, price, ingredients, description, 
         WHERE title = %s
         AND menu_id = %s;
     """ 
-    
+    # NOTE: Assumption that food item names are unique per menu
+
     cur.execute(query1, [menu_item_name, description, price, category_id, menu_id, image])
     cur.execute(query2, [menu_item_name, menu_id])
     
@@ -321,31 +331,32 @@ def manager_add_menu_item(cur, menu_item_name, price, ingredients, description, 
     else:
         menu_item_id = list1[0][0]
 
-        query3 = """
-            insert into ingredients (menu_item_id, name, allergy_id) values (%s, %s, %s);
-        """
-        
-        for ingredient in ingredients:
-            cur.execute(query3, [menu_item_id, ingredient[0], ingredient[1]])
+        if len(ingredients) > 0:
+            query3 = """
+                insert into ingredients (menu_item_id, name, allergy_id) values (%s, %s, %s);
+            """
+            
+            for ingredient in ingredients:
+                cur.execute(query3, [menu_item_id, ingredient[0], ingredient[1]])
 
-        # Check that all ingredients were inserted:
+            # Check that all ingredients were inserted:
 
-        query4 = """
-            select count(*)
-            from ingredients
-            where menu_item_id = %s
-            group by menu_item_id
-            ;
-        """
+            query4 = """
+                select count(*)
+                from ingredients
+                where menu_item_id = %s
+                group by menu_item_id
+                ;
+            """
 
-        cur.execute(query4, [menu_item_id])
+            cur.execute(query4, [menu_item_id])
 
-        query4_res = cur.fetchall()
+            query4_res = cur.fetchall()
 
-        if query4_res[0][0] != len(ingredients):
-            return invalid_ingredients_update
+            if query4_res[0][0] != len(ingredients):
+                return invalid_ingredients_update
 
-        menu_item.update({'menu_item_id' : str(list1[0][0])}) # NOTE: Assumption that food item names are unique per menu
+        menu_item.update({'menu_item_id' : str(menu_item_id)})
         return menu_item
 
 

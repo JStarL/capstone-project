@@ -26,7 +26,7 @@ function FoodItemPage() {
     const url = `/customer/view_menu_item?session_id=${sessionId}&menu_item_id=${foodId}`;
     const data = await makeRequest(url, 'GET', undefined, undefined);
     console.log(data);
-   
+
     setFoodData(data);
   }
 
@@ -55,8 +55,8 @@ function FoodItemPage() {
   return (
     <>
       <div className='login-page'>
-        <Paper className='paper' elevation={5} sx={{ p: 4, mb: 2, position: 'relative', borderRadius:'20px'}}>
-          <StyledButton variant='outlined' onClick={() => backToMenu()} startIcon={<ArrowBackIcon size='large' />} sx={{ position: 'absolute', top: '16px', left: '16px', width:'auto' }}>
+        <Paper className='paper' elevation={5} sx={{ p: 4, mb: 2, position: 'relative', borderRadius: '20px' }}>
+          <StyledButton variant='outlined' onClick={() => backToMenu()} startIcon={<ArrowBackIcon size='large' />} sx={{ position: 'absolute', top: '16px', left: '16px', width: 'auto' }}>
             menu
           </StyledButton>
           <Typography className='h4' variant='h4' gutterBottom>
@@ -73,9 +73,14 @@ function FoodItemPage() {
             <Typography variant='subtitle1' fontWeight='bold'>
               Ingredients:
             </Typography>
-            <Typography>
-              {foodData.food_ingredients}
-            </Typography>
+            {foodData.food_ingredients !== undefined && (
+              <Typography>
+                {foodData.food_ingredients.length > 0
+                  ? foodData.food_ingredients.map(ingredients => ingredients[0]).join(', ')
+                  : "No ingredients"}
+              </Typography>
+            )}
+
           </div>
           <div className='div-section'>
             <Typography variant='subtitle1' fontWeight='bold'>
