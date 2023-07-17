@@ -12,35 +12,30 @@ function CustomerViewOrderPage() {
   const menuId = params.menuId;
   const sessionId = params.sessionId;
 
-    React.useEffect(() => {
-      async function fetchData() {
-        const data = await fetchOrder();
-        // setOrders(data.menu_items)
-        console.log(data.menu_items)
-      }
-      fetchData();
-      }, [])
-    
-    async function fetchOrder() {
-      const url = `/customer/view_order?session_id=${sessionId}&menu_id=${menuId}`;
-      const data = await makeRequest(url, 'GET', undefined, undefined)
-      console.log(data.menu_items)
-      setOrders(data.menu_items)
-      return data;
+  React.useEffect(() => {
+    async function fetchData() {
+      await fetchOrder();
     }
+    fetchData();
+    setTotalCost(0)
+  }, [])
 
-    const handleCost = (amount) => {
-      const parsedTotalCost = Number(totalCost);
-      const parsedAmount = Number(amount);
-    
-      if (isNaN(parsedTotalCost) || isNaN(parsedAmount)) {
-        return;
-      }
-    
-      const currentCost = parsedTotalCost + parsedAmount;
-      setTotalCost(currentCost);
-    };
-    
+  React.useEffect(() => {
+    let total = 0
+    orders?.map((order) => {
+      const subtotal = order.price * order.amount;
+      total += subtotal;
+    setTotalCost(total);
+    })
+  }, [orders])
+  
+  async function fetchOrder() {
+    const url = `/customer/view_order?session_id=${sessionId}&menu_id=${menuId}`;
+    const data = await makeRequest(url, 'GET', undefined, undefined)
+    setOrders(data.menu_items)
+    return data;
+  }
+
   
   if (!orders || !Array.isArray(orders)) return <>loading...</>;
 
@@ -57,12 +52,12 @@ function CustomerViewOrderPage() {
           foodImage={order.image}
           foodPrice={order.price}
           fetchOrder={fetchOrder}
-          handleCost={handleCost}
+          setTotalCost={setTotalCost}
         >
         </OrderItem>
       ))}
 		</div>
-    <div>Total: ${totalCost}</div>
+    <div style={{ padding: '5px', margin: '20px' }}><b>Total: ${totalCost}</b></div>
     <StyledButton onClick={() => console.log('finalise order')} style={{ width: '70%'}}>Finalise Order</StyledButton>
     </>
 	);

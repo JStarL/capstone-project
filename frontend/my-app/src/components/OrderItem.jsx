@@ -31,27 +31,6 @@ function OrderItem (props) {
     setMenuItemId(props.menu_item_id)
     console.log(props.foodName)
   }, [props.amount, props.foodDescription, props.foodName, props.foodImage, props.foodPrice, props.menu_item_id]);
-  // React.useEffect(() => {
-  //   async function fetchMenuDetails() {
-  //     const url = `/customer/view_menu_item?session_id=${sessionId}&menu_item_id=${props.menu_item_id}`;
-  //     const data = await makeRequest(url, 'GET', undefined, undefined)
-  //     console.log(data)
-  //     setOrder(data)
-  //     // return data;
-  //   }
-  //   fetchMenuDetails();
-  //   }, [props.menu_item_id])
-
-  // React.useEffect(() => {
-  //   console.log(menuId)
-  //   if (amount < prevAmount) {
-  //     removeFromOrder(1)
-  //   }
-  //   else if (amount > prevAmount) {
-  //     addToOrder();
-  //   }
-  //   setPrevAmount(amount)
-  // }, [amount])
 
   const handleAmountChange = (e) => {
     const newAmount = e.target.value;
@@ -91,7 +70,6 @@ function OrderItem (props) {
     })
     makeRequest('/customer/remove_menu_item', 'DELETE', body, undefined)
       .then(data => {
-        console.log(data)
         props.fetchOrder()
       })
       .catch(e => console.log('Error: ' + e))
@@ -110,18 +88,15 @@ function OrderItem (props) {
       <div className='div-section'>Price: ${price}</div>
     </div>
     <div className='food-item-end' style={{ flexDirection: 'column', alignItems:'center', justifyContent:'center'}}>
-      {/* <div> */}
-        <StyledButton onClick={() => removeFromOrder(amount)}style={{ width: '50%', marginTop: '25%', marginBottom: '5px', marginRight: '10px' }}><DeleteIcon /></StyledButton>
-      {/* </div> */}
-        <TextField
-        label="Amount"
-        type="number"
-        inputProps={{ min: 0 }}
-        sx={{m:2, width: '90%'}}
-        value={amount}
-        onChange={handleAmountChange}
-      />
-      {/* <div className='div-section'>Amount: {props.amount}</div> */}
+      <StyledButton onClick={() => removeFromOrder(amount)}style={{ width: '50%', marginTop: '25%', marginBottom: '5px', marginRight: '10px' }}><DeleteIcon /></StyledButton>
+      <TextField
+      label="Amount"
+      type="number"
+      inputProps={{ min: 0 }}
+      sx={{m:2, width: '90%'}}
+      value={amount}
+      onChange={handleAmountChange}
+    />
     </div>
   </div>
   </>
