@@ -6,10 +6,11 @@ import OrderItem from '../components/OrderItem';
 import { StyledButton } from './CustomerOrStaff';
 
 function CustomerViewOrderPage() {
-    const [orders, setOrders] = React.useState([])
+  const [orders, setOrders] = React.useState([])
+  const [totalCost, setTotalCost] = React.useState(0)
 	const params = useParams();
-    const menuId = params.menuId;
-    const sessionId = params.sessionId;
+  const menuId = params.menuId;
+  const sessionId = params.sessionId;
 
     React.useEffect(() => {
       async function fetchData() {
@@ -27,6 +28,19 @@ function CustomerViewOrderPage() {
       setOrders(data.menu_items)
       return data;
     }
+
+    const handleCost = (amount) => {
+      const parsedTotalCost = Number(totalCost);
+      const parsedAmount = Number(amount);
+    
+      if (isNaN(parsedTotalCost) || isNaN(parsedAmount)) {
+        return;
+      }
+    
+      const currentCost = parsedTotalCost + parsedAmount;
+      setTotalCost(currentCost);
+    };
+    
   
   if (!orders || !Array.isArray(orders)) return <>loading...</>;
 
@@ -39,11 +53,16 @@ function CustomerViewOrderPage() {
           amount={order.amount}
           menu_item_id={order.menu_item_id}
           foodName={order.title}
+          foodDescription={order.description}
+          foodImage={order.image}
+          foodPrice={order.price}
           fetchOrder={fetchOrder}
+          handleCost={handleCost}
         >
         </OrderItem>
       ))}
 		</div>
+    <div>Total: ${totalCost}</div>
     <StyledButton onClick={() => console.log('finalise order')} style={{ width: '70%'}}>Finalise Order</StyledButton>
     </>
 	);

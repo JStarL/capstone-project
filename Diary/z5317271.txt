@@ -47,3 +47,29 @@ Meeting/Tutorial
 - Finish setting up backend/frontend locally and on vm
 - Link backend and frontend together - manager page, customer page, add staff
 - Discussed how data will be shown in the frontend
+
+Work Done:
+- Demo: Demonstrated manager pages (add menu item and categories)
+- Retrospective
+
+WEEK SIX
+Meeting
+- Allocated tasks for the next sprint
+- Delegated tasks between the frontend
+
+Work Done:
+- Fix up overall styling for the UI
+- View Order page for customers
+- Debug any issues from Sprint 1
+
+
+WEEK SEVEN
+Meeting/Tutorial
+- 
+
+Work Done:
+- Personalisation working with the backend
+- View Order page for customers
+
+WEEK EIGHT
+Meeting/Tutorial
