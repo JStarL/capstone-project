@@ -142,8 +142,8 @@ function ManagerFoodItem({ allergies, originalFoodName, originalFoodDescription,
           </div>
           <div className='div-section'>
             <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
-              <Typography variant="h6" gutterBottom>Ingredients and Allergy List:</Typography>
-              <StyledButton variant="outlined" onClick={toggleListVisibility} style={{ width: 'auto', margin: '10px' }}>
+              <Typography variant="h6" gutterBottom>Ingredients and Allergy List</Typography>
+              <StyledButton variant="outlined" onClick={toggleListVisibility} style={{ width: 'auto', margin: '10px', marginBottom: '20px'}}>
                 {isListVisible ? 'Hide Ingredients' : 'Show Ingredients'}
               </StyledButton>
             </div>

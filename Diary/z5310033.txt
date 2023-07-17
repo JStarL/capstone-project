@@ -98,9 +98,16 @@ Week 6
   - Personalisation
 
 Week 7 
+- Meeting Monday 10/7/23
 - Working on: 
   - Personalise 
   - Add / update new menu item as we changed the structure of ingredients to link with allergies 
   - Hiding and showing ingredient and allergies list 
   - Make ingredient and allergy pair component
-  
+
+Week 8
+- Meeting Monday 17/7/23:
+  - Work on debugging some error with personas and menu items in the cart with the entire team 
+  - Thinking about how to implement splitting the bill based on personas (need to change the backend slightly)
+- Working on: 
+  - displaying ingredients on the individual food item page 
