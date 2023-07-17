@@ -12,6 +12,7 @@ import makeRequest from '../makeRequest';
 import { useNavigate } from 'react-router-dom';
 import { StyledButton } from '../pages/CustomerOrStaff';
 import IngredientAllergyPair from './IngredientAllergyPair';
+import AddIcon from '@mui/icons-material/Add';
 
 function ManagerFoodItem({ allergies, originalFoodName, originalFoodDescription, originalPrice, originalImage, originalIngredients, foodId, categoryId, categoryName, fetchCategoryMenuItems }) {
   const [foodName, setFoodName] = React.useState('');
@@ -20,6 +21,8 @@ function ManagerFoodItem({ allergies, originalFoodName, originalFoodDescription,
   const [image, setImage] = React.useState(originalImage)
   const [price, setPrice] = React.useState(originalPrice);
   const [isListVisible, setListVisible] = React.useState(false);
+  const [ingredient, setIngredient] = React.useState('');
+  const [selectedAllergy, setSelectedAllergy] = React.useState(0); // New state variable for selected allergy
 
   React.useEffect(() => {
     setFoodName(originalFoodName)
@@ -78,6 +81,12 @@ function ManagerFoodItem({ allergies, originalFoodName, originalFoodDescription,
     const updatedList = [...ingredientAndAllergyList];
     updatedList.splice(index, 1);
     setIngredientAndAllergyList(updatedList);
+  }
+
+  function addIngredientAllergyPair() {
+    setIngredientAndAllergyList([...ingredientAndAllergyList, [ingredient, selectedAllergy]]);
+    setSelectedAllergy(0);
+    setIngredient('');
   }
 
   return (
@@ -158,6 +167,41 @@ function ManagerFoodItem({ allergies, originalFoodName, originalFoodDescription,
                 allergyLabel='Allergy'
               />
             ))}
+
+            {isListVisible
+              ?
+              <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
+                <TextField
+                  sx={{ mb: 2 }}
+                  fullWidth
+                  label='Add New Ingredient'
+                  variant='outlined'
+                  value={ingredient}
+                  onChange={e => setIngredient(e.target.value)}
+                />
+                <FormControl sx={{ mb: 2, ml: 2 }} fullWidth>
+                  <InputLabel id="allergy-select-label">Add Allergy</InputLabel>
+                  <Select
+                    labelId="allergy-select-label"
+                    id="allergy-select"
+                    value={selectedAllergy}
+                    onChange={e => setSelectedAllergy(e.target.value)}
+                    label="Add Allergy"
+                  >
+                    {allergies.map(allergy => (
+                      <MenuItem key={allergy[0]} value={allergy[0]}>
+                        {allergy[1]}
+                      </MenuItem>
+                    ))}
+                  </Select>
+                </FormControl>
+                <StyledButton
+                  sx={{ mb: 2, ml: 2, width: '10%', height: '20%' }}
+                  onClick={() => addIngredientAllergyPair()}
+                  startIcon={<AddIcon />}
+                ></StyledButton>
+              </div>
+              : <></>}
           </div>
         </div>
         <div className='food-item-button'>
