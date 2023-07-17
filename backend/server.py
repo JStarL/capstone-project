@@ -69,33 +69,47 @@ cur_dict = {
 #       {  
 #       'session_id': '1234'
 #       'table_id': 24,
+#       'status': 'kitchen',
 #       'menu_items': [
 #           {
 #               'menu_item_id': 12,
 #               'amount': 1
 #               'title': 'Burger'
+#               'price': 1
+#               'image': string
+#               'description': tis food
 #               
 #           },
 #           {
 #               'menu_item_id': 15,
 #               'amount': 2
 #               'title': 'Fries'
+#               'price': 1
+#               'image': string
+#               'description': tis food
 #           }
 #       ]
 #       },
 #       { 
 #       'session_id': '2345'
 #       'table_id': 22,
+#       'status': 'customer',
 #       'menu_items': [
 #           {
 #               'menu_item_id': 12,
 #               'amount': 1
 #               'title': 'Burger'
+#               'price': 1
+#               'image': string
+#               'description': tis food
 #           },
 #           {
 #               'menu_item_id': 11,
 #               'amount': 2
 #               'title': 'Coke'
+#               'price': 1
+#               'image': string
+#               'description': tis food
 #           }
 #       ]
 #       }
@@ -104,32 +118,46 @@ cur_dict = {
 #        {
 #       'session_id': '2399'
 #       'table_id': 27,
+#       'status': 'wait',
 #       'menu_items': [
 #           {
 #               'menu_item_id': 10,
 #               'amount': 3
 #               'title': 'Pasta'
+#               'price': 1
+#               'image': string
+#               'description': tis food
 #           },
 #           {
 #               'menu_item_id': 3,
 #               'amount': 1
 #               'title': 'Fanta'
+#               'price': 1
+#               'image': string
+#               'description': tis food
 #           }
 #       ]
 #       },
 #       {
 #       'session_id': '3479'
 #       'table_id': 13,
+#       'status': 'kitchen',
 #       'menu_items': [
 #           {
 #               'menu_item_id': 13,
 #               'amount': 2
 #               'title': 'Fried Rice'
+#               'price': 1
+#               'image': string
+#               'description': tis food
 #           },
 #           {
 #               'menu_item_id': 2,
 #               'amount': 1
 #               'title': 'Water'
+#               'price': 1
+#               'image': string
+#               'description': tis food
 #           }
 #       ]
 #       }
@@ -389,15 +417,35 @@ def customer_menu_table_flask():
 
 @APP.route("/customer/add_menu_item", methods=['POST'])
 def customer_add_menu_item_flask():
+    fail = {'error': 'menu_item invalid'}
     data = ast.literal_eval(request.get_json())
     session_id = data['session_id']
     menu_id = data['menu_id']
     menu_item_id = data['menu_item_id']
     amount = data['amount']
-    title = data['title']
+    
+    cur = None
+    if session_id in cur_dict['customers']:
+        cur = cur_dict['customers'][session_id]
+    else:
+        cur = db_conn.cursor()
+        cur_dict['customers'][session_id] = cur
 
     if int(amount) < 0:
         return { 'error': 'amount cannot be negative' }
+    
+    menu_item_query = """
+        SELECT title, description, image, price 
+        FROM menu_items
+        WHERE id = %s;
+    """
+    
+    cur.execute(menu_item_query, [menu_item_id])
+    
+    item = cur.fetchall() #menu item fetched
+    if (len(item) == 0): #check if menu item exists
+        return fail
+    item = item[0]
 
     orders_list = None
     if menu_id in orders:
@@ -417,7 +465,10 @@ def customer_add_menu_item_flask():
             order_list[0]['menu_items'].append( {
                 "menu_item_id" : menu_item_id,
                 "amount" : amount,
-                "title" : title
+                "title" : item[0],
+                "description": item[1],
+                "image": item[2],
+                "price": item[3]
             } )
         return order_list[0]
     else:
@@ -513,6 +564,31 @@ def get_allergies_flask():
 
     cur.close()
     return dumps(return_list)
+
+@APP.route("/customer/finalise_order", methods=['POST'])
+def customer_finalise_order_flask():
+    session_id = request.args.get("session_id")
+    menu_id = request.args.get("menu_id")
+    
+    orders_list = None
+    if menu_id in orders:
+        orders_list = orders[menu_id]
+    else:
+        return { 'error': 'no orders with the given menu_id'}
+
+    # find the order with session_id
+    order_list = [order for order in orders_list if order["session_id"] == session_id]
+    
+    if len(order_list) > 0:
+        if order_list['status'] == 'kitchen':
+            return { 'error': 'Already sent to kitchen'}
+        else:
+            order_list['status'] = 'kitchen'
+        
+        return {'success': 'order finalised'}
+    else:
+        return {'error': 'invalid session_id' }
+    
 
 # Kitchen Staff functions
 
