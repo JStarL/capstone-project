@@ -74,6 +74,10 @@ function ManagerFoodItem({ allergies, fetchAllMenuData, originalFoodName, origin
   }
 
   function reorderMenuItem(prev_ordering_id, new_ordering_id) {
+    if (!new_ordering_id) {
+      console.log("new_ordering_id is: " + new_ordering_id);
+      return;
+    }
     const body = JSON.stringify({
       manager_id: managerId,
       menu_item_id: foodId, 
