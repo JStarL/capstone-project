@@ -1,14 +1,22 @@
 import React from 'react';
-import { Typography, Paper, Checkbox, FormControlLabel, Button, TextField } from '@mui/material';
+import { Typography, Paper, Checkbox, FormControlLabel, Button, TextField, Card } from '@mui/material';
 import { useNavigate, useParams } from 'react-router-dom';
 import makeRequest from '../makeRequest';
 import { StyledButton } from './CustomerOrStaff';
-
+import PersonAddAlt1Icon from '@mui/icons-material/PersonAddAlt1';
 function PersonalisePage({ personas, handlePersonas }) {
 	const [allergies, setAllergies] = React.useState([]);
   const [personaName, setPersonaName] = React.useState('')
-	const [selectedAllergies, setSelectedAllergies] = React.useState([]);
+  const [currentlySelectedPersona, setCurrentlySelectedPersona] = React.useState('')
+	const [selectedAllergies, setSelectedAllergies] = React.useState([1,2,3]);
+  const [newPersona, setNewPersona] = React.useState(true)
 
+  const selectedAllergies1 = [1,2,3]
+  const navigate = useNavigate()
+  const params = useParams()
+  const sessionId = params.sessionId
+  const menuId = params.menuId
+  const tableNumber = params.tableNumber
 	React.useEffect(() => {
 		const fetchData = async () => {
 			const data = await fetchAllergies();
@@ -18,15 +26,32 @@ function PersonalisePage({ personas, handlePersonas }) {
 	}, []);
 
   React.useEffect(() => {
-		console.log(personas)
-	}, [personas]);
+    console.log(currentlySelectedPersona[1])
+    if (currentlySelectedPersona) {
+      console.log('a')
+      setSelectedAllergies(currentlySelectedPersona[1])
+    }
+    else {
+      console.log('b')
+      setSelectedAllergies([])
+    }
+	}, [currentlySelectedPersona]);
 
 	async function fetchAllergies() {
 		const url = '/get_allergies';
 		const data = await makeRequest(url, 'GET', undefined, undefined);
 		setAllergies(data);
+    console.log(data)
 		return data;
 	}
+
+  // const handleCheckboxChange = (value) => {
+  //   if (selectedAllergies.includes(value)) {
+  //     setSelectedAllergies(selectedAllergies.filter((selectedValue) => selectedValue !== value));
+  //   } else {
+  //     setSelectedAllergies([...selectedAllergies, value]);
+  //   }
+  // };
 
 	const handleCheckboxChange = (event) => {
 		const { value, checked } = event.target;
@@ -41,26 +66,73 @@ function PersonalisePage({ personas, handlePersonas }) {
 			);
 		}
 	};
-
+  console.log(selectedAllergies)
 	const handleFormSubmit = (event) => {
 		event.preventDefault();
 		handlePersonas(personaName, selectedAllergies)
-		console.log(selectedAllergies);
+		console.log(selectedAllergies)
+    navigate(`/customer/${sessionId}/${menuId}/${tableNumber}`)
 	};
 
+  const handlePersonaChange = (persona) => {
+    setCurrentlySelectedPersona(persona)
+    setPersonaName(persona[0])
+    // setSelectedAllergies(persona[1])
+    console.log(persona[0])
+    setNewPersona(false)
+  }
+
+  const handleNewPersona = () => {
+    setCurrentlySelectedPersona('')
+    setPersonaName('')
+    setNewPersona(true)
+  }
+
+  // const handleEditAllergies = () => {
+  //   handlePersonas(personaName, selectedAllergies)
+  // }
+  console.log(personaName)
 	return (
 		<>
-			<div className="login-page" sx={{ alignItems: 'center' }}>
+    <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+      <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'flex-start', marginLeft: '100px', flexDirection: 'column' }}>
+        {personas.slice(1).map((persona) => (
+          <Card sx={{ m: 2, p: 7 }} style={{
+            width: '300px', 
+            borderColor: currentlySelectedPersona[0] === persona[0] ? '#002250' : undefined, 
+            boxShadow: currentlySelectedPersona[0] === persona[0] ? "0 6px 12px rgba(0, 0, 0, 0.4)" : undefined,
+            borderRadius: '20px'
+          }} variant="outlined" onClick={() => {handlePersonaChange(persona)}}>{persona[0]}</Card>
+        ))}
+         <Card
+          sx={{ m: 2, p: 7, display: 'flex', flexDirection: 'column', alignItems: 'center' }}
+          style={{
+            width: '300px',
+            borderColor: newPersona ? '#002250' : undefined,
+            boxShadow: newPersona ? "0 6px 12px rgba(0, 0, 0, 0.4)" : undefined,
+            borderRadius: '20px'
+          }}
+          variant="outlined"
+          onClick={handleNewPersona}
+        >
+          <PersonAddAlt1Icon fontSize="small" style={{ marginBottom: '10px' }} />
+          <Typography>Add New Persona</Typography>
+        </Card>
+      </div>
+			<div style={{ marginRight: '250px' }}className="login-page" sx={{ alignItems: 'center' }}>
 				<Paper elevation={10} sx={{ p: 6, borderRadius: '20px', width: '80vh' }}>
 					<Typography sx={{ mb: 3 }} variant="h4" gutterBottom>
 						Personalise
 					</Typography>
-          <TextField
-            label="Persona Name"
-            sx={{m:2, width: '90%'}}
-            value={personaName}
-            onChange={(e) => setPersonaName(e.target.value)}
-          />
+          {newPersona ? (
+            <TextField
+              label="Persona Name"
+              sx={{ m: 2, width: '90%' }}
+              value={personaName}
+              onChange={(e) => setPersonaName(e.target.value)}
+            />
+          ) : <Typography style={{ margin: '15px' }}><b>{personaName}</b></Typography>}
+
 					<form onSubmit={handleFormSubmit}>
 						<div
 							style={{
@@ -76,6 +148,7 @@ function PersonalisePage({ personas, handlePersonas }) {
 									control={
 										<Checkbox
 											onChange={handleCheckboxChange}
+                      checked={selectedAllergies?.includes(allergy[0].toString())}
 											value={allergy[0]}
 										/>
 									}
@@ -103,12 +176,21 @@ function PersonalisePage({ personas, handlePersonas }) {
 								/>
 							))}
 						</div>
-						<StyledButton sx={{ width: '80%', p: 1, mt: 2 }} variant='outlined' type="submit" color="primary">
-							Add Persona
-						</StyledButton>
+            <StyledButton sx={{ width: '80%', p: 1, mt: 2 }} variant='outlined' type="submit" color="primary">
+                {newPersona ? 'Add Persona' : 'Edit Allergies'}
+              </StyledButton>
+            {/* {newPersona ? (
+              <StyledButton sx={{ width: '80%', p: 1, mt: 2 }} variant='outlined' type="submit" color="primary">
+                Add Persona
+              </StyledButton>
+            ): <StyledButton onClick={handleEditAllergies}sx={{ width: '80%', p: 1, mt: 2 }} variant='outlined' color="primary">
+                Edit Allergies
+               </StyledButton>} */}
+						
 					</form>
 				</Paper>
 			</div>
+      </div>
 		</>
 	);
 }

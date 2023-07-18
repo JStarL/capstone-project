@@ -29,7 +29,7 @@ function App() {
   const [sessionId, setSessionId] = React.useState(localStorage.getItem('session_id'))
   const [tableNumber, setTableNumber] = React.useState(localStorage.getItem('table_number'))
 
-  const [personas, setPersonas] = React.useState([['default', null]])
+  const [personas, setPersonas] = React.useState([['Default', null]])
   const params = useParams();
   console.log(params.sessionId)
   React.useEffect(function () {
@@ -47,11 +47,27 @@ function App() {
 
   console.log(localStorage.getItem('staff_type'))
 
+  // const handlePersonas = (name, allergies) => {
+  //   const persona = [name, allergies]
+  //   console.log(persona)
+  //   setPersonas([...personas, persona])
+  // }
+
   const handlePersonas = (name, allergies) => {
-    const persona = [name, allergies]
-    console.log(persona)
-    setPersonas([...personas, persona])
-  }
+    const persona = [name, allergies];
+    const updatedPersonas = [...personas];
+    
+    const existingPersonaIndex = updatedPersonas.findIndex((p) => p[0] === name);
+    if (existingPersonaIndex !== -1) {
+      updatedPersonas[existingPersonaIndex] = persona;
+    } else {
+      updatedPersonas.push(persona);
+    }
+  
+    console.log(updatedPersonas);
+    setPersonas(updatedPersonas);
+  };
+  
 
   const customer = (staff_type, session_id) => {
     setStaffType(staff_type)
@@ -153,7 +169,7 @@ function App() {
             <Link to={`/customer/${sessionId}/${menuId}/${tableNumber}`} className="toNavy">Go to Menu</Link>
           </StyledButton>
           <StyledButton startIcon={<SettingsIcon />}>
-            <Link to={`/customer/${sessionId}/${menuId}/personalise`} className="toNavy">Personalise</Link>
+            <Link to={`/customer/${sessionId}/${menuId}/${tableNumber}/personalise`} className="toNavy">Personalise</Link>
           </StyledButton>
         </div>
       );
@@ -198,7 +214,7 @@ function App() {
             <Route path='/customer/:sessionId/:menuId/tablenumber' element={<SelectTableNumber onSuccess={tableNumberSuccess} />} />
             <Route path='/customer/:sessionId/:menuId/:tableNumber' element={<CustomerMenuPage personas={personas}/>} />
             <Route path='/customer/:sessionId/:menuId/:categoryId/:foodId' element={<FoodItemPage />} />
-            <Route path='/customer/:sessionId/:menuId/personalise' element={<PersonalisePage personas={personas} handlePersonas={handlePersonas}/>} />
+            <Route path='/customer/:sessionId/:menuId/:tableNumber/personalise' element={<PersonalisePage personas={personas} handlePersonas={handlePersonas}/>} />
             <Route path='/customer/:sessionId/view_order/:menuId/:tableNumber' element={<CustomerViewOrderPage />} />
           </Routes>
         </main>
