@@ -114,10 +114,15 @@ function FoodItemPage() {
           open={isSnackbarOpen}
           autoHideDuration={4000}
           onClose={handleSnackbarClose}
+          anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
         >
-          <Alert onClose={handleSnackbarClose} severity="success" sx={{ fontSize: '2rem', width: '50vh' }}>
-            Item successfully added to order!
-          </Alert>
+          <Alert onClose={handleSnackbarClose} severity="success" sx={{ fontSize: '2rem', width: 'auto' }}>
+          {`Successfully added `}
+          <Typography variant="inherit" fontWeight="bold" display="inline">
+            {foodData.food_name}
+          </Typography>
+          {` to order!`}
+        </Alert>
         </Snackbar>
       </div>
     </>

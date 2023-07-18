@@ -1,17 +1,12 @@
 import React from 'react';
-import {
-	Typography,
-	Paper,
-	Checkbox,
-	FormControlLabel,
-	Button,
-} from '@mui/material';
+import { Typography, Paper, Checkbox, FormControlLabel, Button, TextField } from '@mui/material';
 import { useNavigate, useParams } from 'react-router-dom';
 import makeRequest from '../makeRequest';
 import { StyledButton } from './CustomerOrStaff';
 
-function PersonalisePage({ handlePersonas }) {
+function PersonalisePage({ personas, handlePersonas }) {
 	const [allergies, setAllergies] = React.useState([]);
+  const [personaName, setPersonaName] = React.useState('')
 	const [selectedAllergies, setSelectedAllergies] = React.useState([]);
 
 	React.useEffect(() => {
@@ -21,6 +16,10 @@ function PersonalisePage({ handlePersonas }) {
 		};
 		fetchData();
 	}, []);
+
+  React.useEffect(() => {
+		console.log(personas)
+	}, [personas]);
 
 	async function fetchAllergies() {
 		const url = '/get_allergies';
@@ -45,7 +44,7 @@ function PersonalisePage({ handlePersonas }) {
 
 	const handleFormSubmit = (event) => {
 		event.preventDefault();
-		handlePersonas(selectedAllergies)
+		handlePersonas(personaName, selectedAllergies)
 		console.log(selectedAllergies);
 	};
 
@@ -56,6 +55,12 @@ function PersonalisePage({ handlePersonas }) {
 					<Typography sx={{ mb: 3 }} variant="h4" gutterBottom>
 						Personalise
 					</Typography>
+          <TextField
+            label="Persona Name"
+            sx={{m:2, width: '90%'}}
+            value={personaName}
+            onChange={(e) => setPersonaName(e.target.value)}
+          />
 					<form onSubmit={handleFormSubmit}>
 						<div
 							style={{

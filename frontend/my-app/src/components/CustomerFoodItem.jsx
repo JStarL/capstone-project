@@ -1,6 +1,6 @@
 import React from 'react';
 import './Components.css';
-import { Button, Snackbar, Alert } from '@mui/material';
+import { Typography, Button, Snackbar, Alert } from '@mui/material';
 import { useNavigate, useParams } from 'react-router-dom';
 import { StyledButton } from '../pages/CustomerOrStaff';
 import makeRequest from '../makeRequest';
@@ -78,10 +78,14 @@ function CustomerFoodItem(props) {
         open={isSnackbarOpen}
         autoHideDuration={4000}
         onClose={handleSnackbarClose}
-        // anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
+        anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
       >
-        <Alert onClose={handleSnackbarClose} severity="success" sx={{ fontSize: '2rem', width: '50vh' }}>
-          Item successfully added to order!
+        <Alert onClose={handleSnackbarClose} severity="success" sx={{ fontSize: '2rem', width: 'auto' }}>
+          {`Successfully added `}
+          <Typography variant="inherit" fontWeight="bold" display="inline">
+            {props.originalFoodName}
+          </Typography>
+          {` to order!`}
         </Alert>
       </Snackbar>
 

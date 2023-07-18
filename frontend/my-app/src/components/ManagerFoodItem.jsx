@@ -12,6 +12,8 @@ import makeRequest from '../makeRequest';
 import { useNavigate } from 'react-router-dom';
 import { StyledButton } from '../pages/CustomerOrStaff';
 import IngredientAllergyPair from './IngredientAllergyPair';
+import ArrowUpwardIcon from '@mui/icons-material/ArrowUpward';
+import ArrowDownwardIcon from '@mui/icons-material/ArrowDownward';
 import AddIcon from '@mui/icons-material/Add';
 
 function ManagerFoodItem({ allergies, originalFoodName, originalFoodDescription, originalPrice, originalImage, originalIngredients, foodId, categoryId, categoryName, fetchCategoryMenuItems }) {
@@ -143,7 +145,7 @@ function ManagerFoodItem({ allergies, originalFoodName, originalFoodDescription,
           <div className='div-section'>
             <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
               <Typography variant="h6" gutterBottom>Ingredients and Allergy List</Typography>
-              <StyledButton variant="outlined" onClick={toggleListVisibility} style={{ width: 'auto', margin: '10px', marginBottom: '20px'}}>
+              <StyledButton variant="outlined" onClick={toggleListVisibility} style={{ width: 'auto', margin: '10px', marginBottom: '20px' }}>
                 {isListVisible ? 'Hide Ingredients' : 'Show Ingredients'}
               </StyledButton>
             </div>
@@ -205,10 +207,28 @@ function ManagerFoodItem({ allergies, originalFoodName, originalFoodDescription,
           </div>
         </div>
         <div className='food-item-button'>
-          {categoryName !== 'Best Selling' && (
-            <Button sx={{ color: '#002250' }} onClick={deleteFoodItem} startIcon={<DeleteIcon />} />
-          )}
-          <StyledButton sx={{ width: '45%' }} onClick={updateFoodItem}>UPDATE</StyledButton>
+          <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
+            <Button
+              style={{ color: '#002250', fontSize: '2.5rem', margin: '5px'}}
+              onClick={() => console.log('Moving menu item up')}
+              startIcon={<ArrowUpwardIcon style={{ fontSize: '2.5rem' }} />}
+            />
+            {categoryName !== 'Best Selling' && (
+              <Button
+                style={{ color: '#002250', fontSize: '2.5rem', margin: '5px'}}
+                onClick={deleteFoodItem}
+                startIcon={<DeleteIcon style={{ fontSize: '2.5rem' }}/>}
+              />
+            )}
+            <StyledButton style={{ width: 'auto', fontSize: '1rem', margin: '5px' }} onClick={updateFoodItem}>
+              UPDATE
+            </StyledButton>
+            <Button
+              style={{ color: '#002250', fontSize: '2.5rem', margin: '5px'}}
+              onClick={() => console.log('Moving menu item down')}
+              startIcon={<ArrowDownwardIcon style={{ fontSize: '2.5rem' }} />}
+            />
+          </div>
         </div>
       </div>
     </>

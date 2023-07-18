@@ -34,13 +34,20 @@ function OrderItem (props) {
 
   const handleAmountChange = (e) => {
     const newAmount = e.target.value;
+    console.log(e.target.value)
+    console.log(prevAmount)
     setAmount(newAmount);
     const diff = Math.abs(newAmount - prevAmount);
 
     if (newAmount > prevAmount) {
       addToOrder(diff)
     } else if (newAmount < prevAmount) {
-      removeFromOrder(diff)
+      if (!(newAmount.trim() === '')) {
+        removeFromOrder(diff)
+      }
+      else {
+        return;
+      }
     }
     setPrevAmount(newAmount);
   };

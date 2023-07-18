@@ -99,8 +99,8 @@ function CategoryManager(props) {
       </Card>
       {categoryName === 'Best Selling' ? <div style={{ width: "55px" }}></div> : (
         <Box style={{ width: "55px" }} display="flex" justifyContent='center' flexDirection="column">
-          <Button sx={{color: '#002250'}} onClick={() => deleteCategory()} startIcon={<DeleteIcon />} />
           <Button sx={{color: '#002250'}} onClick={() => console.log(`moving ${categoryName} with ordering ID: ${props.orderingId} up`)} startIcon={<ArrowUpwardIcon/>} />
+          <Button sx={{color: '#002250'}} onClick={() => deleteCategory()} startIcon={<DeleteIcon />} />
 					<Button sx={{color: '#002250'}} onClick={() => console.log(`moving ${categoryName} with ordering ID: ${props.orderingId} down`)} startIcon={<ArrowDownwardIcon/>} />
         </Box>
       )}

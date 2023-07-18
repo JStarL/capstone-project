@@ -13,7 +13,10 @@ function CustomerMenuPage({ personas }) {
   const [currentSelectedCategory, setCurrentSelectedCategory] = React.useState('Best Selling');
   const [currentSelectedCategoryId, setCurrentSelectedCategoryId] = React.useState(-1);
   const [menuItems, setMenuItems] = React.useState([]); // List of Menu items for the current selected category
-  const [currentlySelectedPersona, setCurrentlySelectedPersona] = React.useState([])
+  const [currentlySelectedPersona, setCurrentlySelectedPersona] = React.useState('')
+  const [currentlySelectedPersonaAllergies, setCurrentlySelectedPersonaAllergies] = React.useState([])
+  const [trigger, setTrigger] = React.useState(0)
+
   console.log(personas)
 
   const sessionId = localStorage.getItem('session_id');
@@ -41,6 +44,7 @@ function CustomerMenuPage({ personas }) {
       const data = await fetchAllMenuData();
       if (data && data?.length > 0) {
         setCurrentSelectedCategoryId(Object.keys(data[0])[0]);
+        setTrigger((prevTrigger) => prevTrigger + 1)
         console.log(data)
       }
     };
@@ -51,17 +55,17 @@ function CustomerMenuPage({ personas }) {
   React.useEffect(() => {
     const fetchCategoryData = async () => {
       if (currentSelectedCategoryId !== -1) {
-        const url = `/customer/view_category?session_id=${sessionId}&category_id=${currentSelectedCategoryId}&allergies=[${currentlySelectedPersona}]`;
+        const url = `/customer/view_category?session_id=${sessionId}&category_id=${currentSelectedCategoryId}&allergies=[${currentlySelectedPersonaAllergies}]`;
         const data = await makeRequest(url, 'GET', undefined, undefined)
         setMenuItems(data)
         fetchAllMenuData()
       }
     };
     fetchCategoryData();
-  }, [currentSelectedCategoryId])
+  }, [currentSelectedCategoryId, trigger])
 
   async function fetchAllMenuData() {
-    const url = `/customer/view_menu?session_id=${sessionId}&menu_id=${menuId}&allergies=[${currentlySelectedPersona}]`;
+    const url = `/customer/view_menu?session_id=${sessionId}&menu_id=${menuId}&allergies=[${currentlySelectedPersonaAllergies}]`;
     const data = await makeRequest(url, 'GET', undefined, undefined);
     console.log(data)
     setCategories(data);
@@ -69,8 +73,14 @@ function CustomerMenuPage({ personas }) {
   }
 
   const handlePersonaChange = (persona) => {
-    setCurrentlySelectedPersona(persona)
     console.log(persona)
+    // console.log(personaAllergyArray)
+    const personaAllergyString = persona.slice(1).join(',')
+    console.log(personaAllergyString)
+    // console.log(personaAllergyString)
+    setCurrentlySelectedPersona(persona)
+    setCurrentlySelectedPersonaAllergies(personaAllergyString)
+    // console.log(personaAllergy)
   }
 
   async function fetchCategoryMenuItems() {
@@ -107,10 +117,10 @@ function CustomerMenuPage({ personas }) {
           <Typography className='h4' variant="h4" gutterBottom>Customer Menu Page - {currentSelectedCategory}</Typography>
           </div>
           <div  style={{ width: '15%' }}>
-            <select value={currentlySelectedPersona} onChange={(e) => handlePersonaChange(e.target.value)}>
-            {personas.map((persona, index) => (
+          <select value={currentlySelectedPersona} onChange={(e) => handlePersonaChange(personas[e.target.selectedIndex])}>
+            {personas.map((persona) => (
               <option key={persona} value={persona}>
-                {`Persona ${index}`}
+                {`${persona[0]}`}
               </option>
             ))}
             </select>

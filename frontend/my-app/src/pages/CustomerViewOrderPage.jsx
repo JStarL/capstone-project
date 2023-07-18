@@ -25,8 +25,11 @@ function CustomerViewOrderPage() {
     orders?.map((order) => {
       const subtotal = order.price * order.amount;
       total += subtotal;
-    setTotalCost(total);
+      setTotalCost(total);
     })
+    if (orders.length === 0) {
+      setTotalCost(0)
+    }
   }, [orders])
   
   async function fetchOrder() {
@@ -41,7 +44,7 @@ function CustomerViewOrderPage() {
 
 	return (
     <>
-    <div>CUSTOMER VIEW ORDER</div>
+    <div>CUSTOMER ORDER PAGE</div>
 		<div className='view-order-page' style={{ justifywidth: '100%', alignItems:'center' }} sx={{ alignItems: 'center' }}>
     {orders?.map((order) => (
         <OrderItem
@@ -57,7 +60,7 @@ function CustomerViewOrderPage() {
         </OrderItem>
       ))}
 		</div>
-    <div style={{ padding: '5px', margin: '20px' }}><b>Total: ${totalCost}</b></div>
+    <Typography style={{ padding: '5px', margin: '20px' }}><b>Total: ${totalCost}</b></Typography>
     <StyledButton onClick={() => console.log('finalise order')} style={{ width: '70%'}}>Finalise Order</StyledButton>
     </>
 	);
