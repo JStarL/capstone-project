@@ -110,7 +110,7 @@ function ManagerMenuPage() {
     
     if (swapDirection === 'up') {
       categoriesIndex = categoriesIndex - 1;
-      if (categoriesIndex = 0) {
+      if (categoriesIndex === 0) {
         console.log('error: cannot swap with Best Selling');
         return;
       }
@@ -149,7 +149,7 @@ function ManagerMenuPage() {
               fetchCategoryMenuItems={fetchCategoryMenuItems}
               orderingId={category[Object.keys(category)[0]][2]}
             >
-              {console.log(categories)}
+              {console.log(category)}
             </CategoryManager>
             
           ))}
