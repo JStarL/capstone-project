@@ -407,6 +407,7 @@ def customer_menu_table_flask():
             {
             'session_id': session_id,
             'table_id' : table_id,
+            'status': 'customer',
             'menu_items' : []
             }
         )
@@ -567,8 +568,10 @@ def get_allergies_flask():
 
 @APP.route("/customer/finalise_order", methods=['POST'])
 def customer_finalise_order_flask():
-    session_id = request.args.get("session_id")
-    menu_id = request.args.get("menu_id")
+    data = ast.literal_eval(request.get_json())
+    
+    session_id = data["session_id"]
+    menu_id = data["menu_id"]
     
     orders_list = None
     if menu_id in orders:
@@ -580,10 +583,10 @@ def customer_finalise_order_flask():
     order_list = [order for order in orders_list if order["session_id"] == session_id]
     
     if len(order_list) > 0:
-        if order_list['status'] == 'kitchen':
+        if order_list[0]['status'] == 'kitchen':
             return { 'error': 'Already sent to kitchen'}
         else:
-            order_list['status'] = 'kitchen'
+            order_list[0]['status'] = 'kitchen'
         
         return {'success': 'order finalised'}
     else:
