@@ -113,7 +113,7 @@ function ManagerMenuPage() {
               fetchCategoryMenuItems={fetchCategoryMenuItems}
               orderingId={category[Object.keys(category)[0]][2]}
             >
-              {console.log(category)}
+              {console.log('Category is: ' + category)}
             </CategoryManager>
           ))}
           <NewCategoryField
