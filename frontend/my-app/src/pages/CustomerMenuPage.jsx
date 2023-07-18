@@ -58,7 +58,7 @@ function CustomerMenuPage({ personas }) {
       }
     };
     fetchCategoryData();
-  }, [currentSelectedCategoryId])
+  }, [currentSelectedCategoryId, currentlySelectedPersona])
 
   async function fetchAllMenuData() {
     const url = `/customer/view_menu?session_id=${sessionId}&menu_id=${menuId}&allergies=[${currentlySelectedPersona}]`;
