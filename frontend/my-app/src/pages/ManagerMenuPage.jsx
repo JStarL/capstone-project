@@ -94,6 +94,42 @@ function ManagerMenuPage() {
     return data
   }
 
+  function getOtherCategoryOrderingId(swapDirection, categoryId) {
+    let categoriesIndex = -1;
+    categoryId = Number(categoryId);
+    categories.every((obj, index) => {
+      for (const [key, value] of Object.entries(obj)) {
+        let k = Number(key);
+        if (k === categoryId) {
+          categoriesIndex = index;
+          return false;
+        }
+      }
+      return true;
+    })
+    
+    if (swapDirection === 'up') {
+      categoriesIndex = categoriesIndex - 1;
+      if (categoriesIndex = 0) {
+        console.log('error: cannot swap with Best Selling');
+        return;
+      }
+    } else if (swapDirection === 'down') {
+      categoriesIndex = categoriesIndex + 1;
+      if (categoriesIndex >= categories.length) {
+        console.log('error: this is the last category, cannot swap down');
+        return;
+      }
+    } else {
+      console.log('Invalid swap direction')
+      return;
+    }
+    
+    for (const [key, value] of Object.entries(categories[categoriesIndex])) {
+      return Number(categories[categoriesIndex][key][2])
+    }
+  }
+
   if (!categories || !Array.isArray(categories)) return <>loading...</>;
   return (
     <>
@@ -113,8 +149,9 @@ function ManagerMenuPage() {
               fetchCategoryMenuItems={fetchCategoryMenuItems}
               orderingId={category[Object.keys(category)[0]][2]}
             >
-              {console.log('Category is: ' + category)}
+              {console.log(categories)}
             </CategoryManager>
+            
           ))}
           <NewCategoryField
             menuId={menuId}
