@@ -1,12 +1,9 @@
 import React from 'react';
 import '../App.css';
 import CustomerFoodItem from '../components/CustomerFoodItem';
-import { useNavigate } from 'react-router-dom';
 import CategoryCustomer from '../components/CategoryCustomer';
 import makeRequest from '../makeRequest';
 import { Typography, Select, MenuItem, FormControl, InputLabel } from '@mui/material';
-import { StyledButton } from './CustomerOrStaff';
-import PersonAddAlt1SharpIcon from '@mui/icons-material/PersonAddAlt1Sharp';
 
 function CustomerMenuPage({ personas }) {
   const [categories, setCategories] = React.useState([]);

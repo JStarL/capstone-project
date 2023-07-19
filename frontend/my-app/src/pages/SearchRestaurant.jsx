@@ -1,7 +1,6 @@
 import React from 'react';
-import { Typography, Paper, Grid, TextField } from '@mui/material';
-import { useNavigate, useParams } from 'react-router-dom';
-import { StyledButton } from './CustomerOrStaff';
+import { Typography, Paper, TextField } from '@mui/material';
+import { useNavigate } from 'react-router-dom';
 import makeRequest from '../makeRequest';
 import RestaurantDetails from '../components/RestaurantDetails';
 
@@ -12,18 +11,11 @@ function SearchRestaurant({ onSuccess }) {
 
 	React.useEffect(() => {
 		const fetchData = async () => {
-			const data = await fetchRestaurants();
-			console.log(data)
+			await fetchRestaurants();
 		};
 		fetchData();
 	}, [searchQuery]);
 
-	// function selectRestaurant() {
-	// 	// set menu id in local storage 
-	// 	localStorage.setItem('menu_id', menuId)
-	// 	// forward user to select table number 
-	// 	navigate('/tablenumber')
-	// }
 	async function fetchRestaurants() {
 		const url = `/customer/menu/search?session_id=${localStorage.getItem('session_id')}&query=${searchQuery}`;
 		const data = await makeRequest(url, 'GET', undefined, undefined);

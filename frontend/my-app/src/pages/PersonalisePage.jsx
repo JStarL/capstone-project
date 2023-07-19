@@ -11,7 +11,6 @@ function PersonalisePage({ personas, handlePersonas }) {
 	const [selectedAllergies, setSelectedAllergies] = React.useState([1,2,3]);
   const [newPersona, setNewPersona] = React.useState(true)
 
-  const selectedAllergies1 = [1,2,3]
   const navigate = useNavigate()
   const params = useParams()
   const sessionId = params.sessionId
@@ -20,19 +19,15 @@ function PersonalisePage({ personas, handlePersonas }) {
 	React.useEffect(() => {
 		const fetchData = async () => {
 			const data = await fetchAllergies();
-			console.log(data);
 		};
 		fetchData();
 	}, []);
 
   React.useEffect(() => {
-    console.log(currentlySelectedPersona[1])
     if (currentlySelectedPersona) {
-      console.log('a')
       setSelectedAllergies(currentlySelectedPersona[1])
     }
     else {
-      console.log('b')
       setSelectedAllergies([])
     }
 	}, [currentlySelectedPersona]);
@@ -41,7 +36,6 @@ function PersonalisePage({ personas, handlePersonas }) {
 		const url = '/get_allergies';
 		const data = await makeRequest(url, 'GET', undefined, undefined);
 		setAllergies(data);
-    console.log(data)
 		return data;
 	}
 
@@ -66,19 +60,15 @@ function PersonalisePage({ personas, handlePersonas }) {
 			);
 		}
 	};
-  console.log(selectedAllergies)
 	const handleFormSubmit = (event) => {
 		event.preventDefault();
 		handlePersonas(personaName, selectedAllergies)
-		console.log(selectedAllergies)
     navigate(`/customer/${sessionId}/${menuId}/${tableNumber}`)
 	};
 
   const handlePersonaChange = (persona) => {
     setCurrentlySelectedPersona(persona)
     setPersonaName(persona[0])
-    // setSelectedAllergies(persona[1])
-    console.log(persona[0])
     setNewPersona(false)
   }
 
@@ -88,10 +78,6 @@ function PersonalisePage({ personas, handlePersonas }) {
     setNewPersona(true)
   }
 
-  // const handleEditAllergies = () => {
-  //   handlePersonas(personaName, selectedAllergies)
-  // }
-  console.log(personaName)
 	return (
 		<>
     <div style={{ display: 'flex', justifyContent: 'space-between' }}>

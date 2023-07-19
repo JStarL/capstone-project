@@ -1,18 +1,16 @@
 import React from 'react';
 import '../App.css';
-import { Button, TextField, Typography } from '@mui/material';
+import { Typography } from '@mui/material';
 import ManagerFoodItem from '../components/ManagerFoodItem';
 import { useNavigate, useParams } from 'react-router-dom';
 import CategoryManager from '../components/CategoryManager';
 import BestSellingFoodItem from '../components/BestSellingFoodItem';
-import AddIcon from '@mui/icons-material/Add';
 import makeRequest from '../makeRequest';
 import PropTypes from 'prop-types';
 import NewCategoryField from '../components/NewCategoryField';
 import { StyledButton } from './CustomerOrStaff';
 
 function ManagerMenuPage() {
-  const [newCategoryName, setNewCategoryName] = React.useState('');
   const [categories, setCategories] = React.useState([]);
   const [currentSelectedCategory, setCurrentSelectedCategory] = React.useState('Best Selling');
   const [currentSelectedCategoryId, setCurrentSelectedCategoryId] = React.useState(-1);
@@ -68,25 +66,6 @@ function ManagerMenuPage() {
     return data;
   }
 
-  function addNewCategory() {
-    const body = JSON.stringify({
-      'manager_id': managerId,
-      'menu_id': menuId,
-      'category_name': newCategoryName
-    });
-
-    if (newCategoryName !== '') {
-      makeRequest('/manager/add_category', 'POST', body, undefined)
-        .then(data => {
-          setNewCategoryName('')
-          fetchAllMenuData(); // basically updates/refreshes the page
-        })
-        .catch(e => console.log('Error: ' + e));
-    } else {
-      alert('Invalid category name')
-    }
-  }
-
   async function fetchCategoryMenuItems() {
     const url = `/manager/view_category?manager_id=${managerId}&category_id=${currentSelectedCategoryId}`;
     const data = await makeRequest(url, 'GET', undefined, undefined)
@@ -98,7 +77,7 @@ function ManagerMenuPage() {
     let categoriesIndex = -1;
     categoryId = Number(categoryId);
     categories.every((obj, index) => {
-      for (const [key, value] of Object.entries(obj)) {
+      for (const [key] of Object.entries(obj)) {
         let k = Number(key);
         console.log('k is: ' + k);
         if (k === categoryId) {
@@ -127,7 +106,7 @@ function ManagerMenuPage() {
     }
 
 
-    for (const [key, value] of Object.entries(categories[categoriesIndex])) {
+    for (const [key] of Object.entries(categories[categoriesIndex])) {
       return Number(categories[categoriesIndex][key][2])
     }
   }
