@@ -32,6 +32,9 @@ function CategoryManager(props) {
   }
 
   function reorderCategory(prev_ordering_id, new_ordering_id) {
+    if (!new_ordering_id) {
+      return;
+    }
     const body = JSON.stringify({
       manager_id: managerId,
       category_id: props.id, 
