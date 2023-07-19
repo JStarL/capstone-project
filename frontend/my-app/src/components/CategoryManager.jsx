@@ -40,6 +40,24 @@ function CategoryManager(props) {
       .catch(e => console.log('Error: ' + e));
   }
 
+  function reorderCategory(prev_ordering_id, new_ordering_id) {
+    const body = JSON.stringify({
+      manager_id: managerId,
+      category_id: props.id, 
+      prev_ordering_id, 
+      new_ordering_id
+    });
+    if (categoryName !== '') {
+      makeRequest('/manager/update_category_ordering', 'POST', body, undefined)
+        .then(data => {
+          props.fetchAllMenuData();
+        })
+        .catch(e => console.log('Error: ' + e));
+    } else {
+      alert('Cannot reorder categories')
+    }
+  }
+
   function updateCategoryName() {
     const body = JSON.stringify({
       manager_id: managerId,
@@ -99,9 +117,9 @@ function CategoryManager(props) {
       </Card>
       {categoryName === 'Best Selling' ? <div style={{ width: "55px" }}></div> : (
         <Box style={{ width: "55px" }} display="flex" justifyContent='center' flexDirection="column">
-          <Button sx={{ color: '#002250' }} onClick={() => console.log(`moving ${categoryName} with ordering ID: ${props.orderingId} up switching with category with ordering ID: ${props.getOtherCategoryOrderingId('up', categoryId)}`)} startIcon={<ArrowUpwardIcon />} />
+          <Button sx={{ color: '#002250' }} onClick={() => reorderCategory(props.orderingId, props.getOtherCategoryOrderingId('up', categoryId))} startIcon={<ArrowUpwardIcon />} />
           <Button sx={{ color: '#002250' }} onClick={() => deleteCategory()} startIcon={<DeleteIcon />} />
-          <Button sx={{ color: '#002250' }} onClick={() => console.log(`moving ${categoryName} with ordering ID: ${props.orderingId} down switching with category with ordering ID: ${props.getOtherCategoryOrderingId('down', categoryId)}`)} startIcon={<ArrowDownwardIcon />} />
+          <Button sx={{ color: '#002250' }} onClick={() => reorderCategory(props.orderingId, props.getOtherCategoryOrderingId('down', categoryId))} startIcon={<ArrowDownwardIcon />} />
         </Box>
       )}
     </Box>

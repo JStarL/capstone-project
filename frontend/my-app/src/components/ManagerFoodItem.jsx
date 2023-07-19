@@ -93,7 +93,6 @@ function ManagerFoodItem({ allergies, originalFoodName, originalFoodDescription,
 
   return (
     <>
-      {console.log(originalIngredients)}
       <div className='food-item-div'>
         <div>
           {image ? (

@@ -108,25 +108,25 @@ function ManagerMenuPage() {
       }
       return true;
     })
-    
+
     if (swapDirection === 'up') {
       categoriesIndex = categoriesIndex - 1;
       if (categoriesIndex === 0) {
-        alert('error: cannot swap with Best Selling');
+        alert('Error: Cannot swap with Best Selling category');
         return;
       }
     } else if (swapDirection === 'down') {
       categoriesIndex = categoriesIndex + 1;
       if (categoriesIndex >= categories.length) {
-        alert('error: this is the last category, cannot swap down');
+        alert('Error: This is the last category, cannot move category further down');
         return;
       }
     } else {
       alert('Invalid swap direction')
       return;
     }
-    
-    
+
+
     for (const [key, value] of Object.entries(categories[categoriesIndex])) {
       return Number(categories[categoriesIndex][key][2])
     }
@@ -135,10 +135,10 @@ function ManagerMenuPage() {
   if (!categories || !Array.isArray(categories)) return <>loading...</>;
   return (
     <>
-      <div style={{ display: 'flex', flexDirection: 'row'}}>
-        <div style={{ width: '25%', backgroundColor: 'white', display: 'flex', flexDirection: 'column', alignItems: 'center'}}>
+      <div style={{ display: 'flex', flexDirection: 'row' }}>
+        <div style={{ width: '25%', backgroundColor: 'white', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
           {categories?.map((category) => (
-            
+
             <CategoryManager
               categoryName={category[Object.keys(category)[0]][0]}
               key={Object.keys(category)[0]} // category id 
@@ -154,7 +154,7 @@ function ManagerMenuPage() {
             >
               {console.log(category)}
             </CategoryManager>
-            
+
           ))}
           <NewCategoryField
             menuId={menuId}
@@ -163,38 +163,40 @@ function ManagerMenuPage() {
           />
         </div>
         <div style={{ width: '75%', height: '100%' }}>
-        <Typography className='h4' variant="h4" gutterBottom>Manager Menu Page - {currentSelectedCategory}</Typography>
+          <Typography className='h4' variant="h4" gutterBottom>Manager Menu Page - {currentSelectedCategory}</Typography>
           <div>
-          {menuItems?.map((menuItem) =>
-            currentSelectedCategory === 'Best Selling' ? (
-              <BestSellingFoodItem
-                key={menuItem.food_id}
-                originalFoodName={menuItem.food_name}
-                originalFoodDescription={menuItem.food_description}
-                originalPrice={menuItem.food_price.toString()}
-                originalImage={menuItem.food_image}
-              />
-            ) : (
-              <ManagerFoodItem
-                originalFoodName={menuItem.food_name}
-                originalFoodDescription={menuItem.food_description}
-                originalPrice={menuItem.food_price.toString()}
-                originalImage={menuItem.food_image}
-                originalIngredients={menuItem.food_ingredients}
-                foodId={menuItem.food_id.toString()}
-                categoryId={currentSelectedCategoryId}
-                categoryName={currentSelectedCategory}
-                fetchAllMenuData={fetchAllMenuData}
-                fetchCategoryMenuItems={fetchCategoryMenuItems}
-                allergies={allergies}
-              />
-            )
-          )}
+            {menuItems?.map((menuItem) =>
+              currentSelectedCategory === 'Best Selling' ? (
+                <BestSellingFoodItem
+                  key={menuItem.food_id}
+                  originalFoodName={menuItem.food_name}
+                  originalFoodDescription={menuItem.food_description}
+                  originalPrice={menuItem.food_price.toString()}
+                  originalImage={menuItem.food_image}
+                />
+              ) : (
+                <ManagerFoodItem
+                  originalFoodName={menuItem.food_name}
+                  originalFoodDescription={menuItem.food_description}
+                  originalPrice={menuItem.food_price.toString()}
+                  originalImage={menuItem.food_image}
+                  originalIngredients={menuItem.food_ingredients}
+                  foodId={menuItem.food_id.toString()}
+                  categoryId={currentSelectedCategoryId}
+                  categoryName={currentSelectedCategory}
+                  fetchAllMenuData={fetchAllMenuData}
+                  fetchCategoryMenuItems={fetchCategoryMenuItems}
+                  allergies={allergies}
+                >
+                  {console.log(menuItem)}
+                </ManagerFoodItem>
+              )
+            )}
           </div>
           <div>
             <br></br>
             {currentSelectedCategory !== 'Best Selling'
-              ? <StyledButton sx={{width: '25%'}} onClick={() => { navigate(`/manager/addnewmenuitem/${menuId}/${currentSelectedCategory}/${currentSelectedCategoryId}`) }}>Add new menu item</StyledButton>
+              ? <StyledButton sx={{ width: '25%' }} onClick={() => { navigate(`/manager/addnewmenuitem/${menuId}/${currentSelectedCategory}/${currentSelectedCategoryId}`) }}>Add new menu item</StyledButton>
               : null
             }
           </div>
