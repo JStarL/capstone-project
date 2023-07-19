@@ -38,7 +38,8 @@ function ManagerMenuPage() {
       if (currentSelectedCategoryId !== -1) {
         const url = `/manager/view_category?manager_id=${managerId}&category_id=${currentSelectedCategoryId}`;
         const data = await makeRequest(url, 'GET', undefined, undefined)
-        setMenuItems(data)
+        setMenuItems(data);
+        console.log(data);
       }
     };
     fetchCategoryData();
@@ -69,7 +70,8 @@ function ManagerMenuPage() {
   async function fetchCategoryMenuItems() {
     const url = `/manager/view_category?manager_id=${managerId}&category_id=${currentSelectedCategoryId}`;
     const data = await makeRequest(url, 'GET', undefined, undefined)
-    setMenuItems(data)
+    setMenuItems(data);
+    console.log(data);
     return data
   }
 
@@ -109,6 +111,42 @@ function ManagerMenuPage() {
     for (const [key] of Object.entries(categories[categoriesIndex])) {
       return Number(categories[categoriesIndex][key][2])
     }
+  }
+  
+  function getOtherMenuItemOrderingId(swapDirection, menuItemId) {
+  	let menuItemIndex = -1;
+    menuItemId = Number(menuItemId);
+    menuItems.every((obj, index) => {
+      let foodId = Number(obj['food_id'])
+      console.log('foodId is: ' + foodId);
+      if (foodId === menuItemId) {
+        menuItemIndex = index;
+        return false;
+      }
+      
+      return true;
+    })
+
+    if (swapDirection === 'up') {
+      menuItemIndex = menuItemIndex - 1;
+      if (menuItemIndex < 0) {
+      	alert('Error: This is the first menu item, cannot move it further up');
+      	return;
+      }
+    } else if (swapDirection === 'down') {
+      menuItemIndex = menuItemIndex + 1;
+      if (menuItemIndex >= menuItems.length) {
+        alert('Error: This is the last menu item, cannot move it further down');
+        return;
+      }
+    } else {
+      alert('Invalid swap direction');
+      return;
+    }
+
+
+    return Number(menuItems[menuItemIndex]['food_ordering_id']);
+   
   }
 
   if (!categories || !Array.isArray(categories)) return <>loading...</>;
