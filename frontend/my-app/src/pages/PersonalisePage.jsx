@@ -120,7 +120,7 @@ function PersonalisePage({ personas, handlePersonas }) {
 								alignItems: 'center'
 							}}
 						>
-							{allergies?.map((allergy) => (
+							{allergies?.slice(0, allergies.length - 1).map((allergy) => (
 								<FormControlLabel
 									key={allergy[0]}
 									control={
