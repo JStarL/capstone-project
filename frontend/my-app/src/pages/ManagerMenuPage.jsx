@@ -201,6 +201,8 @@ function ManagerMenuPage() {
                   fetchAllMenuData={fetchAllMenuData}
                   fetchCategoryMenuItems={fetchCategoryMenuItems}
                   allergies={allergies}
+                  getOtherMenuItemOrderingId={getOtherMenuItemOrderingId}
+                  orderingId={menuItem.food_ordering_id}
                 >
                 </ManagerFoodItem>
               )
