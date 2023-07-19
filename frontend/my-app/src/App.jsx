@@ -29,7 +29,7 @@ function App() {
   const [sessionId, setSessionId] = React.useState(localStorage.getItem('session_id'))
   const [tableNumber, setTableNumber] = React.useState(localStorage.getItem('table_number'))
 
-  const [personas, setPersonas] = React.useState([['Default', null]])
+  const [personas, setPersonas] = React.useState([['Default', [null]]])
   const params = useParams();
   console.log(params.sessionId)
   React.useEffect(function () {

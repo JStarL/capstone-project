@@ -1,21 +1,16 @@
 import React from 'react';
 import './Components.css';
-import { Button, TextField, Card, CardActions, CardContent, Box } from '@mui/material';
+import { Button, TextField, Card, CardContent, Box } from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete';
-import MenuIcon from '@mui/icons-material/Menu';
 import ArrowUpwardIcon from '@mui/icons-material/ArrowUpward';
 import ArrowDownwardIcon from '@mui/icons-material/ArrowDownward';
 import makeRequest from '../makeRequest';
-import { useNavigate } from 'react-router-dom';
 
 function CategoryManager(props) {
   const [categoryName, setCategoryName] = React.useState(props.categoryName);
   const [categoryId, setCategoryId] = React.useState(props.id);
-  const [prevCategoryName, setPrevCategoryName] = React.useState('');
-  const [isClicked, setIsClicked] = React.useState(false);
   const managerId = localStorage.getItem('staff_id');
   const menuId = localStorage.getItem('menu_id');
-  const navigate = useNavigate();
 
   function deleteCategory() {
     const body = JSON.stringify({
@@ -26,11 +21,7 @@ function CategoryManager(props) {
 
     makeRequest('/manager/delete_category', 'DELETE', body, undefined)
       .then(data => {
-        console.log(data)
         if (props.currentSelectedCategoryId === categoryId) {
-          console.log('deleting selected categoyr')
-          console.log('Typeof props.currentSelectedCategoryId: ' + typeof (props.currentSelectedCategoryId) + ' ' + props.currentSelectedCategoryId)
-          console.log('Typeof categoryId: ' + typeof (categoryId) + ' ' + categoryId)
           // deleting the currently selected category should automatically change selected category to best selling
           props.setCurrentSelectedCategoryId(1)
           props.setCurrentSelectedCategory('Best Selling')
