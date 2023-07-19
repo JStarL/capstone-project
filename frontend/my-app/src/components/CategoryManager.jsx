@@ -99,9 +99,9 @@ function CategoryManager(props) {
       </Card>
       {categoryName === 'Best Selling' ? <div style={{ width: "55px" }}></div> : (
         <Box style={{ width: "55px" }} display="flex" justifyContent='center' flexDirection="column">
-          <Button sx={{ color: '#002250' }} onClick={() => console.log(`moving ${categoryName} with ordering ID: ${props.orderingId} up switching with category with ordering ID: ${props.getOtherCategoryOrderingId('up', props.orderingId)}`)} startIcon={<ArrowUpwardIcon />} />
+          <Button sx={{ color: '#002250' }} onClick={() => console.log(`moving ${categoryName} with ordering ID: ${props.orderingId} up switching with category with ordering ID: ${props.getOtherCategoryOrderingId('up', categoryId)}`)} startIcon={<ArrowUpwardIcon />} />
           <Button sx={{ color: '#002250' }} onClick={() => deleteCategory()} startIcon={<DeleteIcon />} />
-          <Button sx={{ color: '#002250' }} onClick={() => console.log(`moving ${categoryName} with ordering ID: ${props.orderingId} down switching with category with ordering ID: ${props.getOtherCategoryOrderingId('down', props.orderingId)}`)} startIcon={<ArrowDownwardIcon />} />
+          <Button sx={{ color: '#002250' }} onClick={() => console.log(`moving ${categoryName} with ordering ID: ${props.orderingId} down switching with category with ordering ID: ${props.getOtherCategoryOrderingId('down', categoryId)}`)} startIcon={<ArrowDownwardIcon />} />
         </Box>
       )}
     </Box>

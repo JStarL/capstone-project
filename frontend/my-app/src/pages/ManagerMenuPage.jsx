@@ -100,6 +100,7 @@ function ManagerMenuPage() {
     categories.every((obj, index) => {
       for (const [key, value] of Object.entries(obj)) {
         let k = Number(key);
+        console.log('k is: ' + k);
         if (k === categoryId) {
           categoriesIndex = index;
           return false;
@@ -111,19 +112,20 @@ function ManagerMenuPage() {
     if (swapDirection === 'up') {
       categoriesIndex = categoriesIndex - 1;
       if (categoriesIndex === 0) {
-        console.log('error: cannot swap with Best Selling');
+        alert('error: cannot swap with Best Selling');
         return;
       }
     } else if (swapDirection === 'down') {
       categoriesIndex = categoriesIndex + 1;
       if (categoriesIndex >= categories.length) {
-        console.log('error: this is the last category, cannot swap down');
+        alert('error: this is the last category, cannot swap down');
         return;
       }
     } else {
-      console.log('Invalid swap direction')
+      alert('Invalid swap direction')
       return;
     }
+    
     
     for (const [key, value] of Object.entries(categories[categoriesIndex])) {
       return Number(categories[categoriesIndex][key][2])
