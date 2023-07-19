@@ -91,6 +91,7 @@ function CustomerMenuPage({ personas }) {
           <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100%' }}>
             <div style={{ width: '85%' }}>
               <Typography className='h4' variant="h4" gutterBottom>Customer Menu Page - {currentSelectedCategory}</Typography>
+              <Typography variant="overline" gutterBottom><b>Table Number: {params.tableNumber}</b></Typography>
             </div>
             <div>
               <FormControl variant="outlined" style={{width: '15vh', margin: '10px'}}>
