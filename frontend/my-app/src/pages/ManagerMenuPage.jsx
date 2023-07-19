@@ -148,6 +148,7 @@ function ManagerMenuPage() {
               setMenuItems={setMenuItems}
               fetchCategoryMenuItems={fetchCategoryMenuItems}
               orderingId={category[Object.keys(category)[0]][2]}
+              getOtherCategoryOrderingId={getOtherCategoryOrderingId}
             >
               {console.log(category)}
             </CategoryManager>
