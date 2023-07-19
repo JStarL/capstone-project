@@ -43,16 +43,17 @@ Work Done:
 - Created an interface with dummy buttons, so that when backend is ready, all we have to do is connect them both
 
 WEEK FIVE
-Meeting/Tutorial
+Meeting/Tutorial (26/7/2023 1pm)
 - Finish setting up backend/frontend locally and on vm
 - Link backend and frontend together - manager page, customer page, add staff
 - Discussed how data will be shown in the frontend
+- Practice Demo
 
 Work Done:
 - Demo: Demonstrated manager pages (add menu item and categories)
 - Retrospective
 
-WEEK SIX
+WEEK SIX (3/7/2023 1pm)
 Meeting
 - Allocated tasks for the next sprint
 - Delegated tasks between the frontend
@@ -64,12 +65,20 @@ Work Done:
 
 
 WEEK SEVEN
-Meeting/Tutorial
-- 
+Meeting/Tutorial (10/7/2023 1pm)
+- Catch up with work that has been done during flex week
+- Discuss how to implement personas
 
 Work Done:
 - Personalisation working with the backend
 - View Order page for customers
 
 WEEK EIGHT
-Meeting/Tutorial
+Meeting/Tutorial (17/7/2023 1pm)
+- Discuss and work on debugging for errors arised in meeting
+- Discuss how to implement split payments
+- Practice Demo (19/7/2023 11pm)
+
+Work Done: 
+- Work on personas allowing user's to add persona names and edit their allergies
+- Implement total cost in View Order Page

@@ -1,5 +1,5 @@
 import React from 'react';
-import { Typography, Paper, Checkbox, FormControlLabel, Button, TextField, Card } from '@mui/material';
+import { Typography, Paper, Checkbox, FormControlLabel, TextField, Card } from '@mui/material';
 import { useNavigate, useParams } from 'react-router-dom';
 import makeRequest from '../makeRequest';
 import { StyledButton } from './CustomerOrStaff';
@@ -18,7 +18,7 @@ function PersonalisePage({ personas, handlePersonas }) {
   const tableNumber = params.tableNumber
 	React.useEffect(() => {
 		const fetchData = async () => {
-			const data = await fetchAllergies();
+			await fetchAllergies();
 		};
 		fetchData();
 	}, []);
@@ -38,14 +38,6 @@ function PersonalisePage({ personas, handlePersonas }) {
 		setAllergies(data);
 		return data;
 	}
-
-  // const handleCheckboxChange = (value) => {
-  //   if (selectedAllergies.includes(value)) {
-  //     setSelectedAllergies(selectedAllergies.filter((selectedValue) => selectedValue !== value));
-  //   } else {
-  //     setSelectedAllergies([...selectedAllergies, value]);
-  //   }
-  // };
 
 	const handleCheckboxChange = (event) => {
 		const { value, checked } = event.target;

@@ -18,7 +18,6 @@ function SelectTableNumber({ onSuccess }) {
 		})
 		makeRequest('/customer/menu/table', 'POST', body, undefined)
 			.then(data => {
-				console.log(data)
 				localStorage.setItem('table_number', tableNumber)
 				// forward user to select table number
 				onSuccess(tableNumber)

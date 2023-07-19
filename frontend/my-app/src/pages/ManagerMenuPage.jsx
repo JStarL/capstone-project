@@ -53,8 +53,7 @@ function ManagerMenuPage() {
 
   React.useEffect(() => {
     const fetchData = async () => {
-      const data = await fetchAllergies();
-      console.log(data);
+      await fetchAllergies();
     };
     fetchData();
   }, []);
@@ -79,7 +78,6 @@ function ManagerMenuPage() {
     categories.every((obj, index) => {
       for (const [key] of Object.entries(obj)) {
         let k = Number(key);
-        console.log('k is: ' + k);
         if (k === categoryId) {
           categoriesIndex = index;
           return false;
@@ -131,7 +129,6 @@ function ManagerMenuPage() {
               orderingId={category[Object.keys(category)[0]][2]}
               getOtherCategoryOrderingId={getOtherCategoryOrderingId}
             >
-              {console.log(category)}
             </CategoryManager>
 
           ))}
@@ -167,7 +164,6 @@ function ManagerMenuPage() {
                   fetchCategoryMenuItems={fetchCategoryMenuItems}
                   allergies={allergies}
                 >
-                  {console.log(menuItem)}
                 </ManagerFoodItem>
               )
             )}
