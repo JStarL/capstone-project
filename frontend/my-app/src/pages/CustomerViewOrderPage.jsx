@@ -44,8 +44,7 @@ function CustomerViewOrderPage() {
 
 	return (
     <>
-    <div>YOUR ORDER</div>
-    <Typography variant="overline" gutterBottom><b>Table Number: {params.tableNumber}</b></Typography>
+    <div><b>YOUR ORDER</b></div>
 		<div className='view-order-page' style={{ justifywidth: '100%', alignItems:'center' }} sx={{ alignItems: 'center' }}>
     {orders?.map((order) => (
         <OrderItem
