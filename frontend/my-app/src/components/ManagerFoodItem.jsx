@@ -15,7 +15,7 @@ import ArrowUpwardIcon from '@mui/icons-material/ArrowUpward';
 import ArrowDownwardIcon from '@mui/icons-material/ArrowDownward';
 import AddIcon from '@mui/icons-material/Add';
 
-function ManagerFoodItem({ allergies, originalFoodName, originalFoodDescription, originalPrice, originalImage, originalIngredients, foodId, categoryId, categoryName, fetchCategoryMenuItems }) {
+function ManagerFoodItem({ allergies, fetchAllMenuData, originalFoodName, originalFoodDescription, originalPrice, originalImage, originalIngredients, foodId, categoryId, categoryName, fetchCategoryMenuItems, orderingId, getOtherMenuItemOrderingId}) {
   const [foodName, setFoodName] = React.useState('');
   const [foodDescription, setFoodDescription] = React.useState('');
   const [ingredientAndAllergyList, setIngredientAndAllergyList] = React.useState(originalIngredients);
@@ -71,6 +71,28 @@ function ManagerFoodItem({ allergies, originalFoodName, originalFoodDescription,
         fetchCategoryMenuItems();
       })
       .catch(e => console.log('Error: ' + e));
+  }
+
+  function reorderMenuItem(prev_ordering_id, new_ordering_id) {
+    if (!new_ordering_id) {
+      console.log("new_ordering_id is: " + new_ordering_id);
+      return;
+    }
+    const body = JSON.stringify({
+      manager_id: managerId,
+      menu_item_id: foodId, 
+      prev_ordering_id, 
+      new_ordering_id
+    });
+    if (categoryName !== '') {
+      makeRequest('/manager/update_menu_item_ordering', 'POST', body, undefined)
+        .then(data => {
+          fetchCategoryMenuItems();
+        })
+        .catch(e => console.log('Error: ' + e));
+    } else {
+      alert('Cannot reorder categories')
+    }
   }
 
   function toggleListVisibility() {
@@ -207,7 +229,7 @@ function ManagerFoodItem({ allergies, originalFoodName, originalFoodDescription,
           <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
             <Button
               style={{ color: '#002250', fontSize: '2.5rem', margin: '5px'}}
-              onClick={() => console.log('Moving menu item up')}
+              onClick={() => reorderMenuItem(orderingId, getOtherMenuItemOrderingId('up', foodId))}
               startIcon={<ArrowUpwardIcon style={{ fontSize: '2.5rem' }} />}
             />
             {categoryName !== 'Best Selling' && (
@@ -222,7 +244,7 @@ function ManagerFoodItem({ allergies, originalFoodName, originalFoodDescription,
             </StyledButton>
             <Button
               style={{ color: '#002250', fontSize: '2.5rem', margin: '5px'}}
-              onClick={() => console.log('Moving menu item down')}
+              onClick={() => reorderMenuItem(orderingId, getOtherMenuItemOrderingId('down', foodId))}
               startIcon={<ArrowDownwardIcon style={{ fontSize: '2.5rem' }} />}
             />
           </div>
