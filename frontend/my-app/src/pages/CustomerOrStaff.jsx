@@ -29,9 +29,6 @@ function CustomerOrStaff({ onSuccess, reset }) {
     localStorage.removeItem('menu_id')
     localStorage.removeItem('table_number')
     onSuccess('customer', timestamp)
-    // setStaffType('customer')
-    // setSessionId(timestamp)
-    console.log(timestamp);
     navigate(`/customer/${timestamp}/searchrestaurant`);
   }
 

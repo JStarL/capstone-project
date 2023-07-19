@@ -1,7 +1,6 @@
 import './App.css';
 import React from 'react';
-import { BrowserRouter, Routes, Route, Link, useParams } from 'react-router-dom';
-import { Button } from '@mui/material';
+import { BrowserRouter, Routes, Route, Link } from 'react-router-dom';
 import PersonAddAlt1SharpIcon from '@mui/icons-material/PersonAddAlt1Sharp';
 import RestaurantMenuIcon from '@mui/icons-material/RestaurantMenu';
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
@@ -30,28 +29,17 @@ function App() {
   const [tableNumber, setTableNumber] = React.useState(localStorage.getItem('table_number'))
 
   const [personas, setPersonas] = React.useState([['Default', [null]]])
-  const params = useParams();
-  console.log(params.sessionId)
   React.useEffect(function () {
     if (localStorage.getItem('staff_id')) {
       setId(localStorage.getItem('staff_id'));
     }
     if (localStorage.getItem('staff_type')) {
       setStaffType(localStorage.getItem('staff_type'));
-      console.log(staffType)
     }
     if (localStorage.getItem('menu_id')) {
       setStaffType(localStorage.getItem('menu_id'));
     }
   }, []);
-
-  console.log(localStorage.getItem('staff_type'))
-
-  // const handlePersonas = (name, allergies) => {
-  //   const persona = [name, allergies]
-  //   console.log(persona)
-  //   setPersonas([...personas, persona])
-  // }
 
   const handlePersonas = (name, allergies) => {
     const persona = [name, allergies];
@@ -63,12 +51,9 @@ function App() {
     } else {
       updatedPersonas.push(persona);
     }
-  
-    console.log(updatedPersonas);
-    setPersonas(updatedPersonas);
+      setPersonas(updatedPersonas);
   };
   
-
   const customer = (staff_type, session_id) => {
     setStaffType(staff_type)
     setSessionId(session_id)
@@ -81,7 +66,6 @@ function App() {
     setTableNumber(table_number)
   }
   const restaurantSuccess = (menu_id) => {
-    console.log(menu_id)
     setMenuId(menu_id)
   }
   const tableNumberSuccess = (table_number) => {
@@ -158,8 +142,6 @@ function App() {
         </div>
       );
     } else if (staffType === 'customer' && menuId !== null && tableNumber !== null) {
-      console.log(menuId);
-      console.log(tableNumber);
       return (
         <div className="footer-container">
           <StyledButton startIcon={<ShoppingCartIcon />}>
@@ -186,7 +168,6 @@ function App() {
     }
   }, []);
 
-  console.log(staffType)
   return (
     <div className="App">
       <BrowserRouter>
@@ -220,12 +201,6 @@ function App() {
         </main>
         <footer>
           <Footer />
-          {/* {localStorage.getItem('staff_type') !== 'manager'
-            ? null
-            : (<div className="footer-container">
-              <StyledButton startIcon={<PersonAddAlt1SharpIcon />}><Link to='/addstaff' className='toNavy'>Add Staff</Link></StyledButton>
-              <StyledButton startIcon={<RestaurantMenuIcon />}><Link to={`/manager/menu/${menuId}`} className='toNavy'>Go to Menu</Link></StyledButton>
-            </div>)} */}
         </footer>
 
       </BrowserRouter>

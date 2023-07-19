@@ -1,11 +1,9 @@
 import React from 'react';
 import { Typography, Paper, TextField } from '@mui/material';
-import { useNavigate } from 'react-router-dom';
 import makeRequest from '../makeRequest';
 import RestaurantDetails from '../components/RestaurantDetails';
 
 function SearchRestaurant({ onSuccess }) {
-	const navigate = useNavigate();
 	const [searchQuery, setSearchQuery] = React.useState('');
 	const [restaurants, setRestaurants] = React.useState([]);
 

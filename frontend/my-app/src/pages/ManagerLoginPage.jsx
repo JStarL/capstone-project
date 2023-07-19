@@ -19,11 +19,9 @@ function ManagerLoginPage({ onSuccess }) {
       .then(data => {
         if (data.hasOwnProperty('success')) {
           onSuccess(data['staff_id'], data['staff_type'], data['menu_id'])
-          console.log(data['staff_id'])
           localStorage.setItem('staff_id', data['staff_id']);
           localStorage.setItem('menu_id', data['menu_id']);
           localStorage.setItem('staff_type', data['staff_type']);
-          console.log(data)
           if (data['staff_type'] === 'kitchen') {
             navigate('/kitchen_staff')
           }

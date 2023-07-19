@@ -4,6 +4,7 @@ import CustomerFoodItem from '../components/CustomerFoodItem';
 import CategoryCustomer from '../components/CategoryCustomer';
 import makeRequest from '../makeRequest';
 import { Typography, Select, MenuItem, FormControl, InputLabel } from '@mui/material';
+import { useParams } from 'react-router-dom';
 
 function CustomerMenuPage({ personas }) {
   const [categories, setCategories] = React.useState([]);
@@ -14,10 +15,9 @@ function CustomerMenuPage({ personas }) {
   const [currentlySelectedPersonaAllergies, setCurrentlySelectedPersonaAllergies] = React.useState([]);
   const [trigger, setTrigger] = React.useState(0);
 
-  console.log(personas);
-
-  const sessionId = localStorage.getItem('session_id');
-  const menuId = localStorage.getItem('menu_id');
+  const params = useParams()
+  const sessionId = params.sessionId
+  const menuId = params.menuId
 
   React.useEffect(() => {
     const fetchData = async () => {
@@ -25,7 +25,6 @@ function CustomerMenuPage({ personas }) {
       if (data && data?.length > 0) {
         setCurrentSelectedCategoryId(Object.keys(data[0])[0]);
         setTrigger((prevTrigger) => prevTrigger + 1);
-        console.log(data);
       }
     };
 
@@ -47,7 +46,6 @@ function CustomerMenuPage({ personas }) {
   async function fetchAllMenuData() {
     const url = `/customer/view_menu?session_id=${sessionId}&menu_id=${menuId}&allergies=[${currentlySelectedPersonaAllergies}]`;
     const data = await makeRequest(url, 'GET', undefined, undefined);
-    console.log(data);
     setCategories(data);
     return data;
   }
@@ -55,7 +53,6 @@ function CustomerMenuPage({ personas }) {
   const handlePersonaChange = (event) => {
     const selectedIndex = event.target.value;
     const selectedPersona = personas[selectedIndex];
-    const selectedPersonaName = selectedPersona[0];
     const selectedPersonaAllergies = selectedPersona[1] || [];
   
     setCurrentlySelectedPersona(selectedIndex); // Use the index as the selected value
