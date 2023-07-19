@@ -1,6 +1,5 @@
 import React from 'react';
 import './Components.css';
-import { Button } from '@mui/material';
 
 function BestSellingFoodItem (props) {
   return <>

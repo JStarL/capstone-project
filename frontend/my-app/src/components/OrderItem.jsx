@@ -1,16 +1,14 @@
 import React from 'react';
 import './Components.css';
-import { Button, styled, TextField } from '@mui/material';
-import { useNavigate, useParams } from 'react-router-dom';
+import { TextField } from '@mui/material';
+import { useParams } from 'react-router-dom';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { StyledButton } from '../pages/CustomerOrStaff';
 import makeRequest from '../makeRequest';
 
 function OrderItem (props) {
-  const [order, setOrder] = React.useState('')
   const [amount, setAmount] = React.useState(props.amount)
   const [prevAmount, setPrevAmount] = React.useState(props.amount)
-  const previousAmount = React.useRef('');
   const [description, setDescription] = React.useState(props.foodDescription)
   const [name, setName] = React.useState(props.foodName)
   const [image, setImage] = React.useState(props.foodImage)

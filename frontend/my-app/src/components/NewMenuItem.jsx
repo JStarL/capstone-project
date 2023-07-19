@@ -1,7 +1,7 @@
 import React from 'react';
 import '../App.css';
 import { useParams, useNavigate } from 'react-router-dom';
-import { Select, TextField, Input, Typography, Paper, IconButton } from '@mui/material';
+import { Select, TextField, Input, Typography, Paper } from '@mui/material';
 import { fileToDataUrl } from './helperFunctions'
 import MenuItem from '@mui/material/MenuItem';
 import OutlinedInput from '@mui/material/OutlinedInput';

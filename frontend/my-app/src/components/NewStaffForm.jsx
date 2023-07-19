@@ -1,6 +1,5 @@
 import React from 'react';
-import { useNavigate } from 'react-router-dom';
-import { Button, TextField, Typography, Paper, FormLabel, FormControl, Radio, RadioGroup, FormControlLabel } from '@mui/material';
+import { TextField, Typography, Paper, FormLabel, FormControl, Radio, RadioGroup, FormControlLabel } from '@mui/material';
 import makeRequest from '../makeRequest';
 import { StyledButton } from '../pages/CustomerOrStaff';
 import { styled } from '@mui/material';
@@ -12,13 +11,11 @@ const StyledRadio = styled(Radio) ({
 	}
 })
 
-
 function NewStaffForm({ onSuccess }) {
 	const [name, setName] = React.useState('')
 	const [email, setEmail] = React.useState('')
 	const [password, setPassword] = React.useState('')
 	const [staffType, setStaffType] = React.useState('kitchen')
-	const navigate = useNavigate();
 
 	const managerId = localStorage.getItem('staff_id')
   const menuId = localStorage.getItem('menu_id')

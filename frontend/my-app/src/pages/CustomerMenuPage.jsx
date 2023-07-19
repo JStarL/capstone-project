@@ -98,8 +98,8 @@ function CustomerMenuPage({ personas }) {
             <div style={{ width: '85%' }}>
               <Typography className='h4' variant="h4" gutterBottom>Customer Menu Page - {currentSelectedCategory}</Typography>
             </div>
-            <div style={{ width: '15%' }}>
-              <FormControl variant="outlined" sx={{ minWidth: 200 }}>
+            <div>
+              <FormControl variant="outlined" style={{width: '15vh', margin: '10px'}}>
                 <InputLabel>Choose Persona</InputLabel>
                 <Select
                   value={currentlySelectedPersona}

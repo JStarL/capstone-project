@@ -8,7 +8,7 @@ import makeRequest from '../makeRequest';
 
 function CategoryManager(props) {
   const [categoryName, setCategoryName] = React.useState(props.categoryName);
-  const [categoryId, setCategoryId] = React.useState(props.id);
+  const [categoryId] = React.useState(props.id);
   const managerId = localStorage.getItem('staff_id');
   const menuId = localStorage.getItem('menu_id');
 

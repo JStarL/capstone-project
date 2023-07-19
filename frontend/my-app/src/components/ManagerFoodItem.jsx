@@ -9,7 +9,6 @@ import FormControl from '@mui/material/FormControl';
 import InputAdornment from '@mui/material/InputAdornment';
 import InputLabel from '@mui/material/InputLabel';
 import makeRequest from '../makeRequest';
-import { useNavigate } from 'react-router-dom';
 import { StyledButton } from '../pages/CustomerOrStaff';
 import IngredientAllergyPair from './IngredientAllergyPair';
 import ArrowUpwardIcon from '@mui/icons-material/ArrowUpward';
@@ -34,7 +33,6 @@ function ManagerFoodItem({ allergies, originalFoodName, originalFoodDescription,
     setIngredientAndAllergyList(originalIngredients)
   }, [originalFoodDescription, originalFoodName, originalImage, originalPrice, originalIngredients]);
 
-  const navigate = useNavigate();
   async function handleFileSelect(event) {
     const thumbnailUrl = await fileToDataUrl(event.target.files[0])
     setImage(thumbnailUrl);
