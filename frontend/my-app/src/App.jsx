@@ -20,6 +20,8 @@ import SelectTableNumber from './pages/SelectTableNumber';
 import SearchRestaurant from './pages/SearchRestaurant';
 import CustomerViewOrderPage from './pages/CustomerViewOrderPage';
 import PersonalisePage from './pages/PersonalisePage';
+import { Typography } from '@mui/material';
+
 
 function App() {
   const [id, setId] = React.useState(null);
@@ -119,11 +121,15 @@ function App() {
   const Nav = () => {
     return (
       <nav>
-        <div className='nav-container' sx={{ zIndex: 100 }}>
+        <div className='nav-container' sx={{ zIndex: 100, display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
           <div className='links-container'>
             <span className="link"><Link to='/'>Login</Link></span>
-            <span className="link"><Link to='/register  '>Register</Link></span>
+            <span className="link"><Link to='/register'>Register</Link></span>
           </div>
+          {tableNumber ? (<div className='links-container' style={{ marginLeft: 'auto', marginTop: '5px' }}>
+            <Typography style={{ color: 'white' }} variant="overline" gutterBottom>Table Number: {tableNumber}</Typography>
+            </div>)
+          : null}
         </div>
       </nav>
     )
