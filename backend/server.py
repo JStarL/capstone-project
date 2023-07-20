@@ -613,12 +613,12 @@ def customer_finalise_order_flask():
         else:
             order_list[0]['status'] = 'kitchen'
             
-        for customer in order_list[0]['menu_items']:
+        for menu_item in order_list[0]['menu_items']:
             for menu_item_cur in menu_items_list:
-                if menu_item_cur[0] == customer['menu_item_id']:
+                if menu_item_cur[0] == menu_item['menu_item_id']:
                     tmp_list.append({
-                        "menu_item_id" : customer['menu_item_id'],
-                        "points" : customer['amount'] + menu_item_cur[1]
+                        "menu_item_id" : menu_item['menu_item_id'],
+                        "points" : str(int(menu_item['amount']) + int(menu_item_cur[1]))
                     })
         
         for apply in tmp_list:
