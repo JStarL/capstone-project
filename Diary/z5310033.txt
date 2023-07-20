@@ -47,3 +47,67 @@ Week 4
 - Start inital pages of Frontend (very rough skeleton)
 - Plan out how we are going to organise frontend components and pages 
 - Think about what we can do prior to interface between backend and frontend is setup
+
+- Tutorial Week 4
+- Dicussion about virtual machines
+- Delegate demo 
+- Virtual machine dicusssion 
+- Dicussion on how to organise our CSS (styled components)
+- Continue planning for frontend skeleton
+- update from mentor: 
+  - Focus on functionality rather than the UI 
+  - Better to fully complete user stories rather than have all partially complete 
+
+Working on frontend coding: 
+- Manager Sign Up 
+- Setting up Categories
+
+Week 5
+- Meeting Monday 26/6/23
+- Planning for the demo 
+  - Delegate roles for what to present during the demo
+  - schedule demo practice run for Thursday
+- Working on manager adding a new staff page 
+
+Things implemented (Frontend) throughout the week:
+- Added initial are you a customer or staff screen
+- Added session id for customers 
+- Local storage for staff_id, session_id, menu_id, staff_type
+- Register a new manager 
+- Categories add, update and select
+- Customer and manager menu pages 
+- Individual food pages clicking the "Find out more" button
+
+Demo + retrospective
+- demonstrate customer menu page 
+- Work on retrospective after the demo
+
+Week 6 
+- Meeting Monday 3/7/23
+- Planning for the next sprint 
+  - Figuring out what users stories to include for the next sprint 
+  - Delegating roles for each user story 
+  - Improve styling -> Skeleton pages -> add in data after backend finish routes
+  - Thinking about UI design and styling 
+
+- Worked on: 
+  - Delete category bug when trying to delete a currently selected category
+  - Overall styling and aesthetics of the UI 
+  - Search restaurant 
+  - Selecting Table number 
+  - Personalisation
+
+Week 7 
+- Meeting Monday 10/7/23
+- Working on: 
+  - Personalise 
+  - Add / update new menu item as we changed the structure of ingredients to link with allergies 
+  - Hiding and showing ingredient and allergies list 
+  - Make ingredient and allergy pair component
+
+Week 8
+- Meeting Monday 17/7/23:
+  - Work on debugging some error with personas and menu items in the cart with the entire team 
+  - Thinking about how to implement splitting the bill based on personas (need to change the backend slightly)
+- Working on: 
+  - displaying ingredients on the individual food item page 

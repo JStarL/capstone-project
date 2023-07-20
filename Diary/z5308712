@@ -22,3 +22,33 @@ Week 3
 - Under some of these new 10 user stories, we had to create a new functionality (authentification) and correspondingly a new epic
 - Added child issues in the user stories for frontend developers and backend developers to know what to do.
 - Ready to start implementation of tasks in Sprint 2! Specifically, I want to start the backend of the manager user stories relating to categories.
+
+Week 4
+- This week was quite stressful as we ran into a lot of setup issues, so we actually didn't get to spend any time coding yet.
+- Although we planned on starting to implement the code, I could't yet.
+- We ran into issues because vlab didn't offer compatibility with psycopg2 and so we had to make the switch to using a vm. This process took quite long
+as we ran into errors. These errors took a while trying to fix. Then we had install all the backend, frontend and database software on the vm which was
+quite tricky as the instructions weren't super clear on how to do this. Once we installed it all, I realised I couldn't use git on my local vscode,
+so I had to install another bash terminal just to be able to use git. 
+- These obstacles were overcome by having meetings with Jibi who was able to help me.
+- It did set us back more than we liked, which slowed down the project progress.
+- In our meetings, we created an interface table and highlighted which routes corresponded to sprint 2 for us to start coding.
+- What is planned for next week is to complete the sql code for the backend user stories, and flask code for the function wrappers in server.py.
+
+Week 5
+- We completed our demo succesfully within 10-12 mins!
+- We completed all of our user stories for the first sprint, and did testing to ensure that the backend and frontend worked well together.
+- Personally, I didn't run into too many issues in the functions delegated to me in the backend. However, the frontend had some issues.
+- For the best selling category, we based it off popularity however for it to be novel, it needs to also be based on another criteria which we will discuss at a later sprint.
+- We completed our retrospective meeting soon after the demo and identified areas for improvement.
+- Next week is flexi week so it will be more relaxed but we will decide what user stories we want to do in the next sprint, as well as delegating tasks
+
+Week 6
+- This week was more relaxed week for me as it was flexibility week.
+- We did have a meeting to decide all the user stories we want to do for this upcoming sprint and we also delegated user stories for each person to do.
+- We all took part in creating the interface table in google docs so we know how to structure our functions (params, and returns).
+- I also started coding on the functions that was assigned to me.
+- Next week, I want all of my code to be completed and to do more API Client Testing.
+
+Week 7
+- I completed all my functions that I had to do but had to make some slight changes...
