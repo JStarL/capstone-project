@@ -14,8 +14,9 @@ import IngredientAllergyPair from './IngredientAllergyPair';
 import ArrowUpwardIcon from '@mui/icons-material/ArrowUpward';
 import ArrowDownwardIcon from '@mui/icons-material/ArrowDownward';
 import AddIcon from '@mui/icons-material/Add';
+import SaveAltIcon from '@mui/icons-material/SaveAlt';
 
-function ManagerFoodItem({ allergies, fetchAllMenuData, originalFoodName, originalFoodDescription, originalPrice, originalImage, originalIngredients, foodId, categoryId, categoryName, fetchCategoryMenuItems, orderingId, getOtherMenuItemOrderingId}) {
+function ManagerFoodItem({ allergies, fetchAllMenuData, originalFoodName, originalFoodDescription, originalPrice, originalImage, originalIngredients, foodId, categoryId, categoryName, fetchCategoryMenuItems, orderingId, getOtherMenuItemOrderingId }) {
   const [foodName, setFoodName] = React.useState('');
   const [foodDescription, setFoodDescription] = React.useState('');
   const [ingredientAndAllergyList, setIngredientAndAllergyList] = React.useState(originalIngredients);
@@ -80,8 +81,8 @@ function ManagerFoodItem({ allergies, fetchAllMenuData, originalFoodName, origin
     }
     const body = JSON.stringify({
       manager_id: managerId,
-      menu_item_id: foodId, 
-      prev_ordering_id, 
+      menu_item_id: foodId,
+      prev_ordering_id,
       new_ordering_id
     });
     if (categoryName !== '') {
@@ -225,30 +226,39 @@ function ManagerFoodItem({ allergies, fetchAllMenuData, originalFoodName, origin
               : <></>}
           </div>
         </div>
-        <div className='food-item-button'>
+        <div className='food-item-button' style={{ marginRight: '0px' }}>
           <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
             <Button
-              style={{ color: '#002250', fontSize: '2.5rem', margin: '5px'}}
+              style={{ color: '#002250', fontSize: '2vw', margin: '1vw' }}
               onClick={() => reorderMenuItem(orderingId, getOtherMenuItemOrderingId('up', foodId))}
-              startIcon={<ArrowUpwardIcon style={{ fontSize: '2.5rem' }} />}
+              startIcon={<ArrowUpwardIcon style={{ fontSize: '2vw' }} />}
             />
-            {categoryName !== 'Best Selling' && (
+            <div style={{ margin: '1vw' }}>
+              {categoryName !== 'Best Selling' && (
+                <Button
+                  style={{ color: '#002250', fontSize: '2vw', marginLeft: '1vw', marginRight: '1vw' }}
+                  onClick={deleteFoodItem}
+                  startIcon={<DeleteIcon style={{ fontSize: '2vw' }} />}
+                />
+              )}
               <Button
-                style={{ color: '#002250', fontSize: '2.5rem', margin: '5px'}}
-                onClick={deleteFoodItem}
-                startIcon={<DeleteIcon style={{ fontSize: '2.5rem' }}/>}
-              />
-            )}
-            <StyledButton style={{ width: 'auto', fontSize: '1rem', margin: '5px' }} onClick={updateFoodItem}>
-              UPDATE
-            </StyledButton>
+                  style={{ color: '#002250', fontSize: '2vw', marginLeft: '1vw', marginRight: '1vw' }}
+                  onClick={updateFoodItem}
+                  startIcon={<SaveAltIcon style={{ fontSize: '2vw' }} />}
+                />
+              {/* <StyledButton style={{ width: 'auto', fontSize: '1vw', marginLeft: '1vw', marginRight: '1vw' }} onClick={updateFoodItem}>
+                UPDATE
+              </StyledButton> */}
+            </div>
             <Button
-              style={{ color: '#002250', fontSize: '2.5rem', margin: '5px'}}
+              style={{ color: '#002250', fontSize: '2vw', margin: '1vw' }}
               onClick={() => reorderMenuItem(orderingId, getOtherMenuItemOrderingId('down', foodId))}
-              startIcon={<ArrowDownwardIcon style={{ fontSize: '2.5rem' }} />}
+              startIcon={<ArrowDownwardIcon style={{ fontSize: '2vw' }} />}
             />
           </div>
         </div>
+
+
       </div>
     </>
   );
