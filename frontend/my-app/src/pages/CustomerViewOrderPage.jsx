@@ -1,6 +1,6 @@
 import React from 'react';
 import { Typography } from '@mui/material';
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import makeRequest from '../makeRequest';
 import OrderItem from '../components/OrderItem';
 import { StyledButton } from './CustomerOrStaff';
@@ -11,6 +11,8 @@ function CustomerViewOrderPage() {
 	const params = useParams();
   const menuId = params.menuId;
   const sessionId = params.sessionId;
+  const tableId = params.tableNumber;
+  const navigate = useNavigate();
 
   React.useEffect(() => {
     async function fetchData() {
@@ -39,6 +41,18 @@ function CustomerViewOrderPage() {
     return data;
   }
 
+  function finaliseOrder() {
+    const body = JSON.stringify({
+      'session_id': sessionId,
+      'menu_id': menuId
+    });
+    makeRequest('/customer/finalise_order', 'POST', body, undefined)
+      .then(data => {
+        console.log(data);
+        navigate(`/customer/${sessionId}/${menuId}/${tableId}`);
+      })
+      .catch(e => console.log('Error: ' + e));
+  }
   
   if (!orders || !Array.isArray(orders)) return <>loading...</>;
 
@@ -61,7 +75,7 @@ function CustomerViewOrderPage() {
       ))}
 		</div>
     <Typography style={{ padding: '5px', margin: '20px' }}><b>Total: ${totalCost}</b></Typography>
-    <StyledButton onClick={() => console.log('finalise order')} style={{ width: '70%'}}>Finalise Order</StyledButton>
+    <StyledButton onClick={() => finaliseOrder()} style={{ width: '70%'}}>Finalise Order</StyledButton>
     </>
 	);
 }
