@@ -211,7 +211,7 @@ function ManagerMenuPage() {
           <div>
             <br></br>
             {currentSelectedCategory !== 'Best Selling'
-              ? <StyledButton sx={{ width: '25%' }} onClick={() => { navigate(`/manager/addnewmenuitem/${menuId}/${currentSelectedCategory}/${currentSelectedCategoryId}`) }}>Add new menu item</StyledButton>
+              ? <StyledButton variant='outlined' sx={{ width: '25%' }} onClick={() => { navigate(`/manager/addnewmenuitem/${menuId}/${currentSelectedCategory}/${currentSelectedCategoryId}`) }}>Add new menu item</StyledButton>
               : null
             }
           </div>

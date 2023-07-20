@@ -15,10 +15,6 @@ function AddStaffPage () {
   return <>
     <NewStaffForm onSuccess={successFunction}></NewStaffForm>
     <br></br>
-    {success === true
-      ? <div>Successfully registered: {name} as {staffType} staff</div>
-      : null
-    }
   </>
 }
 
