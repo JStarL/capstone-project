@@ -54,6 +54,10 @@ function PersonalisePage({ personas, handlePersonas }) {
 	};
 	const handleFormSubmit = (event) => {
 		event.preventDefault();
+    if (personaName === '') {
+      alert('Persona Name cannot be empty')
+      return;
+    }
 		handlePersonas(personaName, selectedAllergies)
     navigate(`/customer/${sessionId}/${menuId}/${tableNumber}`)
 	};
