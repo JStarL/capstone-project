@@ -14,6 +14,7 @@ import IngredientAllergyPair from './IngredientAllergyPair';
 import ArrowUpwardIcon from '@mui/icons-material/ArrowUpward';
 import ArrowDownwardIcon from '@mui/icons-material/ArrowDownward';
 import AddIcon from '@mui/icons-material/Add';
+import SaveAltIcon from '@mui/icons-material/SaveAlt';
 
 function ManagerFoodItem({ allergies, fetchAllMenuData, originalFoodName, originalFoodDescription, originalPrice, originalImage, originalIngredients, foodId, categoryId, categoryName, fetchCategoryMenuItems, orderingId, getOtherMenuItemOrderingId }) {
   const [foodName, setFoodName] = React.useState('');
@@ -240,9 +241,14 @@ function ManagerFoodItem({ allergies, fetchAllMenuData, originalFoodName, origin
                   startIcon={<DeleteIcon style={{ fontSize: '2vw' }} />}
                 />
               )}
-              <StyledButton style={{ width: 'auto', fontSize: '1vw', marginLeft: '1vw', marginRight: '1vw' }} onClick={updateFoodItem}>
+              <Button
+                  style={{ color: '#002250', fontSize: '2vw', marginLeft: '1vw', marginRight: '1vw' }}
+                  onClick={updateFoodItem}
+                  startIcon={<SaveAltIcon style={{ fontSize: '2vw' }} />}
+                />
+              {/* <StyledButton style={{ width: 'auto', fontSize: '1vw', marginLeft: '1vw', marginRight: '1vw' }} onClick={updateFoodItem}>
                 UPDATE
-              </StyledButton>
+              </StyledButton> */}
             </div>
             <Button
               style={{ color: '#002250', fontSize: '2vw', margin: '1vw' }}
