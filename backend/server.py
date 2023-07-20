@@ -585,18 +585,18 @@ def customer_finalise_order_flask():
         WHERE menu_id = %s;
     """
     
-    cur.execute(get_menu_items, [menu_id])
-    
-    menu_items_list = cur.fetchall()
-    
-    tmp_list = []
-    
     cur = None
     if session_id in cur_dict['customers']:
         cur = cur_dict['customers'][session_id]
     else:
         cur = db_conn.cursor()
         cur_dict['customers'][session_id] = cur
+
+    cur.execute(get_menu_items, [menu_id])
+    
+    menu_items_list = cur.fetchall()
+    
+    tmp_list = []
     
     orders_list = None
     if menu_id in orders:
