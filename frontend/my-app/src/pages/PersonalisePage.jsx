@@ -4,7 +4,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import makeRequest from '../makeRequest';
 import { StyledButton } from './CustomerOrStaff';
 import PersonAddAlt1Icon from '@mui/icons-material/PersonAddAlt1';
-function PersonalisePage({ personas, handlePersonas }) {
+function PersonalisePage({ personas, handlePersonas, setCurrentlySelectedPersonaApp, setCurrentlySelectedPersonaAllergies }) {
 	const [allergies, setAllergies] = React.useState([]);
   const [personaName, setPersonaName] = React.useState('')
   const [currentlySelectedPersona, setCurrentlySelectedPersona] = React.useState('')
@@ -59,6 +59,9 @@ function PersonalisePage({ personas, handlePersonas }) {
       return;
     }
 		handlePersonas(personaName, selectedAllergies)
+    console.log(personas.length)
+    setCurrentlySelectedPersonaApp(personas.length)
+    setCurrentlySelectedPersonaAllergies(selectedAllergies)
     navigate(`/customer/${sessionId}/${menuId}/${tableNumber}`)
 	};
 

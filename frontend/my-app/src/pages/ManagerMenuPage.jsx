@@ -179,7 +179,7 @@ function ManagerMenuPage() {
         <div style={{ width: '75%', height: '100%' }}>
           <Typography className='h4' variant="h4" gutterBottom>Manager Menu Page - {currentSelectedCategory}</Typography>
           <div>
-            {menuItems?.map((menuItem) =>
+            {menuItems?.map((menuItem, index) =>
               currentSelectedCategory === 'Best Selling' ? (
                 <BestSellingFoodItem
                   key={menuItem.food_id}
@@ -203,6 +203,8 @@ function ManagerMenuPage() {
                   allergies={allergies}
                   getOtherMenuItemOrderingId={getOtherMenuItemOrderingId}
                   orderingId={menuItem.food_ordering_id}
+                  index={index}
+                  menuItemsSize={menuItems.length}
                 >
                 </ManagerFoodItem>
               )
