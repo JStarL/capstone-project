@@ -1,11 +1,8 @@
 import React from 'react';
 import './Components.css';
-import { Button, TextField, Card, Box, CardContent, styled, Typography } from '@mui/material';
-import DeleteIcon from '@mui/icons-material/Delete';
+import { Button, TextField, Card, Box, CardContent, Typography } from '@mui/material';
 import makeRequest from '../makeRequest';
-import AddCircle from '@mui/icons-material/Add';
 import LibraryAddIcon from '@mui/icons-material/LibraryAdd';
-import { StyledButton } from '../pages/CustomerOrStaff';
 
 function NewCategoryField({ menuId, managerId, fetchAllMenuData }) {
   const [newCategoryName, setNewCategoryName] = React.useState('')

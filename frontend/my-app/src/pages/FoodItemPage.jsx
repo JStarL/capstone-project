@@ -1,6 +1,6 @@
 import React from 'react';
 import '../App.css';
-import { Button, TextField, Typography, Paper, Box, Snackbar, Alert } from '@mui/material';
+import { Typography, Paper, Box, Snackbar, Alert } from '@mui/material';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import { useNavigate, useParams } from 'react-router-dom';
 import makeRequest from '../makeRequest';
@@ -26,14 +26,12 @@ function FoodItemPage() {
   async function fetchFoodItemData() {
     const url = `/customer/view_menu_item?session_id=${sessionId}&menu_item_id=${foodId}`;
     const data = await makeRequest(url, 'GET', undefined, undefined);
-    console.log(data);
 
     setFoodData(data);
   }
 
   function backToMenu() {
     navigate(`/customer/${sessionId}/${menuId}/${tableNumber}`);
-    console.log(params.categoryId); // set this to currently selected
   }
 
   function addToOrder() {
@@ -47,7 +45,6 @@ function FoodItemPage() {
 
     makeRequest('/customer/add_menu_item', 'POST', body, undefined)
       .then(data => {
-        console.log(data);
         setSnackbarOpen(true);
       })
       .catch(e => console.log('Error: ' + e));

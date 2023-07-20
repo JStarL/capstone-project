@@ -1,7 +1,7 @@
 import React from 'react';
 import '../App.css';
 import { useNavigate, Link } from 'react-router-dom';
-import { Button, TextField, Typography, Paper } from '@mui/material';
+import { TextField, Typography, Paper } from '@mui/material';
 import makeRequest from '../makeRequest.jsx'
 import { StyledButton } from './CustomerOrStaff';
 
@@ -19,11 +19,9 @@ function ManagerLoginPage({ onSuccess }) {
       .then(data => {
         if (data.hasOwnProperty('success')) {
           onSuccess(data['staff_id'], data['staff_type'], data['menu_id'])
-          console.log(data['staff_id'])
           localStorage.setItem('staff_id', data['staff_id']);
           localStorage.setItem('menu_id', data['menu_id']);
           localStorage.setItem('staff_type', data['staff_type']);
-          console.log(data)
           if (data['staff_type'] === 'kitchen') {
             navigate('/kitchen_staff')
           }

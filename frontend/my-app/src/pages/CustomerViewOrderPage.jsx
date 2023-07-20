@@ -1,6 +1,6 @@
 import React from 'react';
-import { Typography, Paper } from '@mui/material';
-import { useNavigate, useParams } from 'react-router-dom';
+import { Typography } from '@mui/material';
+import { useParams } from 'react-router-dom';
 import makeRequest from '../makeRequest';
 import OrderItem from '../components/OrderItem';
 import { StyledButton } from './CustomerOrStaff';
@@ -44,7 +44,7 @@ function CustomerViewOrderPage() {
 
 	return (
     <>
-    <div>CUSTOMER ORDER PAGE</div>
+    <div><b>YOUR ORDER</b></div>
 		<div className='view-order-page' style={{ justifywidth: '100%', alignItems:'center' }} sx={{ alignItems: 'center' }}>
     {orders?.map((order) => (
         <OrderItem

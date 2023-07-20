@@ -1,5 +1,3 @@
-import React from 'react'
-
 export async function fileToDataUrl (file) {
     const validFileTypes = ['image/jpeg', 'image/png', 'image/jpg'];
     if (file) {

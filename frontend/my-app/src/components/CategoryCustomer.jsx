@@ -1,8 +1,8 @@
 import React from 'react';
 import { Typography, Card, CardActions, CardContent } from '@mui/material';
 function CategoryCustomer(props) {
-	const [categoryName, setCategoryName] = React.useState(props.categoryName);
-	const [categoryId, setCategoryId] = React.useState(props.id)
+	const [categoryName] = React.useState(props.categoryName);
+	const [categoryId] = React.useState(props.id)
 
 	function selectCategory() {
 		props.setCurrentSelectedCategory(categoryName)

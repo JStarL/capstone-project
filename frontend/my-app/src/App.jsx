@@ -1,7 +1,6 @@
 import './App.css';
 import React from 'react';
-import { BrowserRouter, Routes, Route, Link, useParams } from 'react-router-dom';
-import { Button } from '@mui/material';
+import { BrowserRouter, Routes, Route, Link } from 'react-router-dom';
 import PersonAddAlt1SharpIcon from '@mui/icons-material/PersonAddAlt1Sharp';
 import RestaurantMenuIcon from '@mui/icons-material/RestaurantMenu';
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
@@ -21,6 +20,8 @@ import SelectTableNumber from './pages/SelectTableNumber';
 import SearchRestaurant from './pages/SearchRestaurant';
 import CustomerViewOrderPage from './pages/CustomerViewOrderPage';
 import PersonalisePage from './pages/PersonalisePage';
+import { Typography } from '@mui/material';
+
 
 function App() {
   const [id, setId] = React.useState(null);
@@ -29,30 +30,32 @@ function App() {
   const [sessionId, setSessionId] = React.useState(localStorage.getItem('session_id'))
   const [tableNumber, setTableNumber] = React.useState(localStorage.getItem('table_number'))
 
-  const [personas, setPersonas] = React.useState([['default', null]])
-  const params = useParams();
-  console.log(params.sessionId)
+  const [personas, setPersonas] = React.useState([['Default', [null]]])
   React.useEffect(function () {
     if (localStorage.getItem('staff_id')) {
       setId(localStorage.getItem('staff_id'));
     }
     if (localStorage.getItem('staff_type')) {
       setStaffType(localStorage.getItem('staff_type'));
-      console.log(staffType)
     }
     if (localStorage.getItem('menu_id')) {
       setStaffType(localStorage.getItem('menu_id'));
     }
   }, []);
 
-  console.log(localStorage.getItem('staff_type'))
-
   const handlePersonas = (name, allergies) => {
-    const persona = [name, allergies]
-    console.log(persona)
-    setPersonas([...personas, persona])
-  }
-
+    const persona = [name, allergies];
+    const updatedPersonas = [...personas];
+    
+    const existingPersonaIndex = updatedPersonas.findIndex((p) => p[0] === name);
+    if (existingPersonaIndex !== -1) {
+      updatedPersonas[existingPersonaIndex] = persona;
+    } else {
+      updatedPersonas.push(persona);
+    }
+      setPersonas(updatedPersonas);
+  };
+  
   const customer = (staff_type, session_id) => {
     setStaffType(staff_type)
     setSessionId(session_id)
@@ -65,7 +68,6 @@ function App() {
     setTableNumber(table_number)
   }
   const restaurantSuccess = (menu_id) => {
-    console.log(menu_id)
     setMenuId(menu_id)
   }
   const tableNumberSuccess = (table_number) => {
@@ -119,11 +121,15 @@ function App() {
   const Nav = () => {
     return (
       <nav>
-        <div className='nav-container' sx={{ zIndex: 100 }}>
+        <div className='nav-container' sx={{ zIndex: 100, display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
           <div className='links-container'>
             <span className="link"><Link to='/'>Login</Link></span>
-            <span className="link"><Link to='/register  '>Register</Link></span>
+            <span className="link"><Link to='/register'>Register</Link></span>
           </div>
+          {tableNumber ? (<div className='links-container' style={{ marginLeft: 'auto', marginTop: '5px' }}>
+            <Typography style={{ color: 'white' }} variant="overline" gutterBottom>Table Number: {tableNumber}</Typography>
+            </div>)
+          : null}
         </div>
       </nav>
     )
@@ -142,8 +148,6 @@ function App() {
         </div>
       );
     } else if (staffType === 'customer' && menuId !== null && tableNumber !== null) {
-      console.log(menuId);
-      console.log(tableNumber);
       return (
         <div className="footer-container">
           <StyledButton startIcon={<ShoppingCartIcon />}>
@@ -153,7 +157,7 @@ function App() {
             <Link to={`/customer/${sessionId}/${menuId}/${tableNumber}`} className="toNavy">Go to Menu</Link>
           </StyledButton>
           <StyledButton startIcon={<SettingsIcon />}>
-            <Link to={`/customer/${sessionId}/${menuId}/personalise`} className="toNavy">Personalise</Link>
+            <Link to={`/customer/${sessionId}/${menuId}/${tableNumber}/personalise`} className="toNavy">Personalise</Link>
           </StyledButton>
         </div>
       );
@@ -170,7 +174,6 @@ function App() {
     }
   }, []);
 
-  console.log(staffType)
   return (
     <div className="App">
       <BrowserRouter>
@@ -198,18 +201,12 @@ function App() {
             <Route path='/customer/:sessionId/:menuId/tablenumber' element={<SelectTableNumber onSuccess={tableNumberSuccess} />} />
             <Route path='/customer/:sessionId/:menuId/:tableNumber' element={<CustomerMenuPage personas={personas}/>} />
             <Route path='/customer/:sessionId/:menuId/:categoryId/:foodId' element={<FoodItemPage />} />
-            <Route path='/customer/:sessionId/:menuId/personalise' element={<PersonalisePage personas={personas} handlePersonas={handlePersonas}/>} />
+            <Route path='/customer/:sessionId/:menuId/:tableNumber/personalise' element={<PersonalisePage personas={personas} handlePersonas={handlePersonas}/>} />
             <Route path='/customer/:sessionId/view_order/:menuId/:tableNumber' element={<CustomerViewOrderPage />} />
           </Routes>
         </main>
         <footer>
           <Footer />
-          {/* {localStorage.getItem('staff_type') !== 'manager'
-            ? null
-            : (<div className="footer-container">
-              <StyledButton startIcon={<PersonAddAlt1SharpIcon />}><Link to='/addstaff' className='toNavy'>Add Staff</Link></StyledButton>
-              <StyledButton startIcon={<RestaurantMenuIcon />}><Link to={`/manager/menu/${menuId}`} className='toNavy'>Go to Menu</Link></StyledButton>
-            </div>)} */}
         </footer>
 
       </BrowserRouter>
