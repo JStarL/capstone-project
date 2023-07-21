@@ -229,11 +229,11 @@ function ManagerFoodItem({ allergies, fetchAllMenuData, originalFoodName, origin
         </div>
         <div className='food-item-button' style={{ marginRight: '0px' }}>
           <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
-            <Button
-              style={{ color: index === 0 ? 'grey' : '#002250', fontSize: '2vw', margin: '1vw' }}
+            <Button disabled={index === 0}
+              sx={{ color: '#002250', fontSize: '2vw', margin: '1vw' }}
               onClick={() => reorderMenuItem(orderingId, getOtherMenuItemOrderingId('up', foodId))}
               startIcon={<ArrowUpwardIcon style={{ fontSize: '2vw' }} />}
-              disabled={index === 0}/>
+            />
             <div style={{ margin: '1vw' }}>
               {categoryName !== 'Best Selling' && (
                 <Button
@@ -252,7 +252,7 @@ function ManagerFoodItem({ allergies, fetchAllMenuData, originalFoodName, origin
               </StyledButton> */}
             </div>
             <Button
-              style={{ color: index === (menuItemsSize - 1) ? 'grey' : '#002250', fontSize: '2vw', margin: '1vw' }}
+              sx={{ color: '#002250', fontSize: '2vw', margin: '1vw' }}
               onClick={() => reorderMenuItem(orderingId, getOtherMenuItemOrderingId('down', foodId))}
               startIcon={<ArrowDownwardIcon style={{ fontSize: '2vw' }} />} disabled={index === (menuItemsSize - 1)}
             />
