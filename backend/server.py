@@ -173,13 +173,15 @@ notifications = {}
 #  "1": [   # menu_id as a str(int)
 #       {
 #           session_id: "116662278",
-#           table_id: '2'
+#           table_id: '2',
+#           'status': 'customer',
 #           message: 'I need some water' (optional?)
 # 
 #       },
 #       {
 #           session_id: "116639191",
-#           table_id: '14'
+#           table_id: '14',
+#           'status': 'wait',
 #           message: 'When will my food be served?' (optional?)
 #       }
 # 
@@ -190,13 +192,15 @@ notifications = {}
 # 
 #       {
 #           session_id: "1133949494",
-#           table_id: '3'
+#           table_id: '3',
+#           'status': 'wait',
 #           message: 'Do you have Coke or Pepsi?' (optional?)
 # 
 #       },
 #       {
 #           session_id: "1233222001",
-#           table_id: '23'
+#           table_id: '23',
+#           'status': 'customer',
 #           message: 'Where can I pay the bill?' (optional?)
 #       }
 #   ] 
