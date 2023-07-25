@@ -681,29 +681,34 @@ def customer_request_assistance_flask():
     table_id = data["table_id"]
     session_id = data["session_id"]
     menu_id = data["menu_id"]
-    found = 0
-    empty = []
+    found = False
     
     if menu_id not in notifications: #creates a dictionary key and adds an empty list
-        notifications[menu_id] = empty
-        
-    if table_id in notifications[menu_id]: #might remove this but this denies the same customer a request if it is already in
-        return dumps(already_in)
-    else:
-        notifications[menu_id].append( {
-            "session_id": session_id,
-            "table_id": table_id
-            #message: 'Where can I pay the bill?' not sure to add in yet
-        } )
+        notifications[menu_id] = []
+
+    # might remove this block and allow multiple requests    
+    for notification in notifications[menu_id]:
+        if notification['table_id'] == table_id:
+            return dumps(already_in)
+    
+    
+    notifications[menu_id].append( {
+        "session_id": session_id,
+        "table_id": table_id,
+        "status": 'customer'
+        #message: 'Where can I pay the bill?' not sure to add in yet
+    } )
         
     for notice in notifications[menu_id]: #just to check if the notifcation has been added to the dictionary
         if notice["session_id"] == session_id and notice["table_id"] == table_id:
-            found = 1
+            found = True
+            break
     
-    if found == 0:
+    if found:
+        return dumps(success)
+    else:    
         return dumps(fail)
     
-    return dumps(success)
     
 # Kitchen Staff functions
 
@@ -880,19 +885,40 @@ def wait_staff_mark_order_complete_flask():
     
     return dumps(success)
 
-@APP.route("/wait_staff/get_assistance_notification", methods=['GET'])
-def wait_staff_get_assistance_notification_flask():
-    data = ast.literal_eval(request.get_json())
-    
-    empty = {"empty": "Menu_id did not get anything or the list is empty"}
+@APP.route("/wait_staff/get_assistance_notifications", methods=['GET'])
+def wait_staff_get_assistance_notifications_flask():
+    menu_id = request.args.get('menu_id')    
+    empty = {"error": "Menu_id did not return anything or there are no notifications yet"}
 
-    menu_id = data["menu_id"]
-    
     if menu_id in notifications:
-        output = notifications[menu_id]
+        notification_list = notifications[menu_id]
+        output = []
+        for notification in notification_list:
+            if notification['status'] == 'customer':
+                output.append(notification)
         return dumps(output)
     else:
         return dumps(empty)
+
+@APP.route("/wait_staff/mark_currently_assisting", methods=['POST'])
+def wait_staff_mark_currently_assisting_flask():
+    data = ast.literal_eval(request.get_json())
+    menu_id = data['menu_id']
+    table_id = data['table_id']
+    
+    invalid_menu_id = { 'error': 'invalid menu_id' }
+    not_found = { 'error': 'notification not found' }
+    success = { 'success': 'marked currently assisting' }
+
+    if menu_id not in notifications:
+        return dumps(invalid_menu_id)
+    
+    for notification in notifications[menu_id]:
+        if notification[table_id] == table_id:
+            notification['status'] = 'wait'
+            return dumps(success)
+
+    return dumps(not_found)
 
 ##############################################################################################################################
 ################################################ OLD PROJECT STUFF ###########################################################
