@@ -669,7 +669,42 @@ def customer_finalise_order_flask():
     else:
         return {'error': 'invalid session_id' }
     
-
+    
+@APP.route("/customer/request_assistance", methods=['POST'])
+def customer_request_assistance_flask():
+    data = ast.literal_eval(request.get_json())
+    
+    already_in = {"invalid": "The request has already been added in the system"}
+    fail = {"error": "It did not successfully add to the dictionary"}
+    success = {"success": "assistance requested"}
+    
+    table_id = data["table_id"]
+    session_id = data["session_id"]
+    menu_id = data["menu_id"]
+    found = 0
+    empty = []
+    
+    if menu_id not in notifications: #creates a dictionary key and adds an empty list
+        notifications[menu_id] = empty
+        
+    if table_id in notifications[menu_id]: #might remove this but this denies the same customer a request if it is already in
+        return dumps(already_in)
+    else:
+        notifications[menu_id].append( {
+            "session_id": session_id,
+            "table_id": table_id
+            #message: 'Where can I pay the bill?' not sure to add in yet
+        } )
+        
+    for notice in notifications[menu_id]: #just to check if the notifcation has been added to the dictionary
+        if notice["session_id"] == session_id and notice["table_id"] == table_id:
+            found = 1
+    
+    if found == 0:
+        return dumps(fail)
+    
+    return dumps(success)
+    
 # Kitchen Staff functions
 
 @APP.route("/kitchen_staff/get_order_list", methods=['GET'])
@@ -844,6 +879,20 @@ def wait_staff_mark_order_complete_flask():
             return dumps(fail)
     
     return dumps(success)
+
+@APP.route("/wait_staff/get_assistance_notification", methods=['GET'])
+def wait_staff_get_assistance_notification_flask():
+    data = ast.literal_eval(request.get_json())
+    
+    empty = {"empty": "Menu_id did not get anything or the list is empty"}
+
+    menu_id = data["menu_id"]
+    
+    if menu_id in notifications:
+        output = notifications[menu_id]
+        return dumps(output)
+    else:
+        return dumps(empty)
 
 ##############################################################################################################################
 ################################################ OLD PROJECT STUFF ###########################################################
