@@ -674,7 +674,8 @@ def customer_finalise_order_flask():
 
 @APP.route("/kitchen_staff/get_order_list", methods=['GET'])
 def kitchen_staff_get_order_list_flask():   
-    kitchen_id = request.args.get('kitchen_staff_id')
+    data = ast.literal_eval(request.get_json())
+    kitchen_id = data['kitchen_staff_id']
     cur = cur_dict['staff'][kitchen_id]
     
     invalid_id = { 'error': 'invalid kitchen_staff_id' } # error message
