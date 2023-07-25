@@ -7,3 +7,7 @@
     - The ordering of menu items within this category cannot be manually changed
     - The 'Best Selling' category is always the first category in the categories panel, its order cannot be changed
     - The 'Best Selling' category dynamically updates based on internally maintained statistics
+
+- We consider general use cases where the user does not try to intentionally break the system, however we stop unwanted behaviours as much as possible regardless
+
+- Persona names are unique

@@ -2,6 +2,11 @@
 def customer_view_menu(cur, menu_id, allergies_list, excluded_cat_list, top_k):
     invalid_menu_id = { 'error': 'invalid menu id' } # error message
     menu = []
+    if len(allergies_list) > 0:
+        if 0 in allergies_list:
+            allergies_list.remove(0)
+        if "0" in allergies_list:
+            allergies_list.remove("0")
 
     query_categories = """
     select id, name, ordering_id from categories where menu_id = %s order by ordering_id;
@@ -89,6 +94,12 @@ def customer_view_menu(cur, menu_id, allergies_list, excluded_cat_list, top_k):
 def customer_view_category(cur, category_id, allergies_list, excluded_cat_list, top_k):
     invalid_category_id = { 'error': 'invalid category_id' }
     menu_items = []
+
+    if len(allergies_list) > 0:
+        if 0 in allergies_list:
+            allergies_list.remove(0)
+        if "0" in allergies_list:
+            allergies_list.remove("0")
 
     query0 = """
     select id, name, menu_id from categories where id = %s;

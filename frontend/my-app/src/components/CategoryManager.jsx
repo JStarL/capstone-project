@@ -111,9 +111,9 @@ function CategoryManager(props) {
       </Card>
       {categoryName === 'Best Selling' ? <div style={{ width: "55px" }}></div> : (
         <Box style={{ width: "55px" }} display="flex" justifyContent='center' flexDirection="column">
-          <Button sx={{ color: '#002250' }} onClick={() => reorderCategory(props.orderingId, props.getOtherCategoryOrderingId('up', categoryId))} startIcon={<ArrowUpwardIcon />} />
+          <Button disabled={props.index === 1} sx={{ color: '#002250' }} onClick={() => reorderCategory(props.orderingId, props.getOtherCategoryOrderingId('up', categoryId))} startIcon={<ArrowUpwardIcon />} />
           <Button sx={{ color: '#002250' }} onClick={() => deleteCategory()} startIcon={<DeleteIcon />} />
-          <Button sx={{ color: '#002250' }} onClick={() => reorderCategory(props.orderingId, props.getOtherCategoryOrderingId('down', categoryId))} startIcon={<ArrowDownwardIcon />} />
+          <Button disabled={props.index === props.categoriesSize - 1} sx={{ color: '#002250' }} onClick={() => reorderCategory(props.orderingId, props.getOtherCategoryOrderingId('down', categoryId))} startIcon={<ArrowDownwardIcon />} />
         </Box>
       )}
     </Box>

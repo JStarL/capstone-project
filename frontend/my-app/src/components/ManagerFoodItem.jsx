@@ -16,7 +16,7 @@ import ArrowDownwardIcon from '@mui/icons-material/ArrowDownward';
 import AddIcon from '@mui/icons-material/Add';
 import SaveAltIcon from '@mui/icons-material/SaveAlt';
 
-function ManagerFoodItem({ allergies, fetchAllMenuData, originalFoodName, originalFoodDescription, originalPrice, originalImage, originalIngredients, foodId, categoryId, categoryName, fetchCategoryMenuItems, orderingId, getOtherMenuItemOrderingId }) {
+function ManagerFoodItem({ allergies, fetchAllMenuData, originalFoodName, originalFoodDescription, originalPrice, originalImage, originalIngredients, foodId, categoryId, categoryName, fetchCategoryMenuItems, orderingId, getOtherMenuItemOrderingId, index, menuItemsSize }) {
   const [foodName, setFoodName] = React.useState('');
   const [foodDescription, setFoodDescription] = React.useState('');
   const [ingredientAndAllergyList, setIngredientAndAllergyList] = React.useState(originalIngredients);
@@ -25,7 +25,6 @@ function ManagerFoodItem({ allergies, fetchAllMenuData, originalFoodName, origin
   const [isListVisible, setListVisible] = React.useState(false);
   const [ingredient, setIngredient] = React.useState('');
   const [selectedAllergy, setSelectedAllergy] = React.useState(0); // New state variable for selected allergy
-
   React.useEffect(() => {
     setFoodName(originalFoodName)
     setFoodDescription(originalFoodDescription)
@@ -112,6 +111,8 @@ function ManagerFoodItem({ allergies, fetchAllMenuData, originalFoodName, origin
     setIngredient('');
   }
 
+  console.log(index)
+
   return (
     <>
       <div className='food-item-div'>
@@ -164,8 +165,8 @@ function ManagerFoodItem({ allergies, fetchAllMenuData, originalFoodName, origin
           </div>
           <div className='div-section'>
             <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
-              <Typography variant="h6" gutterBottom>Ingredients and Allergy List</Typography>
-              <StyledButton variant="outlined" onClick={toggleListVisibility} style={{ width: 'auto', margin: '10px', marginBottom: '20px' }}>
+              <Typography variant="overline" gutterBottom><b>Ingredients and Allergy List</b></Typography>
+              <StyledButton size="small" variant="outlined" onClick={toggleListVisibility} style={{ width: 'auto', margin: '10px', marginBottom: '15px' }}>
                 {isListVisible ? 'Hide Ingredients' : 'Show Ingredients'}
               </StyledButton>
             </div>
@@ -228,8 +229,8 @@ function ManagerFoodItem({ allergies, fetchAllMenuData, originalFoodName, origin
         </div>
         <div className='food-item-button' style={{ marginRight: '0px' }}>
           <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
-            <Button
-              style={{ color: '#002250', fontSize: '2vw', margin: '1vw' }}
+            <Button disabled={index === 0}
+              sx={{ color: '#002250', fontSize: '2vw', margin: '1vw' }}
               onClick={() => reorderMenuItem(orderingId, getOtherMenuItemOrderingId('up', foodId))}
               startIcon={<ArrowUpwardIcon style={{ fontSize: '2vw' }} />}
             />
@@ -251,9 +252,9 @@ function ManagerFoodItem({ allergies, fetchAllMenuData, originalFoodName, origin
               </StyledButton> */}
             </div>
             <Button
-              style={{ color: '#002250', fontSize: '2vw', margin: '1vw' }}
+              sx={{ color: '#002250', fontSize: '2vw', margin: '1vw' }}
               onClick={() => reorderMenuItem(orderingId, getOtherMenuItemOrderingId('down', foodId))}
-              startIcon={<ArrowDownwardIcon style={{ fontSize: '2vw' }} />}
+              startIcon={<ArrowDownwardIcon style={{ fontSize: '2vw' }} />} disabled={index === (menuItemsSize - 1)}
             />
           </div>
         </div>

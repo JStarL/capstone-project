@@ -152,7 +152,7 @@ function ManagerMenuPage() {
     <>
       <div style={{ display: 'flex', flexDirection: 'row' }}>
         <div style={{ width: '25%', backgroundColor: 'white', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-          {categories?.map((category) => (
+          {categories?.map((category, index) => (
 
             <CategoryManager
               categoryName={category[Object.keys(category)[0]][0]}
@@ -166,6 +166,8 @@ function ManagerMenuPage() {
               fetchCategoryMenuItems={fetchCategoryMenuItems}
               orderingId={category[Object.keys(category)[0]][2]}
               getOtherCategoryOrderingId={getOtherCategoryOrderingId}
+              index={index}
+              categoriesSize={categories.length}
             >
             </CategoryManager>
 
@@ -179,7 +181,7 @@ function ManagerMenuPage() {
         <div style={{ width: '75%', height: '100%' }}>
           <Typography className='h4' variant="h4" gutterBottom>Manager Menu Page - {currentSelectedCategory}</Typography>
           <div>
-            {menuItems?.map((menuItem) =>
+            {menuItems?.map((menuItem, index) =>
               currentSelectedCategory === 'Best Selling' ? (
                 <BestSellingFoodItem
                   key={menuItem.food_id}
@@ -203,6 +205,8 @@ function ManagerMenuPage() {
                   allergies={allergies}
                   getOtherMenuItemOrderingId={getOtherMenuItemOrderingId}
                   orderingId={menuItem.food_ordering_id}
+                  index={index}
+                  menuItemsSize={menuItems.length}
                 >
                 </ManagerFoodItem>
               )

@@ -6,13 +6,13 @@ import makeRequest from '../makeRequest';
 import { Typography, Select, MenuItem, FormControl, InputLabel } from '@mui/material';
 import { useParams } from 'react-router-dom';
 
-function CustomerMenuPage({ personas }) {
+function CustomerMenuPage({ personas, currentlySelectedPersona, setCurrentlySelectedPersona, currentlySelectedPersonaAllergies, setCurrentlySelectedPersonaAllergies }) {
   const [categories, setCategories] = React.useState([]);
   const [currentSelectedCategory, setCurrentSelectedCategory] = React.useState('Best Selling');
   const [currentSelectedCategoryId, setCurrentSelectedCategoryId] = React.useState(-1);
-  const [menuItems, setMenuItems] = React.useState([]); // List of Menu items for the current selected category
-  const [currentlySelectedPersona, setCurrentlySelectedPersona] = React.useState(0);
-  const [currentlySelectedPersonaAllergies, setCurrentlySelectedPersonaAllergies] = React.useState([]);
+  const [menuItems, setMenuItems] = React.useState([]);
+  // const [currentlySelectedPersona, setCurrentlySelectedPersona] = React.useState(0);
+  // const [currentlySelectedPersonaAllergies, setCurrentlySelectedPersonaAllergies] = React.useState([]);
   const [trigger, setTrigger] = React.useState(0);
 
   const params = useParams()
