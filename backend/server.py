@@ -932,6 +932,7 @@ def wait_staff_mark_notification_complete_flask():
             return dumps(fail)
     
     return dumps(success)
+
 @APP.route("/wait_staff/get_assistance_notifications", methods=['GET'])
 def wait_staff_get_assistance_notifications_flask():
     menu_id = request.args.get('menu_id')    
@@ -950,6 +951,7 @@ def wait_staff_get_assistance_notifications_flask():
 @APP.route("/wait_staff/mark_currently_assisting", methods=['POST'])
 def wait_staff_mark_currently_assisting_flask():
     data = ast.literal_eval(request.get_json())
+    session_id = data['session_id']
     menu_id = data['menu_id']
     table_id = data['table_id']
     
@@ -961,7 +963,7 @@ def wait_staff_mark_currently_assisting_flask():
         return dumps(invalid_menu_id)
     
     for notification in notifications[menu_id]:
-        if notification[table_id] == table_id:
+        if notification['table_id'] == table_id and notification['session_id'] == session_id:
             notification['status'] = 'wait'
             return dumps(success)
 
