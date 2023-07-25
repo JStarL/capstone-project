@@ -173,13 +173,15 @@ notifications = {}
 #  "1": [   # menu_id as a str(int)
 #       {
 #           session_id: "116662278",
-#           table_id: '2'
+#           table_id: '2',
+#           'status': 'customer',
 #           message: 'I need some water' (optional?)
 # 
 #       },
 #       {
 #           session_id: "116639191",
-#           table_id: '14'
+#           table_id: '14',
+#           'status': 'wait',
 #           message: 'When will my food be served?' (optional?)
 #       }
 # 
@@ -190,13 +192,15 @@ notifications = {}
 # 
 #       {
 #           session_id: "1133949494",
-#           table_id: '3'
+#           table_id: '3',
+#           'status': 'wait',
 #           message: 'Do you have Coke or Pepsi?' (optional?)
 # 
 #       },
 #       {
 #           session_id: "1233222001",
-#           table_id: '23'
+#           table_id: '23',
+#           'status': 'customer',
 #           message: 'Where can I pay the bill?' (optional?)
 #       }
 #   ] 
@@ -669,12 +673,53 @@ def customer_finalise_order_flask():
     else:
         return {'error': 'invalid session_id' }
     
+    
+@APP.route("/customer/request_assistance", methods=['POST'])
+def customer_request_assistance_flask():
+    data = ast.literal_eval(request.get_json())
+    
+    already_in = {"invalid": "The request has already been added in the system"}
+    fail = {"error": "It did not successfully add to the dictionary"}
+    success = {"success": "assistance requested"}
+    
+    table_id = data["table_id"]
+    session_id = data["session_id"]
+    menu_id = data["menu_id"]
+    found = False
+    
+    if menu_id not in notifications: #creates a dictionary key and adds an empty list
+        notifications[menu_id] = []
 
+    # might remove this block and allow multiple requests    
+    for notification in notifications[menu_id]:
+        if notification['table_id'] == table_id:
+            return dumps(already_in)
+    
+    
+    notifications[menu_id].append( {
+        "session_id": session_id,
+        "table_id": table_id,
+        "status": 'customer'
+        #message: 'Where can I pay the bill?' not sure to add in yet
+    } )
+        
+    for notice in notifications[menu_id]: #just to check if the notifcation has been added to the dictionary
+        if notice["session_id"] == session_id and notice["table_id"] == table_id:
+            found = True
+            break
+    
+    if found:
+        return dumps(success)
+    else:    
+        return dumps(fail)
+    
+    
 # Kitchen Staff functions
 
 @APP.route("/kitchen_staff/get_order_list", methods=['GET'])
 def kitchen_staff_get_order_list_flask():   
-    kitchen_id = request.args.get('kitchen_staff_id')
+    data = ast.literal_eval(request.get_json())
+    kitchen_id = data['kitchen_staff_id']
     cur = cur_dict['staff'][kitchen_id]
     
     invalid_id = { 'error': 'invalid kitchen_staff_id' } # error message
@@ -887,6 +932,40 @@ def wait_staff_mark_notification_complete_flask():
             return dumps(fail)
     
     return dumps(success)
+@APP.route("/wait_staff/get_assistance_notifications", methods=['GET'])
+def wait_staff_get_assistance_notifications_flask():
+    menu_id = request.args.get('menu_id')    
+    empty = {"error": "Menu_id did not return anything or there are no notifications yet"}
+
+    if menu_id in notifications:
+        notification_list = notifications[menu_id]
+        output = []
+        for notification in notification_list:
+            if notification['status'] == 'customer':
+                output.append(notification)
+        return dumps(output)
+    else:
+        return dumps(empty)
+
+@APP.route("/wait_staff/mark_currently_assisting", methods=['POST'])
+def wait_staff_mark_currently_assisting_flask():
+    data = ast.literal_eval(request.get_json())
+    menu_id = data['menu_id']
+    table_id = data['table_id']
+    
+    invalid_menu_id = { 'error': 'invalid menu_id' }
+    not_found = { 'error': 'notification not found' }
+    success = { 'success': 'marked currently assisting' }
+
+    if menu_id not in notifications:
+        return dumps(invalid_menu_id)
+    
+    for notification in notifications[menu_id]:
+        if notification[table_id] == table_id:
+            notification['status'] = 'wait'
+            return dumps(success)
+
+    return dumps(not_found)
 
 ##############################################################################################################################
 ################################################ OLD PROJECT STUFF ###########################################################
