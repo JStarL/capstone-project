@@ -849,35 +849,38 @@ def wait_staff_mark_order_complete_flask():
 @APP.route("/wait_staff/mark_notification_complete", methods=['DELETE'])
 def wait_staff_mark_notification_complete_flask():   
     data = ast.literal_eval(request.get_json())
-    wait_id = data['wait_staff_id']
-    cur = cur_dict['staff'][wait_id]
+    menu_id = data['menu_id']
+    
     session_id = data['session_id']
     table_id = data['table_id']
     
-    invalid_id = { 'error': 'invalid wait_staff_id' } # error message
-    success = {'success': 'Order removed from orders'}
-    fail = {'fail': 'could not remove order'}
+    success = {'success': 'notification removed from notifications'}
+    fail = {'fail': 'could not remove notification'}
+    invalid_menu_id = { 'error': 'given menu id has no list of notifications' }
     
-    query_find_staff_menu = """
-        SELECT menu_id
-        FROM staff
-        WHERE id = %s;
-    """
+    # invalid_id = { 'error': 'invalid wait_staff_id' } # error message
+    # wait_id = data['wait_staff_id']
+    # cur = cur_dict['staff'][wait_id]
+    # query_find_staff_menu = """
+    #     SELECT menu_id
+    #     FROM staff
+    #     WHERE id = %s;
+    # """
+    # cur.execute(query_find_staff_menu, [wait_id])
+    # menu_id = cur.fetchall()
+    # if len(menu_id) == 0:
+    #     return dumps(invalid_id)
     
-    cur.execute(query_find_staff_menu, [wait_id])
+    # menu_id = menu_id[0][0] # grabbing it from the list 
     
-    menu_id = cur.fetchall()
+    if menu_id not in notifications:
+        dumps(invalid_menu_id)
     
-    if len(menu_id) == 0:
-        return dumps(invalid_id)
-    
-    menu_id = menu_id[0][0] # grabbing it from the list
-    
-    notifications_list = notifications[menu_id] # grabbing the orders from the dictionary
+    notifications_list = notifications[menu_id] # grabbing the notifications from the dictionary
     
     for notif in notifications_list:
         if notif['session_id'] == session_id and notif['table_id'] == table_id:
-            notifications_list.remove(notif) # once marked as completed, remove it from the dictionary of orders
+            notifications_list.remove(notif) # once marked as completed, remove it from the list of notifications
             
     for notif in notifications_list: #check if it got removed
         if notif['session_id'] == session_id and notif['table_id'] == table_id:
