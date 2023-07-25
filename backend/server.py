@@ -167,6 +167,45 @@ cur_dict = {
 
 orders = {}
 
+notifications = {}
+
+# notifications = {
+#  "1": [   # menu_id as a str(int)
+#       {
+#           session_id: "116662278",
+#           table_id: '2'
+#           message: 'I need some water' (optional?)
+# 
+#       },
+#       {
+#           session_id: "116639191",
+#           table_id: '14'
+#           message: 'When will my food be served?' (optional?)
+#       }
+# 
+#   ],
+# 
+# 
+#  "4": [   # menu_id
+# 
+#       {
+#           session_id: "1133949494",
+#           table_id: '3'
+#           message: 'Do you have Coke or Pepsi?' (optional?)
+# 
+#       },
+#       {
+#           session_id: "1233222001",
+#           table_id: '23'
+#           message: 'Where can I pay the bill?' (optional?)
+#       }
+#   ] 
+# }
+#
+#
+
+
+
 # @APP.route("/echo", methods=['GET'])
 # def echo():
 #     data = request.args.get('data')
