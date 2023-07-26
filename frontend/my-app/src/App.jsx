@@ -24,7 +24,6 @@ import CustomerViewOrderPage from './pages/CustomerViewOrderPage';
 import PersonalisePage from './pages/PersonalisePage';
 import { Typography } from '@mui/material';
 
-
 function App() {
   const [id, setId] = React.useState(null);
   const [staffType, setStaffType] = React.useState(localStorage.getItem('staffType'))
