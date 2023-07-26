@@ -13,13 +13,33 @@ function KitchenStaffPage() {
   const menuId = params.menuId
   const staffId = params.staffId
   console.log(typeof(staffId))
+  // React.useEffect(() => {
+  //   async function fetchData() {
+  //     await getOrderList();
+  //     console.log('refresh')
+  //   }
+  //   fetchData();
+  // }, [trigger])
+
   React.useEffect(() => {
     async function fetchData() {
       await getOrderList();
-      console.log('refresh')
+      console.log('refresh');
     }
+
+    // Call fetchData initially
     fetchData();
-  }, [trigger])
+
+    // Setup an interval to call fetchData every 3 seconds
+    const interval = setInterval(() => {
+      fetchData();
+    }, 3000);
+
+    // Clear the interval when the component unmounts
+    return () => {
+      clearInterval(interval);
+    };
+  }, [trigger]);
 
   async function getOrderList() {
     const url = `/kitchen_staff/get_order_list?menu_id=${menuId}`;
