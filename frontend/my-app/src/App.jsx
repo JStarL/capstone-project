@@ -92,6 +92,18 @@ function App() {
     setSessionId(session_id)
   }
 
+  const requestAssistance = () => {
+    const body = JSON.stringify({
+      table_id: tableNumber,
+      session_id: sessionId,
+      menu_id: menuId,
+    });
+    makeRequest('/customer/request_assistance', 'POST', body, undefined)
+      .then(data => {
+        console.log(data);
+      })
+      .catch(e => console.log('Error: ' + e));
+  }
   const reset = (staff_type, session_id, menu_id, table_number) => {
     setStaffType(staff_type)
     setSessionId(session_id)
@@ -191,7 +203,7 @@ function App() {
           <StyledButton startIcon={<SettingsIcon />}>
             <Link to={`/customer/${sessionId}/${menuId}/${tableNumber}/personalise`} className="toNavy">Personalise</Link>
           </StyledButton>
-          <StyledButton startIcon={<BackHandIcon />} className="toNavy" >
+          <StyledButton onClick={requestAssistance} startIcon={<BackHandIcon />} className="toNavy" >
             Request Assistance
           </StyledButton>
         </div>
