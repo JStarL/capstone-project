@@ -4,7 +4,7 @@ import makeRequest from '../makeRequest';
 import { StyledButton } from '../pages/CustomerOrStaff';
 import { styled } from '@mui/material';
 
-const StyledRadio = styled(Radio)({
+export const StyledRadio = styled(Radio)({
 	color: 'black', // Replace with your desired color
 	'&.Mui-checked': {
 		color: '#002250', // Replace with your desired color when the radio button is checked

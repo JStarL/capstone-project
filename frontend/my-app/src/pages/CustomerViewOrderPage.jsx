@@ -49,7 +49,7 @@ function CustomerViewOrderPage() {
     makeRequest('/customer/finalise_order', 'POST', body, undefined)
       .then(data => {
         console.log(data);
-        navigate(`/customer/${sessionId}/${menuId}/${tableId}`);
+        navigate(`/customer/${sessionId}/view_order/${menuId}/${tableId}/pay`);
       })
       .catch(e => console.log('Error: ' + e));
   }
@@ -58,8 +58,8 @@ function CustomerViewOrderPage() {
 
 	return (
     <>
-    <div><b>YOUR ORDER</b></div>
-		<div className='view-order-page' style={{ justifywidth: '100%', alignItems:'center' }} sx={{ alignItems: 'center' }}>
+    <Typography className='h4' variant="h4" gutterBottom>Your Order</Typography>
+		<div className='view-order-page' style={{justifywidth: '100%', alignItems:'center' }}ß>
     {orders?.map((order) => (
         <OrderItem
           amount={order.amount}
@@ -74,7 +74,7 @@ function CustomerViewOrderPage() {
         </OrderItem>
       ))}
 		</div>
-    <Typography style={{ padding: '5px', margin: '20px' }}><b>Total: ${totalCost}</b></Typography>
+    <Typography variant="h4" style={{ padding: '5px', margin: '20px' }}><b>Total: ${totalCost}</b></Typography>
     <StyledButton onClick={() => finaliseOrder()} style={{ width: '70%'}}>Finalise Order</StyledButton>
     </>
 	);
