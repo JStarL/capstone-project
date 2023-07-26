@@ -21,6 +21,7 @@ import { StyledButton } from './pages/CustomerOrStaff';
 import SelectTableNumber from './pages/SelectTableNumber';
 import SearchRestaurant from './pages/SearchRestaurant';
 import CustomerViewOrderPage from './pages/CustomerViewOrderPage';
+import CustomerPayPage from './pages/CustomerPayPage';
 import PersonalisePage from './pages/PersonalisePage';
 import { Typography } from '@mui/material';
 import BackHandIcon from '@mui/icons-material/BackHand';
@@ -155,8 +156,7 @@ function App() {
       <nav>
         <div className='nav-container' sx={{ zIndex: 100, display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
           <div className='links-container'>
-            <span className="link"><Link to='/'>Login</Link></span>
-            <span className="link"><Link to='/register'>Register</Link></span>
+            <span className="link"><Link to='/'>Home</Link></span>
           </div>
           {tableNumber ? (<div className='links-container' style={{ marginLeft: 'auto', marginTop: '5px' }}>
             <Typography style={{ color: 'white' }} variant="overline" gutterBottom>Table Number: {tableNumber}</Typography>
@@ -238,6 +238,7 @@ function App() {
             <Route path='/customer/:sessionId/:menuId/:categoryId/:foodId' element={<FoodItemPage />} />
             <Route path='/customer/:sessionId/:menuId/:tableNumber/personalise' element={<PersonalisePage personas={personas} handlePersonas={handlePersonas} setCurrentlySelectedPersonaApp={setCurrentlySelectedPersona} setCurrentlySelectedPersonaAllergies={setCurrentlySelectedPersonaAllergies}/>} />
             <Route path='/customer/:sessionId/view_order/:menuId/:tableNumber' element={<CustomerViewOrderPage />} />
+            <Route path='/customer/:sessionId/view_order/:menuId/:tableNumber/pay' element={<CustomerPayPage />} />
           </Routes>
         </main>
         <footer>
