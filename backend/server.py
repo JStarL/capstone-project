@@ -471,7 +471,7 @@ def customer_add_menu_item_flask():
     persona = data['persona_name']
     
     invalid_menu_item_id = {'error': 'menu_item_id invalid'}
-    
+
     cur = None
     if session_id in cur_dict['customers']:
         cur = cur_dict['customers'][session_id]
@@ -689,7 +689,7 @@ def customer_request_assistance_flask():
     
     table_id = data["table_id"]
     session_id = data["session_id"]
-    menu_id = data["menu_id"]
+    menu_id = str(data["menu_id"])
     found = False
     
     if menu_id not in notifications: #creates a dictionary key and adds an empty list
