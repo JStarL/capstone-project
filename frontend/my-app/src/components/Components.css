@@ -9,6 +9,51 @@
     box-shadow: 0 3px 6px rgba(0, 0, 0, 0.4);
 }
 
+.kitchen-staff-order {
+    display: flex;
+    flex-direction: row;
+    margin: 15px;
+    padding: 3px;
+    height: 100%;
+}
+
+.kitchen-staff-time-div {
+    width: '10%';
+    display: flex;
+    flex-direction: column;
+    margin: 5px;
+    margin: 15px;
+    justify-content: center;
+    align-items: center;
+    padding: 3px;
+    height: 100%;
+}
+
+.kitchen-staff-order-div {
+    width: '80%';
+    border: solid 1px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 15px;
+    border-color: lightgrey;
+    padding: 3px;
+    border-radius: 20px;
+    height: 100%;
+    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.4);
+}
+
+.kitchen-staff-menu-item {
+    border-right: solid 1px;
+    border-left: solid 1px;
+    display: flex;
+    margin: 15px;
+    border-color: lightgrey;
+    width: 95%;
+    padding: 3px;
+    height: 100%;
+}
+
 body {
     align-items: center;
     height: calc(100vh - 80px);
