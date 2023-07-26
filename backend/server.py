@@ -718,28 +718,31 @@ def customer_request_assistance_flask():
 
 @APP.route("/kitchen_staff/get_order_list", methods=['GET'])
 def kitchen_staff_get_order_list_flask():   
-    data = ast.literal_eval(request.get_json())
-    kitchen_id = data['kitchen_staff_id']
-    cur = cur_dict['staff'][kitchen_id]
+    # kitchen_id = request.args.get('kitchen_staff_id')
+    menu_id = request.args.get('menu_id')
     
-    invalid_id = { 'error': 'invalid kitchen_staff_id' } # error message
     output = []
     
-    query_find_staff_menu = """
-        SELECT menu_id
-        FROM staff
-        WHERE id = %s;
-    """
+    # invalid_id = { 'error': 'invalid kitchen_staff_id' } # error message
+    # cur = cur_dict['staff'][kitchen_id]
+    # query_find_staff_menu = """
+    #     SELECT menu_id
+    #     FROM staff
+    #     WHERE id = %s;
+    # """
     
-    cur.execute(query_find_staff_menu, [kitchen_id])
+    # cur.execute(query_find_staff_menu, [kitchen_id])
     
-    menu_id = cur.fetchall()
+    # menu_id = cur.fetchall()
     
-    if len(menu_id) == 0:
-        return dumps(invalid_id)
+    # if len(menu_id) == 0:
+    #     return dumps(invalid_id)
     
-    menu_id = menu_id[0][0] # grabbing it from the list
+    # menu_id = menu_id[0][0] # grabbing it from the list
     
+    if menu_id not in orders:
+        return dumps(output)
+
     order = orders[menu_id] # grabbing the orders from the dictionary
     
     for customer_order in order:
@@ -807,27 +810,31 @@ def kitchen_staff_mark_order_complete_flask():
 
 @APP.route("/wait_staff/get_order_list", methods=['GET'])
 def wait_staff_get_order_list_flask():   
-    wait_id = request.args.get('wait_staff_id')
-    cur = cur_dict['staff'][wait_id]
+    # wait_id = request.args.get('wait_staff_id')
+    menu_id = request.args.get('menu_id')
     
-    invalid_id = { 'error': 'invalid wait_staff_id' } # error message
     output = []
 
-    query_find_staff_menu = """
-        SELECT menu_id
-        FROM staff
-        WHERE id = %s;
-    """
+    # invalid_id = { 'error': 'invalid wait_staff_id' } # error message
+    # cur = cur_dict['staff'][wait_id]
+    # query_find_staff_menu = """
+    #     SELECT menu_id
+    #     FROM staff
+    #     WHERE id = %s;
+    # """
     
-    cur.execute(query_find_staff_menu, [wait_id])
+    # cur.execute(query_find_staff_menu, [wait_id])
     
-    menu_id = cur.fetchall()
+    # menu_id = cur.fetchall()
     
-    if len(menu_id) == 0:
-        return dumps(invalid_id)
+    # if len(menu_id) == 0:
+    #     return dumps(invalid_id)
     
-    menu_id = menu_id[0][0] # grabbing it from the list
+    # menu_id = menu_id[0][0] # grabbing it from the list
     
+    if menu_id not in orders:
+        dumps(output)
+
     order = orders[menu_id] # grabbing the orders from the dictionary
     
     for customer_order in order:

@@ -14,6 +14,8 @@ import CustomerMenuPage from './pages/CustomerMenuPage';
 import LogoutIcon from '@mui/icons-material/Logout';
 import CustomerOrStaff from './pages/CustomerOrStaff';
 import FoodItemPage from './pages/FoodItemPage';
+import WaitStaffPage from './pages/WaitStaffPage';
+import KitchenStaffPage from './pages/KitchenStaffPage';
 import makeRequest from './makeRequest';
 import { StyledButton } from './pages/CustomerOrStaff';
 import SelectTableNumber from './pages/SelectTableNumber';
@@ -199,8 +201,8 @@ function App() {
             <Route path='/manager/menu/:menuId' element={<ManagerMenuPage />} />
             <Route path='/manager/addnewmenuitem/:menuId/:categoryName/:categoryId' element={<NewMenuItemPage />} />
 
-            <Route path='/kitchen_staff' element={<div>Kitchen Staff Logged In</div>} />
-            <Route path='/wait_staff/:waitStaffId/orderList' element={<WaitStaffPage/>} />
+            <Route path='/kitchen_staff/:menuId/:staffId' element={<KitchenStaffPage />} />
+            <Route path='/wait_staff/:menuId/:staffId' element={<WaitStaffPage />} />
 
             <Route path='/customer/:sessionId/searchrestaurant' element={<SearchRestaurant onSuccess={restaurantSuccess} />} />
             <Route path='/customer/:sessionId/:menuId/tablenumber' element={<SelectTableNumber onSuccess={tableNumberSuccess} />} />
