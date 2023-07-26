@@ -3,6 +3,7 @@ import { Typography, Paper, Grid, TextField } from '@mui/material';
 import { useNavigate, useParams } from 'react-router-dom';
 import { StyledButton } from './CustomerOrStaff';
 import makeRequest from '../makeRequest';
+import KitchenStaffOrder from '../components/KitchenStaffOrder';
 
 function KitchenStaffPage() {
   const [orderList, setOrderList] = React.useState([])
@@ -16,7 +17,7 @@ function KitchenStaffPage() {
       await getOrderList();
     }
     fetchData();
-  }, []) 
+  }, [])
 
   async function getOrderList() {
     const url = `/kitchen_staff/get_order_list?menu_id=${menuId}`;
@@ -26,7 +27,14 @@ function KitchenStaffPage() {
   }
   return (
   <>
-      <div>Kitchen Staff Page</div>
+    <div>Kitchen Staff Page</div>
+    {orderList?.map((order) => (
+      <KitchenStaffOrder
+        tableId={order.table_id}
+        menuItems={order.menu_items}
+      >
+      </KitchenStaffOrder>
+      ))}
   </>
   );
 }
