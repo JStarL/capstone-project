@@ -21,6 +21,7 @@ import SearchRestaurant from './pages/SearchRestaurant';
 import CustomerViewOrderPage from './pages/CustomerViewOrderPage';
 import PersonalisePage from './pages/PersonalisePage';
 import { Typography } from '@mui/material';
+import WaitStaffPage from './pages/WaitStaffPage';
 
 
 function App() {
@@ -199,7 +200,7 @@ function App() {
             <Route path='/manager/addnewmenuitem/:menuId/:categoryName/:categoryId' element={<NewMenuItemPage />} />
 
             <Route path='/kitchen_staff' element={<div>Kitchen Staff Logged In</div>} />
-            <Route path='/wait_staff' element={<div>Wait Staff Logged In</div>} />
+            <Route path='/wait_staff/:waitStaffId/orderList' element={<WaitStaffPage/>} />
 
             <Route path='/customer/:sessionId/searchrestaurant' element={<SearchRestaurant onSuccess={restaurantSuccess} />} />
             <Route path='/customer/:sessionId/:menuId/tablenumber' element={<SelectTableNumber onSuccess={tableNumberSuccess} />} />

@@ -26,7 +26,7 @@ function ManagerLoginPage({ onSuccess }) {
             navigate('/kitchen_staff')
           }
           else if (data['staff_type'] === 'wait') {
-            navigate('/wait_staff')
+            navigate(`/wait_staff/${data['staff_id']}/orderList`)
           }
           else if (data['staff_type'] === 'manager') {
             navigate(`/manager/menu/${data['menu_id']}`)
