@@ -9,7 +9,8 @@ function KitchenStaffOrder(props) {
   const [cooking, setCooking] = React.useState(false)
 
   const completeOrder = () => {
-
+    console.log('order completed')
+    props.setTrigger(!props.trigger)
   }
   return (
     <>
@@ -21,11 +22,11 @@ function KitchenStaffOrder(props) {
       <>
       <div className='kitchen-staff-menu-item'>
       <div>
-        {props.originalImage ? (
+        {menuItem.image ? (
           <div className='image'>
             <img
               style={{ width: '20vh', height: '20vh', margin: '20px', borderRadius: '10px' }}
-              src={props.originalImage}
+              src={menuItem.image}
             ></img>
           </div>
         ) : (
@@ -44,7 +45,7 @@ function KitchenStaffOrder(props) {
     </div>
     </>
     ))}
-    <StyledButton style={{ width: '90%', marginBottom: '5px' }}>Complete Order</StyledButton>
+    <StyledButton onClick={completeOrder} style={{ width: '90%', marginBottom: '5px' }}>Complete Order</StyledButton>
     </div>
     </div>
     </>

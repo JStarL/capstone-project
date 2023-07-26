@@ -1,6 +1,6 @@
 import './App.css';
 import React from 'react';
-import { BrowserRouter, Routes, Route, Link } from 'react-router-dom';
+import { BrowserRouter, Routes, Route, Link, useLocation } from 'react-router-dom';
 import PersonAddAlt1SharpIcon from '@mui/icons-material/PersonAddAlt1Sharp';
 import RestaurantMenuIcon from '@mui/icons-material/RestaurantMenu';
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
@@ -23,6 +23,7 @@ import SearchRestaurant from './pages/SearchRestaurant';
 import CustomerViewOrderPage from './pages/CustomerViewOrderPage';
 import PersonalisePage from './pages/PersonalisePage';
 import { Typography } from '@mui/material';
+import BackHandIcon from '@mui/icons-material/BackHand';
 
 function App() {
   const [id, setId] = React.useState(null);
@@ -45,6 +46,32 @@ function App() {
       setStaffType(localStorage.getItem('menu_id'));
     }
   }, []);
+
+  const [isCustomer, setIsCustomer] = React.useState(false);
+  const [isManager, setIsManager] = React.useState(false);
+  const [isStaff, setIsStaff] = React.useState(false);
+
+  const location = useLocation();
+
+  React.useEffect(() => {
+    const pathname = location.pathname;
+    const hasCustomerPath = /^\/customer\/\d+\/\d+\/\d+$/.test(pathname);
+    setIsCustomer(hasCustomerPath);
+  }, [location]);
+
+  React.useEffect(() => {
+    const pathname = location.pathname;
+    const hasManagerPath = pathname.includes('/manager/');
+    setIsManager(hasManagerPath);
+    // setIsStaff(hasManagerPath)
+  }, [location]);
+
+  React.useEffect(() => {
+    const pathname = location.pathname;
+    const hasStaffPath = pathname.includes('/manager/') || pathname.includes('kitchen_staff')  || pathname.includes('wait_staff');
+    setIsStaff(hasStaffPath)
+  }, [location]);
+
 
   const handlePersonas = (name, allergies) => {
     const persona = [name, allergies];
@@ -141,7 +168,7 @@ function App() {
   }
 
   const Footer = () => {
-    if (staffType === 'manager') {
+    if (isManager) {
       return (
         <div className="footer-container">
           <StyledButton startIcon={<PersonAddAlt1SharpIcon />}>
@@ -152,7 +179,7 @@ function App() {
           </StyledButton>
         </div>
       );
-    } else if (staffType === 'customer' && menuId !== null && tableNumber !== null) {
+    } else if (isCustomer) {
       return (
         <div className="footer-container">
           <StyledButton startIcon={<ShoppingCartIcon />}>
@@ -163,6 +190,9 @@ function App() {
           </StyledButton>
           <StyledButton startIcon={<SettingsIcon />}>
             <Link to={`/customer/${sessionId}/${menuId}/${tableNumber}/personalise`} className="toNavy">Personalise</Link>
+          </StyledButton>
+          <StyledButton startIcon={<BackHandIcon />} className="toNavy" >
+            Request Assistance
           </StyledButton>
         </div>
       );
@@ -181,9 +211,9 @@ function App() {
 
   return (
     <div className="App">
-      <BrowserRouter>
+      {/* <BrowserRouter> */}
         <header>
-          {id === null
+          {!isStaff
             ? <Nav />
             : <LogoutButton className='logout-button' onClick={logout}></LogoutButton>
           }
@@ -214,7 +244,7 @@ function App() {
           <Footer />
         </footer>
 
-      </BrowserRouter>
+      {/* </BrowserRouter> */}
     </div>
   );
 }

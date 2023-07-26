@@ -7,6 +7,7 @@ import KitchenStaffOrder from '../components/KitchenStaffOrder';
 
 function KitchenStaffPage() {
   const [orderList, setOrderList] = React.useState([])
+  const [trigger, setTrigger] = React.useState(true)
   const params = useParams()
   
   const menuId = params.menuId
@@ -15,9 +16,10 @@ function KitchenStaffPage() {
   React.useEffect(() => {
     async function fetchData() {
       await getOrderList();
+      console.log('refresh')
     }
     fetchData();
-  }, [])
+  }, [trigger])
 
   async function getOrderList() {
     const url = `/kitchen_staff/get_order_list?menu_id=${menuId}`;
@@ -32,6 +34,9 @@ function KitchenStaffPage() {
       <KitchenStaffOrder
         tableId={order.table_id}
         menuItems={order.menu_items}
+        sessionId={order.session_id}
+        trigger={trigger}
+        setTrigger={setTrigger}
       >
       </KitchenStaffOrder>
       ))}
