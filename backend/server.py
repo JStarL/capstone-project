@@ -833,7 +833,7 @@ def wait_staff_get_order_list_flask():
     # menu_id = menu_id[0][0] # grabbing it from the list
     
     if menu_id not in orders:
-        dumps(output)
+        return dumps(output)
 
     order = orders[menu_id] # grabbing the orders from the dictionary
     
