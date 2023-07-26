@@ -446,6 +446,8 @@ def customer_menu_table_flask():
         
         if menu_id not in orders:
             orders[menu_id] = []
+        if menu_id not in notifications:
+            notifications[menu_id] = []
         orders[menu_id].append(
             {
             'session_id': session_id,
