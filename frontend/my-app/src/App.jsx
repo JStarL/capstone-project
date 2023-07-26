@@ -23,8 +23,6 @@ import SearchRestaurant from './pages/SearchRestaurant';
 import CustomerViewOrderPage from './pages/CustomerViewOrderPage';
 import PersonalisePage from './pages/PersonalisePage';
 import { Typography } from '@mui/material';
-import WaitStaffPage from './pages/WaitStaffPage';
-
 
 function App() {
   const [id, setId] = React.useState(null);
