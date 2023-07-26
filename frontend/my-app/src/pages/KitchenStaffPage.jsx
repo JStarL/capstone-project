@@ -57,6 +57,7 @@ function KitchenStaffPage() {
           trigger={trigger}
           setTrigger={setTrigger}
           staffId={staffId}
+          menuId={menuId}
         >
         </KitchenStaffOrder>
       ))}
