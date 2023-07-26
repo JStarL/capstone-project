@@ -1,6 +1,6 @@
 import './App.css';
 import React from 'react';
-import { BrowserRouter, Routes, Route, Link } from 'react-router-dom';
+import { BrowserRouter, Routes, Route, Link, useLocation } from 'react-router-dom';
 import PersonAddAlt1SharpIcon from '@mui/icons-material/PersonAddAlt1Sharp';
 import RestaurantMenuIcon from '@mui/icons-material/RestaurantMenu';
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
@@ -21,8 +21,10 @@ import { StyledButton } from './pages/CustomerOrStaff';
 import SelectTableNumber from './pages/SelectTableNumber';
 import SearchRestaurant from './pages/SearchRestaurant';
 import CustomerViewOrderPage from './pages/CustomerViewOrderPage';
+import CustomerPayPage from './pages/CustomerPayPage';
 import PersonalisePage from './pages/PersonalisePage';
 import { Typography } from '@mui/material';
+import BackHandIcon from '@mui/icons-material/BackHand';
 
 function App() {
   const [id, setId] = React.useState(null);
@@ -46,6 +48,32 @@ function App() {
     }
   }, []);
 
+  const [isCustomer, setIsCustomer] = React.useState(false);
+  const [isManager, setIsManager] = React.useState(false);
+  const [isStaff, setIsStaff] = React.useState(false);
+
+  const location = useLocation();
+
+  React.useEffect(() => {
+    const pathname = location.pathname;
+    const hasCustomerPath = /^\/customer\/\d+\/\d+\/\d+$/.test(pathname);
+    setIsCustomer(hasCustomerPath);
+  }, [location]);
+
+  React.useEffect(() => {
+    const pathname = location.pathname;
+    const hasManagerPath = pathname.includes('/manager/');
+    setIsManager(hasManagerPath);
+    // setIsStaff(hasManagerPath)
+  }, [location]);
+
+  React.useEffect(() => {
+    const pathname = location.pathname;
+    const hasStaffPath = pathname.includes('/manager/') || pathname.includes('kitchen_staff')  || pathname.includes('wait_staff');
+    setIsStaff(hasStaffPath)
+  }, [location]);
+
+
   const handlePersonas = (name, allergies) => {
     const persona = [name, allergies];
     const updatedPersonas = [...personas];
@@ -64,6 +92,18 @@ function App() {
     setSessionId(session_id)
   }
 
+  const requestAssistance = () => {
+    const body = JSON.stringify({
+      table_id: tableNumber,
+      session_id: sessionId,
+      menu_id: menuId,
+    });
+    makeRequest('/customer/request_assistance', 'POST', body, undefined)
+      .then(data => {
+        console.log(data);
+      })
+      .catch(e => console.log('Error: ' + e));
+  }
   const reset = (staff_type, session_id, menu_id, table_number) => {
     setStaffType(staff_type)
     setSessionId(session_id)
@@ -128,8 +168,7 @@ function App() {
       <nav>
         <div className='nav-container' sx={{ zIndex: 100, display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
           <div className='links-container'>
-            <span className="link"><Link to='/'>Login</Link></span>
-            <span className="link"><Link to='/register'>Register</Link></span>
+            <span className="link"><Link to='/'>Home</Link></span>
           </div>
           {tableNumber ? (<div className='links-container' style={{ marginLeft: 'auto', marginTop: '5px' }}>
             <Typography style={{ color: 'white' }} variant="overline" gutterBottom>Table Number: {tableNumber}</Typography>
@@ -141,18 +180,18 @@ function App() {
   }
 
   const Footer = () => {
-    if (staffType === 'manager') {
+    if (isManager) {
       return (
         <div className="footer-container">
           <StyledButton startIcon={<PersonAddAlt1SharpIcon />}>
-            <Link to="/addstaff" className="toNavy">Add Staff</Link>
+            <Link to={`/manager/addstaff/${menuId}/${id}`} className="toNavy">Add Staff</Link>
           </StyledButton>
           <StyledButton startIcon={<RestaurantMenuIcon />}>
             <Link to={`/manager/menu/${menuId}`} className="toNavy">Go to Menu</Link>
           </StyledButton>
         </div>
       );
-    } else if (staffType === 'customer' && menuId !== null && tableNumber !== null) {
+    } else if (isCustomer) {
       return (
         <div className="footer-container">
           <StyledButton startIcon={<ShoppingCartIcon />}>
@@ -163,6 +202,9 @@ function App() {
           </StyledButton>
           <StyledButton startIcon={<SettingsIcon />}>
             <Link to={`/customer/${sessionId}/${menuId}/${tableNumber}/personalise`} className="toNavy">Personalise</Link>
+          </StyledButton>
+          <StyledButton onClick={requestAssistance} startIcon={<BackHandIcon />} className="toNavy" >
+            Request Assistance
           </StyledButton>
         </div>
       );
@@ -181,9 +223,9 @@ function App() {
 
   return (
     <div className="App">
-      <BrowserRouter>
+      {/* <BrowserRouter> */}
         <header>
-          {id === null
+          {!isStaff
             ? <Nav />
             : <LogoutButton className='logout-button' onClick={logout}></LogoutButton>
           }
@@ -193,9 +235,7 @@ function App() {
             <Route path='/' element={<CustomerOrStaff onSuccess={customer} reset={reset}/>} />
             <Route path='/login' element={<ManagerLoginPage onSuccess={login} />} />
             <Route path='/register' element={<RegisterPage onSuccess={login} />} />
-            {/* <Route path='/searchrestaurant' element={<SearchRestaurant />} />
-            <Route path='/tablenumber' element={<SelectTableNumber />} /> */}
-            <Route path='/addstaff' element={<AddStaffPage />} />
+            <Route path='/manager/addstaff/:menuId/:managerId' element={<AddStaffPage />} />
             <Route path='/manager/menu/:menuId' element={<ManagerMenuPage />} />
             <Route path='/manager/addnewmenuitem/:menuId/:categoryName/:categoryId' element={<NewMenuItemPage />} />
 
@@ -208,13 +248,14 @@ function App() {
             <Route path='/customer/:sessionId/:menuId/:categoryId/:foodId' element={<FoodItemPage />} />
             <Route path='/customer/:sessionId/:menuId/:tableNumber/personalise' element={<PersonalisePage personas={personas} handlePersonas={handlePersonas} setCurrentlySelectedPersonaApp={setCurrentlySelectedPersona} setCurrentlySelectedPersonaAllergies={setCurrentlySelectedPersonaAllergies}/>} />
             <Route path='/customer/:sessionId/view_order/:menuId/:tableNumber' element={<CustomerViewOrderPage />} />
+            <Route path='/customer/:sessionId/view_order/:menuId/:tableNumber/pay' element={<CustomerPayPage />} />
           </Routes>
         </main>
         <footer>
           <Footer />
         </footer>
 
-      </BrowserRouter>
+      {/* </BrowserRouter> */}
     </div>
   );
 }

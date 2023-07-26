@@ -11,6 +11,10 @@ function SelectTableNumber({ onSuccess }) {
 	const menuId = params.menuId
 	const sessionId = params.sessionId
 	function selectTableNumber() {
+		if (tableNumber === '') {
+			alert('Table Number cannot be empty')
+			return
+		} 
 		const body = JSON.stringify({
 			'session_id': sessionId,
 			'menu_id': menuId,
@@ -21,7 +25,7 @@ function SelectTableNumber({ onSuccess }) {
 				localStorage.setItem('table_number', tableNumber)
 				// forward user to select table number
 				onSuccess(tableNumber)
-				navigate(`/customer/${sessionId}/${menuId}/${tableNumber}`)	
+				navigate(`/customer/${sessionId}/${menuId}/${tableNumber}`)
 			})
 			.catch(e => console.log('Error: ' + e))
 	}
@@ -35,11 +39,11 @@ function SelectTableNumber({ onSuccess }) {
 							label="Table Number"
 							type="number"
 							inputProps={{ min: 0 }}
-							sx={{m:2, width: '100%'}}
+							sx={{ m: 2, width: '100%' }}
 							value={tableNumber}
-              				onChange={e => setTableNumber(e.target.value)}
+							onChange={e => setTableNumber(e.target.value)}
 						/>
-						<StyledButton sx={{m:2, width:'100%'}} variant="outlined" onClick={() => selectTableNumber()}>
+						<StyledButton sx={{ m: 2, width: '100%' }} variant="outlined" onClick={() => selectTableNumber()}>
 							Confirm
 						</StyledButton>
 					</Grid>

@@ -2,9 +2,11 @@ import React from 'react';
 import { TextField, Typography, Paper, FormLabel, FormControl, Radio, RadioGroup, FormControlLabel, Snackbar, Alert } from '@mui/material';
 import makeRequest from '../makeRequest';
 import { StyledButton } from '../pages/CustomerOrStaff';
+import { useParams } from 'react-router-dom';
+
 import { styled } from '@mui/material';
 
-const StyledRadio = styled(Radio)({
+export const StyledRadio = styled(Radio)({
 	color: 'black', // Replace with your desired color
 	'&.Mui-checked': {
 		color: '#002250', // Replace with your desired color when the radio button is checked
@@ -18,8 +20,9 @@ function NewStaffForm({ onSuccess }) {
 	const [staffType, setStaffType] = React.useState('kitchen')
 	const [isSnackbarOpen, setSnackbarOpen] = React.useState(false);
 
-	const managerId = localStorage.getItem('staff_id')
-	const menuId = localStorage.getItem('menu_id')
+	const params = useParams()
+	const managerId = params.managerId
+	const menuId = params.menuId
 
 	const handleSnackbarClose = () => {
 		setSnackbarOpen(false);

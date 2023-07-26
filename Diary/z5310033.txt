@@ -120,3 +120,7 @@ Week 8
     - Delegate roles for the next sprint 
     - Create child issues
     - trying to figure out how to implement notifications 
+
+  - Working on: 
+    - Payment screen (split the bill based on persona or pay as a group)
+    - Styling for kitchen staff
