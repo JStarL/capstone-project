@@ -23,10 +23,10 @@ function ManagerLoginPage({ onSuccess }) {
           localStorage.setItem('menu_id', data['menu_id']);
           localStorage.setItem('staff_type', data['staff_type']);
           if (data['staff_type'] === 'kitchen') {
-            navigate('/kitchen_staff')
+            navigate(`/kitchen_staff/${data['menu_id']}/${data['staff_id']}`)
           }
           else if (data['staff_type'] === 'wait') {
-            navigate('/wait_staff')
+            navigate(`/wait_staff/${data['menu_id']}/${data['staff_id']}`)
           }
           else if (data['staff_type'] === 'manager') {
             navigate(`/manager/menu/${data['menu_id']}`)
