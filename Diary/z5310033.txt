@@ -111,3 +111,12 @@ Week 8
   - Thinking about how to implement splitting the bill based on personas (need to change the backend slightly)
 - Working on: 
   - displaying ingredients on the individual food item page 
+  - Add ingredient allergy pair to manager menu page (add and delete)
+  - Reordering of category and menu items 
+  - add to order and add staff pop up  
+
+  Week 9 
+  - Meeting Monday 24/7/23:
+    - Delegate roles for the next sprint 
+    - Create child issues
+    - trying to figure out how to implement notifications 
