@@ -172,7 +172,7 @@ function App() {
       return (
         <div className="footer-container">
           <StyledButton startIcon={<PersonAddAlt1SharpIcon />}>
-            <Link to="/addstaff" className="toNavy">Add Staff</Link>
+            <Link to={`/manager/addstaff/${menuId}/${id}`} className="toNavy">Add Staff</Link>
           </StyledButton>
           <StyledButton startIcon={<RestaurantMenuIcon />}>
             <Link to={`/manager/menu/${menuId}`} className="toNavy">Go to Menu</Link>
@@ -223,9 +223,7 @@ function App() {
             <Route path='/' element={<CustomerOrStaff onSuccess={customer} reset={reset}/>} />
             <Route path='/login' element={<ManagerLoginPage onSuccess={login} />} />
             <Route path='/register' element={<RegisterPage onSuccess={login} />} />
-            {/* <Route path='/searchrestaurant' element={<SearchRestaurant />} />
-            <Route path='/tablenumber' element={<SelectTableNumber />} /> */}
-            <Route path='/addstaff' element={<AddStaffPage />} />
+            <Route path='/manager/addstaff/:menuId/:managerId' element={<AddStaffPage />} />
             <Route path='/manager/menu/:menuId' element={<ManagerMenuPage />} />
             <Route path='/manager/addnewmenuitem/:menuId/:categoryName/:categoryId' element={<NewMenuItemPage />} />
 
