@@ -8,6 +8,33 @@ function CustomerPayPage() {
 	const tableNumber = localStorage.getItem('table_number')
 	const [paymentType, setPaymentType] = React.useState('group')
 
+	const calculatePersonaPay = () => {
+		let totalPay = {};
+		// makeRequest('/customer/view_order')
+		let order = {} // actual data structure from above
+
+		const menu_items_list = order['menu_items'];
+		menu_items_list.forEach((val) => {
+      if (totalPay.hasOwnProperty(val['persona'])) {
+        totalPay[val['persona']] += val['amount'] * val['price'];
+      } else {
+        totalPay[val['persona']] = val['amount'] * val['price'];
+      }
+		});
+
+    return totalPay
+
+    /**
+     * totalPay data sructure example:
+     * {
+     *  'default': '12.5',
+     *  'persona 1': 37,
+     *  'some other name': 42
+     * }
+     */
+
+	};
+
 	return (
 		<div className='login-page' sx={{ alignItems: 'center' }}>
 			<Paper elevation={10} sx={{ p: 6, borderRadius: '20px', width: '50%' }}>
