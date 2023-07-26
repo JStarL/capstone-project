@@ -852,8 +852,8 @@ def wait_staff_get_order_list_flask():
         if customer_order['status'] == 'wait':
             for menu_item in customer_order['menu_items']:
                 temp_list_dict = {}
-                temp_list_dict.update({'food_id': menu_item['food_id']})
-                temp_list_dict.update({'food_name': menu_item['food_name']})
+                temp_list_dict.update({'food_id': menu_item['menu_item_id']})
+                temp_list_dict.update({'food_name': menu_item['title']})
                 temp_list_dict.update({'image': menu_item['image']})
                 temp_list_dict.update({'amount': menu_item['amount']})
                 temp_list.append(temp_list_dict)
