@@ -51,6 +51,9 @@ function App() {
   const [isCustomer, setIsCustomer] = React.useState(false);
   const [isManager, setIsManager] = React.useState(false);
   const [isStaff, setIsStaff] = React.useState(false);
+  const [isKitchen, setIsKitchen] = React.useState(false);
+  const [isWait, setIsWait] = React.useState(false);
+
 
   const location = useLocation();
 
@@ -73,7 +76,11 @@ function App() {
   React.useEffect(() => {
     const pathname = location.pathname;
     const hasStaffPath = pathname.includes('/manager/') || pathname.includes('kitchen_staff')  || pathname.includes('wait_staff');
+    const hasKitchenStaff = pathname.includes('kitchen_staff')  
+    const hasWaitStaff = pathname.includes('wait_staff');
     setIsStaff(hasStaffPath)
+    setIsKitchen(hasKitchenStaff)
+    setIsWait(hasWaitStaff)
   }, [location]);
 
 
@@ -150,11 +157,14 @@ function App() {
   const LogoutButton = () => {
     return (
       <nav sx={{ display: 'flex' }}>
+        <div className='links-container' style={{ marginRight: 'auto', marginTop: '5px', marginLeft: '20px' }}>
+          <Typography style={{ color: 'white' }} variant="overline" gutterBottom>{isManager ? 'Manager' : isKitchen ? 'Kitchen Staff' : 'Wait Staff'}</Typography>
+        </div>
         <div className='nav-container'>
           <StyledButton sx={{
             margin: '5px',
             marginLeft: 'auto',
-            width: '7%',
+            width: '70%',
             height: '70%',
           }} onClick={logout} startIcon={<LogoutIcon />}>
             <a className='toNavy' href='/'>
@@ -169,7 +179,7 @@ function App() {
   const Nav = () => {
     return (
       <nav>
-        <div className='nav-container' sx={{ zIndex: 100, display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+        <div className='customer-nav-container' sx={{ zIndex: 100, display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
           <div className='links-container'>
             <span className="link"><Link to='/'>Home</Link></span>
           </div>

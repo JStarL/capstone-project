@@ -133,6 +133,11 @@ nav {
 
 .nav-container {
   display: flex;
+  justify-content: 'space-between';
+}
+
+.customer-nav-container {
+  display: flex;
   width: 100%;
   justify-content: 'space-between';
 }

@@ -5,6 +5,8 @@ import { StyledButton } from './CustomerOrStaff';
 import makeRequest from '../makeRequest';
 import WaitStaffOrder from '../components/WaitStaffOrder'
 import WaitStaffNotifications from '../components/WaitStaffNotifications';
+import PendingActionsIcon from '@mui/icons-material/PendingActions';
+import BackHandIcon from '@mui/icons-material/BackHand';
 function WaitStaffPage() {
   const [orderList, setOrderList] = React.useState([])
   const [notificationsList, setNotificationsList] = React.useState([])
@@ -49,7 +51,8 @@ function WaitStaffPage() {
   <>
     <div style={{ display: 'flex', width: '100%' }}>
       <div style={{ width: '60%', height: '100%' }}>
-      <div>Pending Orders</div>
+      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '1em'}}>
+        <PendingActionsIcon /><Typography fontSize='1.5em' variant="overline"><b>Pending Orders</b></Typography></div>
       {orderList?.map((order) => (
         <WaitStaffOrder
           menuId={menuId}
@@ -63,7 +66,8 @@ function WaitStaffPage() {
         ))}
       </div>
       <div style={{ width: '40%', height: '100%' }}>
-      <div>Require Assistance</div>
+      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '1em'}}>
+        <BackHandIcon /><Typography fontSize='1.5em' variant="overline"><b>Require Assistance</b></Typography></div>
       {notificationsList?.map((notification) => (
         <WaitStaffNotifications
           menuId={menuId}

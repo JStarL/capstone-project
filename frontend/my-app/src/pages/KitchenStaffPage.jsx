@@ -4,6 +4,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { StyledButton } from './CustomerOrStaff';
 import makeRequest from '../makeRequest';
 import KitchenStaffOrder from '../components/KitchenStaffOrder';
+import PendingActionsIcon from '@mui/icons-material/PendingActions';
 
 function KitchenStaffPage() {
   const [orderList, setOrderList] = React.useState([])
@@ -48,7 +49,9 @@ function KitchenStaffPage() {
   }
   return (
     <>
-      <Typography className='h4' variant="h4" gutterBottom>Kitchen Staff - Pending Orders</Typography>
+      {/* <Typography className='h4' variant="h4" gutterBottom>Kitchen Staff - Pending Orders</Typography> */}
+      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '1em'}}>
+        <PendingActionsIcon /><Typography fontSize='1.5em' variant="overline"><b>Pending Orders</b></Typography></div>
       {orderList?.map((order) => (
         <KitchenStaffOrder
           tableId={order.table_id}
