@@ -12,7 +12,7 @@ function CustomerPayPage() {
 		<div className='login-page' sx={{ alignItems: 'center' }}>
 			<Paper elevation={10} sx={{ p: 6, borderRadius: '20px', width: '50%' }}>
 				<Typography sx={{ mb: 3 }} variant="h3" gutterBottom>
-					My Bill <ReceiptLongIcon sx={{ fontSize: '4rem', verticalAlign: 'middle' }} />
+					My Bill <ReceiptLongIcon sx={{ fontSize: '4rem', verticalAlign: 'middle', marginBottom: '10px'}} />
 				</Typography>
 				<Typography sx={{ mb: 3 }} variant="h5" gutterBottom>Please go to the front counter to pay</Typography>
 				<Typography sx={{ mb: 3 }} variant="h5" gutterBottom><b>Table Number:</b> {tableNumber}</Typography>
