@@ -89,6 +89,12 @@ was dedicated to debugging the various errors that popped up after implementing 
 Next week's plan is to review what we've completed so far and complete the remaining user stories for Sprint 2, work on debugging remaining issues and practising for Demo B, as well as prepare for Retrospective B.
 
 Week 8
-The progress for this week was smooth and we finished our sprint tasks neatly before the deadline. This meant that we had completed reviewing backend route implementations, finished the frontend screens and components for the UI, connected both, and tested functionality for any bugs or defects well before Friday. I personally implemented the novel functionalities in the backend, i.e. the main logic for excluding certain menu items with given allergy ids from the view_menu or view_category results sent to the frontend, as well as a basic implementation of the automated Best Selling Category using a simple points based system (for now). We finished before time and practised the demo on Wednesday and Thursday, including having sufficient time to complete our retrospective afterwards.
+The progress for this week was smooth and we finished our sprint tasks neatly before the deadline. This meant that we had completed reviewing backend
+route implementations, finished the frontend screens and components for the UI, connected both, and tested functionality for any bugs or defects well
+before Friday. I personally implemented the novel functionalities in the backend, i.e. the main logic for excluding certain menu items with given allergy
+ids from the view_menu or view_category results sent to the frontend, as well as a basic implementation of the automated Best Selling Category using a
+simple points based system (for now). We finished before time and practised the demo on Wednesday and Thursday, including having sufficient time to 
+complete our retrospective afterwards.
 
-The plan for next week is to improve the implementation of the automated Best Selling Category using more parameters, and work on debugging the kitchen and wait staff screens and routes.
+The plan for next week is to improve the implementation of the automated Best Selling Category using more parameters, and work on debugging the kitchen 
+and wait staff screens and routes.
