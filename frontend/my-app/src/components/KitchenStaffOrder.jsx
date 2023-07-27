@@ -17,9 +17,9 @@ function KitchenStaffOrder(props) {
     makeRequest('/kitchen_staff/mark_order_complete', 'POST', body, undefined)
       .then(data => {
         console.log(data);
+        props.setTrigger(!props.trigger);
       })
       .catch(e => console.log('Error: ' + e));
-    props.setTrigger(!props.trigger);
   };
 
   return (

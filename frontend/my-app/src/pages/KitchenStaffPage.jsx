@@ -30,14 +30,14 @@ function KitchenStaffPage() {
     fetchData();
 
     // Setup an interval to call fetchData every 3 seconds
-    const interval = setInterval(() => {
-      fetchData();
-    }, 3000);
+    // const interval = setInterval(() => {
+    //   fetchData();
+    // }, 3000);
 
-    // Clear the interval when the component unmounts
-    return () => {
-      clearInterval(interval);
-    };
+    // // Clear the interval when the component unmounts
+    // return () => {
+    //   clearInterval(interval);
+    // };
   }, [trigger]);
 
   async function getOrderList() {

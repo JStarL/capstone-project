@@ -18,6 +18,14 @@
     justify-content: center;
 }
 
+.wait-staff-order {
+    display: flex;
+    flex-direction: row;
+    height: 100%;
+    width: 100%;
+    justify-content: center;
+}
+
 .kitchen-staff-time-div {
     width: '10%';
     display: flex;
@@ -51,6 +59,20 @@
     box-shadow: 0 5px 10px rgba(0, 0, 0, 0.4);
 }
 
+.wait-staff-order-div {
+    border: solid 1px;
+    display: flex;
+    height: 100%;
+    flex-direction: column;
+    align-items: center;
+    margin: 15px;
+    border-color: lightgrey;
+    padding: 3px;
+    border-radius: 20px;
+    height: 100%;
+    box-shadow: 0 5px 10px rgba(0, 0, 0, 0.4);
+}
+
 .kitchen-staff-menu-item {
     display: flex;
     border-color: lightgrey;
@@ -59,7 +81,7 @@
     height: 100%;
     border-radius: 20px;
     margin: auto;
-    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.4);
+    /* box-shadow: 0 3px 6px rgba(0, 0, 0, 0.4); */
 }
 
 body {

@@ -57,7 +57,10 @@ function App() {
   React.useEffect(() => {
     const pathname = location.pathname;
     const hasCustomerPath = /^\/customer\/\d+\/\d+\/\d+$/.test(pathname);
-    setIsCustomer(hasCustomerPath);
+    const isPersonalisePage = /^\/customer\/\d+\/\d+\/\d+\/personalise$/.test(pathname);
+    const isViewOrderPage = /^\/customer\/\d+\/view_order\/\d+\/\d+$/.test(pathname);
+
+    setIsCustomer(hasCustomerPath || isPersonalisePage || isViewOrderPage);
   }, [location]);
 
   React.useEffect(() => {

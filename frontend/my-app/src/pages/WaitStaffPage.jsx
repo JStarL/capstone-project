@@ -3,8 +3,8 @@ import { Typography, Paper, Grid, TextField } from '@mui/material';
 import { useNavigate, useParams } from 'react-router-dom';
 import { StyledButton } from './CustomerOrStaff';
 import makeRequest from '../makeRequest';
-import KitchenStaffOrder from '../components/KitchenStaffOrder';
-
+import WaitStaffOrder from '../components/WaitStaffOrder'
+import WaitStaffNotifications from '../components/WaitStaffNotifications';
 function WaitStaffPage() {
   const [orderList, setOrderList] = React.useState([])
   const [notificationsList, setNotificationsList] = React.useState([])
@@ -47,17 +47,36 @@ function WaitStaffPage() {
   }
   return (
   <>
-    <div>Wait Staff Page</div>
-    {orderList?.map((order) => (
-      <KitchenStaffOrder
-        tableId={order.table_id}
-        menuItems={order.menu_items}
-        sessionId={order.session_id}
-        orderTrigger={orderTrigger}
-        setOrderTrigger={setOrderTrigger}
-      >
-      </KitchenStaffOrder>
-      ))}
+    <div style={{ display: 'flex', width: '100%' }}>
+      <div style={{ width: '60%', height: '100%' }}>
+      <div>Pending Orders</div>
+      {orderList?.map((order) => (
+        <WaitStaffOrder
+          menuId={menuId}
+          tableId={order.table_id}
+          menuItems={order.menu_items}
+          sessionId={order.session_id}
+          orderTrigger={orderTrigger}
+          setOrderTrigger={setOrderTrigger}
+        >
+        </WaitStaffOrder>
+        ))}
+      </div>
+      <div style={{ width: '40%', height: '100%' }}>
+      <div>Require Assistance</div>
+      {notificationsList?.map((notification) => (
+        <WaitStaffNotifications
+          menuId={menuId}
+          tableId={notification.table_id}
+          sessionId={notification.session_id}
+          notificationTrigger={notificationTrigger}
+          setNotificationTrigger={setNotificationTrigger}
+        >
+        </WaitStaffNotifications>
+        ))}
+      </div>
+    </div>
+    
   </>
   );
 }
