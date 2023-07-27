@@ -11,7 +11,7 @@ function KitchenStaffOrder(props) {
   const completeOrder = () => {
     console.log('order completed');
     const body = JSON.stringify({
-      'kitchen_staff_id': props.staffId,
+      'menu_id': props.menuId,
       'session_id': props.sessionId
     });
     makeRequest('/kitchen_staff/mark_order_complete', 'POST', body, undefined)
