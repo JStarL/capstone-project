@@ -446,6 +446,8 @@ def customer_menu_table_flask():
         
         if menu_id not in orders:
             orders[menu_id] = []
+        if menu_id not in notifications:
+            notifications[menu_id] = []
         orders[menu_id].append(
             {
             'session_id': session_id,
@@ -771,36 +773,41 @@ def kitchen_staff_get_order_list_flask():
 @APP.route("/kitchen_staff/mark_order_complete", methods=['POST'])
 def kitchen_staff_mark_order_complete_flask():   
     data = ast.literal_eval(request.get_json())
-    cur = cur_dict['staff'][data['kitchen_staff_id']]
-    kitchen_id = data['kitchen_staff_id']
-    
-    invalid_id = { 'error': 'invalid kitchen_staff_id' } # error message
+    # cur = cur_dict['staff'][data['kitchen_staff_id']]
+    # kitchen_id = data['kitchen_staff_id']
+    menu_id = data['menu_id']
+    session_id = data['session_id']
+
     success = {'success': 'Order sent to wait staff'}
     fail = {'fail': 'could not change order status'}
     
-    query_find_staff_menu = """
-        SELECT menu_id
-        FROM staff
-        WHERE id = %s;
-    """
+    invalid_id = { 'error': 'invalid menu_id' } # error message
+    # query_find_staff_menu = """
+    #     SELECT menu_id
+    #     FROM staff
+    #     WHERE id = %s;
+    # """
     
-    cur.execute(query_find_staff_menu, [kitchen_id])
+    # cur.execute(query_find_staff_menu, [kitchen_id])
     
-    menu_id = cur.fetchall()
+    # menu_id = cur.fetchall()
     
-    if len(menu_id) == 0:
-        return dumps(invalid_id)
+    # if len(menu_id) == 0:
+    #     return dumps(invalid_id)
     
-    menu_id = menu_id[0][0] # grabbing it from the list
+    # menu_id = menu_id[0][0] # grabbing it from the list
     
+    if menu_id not in orders:
+        return  dumps(invalid_id)
+
     order = orders[menu_id] # grabbing the orders from the dictionary
     
     for customer_order in order:
-        if customer_order['session_id'] == data['session_id'] and customer_order['status'] == 'kitchen':
+        if customer_order['session_id'] == session_id and customer_order['status'] == 'kitchen':
             customer_order['status'] = 'wait'
             
     for customer_order in order: #check if it got changed
-        if customer_order['session_id'] == data['session_id'] and customer_order['status'] != 'wait':
+        if customer_order['session_id'] == session_id and customer_order['status'] != 'wait':
             return dumps(fail)
             
     return dumps(success)
@@ -865,28 +872,33 @@ def wait_staff_get_order_list_flask():
 @APP.route("/wait_staff/mark_order_complete", methods=['DELETE'])
 def wait_staff_mark_order_complete_flask():   
     data = ast.literal_eval(request.get_json())
-    wait_id = data['wait_staff_id']
-    cur = cur_dict['staff'][wait_id]
-    
-    invalid_id = { 'error': 'invalid wait_staff_id' } # error message
+    # wait_id = data['wait_staff_id']
+    # cur = cur_dict['staff'][wait_id]
+    menu_id = data['menu_id']
+
+
+    invalid_id = { 'error': 'invalid menu_id, or there are no orders' } # error message
     success = {'success': 'Order removed from orders'}
     fail = {'fail': 'could not remove order'}
     
-    query_find_staff_menu = """
-        SELECT menu_id
-        FROM staff
-        WHERE id = %s;
-    """
+    # query_find_staff_menu = """
+    #     SELECT menu_id
+    #     FROM staff
+    #     WHERE id = %s;
+    # """
     
-    cur.execute(query_find_staff_menu, [wait_id])
+    # cur.execute(query_find_staff_menu, [wait_id])
     
-    menu_id = cur.fetchall()
+    # menu_id = cur.fetchall()
     
-    if len(menu_id) == 0:
-        return dumps(invalid_id)
+    # if len(menu_id) == 0:
+    #     return dumps(invalid_id)
     
-    menu_id = menu_id[0][0] # grabbing it from the list
+    # menu_id = menu_id[0][0] # grabbing it from the list
     
+    if menu_id not in orders:
+        return  dumps(invalid_id)
+
     customer_orders = orders[menu_id] # grabbing the orders from the dictionary
     
     for customer_order in customer_orders:
