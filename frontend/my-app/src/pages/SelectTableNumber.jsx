@@ -13,7 +13,8 @@ function SelectTableNumber({ onSuccess }) {
 	function selectTableNumber() {
 		if (tableNumber === '') {
 			alert('Table Number cannot be empty')
-		}
+			return
+		} 
 		const body = JSON.stringify({
 			'session_id': sessionId,
 			'menu_id': menuId,
