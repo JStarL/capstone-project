@@ -463,12 +463,14 @@ def customer_menu_table_flask():
 
 @APP.route("/customer/add_menu_item", methods=['POST'])
 def customer_add_menu_item_flask():
-    invalid_menu_item_id = {'error': 'menu_item_id invalid'}
     data = ast.literal_eval(request.get_json())
     session_id = data['session_id']
     menu_id = data['menu_id']
     menu_item_id = data['menu_item_id']
     amount = int(data['amount'])
+    persona = data['persona_name']
+    
+    invalid_menu_item_id = {'error': 'menu_item_id invalid'}
     
     cur = None
     if session_id in cur_dict['customers']:
@@ -514,7 +516,8 @@ def customer_add_menu_item_flask():
                 "title" : item[0],
                 "description": item[1],
                 "image": item[2],
-                "price": item[3]
+                "price": item[3],
+                "persona": persona
             } )
         return order_list[0]
     else:
