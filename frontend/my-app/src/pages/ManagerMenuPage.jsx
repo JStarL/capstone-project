@@ -19,7 +19,7 @@ function ManagerMenuPage() {
   const navigate = useNavigate();
   const params = useParams();
 
-  const managerId = localStorage.getItem('staff_id');
+  const managerId = params.managerId;
   const menuId = params.menuId;
 
   React.useEffect(() => {
