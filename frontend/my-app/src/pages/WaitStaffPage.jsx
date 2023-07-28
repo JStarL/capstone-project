@@ -53,7 +53,7 @@ function WaitStaffPage() {
     return () => {
       clearInterval(interval);
     };
-    
+
   }, [notificationTrigger])
 
   async function getOrderList() {
@@ -76,8 +76,9 @@ function WaitStaffPage() {
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '1em' }}>
             <PendingActionsIcon style={{fontSize: '2rem', margin: '10px'}}/><Typography fontSize='1.5em' variant="overline"><b>Pending Orders</b></Typography>
           </div>
-          {orderList?.map((order) => (
+          {orderList?.map((order, index) => (
             <WaitStaffOrder
+              key={index}
               menuId={menuId}
               tableId={order.table_id}
               menuItems={order.menu_items}
@@ -91,8 +92,9 @@ function WaitStaffPage() {
         <div style={{ width: '40%', height: '100%' }}>
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '1em' }}>
             <BackHandIcon style={{fontSize: '1.7rem', margin: '10px'}} /><Typography fontSize='1.5em' variant="overline"><b>Require Assistance</b></Typography></div>
-          {notificationsList?.map((notification) => (
+          {notificationsList?.map((notification, index) => (
             <WaitStaffNotifications
+              key={index}
               menuId={menuId}
               tableId={notification.table_id}
               sessionId={notification.session_id}

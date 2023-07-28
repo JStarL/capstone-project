@@ -80,19 +80,19 @@ function CustomerMenuPage({ personas, currentlySelectedPersona, setCurrentlySele
     <>
       <div style={{ display: 'flex', flexDirection: 'row' }}>
         <div style={{ width: '25%', backgroundColor: 'white', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-          {categories.map((category) => (
-            <CategoryCustomer
-              categoryName={category[Object.keys(category)[0]][0].toString()}
-              key={Object.keys(category)[0]} // category id
-              id={Object.keys(category)[0]}
-              setCurrentSelectedCategory={setCurrentSelectedCategory}
-              currentSelectedCategoryId={currentSelectedCategoryId}
-              fetchAllMenuData={fetchAllMenuData}
-              setCurrentSelectedCategoryId={setCurrentSelectedCategoryId}
-              setMenuItems={setMenuItems}
-              fetchCategoryMenuItems={fetchCategoryMenuItems}
-            />
-          ))}
+        {categories.map((category, index) => (
+          <CategoryCustomer
+            categoryName={category[Object.keys(category)[0]][0].toString()}
+            key={index} // Using index as the key since it is guaranteed to be unique
+            id={Object.keys(category)[0]}
+            setCurrentSelectedCategory={setCurrentSelectedCategory}
+            currentSelectedCategoryId={currentSelectedCategoryId}
+            fetchAllMenuData={fetchAllMenuData}
+            setCurrentSelectedCategoryId={setCurrentSelectedCategoryId}
+            setMenuItems={setMenuItems}
+            fetchCategoryMenuItems={fetchCategoryMenuItems}
+          />
+        ))}
         </div>
         <div style={{ width: '75%', height: '100%' }}>
           <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100%' }}>
@@ -119,8 +119,9 @@ function CustomerMenuPage({ personas, currentlySelectedPersona, setCurrentlySele
             </div>
           </div>
 
-          {menuItems?.map((menuItem) => (
+          {menuItems && menuItems.length > 0 && menuItems.map((menuItem, index) => (
             <CustomerFoodItem
+              key={index}
               originalFoodName={menuItem.food_name}
               originalFoodDescription={menuItem.food_description}
               originalPrice={menuItem.food_price.toString()}
