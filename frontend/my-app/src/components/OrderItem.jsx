@@ -58,7 +58,8 @@ function OrderItem (props) {
       'menu_id': menuId,
       'menu_item_id': menuItemId,
       'amount': amountNum,
-      'title': name
+      'title': name,
+      'persona_name': orderedByPersona
     })
     makeRequest('/customer/add_menu_item', 'POST', body, undefined)
       .then(data => {
@@ -74,6 +75,7 @@ function OrderItem (props) {
       'menu_id': menuId,
       'menu_item_id': menuItemId,
       'amount': amountNum,
+      'persona_name': orderedByPersona
     })
     makeRequest('/customer/remove_menu_item', 'DELETE', body, undefined)
       .then(data => {
