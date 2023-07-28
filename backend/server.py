@@ -746,7 +746,8 @@ def customer_give_rating_flask():
 def kitchen_staff_get_order_list_flask():   
     # kitchen_id = request.args.get('kitchen_staff_id')
     menu_id = request.args.get('menu_id')
-    
+    kitchen_staff_id = request.args.get('kitchen_staff_id')
+
     output = []
     
     # invalid_id = { 'error': 'invalid kitchen_staff_id' } # error message
@@ -775,7 +776,7 @@ def kitchen_staff_get_order_list_flask():
         temp_dict = {}
         
         temp_list = []
-        if customer_order['status'] == 'kitchen':
+        if customer_order['status'] == 'kitchen' or (customer_order['status'] == 'cooking' and customer_order['kitchen_staff_id'] == kitchen_staff_id):
             for menu_item in customer_order['menu_items']:
                 temp_list_dict = {}
                 temp_list_dict.update({'food_id': menu_item['menu_item_id']})
@@ -793,6 +794,33 @@ def kitchen_staff_get_order_list_flask():
     
         
     return dumps(output)
+
+@APP.route("/kitchen_staff/mark_currently_cooking", methods=['POST'])
+def kitchen_staff_mark_currently_cooking_flask():
+    data = ast.literal_eval(request.get_json())
+    menu_id = data['menu_id']
+    session_id = data['session_id']
+    kitchen_staff_id = data['kitchen_staff_id']
+
+    success = {'success': 'Marked as currently cooking'}
+    fail = {'fail': 'could not change order status'}
+    invalid_id = { 'error': 'invalid menu_id' }
+
+    if menu_id not in orders:
+        return  dumps(invalid_id)
+
+    order_list = orders[menu_id]
+
+    for order in order_list:
+        if order['session_id'] == session_id and order['status'] == 'kitchen':
+            order['status'] = 'cooking'
+            order['kitchen_staff_id'] = kitchen_staff_id
+            
+    for customer_order in order: #check if it got changed
+        if customer_order['session_id'] == session_id and customer_order['status'] != 'cooking':
+            return dumps(fail)
+            
+    return dumps(success)
 
 @APP.route("/kitchen_staff/mark_order_complete", methods=['POST'])
 def kitchen_staff_mark_order_complete_flask():   
@@ -827,7 +855,7 @@ def kitchen_staff_mark_order_complete_flask():
     order = orders[menu_id] # grabbing the orders from the dictionary
     
     for customer_order in order:
-        if customer_order['session_id'] == session_id and customer_order['status'] == 'kitchen':
+        if customer_order['session_id'] == session_id and customer_order['status'] == 'cooking':
             customer_order['status'] = 'wait'
             
     for customer_order in order: #check if it got changed
