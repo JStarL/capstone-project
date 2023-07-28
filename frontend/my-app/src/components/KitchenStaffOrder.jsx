@@ -3,12 +3,81 @@ import './Components.css';
 import { Typography, Button, Snackbar, Alert } from '@mui/material';
 import { useNavigate, useParams } from 'react-router-dom';
 import { StyledButton } from '../pages/CustomerOrStaff';
+import CheckBoxOutlineBlankIcon from '@mui/icons-material/CheckBoxOutlineBlank';
+import RestaurantMenuIcon from '@mui/icons-material/RestaurantMenu';
+import CheckBoxIcon from '@mui/icons-material/CheckBox'
 import makeRequest from '../makeRequest';
 import DoneIcon from '@mui/icons-material/Done';
 
 function KitchenStaffOrder(props) {
-  const [cooking, setCooking] = React.useState(false);
+  const [status, setStatus] = React.useState('none');
+  const [timestamp, setTimestamp] = React.useState(0)
+  const [minutes, setMinutes] = React.useState(0)
+  const [seconds, setSeconds] = React.useState(0)
 
+  const convertToMinutesAndHours = (totalSeconds) => {
+    const hours = Math.floor(totalSeconds / 3600);
+    const remainingSeconds = totalSeconds % 3600;
+    const minutes = Math.floor(remainingSeconds / 60);
+    const seconds = remainingSeconds % 60;
+    setMinutes(minutes)
+    setSeconds(seconds)
+  };
+  
+
+  // const { minutes, seconds } = convertToMinutesAndSeconds(timestamp);
+
+  React.useEffect(() => {  
+    const timer = () => {
+      setTimestamp(prevTime => prevTime + 1); // Increment time instead of decrementing
+      // convertToMinutesAndSeconds(timestamp)
+    };
+  
+    // const checkTime = () => {
+    //   const now = new Date(Date.now());
+    //   const targetTime = new Date(isoTimeLastQuestionStarted);
+    //   const diff = now - targetTime;
+    //   if (diff >= timeLeft * 1000) {
+    //     setTimeFinished(true);
+    //   }
+    // };
+  
+    const timerFunction = setInterval(timer, 1000);
+    // convertToMinutesAndSeconds(timestamp)
+    // const checkTimeFunction = setInterval(checkTime, 1000);
+    convertToMinutesAndHours(timestamp)
+
+    return () => {
+      clearInterval(timerFunction);
+      // clearInterval(checkTimeFunction);
+    };
+  }, [timestamp]);
+
+  const handleClick = () => {
+    if (status === 'none') {
+      markCooking();
+    } else if (status === 'cooking'){
+      completeOrder();
+    }
+  };
+  
+  const markCooking = () => {
+    // console.log('order assisting');
+    // const body = JSON.stringify({
+    //   'menu_id': props.menuId,
+    //   'session_id': props.sessionId,
+    //   'table_id': props.tableId
+    // });
+    // makeRequest('/wait_staff/mark_currently_assisting', 'POST', body, undefined)
+    //   .then(data => {
+    //     console.log(data);
+    //     setStatus('assisting')
+    //     props.setNotificationTrigger(!props.notificationTrigger);
+    //   })
+    //   .catch(e => console.log('Error: ' + e));
+      setStatus('cooking')
+      props.setTrigger(!props.trigger);
+    };
   const completeOrder = () => {
     console.log('order completed');
     const body = JSON.stringify({
@@ -28,7 +97,7 @@ function KitchenStaffOrder(props) {
       <div className='kitchen-staff-order'>
         <div style={{ width: '60%' }} className='kitchen-staff-order-div'>
             <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '2em', marginTop: '30px' }}><b>Table Number: {props.tableId}</b></div>
-            <div>Time since order was placed: TIMESTAMP</div>
+            <div>Time since order was placed: <b>{minutes} minute(s) and {seconds} second(s)</b> ago</div>
           <div className='kitchen-staff-menu-items-container'>
             {props.menuItems?.map((menuItem) => (
               <div key={menuItem.food_name} className='kitchen-staff-menu-item'>
@@ -58,7 +127,7 @@ function KitchenStaffOrder(props) {
               </div>
             ))}
           </div>
-          <StyledButton startIcon={<DoneIcon />} variant='outlined' onClick={completeOrder} style={{ width: '45vw', marginBottom: '2vh' }}>Complete Order</StyledButton>
+          <StyledButton startIcon={status === 'none' ? <RestaurantMenuIcon /> : <DoneIcon />} variant='outlined' onClick={handleClick} style={{ width: '45vw', marginBottom: '2vh' }}>{status === 'none' ? 'Start Cooking' : 'Complete Order'}</StyledButton>
         </div>
       </div>
     </>

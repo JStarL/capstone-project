@@ -22,6 +22,7 @@ import SelectTableNumber from './pages/SelectTableNumber';
 import SearchRestaurant from './pages/SearchRestaurant';
 import CustomerViewOrderPage from './pages/CustomerViewOrderPage';
 import CustomerPayPage from './pages/CustomerPayPage';
+import CustomerRatePage from './pages/CustomerRatePage';
 import PersonalisePage from './pages/PersonalisePage';
 import { Typography } from '@mui/material';
 import Footer from './components/Footer'
@@ -188,6 +189,7 @@ function App() {
             <span className="link"><Link to='/'>Home</Link></span>
           </div>
           {tableNumber ? (<div className='links-container' style={{ marginLeft: 'auto', marginTop: '5px' }}>
+            <Typography style={{ color: 'white', marginRight: '50px' }} variant="overline" gutterBottom>Current Persona: {personas[currentlySelectedPersona][0]}</Typography>
             <Typography style={{ color: 'white' }} variant="overline" gutterBottom>Table Number: {tableNumber}</Typography>
             </div>)
           : null}
@@ -264,8 +266,9 @@ function App() {
             <Route path='/customer/:sessionId/:menuId/:tableNumber' element={<CustomerMenuPage personas={personas} currentlySelectedPersona={currentlySelectedPersona} setCurrentlySelectedPersona={setCurrentlySelectedPersona} currentlySelectedPersonaAllergies={currentlySelectedPersonaAllergies} setCurrentlySelectedPersonaAllergies={setCurrentlySelectedPersonaAllergies} setMenuId={setMenuId} setTableNumber={setTableNumber} setSessionId={setSessionId} />} />
             <Route path='/customer/:sessionId/:menuId/:categoryId/:tableNumber/:foodId' element={<FoodItemPage currentlySelectedPersona={currentlySelectedPersona}/>} />
             <Route path='/customer/:sessionId/:menuId/:tableNumber/personalise' element={<PersonalisePage personas={personas} handlePersonas={handlePersonas} setCurrentlySelectedPersonaApp={setCurrentlySelectedPersona} setCurrentlySelectedPersonaAllergies={setCurrentlySelectedPersonaAllergies}/>} />
-            <Route path='/customer/:sessionId/view_order/:menuId/:tableNumber' element={<CustomerViewOrderPage personas={personas} currentlySelectedPersona={currentlySelectedPersona}/>} />
+            <Route path='/customer/:sessionId/view_order/:menuId/:tableNumber' element={<CustomerViewOrderPage personas={personas}/>} />
             <Route path='/customer/:sessionId/view_order/:menuId/:tableNumber/pay' element={<CustomerPayPage personas={personas}/>} />
+            <Route path='/customer/:sessionId/view_order/:menuId/:tableNumber/rate' element={<CustomerRatePage personas={personas}/>} />
           </Routes>
         </main>
         <footer>
