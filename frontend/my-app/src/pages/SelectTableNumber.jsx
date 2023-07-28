@@ -22,7 +22,7 @@ function SelectTableNumber({ onSuccess }) {
 		})
 		makeRequest('/customer/menu/table', 'POST', body, undefined)
 			.then(data => {
-				localStorage.setItem('table_number', tableNumber)
+				// localStorage.setItem('table_number', tableNumber)
 				// forward user to select table number
 				onSuccess(tableNumber)
 				navigate(`/customer/${sessionId}/${menuId}/${tableNumber}`)
