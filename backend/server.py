@@ -961,7 +961,7 @@ def wait_staff_mark_notification_complete_flask():
 @APP.route("/wait_staff/get_assistance_notifications", methods=['GET'])
 def wait_staff_get_assistance_notifications_flask():
     menu_id = request.args.get('menu_id')    
-    empty = {"error": "Menu_id did not return anything or there are no notifications yet"}
+    # empty = {"error": "Menu_id did not return anything or there are no notifications yet"}
 
     if menu_id in notifications:
         notification_list = notifications[menu_id]
@@ -971,7 +971,7 @@ def wait_staff_get_assistance_notifications_flask():
                 output.append(notification)
         return dumps(output)
     else:
-        return dumps(empty)
+        return dumps([])
 
 @APP.route("/wait_staff/mark_currently_assisting", methods=['POST'])
 def wait_staff_mark_currently_assisting_flask():
