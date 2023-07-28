@@ -123,6 +123,7 @@ function CustomerMenuPage({ personas, currentlySelectedPersona, setCurrentlySele
               categoryId={currentSelectedCategoryId}
               fetchAllMenuData={fetchAllMenuData}
               fetchCategoryMenuItems={fetchCategoryMenuItems}
+              currentlySelectedPersona={currentlySelectedPersona}
             />
           ))}
         </div>
