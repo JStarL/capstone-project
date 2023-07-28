@@ -7,6 +7,7 @@ import WaitStaffOrder from '../components/WaitStaffOrder'
 import WaitStaffNotifications from '../components/WaitStaffNotifications';
 import PendingActionsIcon from '@mui/icons-material/PendingActions';
 import BackHandIcon from '@mui/icons-material/BackHand';
+
 function WaitStaffPage() {
   const [orderList, setOrderList] = React.useState([])
   const [notificationsList, setNotificationsList] = React.useState([])

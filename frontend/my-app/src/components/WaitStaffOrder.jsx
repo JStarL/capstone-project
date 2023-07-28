@@ -4,6 +4,7 @@ import { Typography, Button, Snackbar, Alert } from '@mui/material';
 import { useNavigate, useParams } from 'react-router-dom';
 import { StyledButton } from '../pages/CustomerOrStaff';
 import makeRequest from '../makeRequest';
+import DoneIcon from '@mui/icons-material/Done';
 
 function WaitStaffOrder(props) {
   const [cooking, setCooking] = React.useState(false);
@@ -57,7 +58,7 @@ function WaitStaffOrder(props) {
             </div>
           ))}
         </div>
-        <StyledButton variant='outlined' onClick={completeOrder} style={{ width: '45vw', marginBottom: '2vh' }}>Finished Serving</StyledButton>
+        <StyledButton startIcon={<DoneIcon />} variant='outlined' onClick={completeOrder} style={{ width: '45vw', marginBottom: '2vh' }}>Finished Serving</StyledButton>
       </div>
     </div>
     </>

@@ -4,6 +4,8 @@ import { Typography, Button, Snackbar, Alert } from '@mui/material';
 import { useNavigate, useParams } from 'react-router-dom';
 import { StyledButton } from '../pages/CustomerOrStaff';
 import makeRequest from '../makeRequest';
+import DoneIcon from '@mui/icons-material/Done';
+
 
 function WaitStaffNotifications(props) {
   const completeNotification = () => {
@@ -27,7 +29,7 @@ function WaitStaffNotifications(props) {
         <div style={{ width: '100%' }} className='wait-staff-order-div'>
           <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '2em', marginTop: '30px' }}><b>Table Number: {props.tableId}</b></div>
           <div>Time since assistance requested: TIMESTAMP</div>
-        <StyledButton variant='outlined' onClick={completeNotification} style={{ width: '30vw', marginTop: '2vh', marginBottom: '2vh' }}>Assistance Completed</StyledButton>
+        <StyledButton startIcon={<DoneIcon />} variant='outlined' onClick={completeNotification} style={{ width: '30vw', marginTop: '2vh', marginBottom: '2vh' }}>Assistance Completed</StyledButton>
       </div>
     </div>
     </>
