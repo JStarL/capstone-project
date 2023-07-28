@@ -24,6 +24,7 @@ import CustomerViewOrderPage from './pages/CustomerViewOrderPage';
 import CustomerPayPage from './pages/CustomerPayPage';
 import PersonalisePage from './pages/PersonalisePage';
 import { Typography } from '@mui/material';
+import Footer from './components/Footer'
 import BackHandIcon from '@mui/icons-material/BackHand';
 
 function App() {
@@ -36,17 +37,17 @@ function App() {
   const [currentlySelectedPersonaAllergies, setCurrentlySelectedPersonaAllergies] = React.useState([]);
 
   const [personas, setPersonas] = React.useState([['Default', [null]]])
-  React.useEffect(function () {
-    if (localStorage.getItem('staff_id')) {
-      setId(localStorage.getItem('staff_id'));
-    }
-    if (localStorage.getItem('staff_type')) {
-      setStaffType(localStorage.getItem('staff_type'));
-    }
-    if (localStorage.getItem('menu_id')) {
-      setStaffType(localStorage.getItem('menu_id'));
-    }
-  }, []);
+  // React.useEffect(function () {
+  //   if (localStorage.getItem('staff_id')) {
+  //     setId(localStorage.getItem('staff_id'));
+  //   }
+  //   if (localStorage.getItem('staff_type')) {
+  //     setStaffType(localStorage.getItem('staff_type'));
+  //   }
+  //   if (localStorage.getItem('menu_id')) {
+  //     setStaffType(localStorage.getItem('menu_id'));
+  //   }
+  // }, []);
 
   const [isCustomer, setIsCustomer] = React.useState(false);
   const [isManager, setIsManager] = React.useState(false);
@@ -62,8 +63,9 @@ function App() {
     const hasCustomerPath = /^\/customer\/\d+\/\d+\/\d+$/.test(pathname);
     const isPersonalisePage = /^\/customer\/\d+\/\d+\/\d+\/personalise$/.test(pathname);
     const isViewOrderPage = /^\/customer\/\d+\/view_order\/\d+\/\d+$/.test(pathname);
+    const isFoodItemPage = /^\/customer\/\d+\/\d+\/\d+\/\w+$/.test(pathname);
 
-    setIsCustomer(hasCustomerPath || isPersonalisePage || isViewOrderPage);
+    setIsCustomer(hasCustomerPath || isPersonalisePage || isViewOrderPage || isFoodItemPage);
   }, [location]);
 
   React.useEffect(() => {
@@ -102,18 +104,18 @@ function App() {
     setSessionId(session_id)
   }
 
-  const requestAssistance = () => {
-    const body = JSON.stringify({
-      table_id: tableNumber,
-      session_id: sessionId,
-      menu_id: menuId,
-    });
-    makeRequest('/customer/request_assistance', 'POST', body, undefined)
-      .then(data => {
-        console.log(data);
-      })
-      .catch(e => console.log('Error: ' + e));
-  }
+  // const requestAssistance = () => {
+  //   const body = JSON.stringify({
+  //     table_id: tableNumber,
+  //     session_id: sessionId,
+  //     menu_id: menuId,
+  //   });
+  //   makeRequest('/customer/request_assistance', 'POST', body, undefined)
+  //     .then(data => {
+  //       console.log(data);
+  //     })
+  //     .catch(e => console.log('Error: ' + e));
+  // }
   const reset = (staff_type, session_id, menu_id, table_number) => {
     setStaffType(staff_type)
     setSessionId(session_id)
@@ -133,7 +135,7 @@ function App() {
     setId(staff_id);
     setStaffType(staff_type);
     setMenuId(menu_id)
-    localStorage.setItem('staff_id', staff_id);
+    // localStorage.setItem('staff_id', staff_id);
   }
 
   const logout = () => {
@@ -147,10 +149,12 @@ function App() {
       .catch(e => console.log('Error: ' + e))
     setId(null);
     setStaffType(null);
-    localStorage.removeItem('staff_id');
-    localStorage.removeItem('manager_id');
-    localStorage.removeItem('menu_id');
-    localStorage.removeItem('staff_type');
+    setIsCustomer(false);
+    setIsStaff(false)
+    // localStorage.removeItem('staff_id');
+    // localStorage.removeItem('manager_id');
+    // localStorage.removeItem('menu_id');
+    // localStorage.removeItem('staff_type');
     localStorage.clear()
   }
 
@@ -192,47 +196,47 @@ function App() {
     )
   }
 
-  const Footer = () => {
-    if (isManager) {
-      return (
-        <div className="footer-container">
-          <StyledButton startIcon={<PersonAddAlt1SharpIcon />}>
-            <Link to={`/manager/addstaff/${menuId}/${id}`} className="toNavy">Add Staff</Link>
-          </StyledButton>
-          <StyledButton startIcon={<RestaurantMenuIcon />}>
-            <Link to={`/manager/menu/${menuId}`} className="toNavy">Go to Menu</Link>
-          </StyledButton>
-        </div>
-      );
-    } else if (isCustomer) {
-      return (
-        <div className="footer-container">
-          <StyledButton startIcon={<ShoppingCartIcon />}>
-            <Link to={`/customer/${sessionId}/view_order/${menuId}/${tableNumber}`} className="toNavy">View Cart</Link>
-          </StyledButton>
-          <StyledButton startIcon={<RestaurantMenuIcon />}>
-            <Link to={`/customer/${sessionId}/${menuId}/${tableNumber}`} className="toNavy">Go to Menu</Link>
-          </StyledButton>
-          <StyledButton startIcon={<SettingsIcon />}>
-            <Link to={`/customer/${sessionId}/${menuId}/${tableNumber}/personalise`} className="toNavy">Personalise</Link>
-          </StyledButton>
-          <StyledButton onClick={requestAssistance} startIcon={<BackHandIcon />} className="toNavy" >
-            Request Assistance
-          </StyledButton>
-        </div>
-      );
-    } else {
-      return null; // Render nothing if menuId or tableNumber is missing
-    }
-  };
+  // const Footer = () => {
+  //   if (isManager) {
+  //     return (
+  //       <div className="footer-container">
+  //         <StyledButton startIcon={<PersonAddAlt1SharpIcon />}>
+  //           <Link to={`/manager/addstaff/${menuId}/${id}`} className="toNavy">Add Staff</Link>
+  //         </StyledButton>
+  //         <StyledButton startIcon={<RestaurantMenuIcon />}>
+  //           <Link to={`/manager/menu/${menuId}`} className="toNavy">Go to Menu</Link>
+  //         </StyledButton>
+  //       </div>
+  //     );
+  //   } else if (isCustomer) {
+  //     return (
+  //       <div className="footer-container">
+  //         <StyledButton startIcon={<ShoppingCartIcon />}>
+  //           <Link to={`/customer/${sessionId}/view_order/${menuId}/${tableNumber}`} className="toNavy">View Cart</Link>
+  //         </StyledButton>
+  //         <StyledButton startIcon={<RestaurantMenuIcon />}>
+  //           <Link to={`/customer/${sessionId}/${menuId}/${tableNumber}`} className="toNavy">Go to Menu</Link>
+  //         </StyledButton>
+  //         <StyledButton startIcon={<SettingsIcon />}>
+  //           <Link to={`/customer/${sessionId}/${menuId}/${tableNumber}/personalise`} className="toNavy">Personalise</Link>
+  //         </StyledButton>
+  //         <StyledButton onClick={requestAssistance} startIcon={<BackHandIcon />} className="toNavy" >
+  //           Request Assistance
+  //         </StyledButton>
+  //       </div>
+  //     );
+  //   } else {
+  //     return null; // Render nothing if menuId or tableNumber is missing
+  //   }
+  // };
 
 
 
-  React.useEffect(function () {
-    if (localStorage.getItem('staff_id')) {
-      setId(localStorage.getItem('staff_id'));
-    }
-  }, []);
+  // React.useEffect(function () {
+  //   if (localStorage.getItem('staff_id')) {
+  //     setId(localStorage.getItem('staff_id'));
+  //   }
+  // }, []);
 
   return (
     <div className="App">
@@ -249,7 +253,7 @@ function App() {
             <Route path='/login' element={<ManagerLoginPage onSuccess={login} />} />
             <Route path='/register' element={<RegisterPage onSuccess={login} />} />
             <Route path='/manager/addstaff/:menuId/:managerId' element={<AddStaffPage />} />
-            <Route path='/manager/menu/:menuId' element={<ManagerMenuPage />} />
+            <Route path='/manager/menu/:menuId/:managerId' element={<ManagerMenuPage />} />
             <Route path='/manager/addnewmenuitem/:menuId/:categoryName/:categoryId' element={<NewMenuItemPage />} />
 
             <Route path='/kitchen_staff/:menuId/:staffId' element={<KitchenStaffPage />} />
@@ -260,12 +264,12 @@ function App() {
             <Route path='/customer/:sessionId/:menuId/:tableNumber' element={<CustomerMenuPage personas={personas} currentlySelectedPersona={currentlySelectedPersona} setCurrentlySelectedPersona={setCurrentlySelectedPersona} currentlySelectedPersonaAllergies={currentlySelectedPersonaAllergies} setCurrentlySelectedPersonaAllergies={setCurrentlySelectedPersonaAllergies} />} />
             <Route path='/customer/:sessionId/:menuId/:categoryId/:foodId' element={<FoodItemPage currentlySelectedPersona={currentlySelectedPersona}/>} />
             <Route path='/customer/:sessionId/:menuId/:tableNumber/personalise' element={<PersonalisePage personas={personas} handlePersonas={handlePersonas} setCurrentlySelectedPersonaApp={setCurrentlySelectedPersona} setCurrentlySelectedPersonaAllergies={setCurrentlySelectedPersonaAllergies}/>} />
-            <Route path='/customer/:sessionId/view_order/:menuId/:tableNumber' element={<CustomerViewOrderPage />} />
-            <Route path='/customer/:sessionId/view_order/:menuId/:tableNumber/pay' element={<CustomerPayPage />} />
+            <Route path='/customer/:sessionId/view_order/:menuId/:tableNumber' element={<CustomerViewOrderPage personas={personas}/>} />
+            <Route path='/customer/:sessionId/view_order/:menuId/:tableNumber/pay' element={<CustomerPayPage personas={personas}/>} />
           </Routes>
         </main>
         <footer>
-          <Footer />
+          <Footer tableNumber={tableNumber} sessionId={sessionId} menuId={menuId} id={id} isManager={isManager} isCustomer={isCustomer}/>
         </footer>
 
       {/* </BrowserRouter> */}

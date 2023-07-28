@@ -14,6 +14,7 @@ function OrderItem (props) {
   const [image, setImage] = React.useState(props.foodImage)
   const [price, setPrice] = React.useState(props.foodPrice)
   const [menuItemId, setMenuItemId] = React.useState(props.menu_item_id)
+  const [orderedByPersona, setOrderedByPersona] = React.useState(props.orderedByPersona)
 
   const params = useParams();
   const menuId = params.menuId;
@@ -27,8 +28,9 @@ function OrderItem (props) {
     setImage(props.foodImage)
     setPrice(props.foodPrice)
     setMenuItemId(props.menu_item_id)
+    setOrderedByPersona(props.orderedByPersona)
     console.log(props.foodName)
-  }, [props.amount, props.foodDescription, props.foodName, props.foodImage, props.foodPrice, props.menu_item_id]);
+  }, [props.amount, props.foodDescription, props.foodName, props.foodImage, props.foodPrice, props.menu_item_id, props.orderedByPersona]);
 
   const handleAmountChange = (e) => {
     const newAmount = e.target.value;
@@ -89,8 +91,9 @@ function OrderItem (props) {
     </div>
     <div className='food-item-middle' style={{ padding: '10px' }}>
       <div className='div-section'><b>{name}</b></div>
-      <div className='div-section'>{description}</div>
-      <div className='div-section'>Price: ${price}</div>
+      <div className='div-section'><i>{description}</i></div>
+      <div className='div-section'><b>Ordered By: </b>{props.personas[orderedByPersona][0]}{console.log(props.personas)}</div>
+      <div className='div-section'><b>Price:</b> ${price}</div>
     </div>
     <div className='food-item-end' style={{ flexDirection: 'column', alignItems:'center', justifyContent:'center'}}>
       <StyledButton onClick={() => removeFromOrder(amount)}style={{ width: '50%', marginTop: '25%', marginBottom: '5px', marginRight: '10px' }}><DeleteIcon /></StyledButton>
