@@ -505,7 +505,7 @@ def customer_add_menu_item_flask():
     order_list = [order for order in orders_list if order["session_id"] == session_id]
     
     if len(order_list) > 0:
-        menu_item_list = [menu_item for menu_item in order_list[0]['menu_items'] if menu_item['menu_item_id'] == menu_item_id]
+        menu_item_list = [menu_item for menu_item in order_list[0]['menu_items'] if menu_item['menu_item_id'] == menu_item_id and menu_item['persona'] == persona]
         
         if len(menu_item_list) > 0:
             menu_item_list[0]['amount'] += amount
