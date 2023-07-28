@@ -18,12 +18,9 @@ function WaitStaffPage() {
   const menuId = params.menuId;
   const staffId = params.staffId;
 
-  console.log(typeof (staffId));
-
   React.useEffect(() => {
     async function fetchData() {
       await getOrderList();
-      console.log('orders refresh')
     }
     fetchData();
 
@@ -39,7 +36,6 @@ function WaitStaffPage() {
   React.useEffect(() => {
     async function fetchData() {
       await getNotificationList();
-      console.log('notifications refresh')
     }
     fetchData();
 
@@ -54,17 +50,15 @@ function WaitStaffPage() {
   }, [notificationTrigger])
 
   async function getOrderList() {
-    const url = `/wait_staff/get_order_list?menu_id=${menuId}`;
+    const url = `/wait_staff/get_order_list?menu_id=${menuId}&wait_staff_id=${staffId}`;
     const data = await makeRequest(url, 'GET', undefined, undefined);
     setOrderList(data);
-    console.log(data);
   }
 
   async function getNotificationList() {
-    const url = `/wait_staff/get_assistance_notifications?menu_id=${menuId}`;
+    const url = `/wait_staff/get_assistance_notifications?menu_id=${menuId}&wait_staff_id=${staffId}`;
     const data = await makeRequest(url, 'GET', undefined, undefined);
     setNotificationsList(data);
-    console.log(data);
   }
 
   return (
@@ -81,14 +75,18 @@ function WaitStaffPage() {
                 borderRadius: '10px',
                 padding: '1vw',
                 width: 'auto',
+                marginLeft: '10px',
                 textAlign: 'center', // Center the text horizontally
-              }} variant="h6" gutterBottom>No Pending orders at the moment</Typography>
+              }} variant="overline" gutterBottom>No Pending orders at the moment</Typography>
             </div>
           ) : (
             orderList.map((order, index) => (
               <WaitStaffOrder
                 key={index}
+                timestamp={order.timestamp}
+                status={order.status}
                 menuId={menuId}
+                staffId={staffId}
                 tableId={order.table_id}
                 menuItems={order.menu_items}
                 sessionId={order.session_id}
@@ -108,14 +106,18 @@ function WaitStaffPage() {
                 borderRadius: '10px',
                 padding: '1vw',
                 width: 'auto',
+                marginLeft: '10px',
                 textAlign: 'center', // Center the text horizontally
-              }} variant="h6" gutterBottom>No customers need assistance at the moment</Typography>
+              }} variant="overline" gutterBottom>No customers need assistance at the moment</Typography>
             </div>
           ) : (
             notificationsList.map((notification, index) => (
               <WaitStaffNotifications
                 key={index}
                 menuId={menuId}
+                status={notification.status}
+                timestamp={notification.timestamp}
+                staffId={staffId}
                 tableId={notification.table_id}
                 sessionId={notification.session_id}
                 notificationTrigger={notificationTrigger}

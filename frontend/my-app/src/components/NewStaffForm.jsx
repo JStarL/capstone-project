@@ -46,7 +46,7 @@ function NewStaffForm({ onSuccess }) {
 					setName('')
 					setEmail('')
 					setPassword('')
-					setStaffType('kitchen')
+					setStaffType('')
 					// navigate(`/manager/menu/${menuId}`)
 				}
 			})
