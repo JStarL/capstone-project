@@ -22,6 +22,10 @@ function ManagerMenuPage() {
   const managerId = params.managerId;
   const menuId = params.menuId;
 
+  // React.useEffect(() => {
+  //   setMenuId(menuId)
+  // }, []);
+
   React.useEffect(() => {
     const fetchData = async () => {
       const data = await fetchAllMenuData();

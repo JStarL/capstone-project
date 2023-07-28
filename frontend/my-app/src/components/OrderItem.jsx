@@ -68,7 +68,7 @@ function OrderItem (props) {
       'menu_item_id': menuItemId,
       'amount': amountNum,
       'title': name,
-      'persona_name': currentlySelectedPersona
+      'persona_name': orderedByPersona
     })
     makeRequest('/customer/add_menu_item', 'POST', body, undefined)
       .then(data => {
@@ -84,7 +84,7 @@ function OrderItem (props) {
       'menu_id': menuId,
       'menu_item_id': menuItemId,
       'amount': amountNum,
-      'persona_name': currentlySelectedPersona
+      'persona': orderedByPersona
     })
     makeRequest('/customer/remove_menu_item', 'DELETE', body, undefined)
       .then(data => {
