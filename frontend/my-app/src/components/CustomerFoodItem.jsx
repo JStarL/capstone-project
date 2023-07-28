@@ -53,8 +53,8 @@ function CustomerFoodItem(props) {
           <div className='div-section'>
             <b>{props.originalFoodName}</b>
           </div>
-          <div className='div-section'>{props.originalFoodDescription}</div>
-          <div className='div-section'>Price: $ {props.originalPrice}</div>
+          <div className='div-section'><i>{props.originalFoodDescription}</i></div>
+          <div className='div-section'><b>Price:</b> ${props.originalPrice}</div>
         </div>
         <div className='food-item-button'>
           <StyledButton
