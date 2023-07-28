@@ -6,6 +6,7 @@ import psycopg2
 
 import sys
 import ast
+from datetime import datetime
 
 
 from manager import manager_view_menu, manager_view_category, manager_view_menu_item, manager_add_category, manager_delete_category, manager_add_menu_item, manager_delete_menu_item, manager_update_category, manager_update_menu_item, manager_update_category_ordering, manager_update_menu_item_ordering
@@ -661,6 +662,7 @@ def customer_finalise_order_flask():
             return { 'error': 'Already sent to kitchen'}
         else:
             order_list[0]['status'] = 'kitchen'
+            order_list[0]['timestamp'] = datetime.now().strftime("%d %B %Y, %H:%M:%S")
             
         # for menu_item in order_list[0]['menu_items']:
         #     for menu_item_cur in menu_items_list:
@@ -788,6 +790,7 @@ def kitchen_staff_get_order_list_flask():
                 temp_dict.update({'session_id': customer_order['session_id']})
                 temp_dict.update({'table_id': customer_order['table_id']})
                 temp_dict.update({'status': customer_order['status']})
+                temp_dict.update({'timestamp': customer_order['timestamp']})
                 temp_dict.update({'menu_items': temp_list})
                 output.append(temp_dict)
     
@@ -856,6 +859,7 @@ def kitchen_staff_mark_order_complete_flask():
     for customer_order in order:
         if customer_order['session_id'] == session_id and customer_order['status'] == 'cooking':
             customer_order['status'] = 'wait'
+            customer_order['timestamp'] = datetime.now().strftime("%d %B %Y, %H:%M:%S")
             
     for customer_order in order: #check if it got changed
         if customer_order['session_id'] == session_id and customer_order['status'] != 'wait':
@@ -914,6 +918,7 @@ def wait_staff_get_order_list_flask():
                 temp_dict.update({'session_id': order['session_id']})
                 temp_dict.update({'table_id': order['table_id']})
                 temp_dict.update({'status': order['status']})
+                temp_dict.update({'timestamp': order['timestamp']})
                 temp_dict.update({'menu_items': temp_list})
                 output.append(temp_dict)
     
