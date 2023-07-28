@@ -31,14 +31,14 @@ function KitchenStaffPage() {
     fetchData();
 
     // Setup an interval to call fetchData every 3 seconds
-    // const interval = setInterval(() => {
-    //   fetchData();
-    // }, 3000);
+    const interval = setInterval(() => {
+      fetchData();
+    }, 3000);
 
-    // // Clear the interval when the component unmounts
-    // return () => {
-    //   clearInterval(interval);
-    // };
+    // Clear the interval when the component unmounts
+    return () => {
+      clearInterval(interval);
+    };
   }, [trigger]);
 
   async function getOrderList() {
@@ -52,8 +52,9 @@ function KitchenStaffPage() {
       {/* <Typography className='h4' variant="h4" gutterBottom>Kitchen Staff - Pending Orders</Typography> */}
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '1em'}}>
         <PendingActionsIcon style={{fontSize: '2rem', margin: '10px'}} /><Typography fontSize='1.5em' variant="overline"><b>Pending Orders</b></Typography></div>
-      {orderList?.map((order) => (
+      {orderList?.map((order, index) => (
         <KitchenStaffOrder
+          key={index}
           tableId={order.table_id}
           menuItems={order.menu_items}
           sessionId={order.session_id}

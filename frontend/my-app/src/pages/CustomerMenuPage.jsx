@@ -3,10 +3,10 @@ import '../App.css';
 import CustomerFoodItem from '../components/CustomerFoodItem';
 import CategoryCustomer from '../components/CategoryCustomer';
 import makeRequest from '../makeRequest';
-import { Typography, Select, MenuItem, FormControl, InputLabel } from '@mui/material';
+import { Typography, Select, MenuItem, FormControl, InputLabel, useThemeProps } from '@mui/material';
 import { useParams } from 'react-router-dom';
 
-function CustomerMenuPage({ personas, currentlySelectedPersona, setCurrentlySelectedPersona, currentlySelectedPersonaAllergies, setCurrentlySelectedPersonaAllergies }) {
+function CustomerMenuPage({ personas, currentlySelectedPersona, setCurrentlySelectedPersona, currentlySelectedPersonaAllergies, setCurrentlySelectedPersonaAllergies, setMenuId, setSessionId, setTableNumber }) {
   const [categories, setCategories] = React.useState([]);
   const [currentSelectedCategory, setCurrentSelectedCategory] = React.useState('Best Selling');
   const [currentSelectedCategoryId, setCurrentSelectedCategoryId] = React.useState(-1);
@@ -18,6 +18,13 @@ function CustomerMenuPage({ personas, currentlySelectedPersona, setCurrentlySele
   const params = useParams()
   const sessionId = params.sessionId
   const menuId = params.menuId
+  const tableNumber = params.tableNumber
+
+  React.useEffect(() => {
+    setMenuId(menuId)
+    setSessionId(sessionId)
+    setTableNumber(tableNumber)
+  }, []);
 
   React.useEffect(() => {
     const fetchData = async () => {
@@ -73,19 +80,19 @@ function CustomerMenuPage({ personas, currentlySelectedPersona, setCurrentlySele
     <>
       <div style={{ display: 'flex', flexDirection: 'row' }}>
         <div style={{ width: '25%', backgroundColor: 'white', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-          {categories.map((category) => (
-            <CategoryCustomer
-              categoryName={category[Object.keys(category)[0]][0].toString()}
-              key={Object.keys(category)[0]} // category id
-              id={Object.keys(category)[0]}
-              setCurrentSelectedCategory={setCurrentSelectedCategory}
-              currentSelectedCategoryId={currentSelectedCategoryId}
-              fetchAllMenuData={fetchAllMenuData}
-              setCurrentSelectedCategoryId={setCurrentSelectedCategoryId}
-              setMenuItems={setMenuItems}
-              fetchCategoryMenuItems={fetchCategoryMenuItems}
-            />
-          ))}
+        {categories.map((category, index) => (
+          <CategoryCustomer
+            categoryName={category[Object.keys(category)[0]][0].toString()}
+            key={index} // Using index as the key since it is guaranteed to be unique
+            id={Object.keys(category)[0]}
+            setCurrentSelectedCategory={setCurrentSelectedCategory}
+            currentSelectedCategoryId={currentSelectedCategoryId}
+            fetchAllMenuData={fetchAllMenuData}
+            setCurrentSelectedCategoryId={setCurrentSelectedCategoryId}
+            setMenuItems={setMenuItems}
+            fetchCategoryMenuItems={fetchCategoryMenuItems}
+          />
+        ))}
         </div>
         <div style={{ width: '75%', height: '100%' }}>
           <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100%' }}>
@@ -112,8 +119,9 @@ function CustomerMenuPage({ personas, currentlySelectedPersona, setCurrentlySele
             </div>
           </div>
 
-          {menuItems?.map((menuItem) => (
+          {menuItems && menuItems.length > 0 && menuItems.map((menuItem, index) => (
             <CustomerFoodItem
+              key={index}
               originalFoodName={menuItem.food_name}
               originalFoodDescription={menuItem.food_description}
               originalPrice={menuItem.food_price.toString()}

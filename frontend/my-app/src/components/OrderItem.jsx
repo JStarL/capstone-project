@@ -15,7 +15,7 @@ function OrderItem (props) {
   const [price, setPrice] = React.useState(props.foodPrice)
   const [menuItemId, setMenuItemId] = React.useState(props.menu_item_id)
   const [orderedByPersona, setOrderedByPersona] = React.useState(props.orderedByPersona)
-
+  const [currentlySelectedPersona, setCurrentlySelectedPersona] = React.useState(props.currentlySelectedPersona)
   const params = useParams();
   const menuId = params.menuId;
   const sessionId = params.sessionId;
@@ -29,10 +29,12 @@ function OrderItem (props) {
     setPrice(props.foodPrice)
     setMenuItemId(props.menu_item_id)
     setOrderedByPersona(props.orderedByPersona)
+    setCurrentlySelectedPersona(props.currentlySelectedPersona)
     console.log(props.foodName)
-  }, [props.amount, props.foodDescription, props.foodName, props.foodImage, props.foodPrice, props.menu_item_id, props.orderedByPersona]);
+  }, [props.amount, props.foodDescription, props.foodName, props.foodImage, props.foodPrice, props.menu_item_id, props.orderedByPersona, props.currentlySelectedPersona]);
 
   const handleAmountChange = (e) => {
+    
     const newAmount = e.target.value;
     console.log(e.target.value)
     console.log(prevAmount)
@@ -49,7 +51,14 @@ function OrderItem (props) {
         return;
       }
     }
-    setPrevAmount(newAmount);
+    
+    if (currentlySelectedPersona !== orderedByPersona) {
+      console.log('dont change the amount')
+      setAmount(prevAmount)
+    } else {
+      setPrevAmount(newAmount);
+    } 
+    return 
   };
 
   function addToOrder(amountNum) {
@@ -58,7 +67,8 @@ function OrderItem (props) {
       'menu_id': menuId,
       'menu_item_id': menuItemId,
       'amount': amountNum,
-      'title': name
+      'title': name,
+      'persona_name': orderedByPersona
     })
     makeRequest('/customer/add_menu_item', 'POST', body, undefined)
       .then(data => {
@@ -74,6 +84,7 @@ function OrderItem (props) {
       'menu_id': menuId,
       'menu_item_id': menuItemId,
       'amount': amountNum,
+      'persona': orderedByPersona
     })
     makeRequest('/customer/remove_menu_item', 'DELETE', body, undefined)
       .then(data => {

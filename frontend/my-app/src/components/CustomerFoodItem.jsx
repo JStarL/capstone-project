@@ -10,9 +10,11 @@ function CustomerFoodItem(props) {
   const params = useParams();
   const sessionId = params.sessionId
   const menuId = params.menuId;
+  const tableNumber = params.tableNumber
   const [isSnackbarOpen, setSnackbarOpen] = React.useState(false);
 
   function addToOrder() {
+    console.log(props.currentlySelectedPersona)
     const body = JSON.stringify({
       session_id: sessionId,
       menu_id: menuId,
@@ -60,7 +62,7 @@ function CustomerFoodItem(props) {
           <StyledButton
             variant='outlined'
             style={{ margin: '10px' }}
-            onClick={() => navigate(`/customer/${sessionId}/${menuId}/${props.categoryId}/${props.foodId}`)}
+            onClick={() => navigate(`/customer/${sessionId}/${menuId}/${props.categoryId}/${tableNumber}/${props.foodId}`)}
           >
             Find out more
           </StyledButton>
