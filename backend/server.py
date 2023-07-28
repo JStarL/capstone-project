@@ -736,6 +736,8 @@ def customer_give_rating_flask():
 
     return_val = customer_give_rating(cur, menu_item_id, rating, amount)
 
+    db_conn.commit()
+
     return dumps(return_val)
 
 # Kitchen Staff functions
