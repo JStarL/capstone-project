@@ -53,7 +53,7 @@ create table menu_items (
     points              integer default 0,
     total_ratings       integer default 0,
     num_ratings         integer default 0,
-    avg_rating          real default 0.0,
+    avg_rating          float default 0.0,
 
     primary key (id),
     foreign key (category_id) references categories(id) on delete cascade,
