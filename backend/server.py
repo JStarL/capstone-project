@@ -872,7 +872,8 @@ def kitchen_staff_mark_order_complete_flask():
 def wait_staff_get_order_list_flask():   
     # wait_id = request.args.get('wait_staff_id')
     menu_id = request.args.get('menu_id')
-    
+    wait_staff_id = request.args.get('wait_staff_id')
+
     output = []
 
     # invalid_id = { 'error': 'invalid wait_staff_id' } # error message
@@ -895,14 +896,14 @@ def wait_staff_get_order_list_flask():
     if menu_id not in orders:
         return dumps(output)
 
-    order = orders[menu_id] # grabbing the orders from the dictionary
+    order_list = orders[menu_id] # grabbing the orders from the dictionary
     
-    for customer_order in order:
+    for order in order_list:
         temp_dict = {}
         
         temp_list = []
-        if customer_order['status'] == 'wait':
-            for menu_item in customer_order['menu_items']:
+        if order['status'] == 'wait' or (order['status'] == 'serving' and order['wait_staff_id'] == wait_staff_id):
+            for menu_item in order['menu_items']:
                 temp_list_dict = {}
                 temp_list_dict.update({'food_id': menu_item['menu_item_id']})
                 temp_list_dict.update({'food_name': menu_item['title']})
@@ -911,14 +912,42 @@ def wait_staff_get_order_list_flask():
                 temp_list.append(temp_list_dict)
                     
             if len(temp_list) != 0:
-                temp_dict.update({'session_id': customer_order['session_id']})
-                temp_dict.update({'table_id': customer_order['table_id']})
-                temp_dict.update({'status': customer_order['status']})
+                temp_dict.update({'session_id': order['session_id']})
+                temp_dict.update({'table_id': order['table_id']})
+                temp_dict.update({'status': order['status']})
                 temp_dict.update({'menu_items': temp_list})
                 output.append(temp_dict)
     
         
     return dumps(output)
+
+@APP.route("/wait_staff/mark_currently_serving", methods=['POST'])
+def wait_staff_mark_currently_serving_flask():
+    data = ast.literal_eval(request.get_json())
+
+    menu_id = data['menu_id']
+    session_id = data['session_id']
+    wait_staff_id = data['wait_staff_id']
+
+    invalid_id = { 'error': 'invalid menu_id, or there are no orders' } # error message
+    success = {'success': 'Order marked as currently serving'}
+    fail = {'fail': 'could not mark order as being served'}
+
+    if menu_id not in orders:
+        return  dumps(invalid_id)
+
+    order_list = orders[menu_id]
+
+    for order in order_list:
+        if order['session_id'] == session_id and order['status'] == 'wait':
+            order['status'] = 'serving'
+            order['wait_staff_id'] = wait_staff_id
+
+    for order in order_list: # check if it got updated
+        if order['session_id'] == session_id and order['status'] != 'serving':
+            return dumps(fail)
+    
+    return dumps(success)
 
 
 @APP.route("/wait_staff/mark_order_complete", methods=['DELETE'])
@@ -927,6 +956,7 @@ def wait_staff_mark_order_complete_flask():
     # wait_id = data['wait_staff_id']
     # cur = cur_dict['staff'][wait_id]
     menu_id = data['menu_id']
+    session_id = data['session_id']
 
 
     invalid_id = { 'error': 'invalid menu_id, or there are no orders' } # error message
@@ -954,11 +984,11 @@ def wait_staff_mark_order_complete_flask():
     customer_orders = orders[menu_id] # grabbing the orders from the dictionary
     
     for customer_order in customer_orders:
-        if customer_order['session_id'] == data['session_id'] and customer_order['status'] == 'wait':
+        if customer_order['session_id'] == session_id and customer_order['status'] == 'serving':
             customer_orders.remove(customer_order) # once marked as completed, remove it from the dictionary of orders
             
-    for customer_order in customer_orders: #check if it got removed
-        if customer_order['session_id'] == data['session_id'] and customer_order['status'] == 'wait':
+    for customer_order in customer_orders: # check if it got removed
+        if customer_order['session_id'] == session_id and customer_order['status'] == 'serving':
             return dumps(fail)
     
     return dumps(success)
