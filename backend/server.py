@@ -707,7 +707,8 @@ def customer_request_assistance_flask():
     notifications[menu_id].append( {
         "session_id": session_id,
         "table_id": table_id,
-        "status": 'customer'
+        "status": 'customer',
+        "timestamp": datetime.now().strftime("%d %B %Y, %H:%M:%S")
     } )
         
     for notice in notifications[menu_id]: #just to check if the notifcation has been added to the dictionary
