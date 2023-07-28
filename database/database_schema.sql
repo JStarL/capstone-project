@@ -94,10 +94,15 @@ begin
     where id = new.id;
 
     -- update avg rating (as a percentage)
-    update menu_items
-    set avg_rating = new.total_ratings::float * 20 / num_ratings
-    where id = new.id;
-
+    if (_current_total > 0) then
+        update menu_items
+        set avg_rating = new.total_ratings::float * 20 / num_ratings
+        where id = new.id;
+    else
+        update menu_items
+        set avg_rating = 0.0
+        where id = new.id;
+    end if;
 
     -- calculate points_percentage
     select sum(points) into _total_points
