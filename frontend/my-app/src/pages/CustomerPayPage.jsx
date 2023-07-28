@@ -97,7 +97,7 @@ function CustomerPayPage(props) {
 					<>
 						{Object.entries(personaPrices).map(([persona, price]) => (
 							<Typography key={persona} sx={{ m: 3 }} variant="h5" gutterBottom>
-								<b>{props.personas[persona][0]}:</b> ${price}
+								<b>{persona}:</b> ${price}
 							</Typography>
 						))}
 					</>
