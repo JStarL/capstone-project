@@ -706,7 +706,6 @@ def customer_request_assistance_flask():
         "session_id": session_id,
         "table_id": table_id,
         "status": 'customer'
-        #message: 'Where can I pay the bill?' not sure to add in yet
     } )
         
     for notice in notifications[menu_id]: #just to check if the notifcation has been added to the dictionary
@@ -1030,7 +1029,7 @@ def wait_staff_mark_notification_complete_flask():
         if notif['session_id'] == session_id and notif['table_id'] == table_id:
             notifications_list.remove(notif) # once marked as completed, remove it from the list of notifications
             
-    for notif in notifications_list: #check if it got removed
+    for notif in notifications_list: # check if it got removed
         if notif['session_id'] == session_id and notif['table_id'] == table_id:
             return dumps(fail)
     
@@ -1039,13 +1038,13 @@ def wait_staff_mark_notification_complete_flask():
 @APP.route("/wait_staff/get_assistance_notifications", methods=['GET'])
 def wait_staff_get_assistance_notifications_flask():
     menu_id = request.args.get('menu_id')    
-    # empty = {"error": "Menu_id did not return anything or there are no notifications yet"}
+    wait_staff_id = request.args.get('wait_staff_id')
 
     if menu_id in notifications:
         notification_list = notifications[menu_id]
         output = []
         for notification in notification_list:
-            if notification['status'] == 'customer':
+            if notification['status'] == 'customer' or (notification['status'] == 'wait' and notification['wait_staff_id'] == wait_staff_id):
                 output.append(notification)
         return dumps(output)
     else:
@@ -1057,6 +1056,7 @@ def wait_staff_mark_currently_assisting_flask():
     session_id = data['session_id']
     menu_id = data['menu_id']
     table_id = data['table_id']
+    wait_staff_id = data['wait_staff_id']
     
     invalid_menu_id = { 'error': 'invalid menu_id' }
     not_found = { 'error': 'notification not found' }
@@ -1068,6 +1068,7 @@ def wait_staff_mark_currently_assisting_flask():
     for notification in notifications[menu_id]:
         if notification['table_id'] == table_id and notification['session_id'] == session_id:
             notification['status'] = 'wait'
+            notification['wait_staff_id'] = wait_staff_id
             return dumps(success)
 
     return dumps(not_found)
