@@ -97,7 +97,7 @@ function CustomerMenuPage({ personas, currentlySelectedPersona, setCurrentlySele
         <div style={{ width: '75%', height: '100%' }}>
           <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100%' }}>
             <div style={{ width: '85%' }}>
-              <Typography className='h4' variant="h4" gutterBottom>Customer Menu Page - {currentSelectedCategory}</Typography>
+              <Typography className='h4' variant="overline" style={{fontSize: '2rem', margin: '10px'}} gutterBottom><b>{currentSelectedCategory}</b></Typography>
             </div>
             <div>
               <FormControl variant="outlined" style={{width: '15vh', margin: '10px'}}>

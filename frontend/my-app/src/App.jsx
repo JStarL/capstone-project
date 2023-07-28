@@ -75,6 +75,20 @@ function App() {
     }
       setPersonas(updatedPersonas);
   };
+
+  const handleCurrentlySelectedPersona = (personaName, allergies) => {
+    let personaExists = false;
+    setCurrentlySelectedPersonaAllergies(allergies)
+    personas?.map((persona, index) => {
+      if (persona[0] === personaName) {
+        setCurrentlySelectedPersona(index)
+        personaExists = true
+      }
+    })
+    if (!personaExists) {
+      setCurrentlySelectedPersona(personas.length)
+    }
+  }
   
   const customer = (staff_type, session_id) => {
     setStaffType(staff_type)
@@ -105,7 +119,7 @@ function App() {
   return (
     <div className="App">
         <header>
-          <Nav id = {id} setId={setId} setStaffType={setStaffType} setIsCustomer={setIsCustomer} setIsStaff={setIsStaff} isManager={isManager} isKitchen={isKitchen} tableNumber={tableNumber} personas={personas} currentlySelectedPersona={currentlySelectedPersona} isStaff={isStaff}/>
+          <Nav id={id} setId={setId} setStaffType={setStaffType} setIsCustomer={setIsCustomer} setIsStaff={setIsStaff} isManager={isManager} isKitchen={isKitchen} tableNumber={tableNumber} personas={personas} currentlySelectedPersona={currentlySelectedPersona} isStaff={isStaff}/>
         </header>
         <main>
           <Routes>
@@ -123,7 +137,7 @@ function App() {
             <Route path='/customer/:sessionId/:menuId/tablenumber' element={<SelectTableNumber onSuccess={tableNumberSuccess} />} />
             <Route path='/customer/:sessionId/:menuId/:tableNumber' element={<CustomerMenuPage personas={personas} currentlySelectedPersona={currentlySelectedPersona} setCurrentlySelectedPersona={setCurrentlySelectedPersona} currentlySelectedPersonaAllergies={currentlySelectedPersonaAllergies} setCurrentlySelectedPersonaAllergies={setCurrentlySelectedPersonaAllergies} setMenuId={setMenuId} setTableNumber={setTableNumber} setSessionId={setSessionId} />} />
             <Route path='/customer/:sessionId/:menuId/:categoryId/:tableNumber/:foodId' element={<FoodItemPage currentlySelectedPersona={currentlySelectedPersona}/>} />
-            <Route path='/customer/:sessionId/:menuId/:tableNumber/personalise' element={<PersonalisePage personas={personas} handlePersonas={handlePersonas} setCurrentlySelectedPersonaApp={setCurrentlySelectedPersona} setCurrentlySelectedPersonaAllergies={setCurrentlySelectedPersonaAllergies}/>} />
+            <Route path='/customer/:sessionId/:menuId/:tableNumber/personalise' element={<PersonalisePage personas={personas} handlePersonas={handlePersonas} handleCurrentlySelectedPersona={handleCurrentlySelectedPersona}/>} />
             <Route path='/customer/:sessionId/view_order/:menuId/:tableNumber' element={<CustomerViewOrderPage personas={personas}/>} />
             <Route path='/customer/:sessionId/view_order/:menuId/:tableNumber/pay' element={<CustomerPayPage personas={personas}/>} />
             <Route path='/customer/:sessionId/view_order/:menuId/:tableNumber/rate' element={<CustomerRatePage personas={personas}/>} />
