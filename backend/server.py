@@ -530,6 +530,7 @@ def customer_remove_menu_item_flask():
     menu_id = data['menu_id']
     menu_item_id = data['menu_item_id']
     amount_to_be_removed = data['amount']
+    persona = data['persona']
 
     orders_list = None
     if menu_id in orders:
@@ -542,7 +543,7 @@ def customer_remove_menu_item_flask():
     
     if len(order_list) > 0:
         # check that the menu_item_id is there to be deleted
-        menu_item_list = [menu_item for menu_item in order_list[0]['menu_items'] if menu_item['menu_item_id'] == menu_item_id]
+        menu_item_list = [menu_item for menu_item in order_list[0]['menu_items'] if menu_item['menu_item_id'] == menu_item_id and menu_item['persona'] == persona]
         if len(menu_item_list) > 0:
 
             remaining_amount = menu_item_list[0]['amount'] - amount_to_be_removed
@@ -556,7 +557,7 @@ def customer_remove_menu_item_flask():
             
             return order_list[0] 
         else:
-            return { 'error': 'menu_item_id doesnt exist in this order'}
+            return { 'error': 'menu_item_id with given persona doesnt exist in this order'}
     else:
         return {'error': 'invalid session_id' }
 
