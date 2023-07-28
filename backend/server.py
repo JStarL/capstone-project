@@ -463,13 +463,15 @@ def customer_menu_table_flask():
 
 @APP.route("/customer/add_menu_item", methods=['POST'])
 def customer_add_menu_item_flask():
-    invalid_menu_item_id = {'error': 'menu_item_id invalid'}
     data = ast.literal_eval(request.get_json())
     session_id = data['session_id']
     menu_id = data['menu_id']
     menu_item_id = data['menu_item_id']
     amount = int(data['amount'])
+    persona = data['persona_name']
     
+    invalid_menu_item_id = {'error': 'menu_item_id invalid'}
+
     cur = None
     if session_id in cur_dict['customers']:
         cur = cur_dict['customers'][session_id]
@@ -514,7 +516,8 @@ def customer_add_menu_item_flask():
                 "title" : item[0],
                 "description": item[1],
                 "image": item[2],
-                "price": item[3]
+                "price": item[3],
+                "persona": persona
             } )
         return order_list[0]
     else:
@@ -686,7 +689,7 @@ def customer_request_assistance_flask():
     
     table_id = data["table_id"]
     session_id = data["session_id"]
-    menu_id = data["menu_id"]
+    menu_id = str(data["menu_id"])
     found = False
     
     if menu_id not in notifications: #creates a dictionary key and adds an empty list

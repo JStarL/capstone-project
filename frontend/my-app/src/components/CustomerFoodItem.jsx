@@ -18,7 +18,8 @@ function CustomerFoodItem(props) {
       menu_id: menuId,
       menu_item_id: props.foodId,
       amount: 1,
-      title: props.originalFoodName
+      title: props.originalFoodName,
+      persona_name: props.currentlySelectedPersona
     });
 
     makeRequest('/customer/add_menu_item', 'POST', body, undefined)

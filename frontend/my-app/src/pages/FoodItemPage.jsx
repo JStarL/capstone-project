@@ -6,7 +6,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import makeRequest from '../makeRequest';
 import { StyledButton } from './CustomerOrStaff';
 
-function FoodItemPage() {
+function FoodItemPage(props) {
   const navigate = useNavigate();
   // Change to get from params
   const sessionId = localStorage.getItem('session_id');
@@ -40,7 +40,8 @@ function FoodItemPage() {
       menu_id: menuId,
       menu_item_id: foodId,
       amount: 1,
-      title: foodData.food_name
+      title: foodData.food_name, 
+      persona_name: props.currentlySelectedPersona
     });
 
     makeRequest('/customer/add_menu_item', 'POST', body, undefined)
