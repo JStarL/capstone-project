@@ -59,9 +59,10 @@ function CustomerViewOrderPage(props) {
 	return (
     <>
     <Typography className='h4' variant="h4" gutterBottom>Your Order</Typography>
-		<div className='view-order-page' style={{justifywidth: '100%', alignItems:'center' }}ß>
-    {orders?.map((order) => (
+		<div className='view-order-page' style={{justifywidth: '100%', alignItems:'center' }}>
+      {orders?.map((order, index) => (
         <OrderItem
+          key={index}
           amount={order.amount}
           menu_item_id={order.menu_item_id}
           foodName={order.title}

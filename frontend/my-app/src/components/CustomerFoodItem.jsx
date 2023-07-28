@@ -10,6 +10,7 @@ function CustomerFoodItem(props) {
   const params = useParams();
   const sessionId = params.sessionId
   const menuId = params.menuId;
+  const tableNumber = params.tableNumber
   const [isSnackbarOpen, setSnackbarOpen] = React.useState(false);
 
   function addToOrder() {
@@ -61,7 +62,7 @@ function CustomerFoodItem(props) {
           <StyledButton
             variant='outlined'
             style={{ margin: '10px' }}
-            onClick={() => navigate(`/customer/${sessionId}/${menuId}/${props.categoryId}/${props.foodId}`)}
+            onClick={() => navigate(`/customer/${sessionId}/${menuId}/${props.categoryId}/${tableNumber}/${props.foodId}`)}
           >
             Find out more
           </StyledButton>

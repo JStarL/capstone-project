@@ -214,8 +214,8 @@ function ManagerFoodItem({ allergies, fetchAllMenuData, originalFoodName, origin
                     onChange={e => setSelectedAllergy(e.target.value)}
                     label="Add Allergy"
                   >
-                    {allergies.map(allergy => (
-                      <MenuItem key={allergy[0]} value={allergy[0]}>
+                    {allergies.map((allergy, index) => (
+                      <MenuItem key={index} value={allergy[0]}>
                         {allergy[1]}
                       </MenuItem>
                     ))}
