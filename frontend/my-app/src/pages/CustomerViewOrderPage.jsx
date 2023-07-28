@@ -72,6 +72,7 @@ function CustomerViewOrderPage(props) {
           setTotalCost={setTotalCost}
           orderedByPersona={order.persona}
           personas={props.personas}
+          currentlySelectedPersona={props.currentlySelectedPersona}
         >
         </OrderItem>
       ))}
