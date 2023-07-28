@@ -819,8 +819,8 @@ def kitchen_staff_mark_currently_cooking_flask():
             order['status'] = 'cooking'
             order['kitchen_staff_id'] = kitchen_staff_id
             
-    for customer_order in order: #check if it got changed
-        if customer_order['session_id'] == session_id and customer_order['status'] != 'cooking':
+    for order in order_list: #check if it got changed
+        if order['session_id'] == session_id and order['status'] != 'cooking':
             return dumps(fail)
             
     return dumps(success)
