@@ -622,30 +622,30 @@ def customer_finalise_order_flask():
     session_id = data["session_id"]
     menu_id = data["menu_id"]
     
-    update_points_query = """
-        UPDATE menu_items
-        SET points = %s
-        WHERE id = %s;
-    """
+    # update_points_query = """
+    #     UPDATE menu_items
+    #     SET points = %s
+    #     WHERE id = %s;
+    # """
     
-    get_menu_items = """
-        SELECT id, points
-        FROM menu_items
-        WHERE menu_id = %s;
-    """
+    # get_menu_items = """
+    #     SELECT id, points
+    #     FROM menu_items
+    #     WHERE menu_id = %s;
+    # """
     
-    cur = None
-    if session_id in cur_dict['customers']:
-        cur = cur_dict['customers'][session_id]
-    else:
-        cur = db_conn.cursor()
-        cur_dict['customers'][session_id] = cur
+    # cur.execute(get_menu_items, [menu_id])
+    
+    # menu_items_list = cur.fetchall()
+    
+    # tmp_list = []
 
-    cur.execute(get_menu_items, [menu_id])
-    
-    menu_items_list = cur.fetchall()
-    
-    tmp_list = []
+    # cur = None
+    # if session_id in cur_dict['customers']:
+    #     cur = cur_dict['customers'][session_id]
+    # else:
+    #     cur = db_conn.cursor()
+    #     cur_dict['customers'][session_id] = cur
     
     orders_list = None
     if menu_id in orders:
@@ -662,19 +662,19 @@ def customer_finalise_order_flask():
         else:
             order_list[0]['status'] = 'kitchen'
             
-        for menu_item in order_list[0]['menu_items']:
-            for menu_item_cur in menu_items_list:
-                if int(menu_item_cur[0]) == int(menu_item['menu_item_id']):
-                    tmp_list.append({
-                        "menu_item_id" : menu_item['menu_item_id'],
-                        "points" : str(int(menu_item['amount']) + int(menu_item_cur[1]))
-                    })
+        # for menu_item in order_list[0]['menu_items']:
+        #     for menu_item_cur in menu_items_list:
+        #         if int(menu_item_cur[0]) == int(menu_item['menu_item_id']):
+        #             tmp_list.append({
+        #                 "menu_item_id" : menu_item['menu_item_id'],
+        #                 "points" : str(int(menu_item['amount']) + int(menu_item_cur[1]))
+        #             })
         
-        for apply in tmp_list:
-            cur.execute(update_points_query, [apply['points'], apply['menu_item_id']])
+        # for apply in tmp_list:
+        #     cur.execute(update_points_query, [apply['points'], apply['menu_item_id']])
             
         
-        db_conn.commit()
+        # db_conn.commit()
         return {'success': 'order finalised'}
     else:
         return {'error': 'invalid session_id' }
