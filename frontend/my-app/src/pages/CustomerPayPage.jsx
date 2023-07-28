@@ -4,17 +4,31 @@ import { TextField, Typography, Paper, FormLabel, FormControl, Radio, RadioGroup
 import ReceiptLongIcon from '@mui/icons-material/ReceiptLong';
 import { StyledRadio } from '../components/NewStaffForm';
 import { useParams } from 'react-router-dom';
+import makeRequest from '../makeRequest';
 
 function CustomerPayPage() {
 	const [paymentType, setPaymentType] = React.useState('group')
 	const params = useParams()
 	const tableId = params.tableNumber
+	const sessionId = params.sessionId
+	const menuId = params.menuId
 
-	const calculatePersonaPay = () => {
+	React.useEffect(() => {
+		const fetchData = async () => {
+			const totalPayData = await calculatePersonaPay();
+			// Do something with the totalPayData, e.g., update the state or display it.
+			console.log(totalPayData);
+		};
+		fetchData();
+	}, []);
+
+	const calculatePersonaPay = async () => {
 		let totalPay = {};
 		// makeRequest('/customer/view_order')
-		let order = {} // actual data structure from above
-
+		const url = `/customer/view_order?session_id=${sessionId}&menu_id=${menuId}`;
+		let order = await makeRequest(url, 'GET', undefined, undefined)
+		// actual data structure from above
+		console.log(order)
 		const menu_items_list = order['menu_items'];
 		menu_items_list.forEach((val) => {
 			if (totalPay.hasOwnProperty(val['persona'])) {

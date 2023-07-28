@@ -5,7 +5,7 @@ import makeRequest from '../makeRequest';
 import OrderItem from '../components/OrderItem';
 import { StyledButton } from './CustomerOrStaff';
 
-function CustomerViewOrderPage() {
+function CustomerViewOrderPage(props) {
   const [orders, setOrders] = React.useState([])
   const [totalCost, setTotalCost] = React.useState(0)
 	const params = useParams();
@@ -70,6 +70,8 @@ function CustomerViewOrderPage() {
           foodPrice={order.price}
           fetchOrder={fetchOrder}
           setTotalCost={setTotalCost}
+          orderedByPersona={order.persona}
+          personas={props.personas}
         >
         </OrderItem>
       ))}
