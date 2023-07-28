@@ -29,10 +29,10 @@ import BackHandIcon from '@mui/icons-material/BackHand';
 
 function App() {
   const [id, setId] = React.useState(null);
-  const [staffType, setStaffType] = React.useState(localStorage.getItem('staffType'))
-  const [menuId, setMenuId] = React.useState(localStorage.getItem('menu_id'))
-  const [sessionId, setSessionId] = React.useState(localStorage.getItem('session_id'))
-  const [tableNumber, setTableNumber] = React.useState(localStorage.getItem('table_number'))
+  const [staffType, setStaffType] = React.useState('')
+  const [menuId, setMenuId] = React.useState('')
+  const [sessionId, setSessionId] = React.useState('')
+  const [tableNumber, setTableNumber] = React.useState('')
   const [currentlySelectedPersona, setCurrentlySelectedPersona] = React.useState(0);
   const [currentlySelectedPersonaAllergies, setCurrentlySelectedPersonaAllergies] = React.useState([]);
 
@@ -254,7 +254,7 @@ function App() {
             <Route path='/register' element={<RegisterPage onSuccess={login} />} />
             <Route path='/manager/addstaff/:menuId/:managerId' element={<AddStaffPage />} />
             <Route path='/manager/menu/:menuId/:managerId' element={<ManagerMenuPage />} />
-            <Route path='/manager/addnewmenuitem/:menuId/:categoryName/:categoryId' element={<NewMenuItemPage />} />
+            <Route path='/manager/addnewmenuitem/:menuId/:managerId/:categoryName/:categoryId' element={<NewMenuItemPage />} />
 
             <Route path='/kitchen_staff/:menuId/:staffId' element={<KitchenStaffPage />} />
             <Route path='/wait_staff/:menuId/:staffId' element={<WaitStaffPage />} />

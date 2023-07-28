@@ -1,5 +1,6 @@
 import React from 'react';
 import './Components.css';
+import { useParams } from 'react-router-dom';
 import { Button, TextField, Card, CardContent, Box } from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete';
 import ArrowUpwardIcon from '@mui/icons-material/ArrowUpward';
@@ -9,8 +10,9 @@ import makeRequest from '../makeRequest';
 function CategoryManager(props) {
   const [categoryName, setCategoryName] = React.useState(props.categoryName);
   const [categoryId] = React.useState(props.id);
-  const managerId = localStorage.getItem('staff_id');
-  const menuId = localStorage.getItem('menu_id');
+  const params = useParams()
+  const managerId = params.managerId
+  const menuId = params.menuId
 
   function deleteCategory() {
     const body = JSON.stringify({

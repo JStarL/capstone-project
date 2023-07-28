@@ -8,7 +8,7 @@ import makeRequest from '../makeRequest';
 function CustomerFoodItem(props) {
   const navigate = useNavigate();
   const params = useParams();
-  const sessionId = localStorage.getItem('session_id');
+  const sessionId = params.sessionId
   const menuId = params.menuId;
   const [isSnackbarOpen, setSnackbarOpen] = React.useState(false);
 

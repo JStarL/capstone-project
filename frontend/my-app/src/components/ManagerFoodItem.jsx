@@ -1,5 +1,6 @@
 import React from 'react';
 import './Components.css';
+import { useParams } from 'react-router-dom';
 import { Typography, Button, TextField, Input, Select } from '@mui/material';
 import { fileToDataUrl } from './helperFunctions';
 import MenuItem from '@mui/material/MenuItem';
@@ -25,6 +26,8 @@ function ManagerFoodItem({ allergies, fetchAllMenuData, originalFoodName, origin
   const [isListVisible, setListVisible] = React.useState(false);
   const [ingredient, setIngredient] = React.useState('');
   const [selectedAllergy, setSelectedAllergy] = React.useState(0); // New state variable for selected allergy
+
+  const params = useParams()
   React.useEffect(() => {
     setFoodName(originalFoodName)
     setFoodDescription(originalFoodDescription)
@@ -37,8 +40,8 @@ function ManagerFoodItem({ allergies, fetchAllMenuData, originalFoodName, origin
     const thumbnailUrl = await fileToDataUrl(event.target.files[0])
     setImage(thumbnailUrl);
   }
-  const managerId = localStorage.getItem('staff_id')
-  const menuId = localStorage.getItem('menu_id')
+  const managerId = params.managerId
+  const menuId = params.menuId
 
   function updateFoodItem() {
     const body = JSON.stringify({
