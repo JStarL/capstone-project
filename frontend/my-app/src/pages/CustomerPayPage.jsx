@@ -48,9 +48,9 @@ function CustomerPayPage(props) {
 		const menu_items_list = order['menu_items'];
 		menu_items_list.forEach((val) => {
 			if (payData.hasOwnProperty(val['persona'])) {
-				payData[val['persona']] += val['amount'] * val['price'];
+				payData[val['persona']] += Number(val['amount']) * Number(val['price']);
 			} else {
-				payData[val['persona']] = val['amount'] * val['price'];
+				payData[val['persona']] = Number(val['amount']) * Number(val['price']);
 			}
 		});
 
