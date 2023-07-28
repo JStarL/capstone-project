@@ -271,3 +271,46 @@ def customer_menu_search(cur, query):
         list2.append(dict_res)
     # menu.update({'menu_list': list2})
     return list2
+
+def customer_give_rating(cur, menu_item_id, rating):
+
+    invalid_menu_item_id = { 'error': 'invalid menu_item_id' }
+    update_failed = { 'error': 'the update failed' }
+    update_success = { 'success': 'update success' }
+
+    query_get_curr_rating = """
+    select rating
+    from menu_items
+    where id = %s
+    ;
+    """
+
+    cur.execute(query_get_curr_rating, [menu_item_id])
+
+    res = cur.fetchone()
+
+    if res is None:
+        return invalid_menu_item_id
+    
+    current_rating = res[0]
+
+    new_rating = current_rating + rating
+
+    query_update_rating = """
+    update menu_items
+    set rating = %s
+    where id = %s
+    ;
+    """
+
+    cur.execute(query_update_rating, [new_rating, menu_item_id])
+
+    # Check that the update worked
+
+    cur.execute(query_get_curr_rating, [menu_item_id])
+    res = cur.fetchone()
+
+    if res[0] == new_rating:
+        return update_success
+    else:
+        return update_failed
