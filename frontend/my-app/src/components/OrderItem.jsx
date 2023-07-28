@@ -68,7 +68,7 @@ function OrderItem (props) {
       'menu_item_id': menuItemId,
       'amount': amountNum,
       'title': name,
-      'persona_name': currentlySelectedPersona
+      'persona_name': orderedByPersona
     })
     makeRequest('/customer/add_menu_item', 'POST', body, undefined)
       .then(data => {
