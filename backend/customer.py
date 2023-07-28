@@ -279,7 +279,7 @@ def customer_give_rating(cur, menu_item_id, rating):
     update_success = { 'success': 'update success' }
 
     query_get_curr_rating = """
-    select rating
+    select total_ratings
     from menu_items
     where id = %s
     ;
@@ -298,7 +298,7 @@ def customer_give_rating(cur, menu_item_id, rating):
 
     query_update_rating = """
     update menu_items
-    set rating = %s
+    set total_ratings = %s
     where id = %s
     ;
     """
