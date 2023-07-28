@@ -34,6 +34,7 @@ function OrderItem (props) {
   }, [props.amount, props.foodDescription, props.foodName, props.foodImage, props.foodPrice, props.menu_item_id, props.orderedByPersona, props.currentlySelectedPersona]);
 
   const handleAmountChange = (e) => {
+    
     const newAmount = e.target.value;
     console.log(e.target.value)
     console.log(prevAmount)
@@ -50,7 +51,14 @@ function OrderItem (props) {
         return;
       }
     }
-    setPrevAmount(newAmount);
+    
+    if (currentlySelectedPersona !== orderedByPersona) {
+      console.log('dont change the amount')
+      setAmount(prevAmount)
+    } else {
+      setPrevAmount(newAmount);
+    } 
+    return 
   };
 
   function addToOrder(amountNum) {
@@ -59,7 +67,7 @@ function OrderItem (props) {
       'menu_id': menuId,
       'menu_item_id': menuItemId,
       'amount': amountNum,
-      'title': name, 
+      'title': name,
       'persona_name': currentlySelectedPersona
     })
     makeRequest('/customer/add_menu_item', 'POST', body, undefined)

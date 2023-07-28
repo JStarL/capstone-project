@@ -25,6 +25,16 @@ function WaitStaffPage() {
       console.log('orders refresh')
     }
     fetchData();
+
+    // Setup an interval to call fetchData every 3 seconds
+    const interval = setInterval(() => {
+      fetchData();
+    }, 3000);
+
+    // Clear the interval when the component unmounts
+    return () => {
+      clearInterval(interval);
+    };
   }, [orderTrigger])
 
   React.useEffect(() => {
@@ -33,6 +43,17 @@ function WaitStaffPage() {
       console.log('notifications refresh')
     }
     fetchData();
+
+    // Setup an interval to call fetchData every 3 seconds
+    const interval = setInterval(() => {
+      fetchData();
+    }, 3000);
+
+    // Clear the interval when the component unmounts
+    return () => {
+      clearInterval(interval);
+    };
+    
   }, [notificationTrigger])
 
   async function getOrderList() {

@@ -13,6 +13,7 @@ function CustomerFoodItem(props) {
   const [isSnackbarOpen, setSnackbarOpen] = React.useState(false);
 
   function addToOrder() {
+    console.log(props.currentlySelectedPersona)
     const body = JSON.stringify({
       session_id: sessionId,
       menu_id: menuId,

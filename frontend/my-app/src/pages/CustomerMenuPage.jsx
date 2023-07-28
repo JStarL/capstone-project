@@ -3,10 +3,10 @@ import '../App.css';
 import CustomerFoodItem from '../components/CustomerFoodItem';
 import CategoryCustomer from '../components/CategoryCustomer';
 import makeRequest from '../makeRequest';
-import { Typography, Select, MenuItem, FormControl, InputLabel } from '@mui/material';
+import { Typography, Select, MenuItem, FormControl, InputLabel, useThemeProps } from '@mui/material';
 import { useParams } from 'react-router-dom';
 
-function CustomerMenuPage({ personas, currentlySelectedPersona, setCurrentlySelectedPersona, currentlySelectedPersonaAllergies, setCurrentlySelectedPersonaAllergies }) {
+function CustomerMenuPage({ personas, currentlySelectedPersona, setCurrentlySelectedPersona, currentlySelectedPersonaAllergies, setCurrentlySelectedPersonaAllergies, setMenuId, setSessionId, setTableNumber }) {
   const [categories, setCategories] = React.useState([]);
   const [currentSelectedCategory, setCurrentSelectedCategory] = React.useState('Best Selling');
   const [currentSelectedCategoryId, setCurrentSelectedCategoryId] = React.useState(-1);
@@ -18,6 +18,13 @@ function CustomerMenuPage({ personas, currentlySelectedPersona, setCurrentlySele
   const params = useParams()
   const sessionId = params.sessionId
   const menuId = params.menuId
+  const tableNumber = params.tableNumber
+
+  React.useEffect(() => {
+    setMenuId(menuId)
+    setSessionId(sessionId)
+    setTableNumber(tableNumber)
+  }, []);
 
   React.useEffect(() => {
     const fetchData = async () => {
