@@ -51,6 +51,9 @@ create table menu_items (
     category_id         integer not null,
     menu_id             integer not null,
     points              integer default 0,
+    total_ratings       integer default 0,
+    num_ratings         integer default 0,
+    avg_rating          real default 0.0,
 
     primary key (id),
     foreign key (category_id) references categories(id) on delete cascade,
