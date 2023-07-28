@@ -719,13 +719,13 @@ def customer_request_assistance_flask():
     else:    
         return dumps(fail)
     
-
 @APP.route("/customer/give_rating", methods=['POST'])
 def customer_give_rating_flask():
     data = ast.literal_eval(request.get_json())
     session_id = data['session_id']
     menu_item_id = data['menu_item_id']
     rating = int(data['rating'])
+    amount = int(data['amount'])
     
     cur = None
     if session_id in cur_dict['customers']:
@@ -734,12 +734,9 @@ def customer_give_rating_flask():
         cur = db_conn.cursor()
         cur_dict['customers'][session_id] = cur
 
-    return_val = customer_give_rating(cur, menu_item_id, rating)
+    return_val = customer_give_rating(cur, menu_item_id, rating, amount)
 
     return dumps(return_val)
-
-
-
 
 # Kitchen Staff functions
 
