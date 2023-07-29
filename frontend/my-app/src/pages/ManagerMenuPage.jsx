@@ -159,7 +159,7 @@ function ManagerMenuPage() {
           {categories?.map((category, index) => (
             <CategoryManager
               categoryName={category[Object.keys(category)[0]][0]}
-              key={index} // category id 
+              key={Object.keys(category)[0]} // category id 
               id={Object.keys(category)[0]}
               setCurrentSelectedCategory={setCurrentSelectedCategory}
               fetchAllMenuData={fetchAllMenuData}
