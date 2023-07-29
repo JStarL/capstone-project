@@ -34,7 +34,7 @@ function CustomerMenuPage({ personas, handleExcludeCategories, currentlySelected
     };
 
     fetchData();
-  }, [currentlySelectedPersona, excludeCategories]);
+  }, [currentlySelectedPersona]);
 
   React.useEffect(() => {
     const fetchCategoryData = async () => {
