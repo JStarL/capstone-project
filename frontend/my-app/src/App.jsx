@@ -28,7 +28,8 @@ function App() {
   const [tableNumber, setTableNumber] = React.useState('')
   const [currentlySelectedPersona, setCurrentlySelectedPersona] = React.useState(0);
   const [currentlySelectedPersonaAllergies, setCurrentlySelectedPersonaAllergies] = React.useState([]);
-  const [personas, setPersonas] = React.useState([['Default', [null]]])
+  const [excludeCategories, setExcludeCategories] = React.useState([])
+  const [personas, setPersonas] = React.useState([['Default', [null], []]])
   const [isCustomer, setIsCustomer] = React.useState(false);
   const [isManager, setIsManager] = React.useState(false);
   const [isStaff, setIsStaff] = React.useState(false);
@@ -36,7 +37,7 @@ function App() {
   const [isWait, setIsWait] = React.useState(false);
 
   const location = useLocation();
-
+  console.log(personas)
   React.useEffect(() => {
     const pathname = location.pathname;
     const hasCustomerPath = /^\/customer\/\d+\/\d+\/\d+$/.test(pathname);
@@ -64,7 +65,8 @@ function App() {
   }, [location]);
 
   const handlePersonas = (name, allergies) => {
-    const persona = [name, allergies];
+    const category = []
+    const persona = [name, allergies, category];
     const updatedPersonas = [...personas];
     
     const existingPersonaIndex = updatedPersonas.findIndex((p) => p[0] === name);
@@ -76,12 +78,28 @@ function App() {
       setPersonas(updatedPersonas);
   };
 
+  const handleExcludeCategories = (name, category) => {
+    // const persona = [name, currentlySelectedPersonaAllergies, [category]];
+    const updatedPersonas = [...personas];
+
+    const existingPersonaIndex = updatedPersonas.findIndex((p) => p[0] === name);
+    if (existingPersonaIndex !== -1) {
+      const existingCategories = [...updatedPersonas[existingPersonaIndex][2], category]
+      console.log(existingCategories)
+      const persona = [name, currentlySelectedPersonaAllergies, existingCategories];
+
+      updatedPersonas[existingPersonaIndex] = persona;
+    }
+    setPersonas(updatedPersonas);
+  };
+
   const handleCurrentlySelectedPersona = (personaName, allergies) => {
     let personaExists = false;
     setCurrentlySelectedPersonaAllergies(allergies)
     personas?.map((persona, index) => {
       if (persona[0] === personaName) {
         setCurrentlySelectedPersona(index)
+        setExcludeCategories(persona[2])
         personaExists = true
       }
     })
@@ -100,7 +118,7 @@ function App() {
     setSessionId(session_id)
     setMenuId(menu_id)
     setTableNumber(table_number)
-    setPersonas([['Default', [null]]])
+    setPersonas([['Default', [null], [null]]])
     setCurrentlySelectedPersona(0)
     setCurrentlySelectedPersonaAllergies([])
   }
@@ -135,7 +153,7 @@ function App() {
 
             <Route path='/customer/:sessionId/searchrestaurant' element={<SearchRestaurant onSuccess={restaurantSuccess} />} />
             <Route path='/customer/:sessionId/:menuId/tablenumber' element={<SelectTableNumber onSuccess={tableNumberSuccess} />} />
-            <Route path='/customer/:sessionId/:menuId/:tableNumber' element={<CustomerMenuPage personas={personas} currentlySelectedPersona={currentlySelectedPersona} setCurrentlySelectedPersona={setCurrentlySelectedPersona} currentlySelectedPersonaAllergies={currentlySelectedPersonaAllergies} setCurrentlySelectedPersonaAllergies={setCurrentlySelectedPersonaAllergies} setMenuId={setMenuId} setTableNumber={setTableNumber} setSessionId={setSessionId} />} />
+            <Route path='/customer/:sessionId/:menuId/:tableNumber' element={<CustomerMenuPage handleExcludeCategories={handleExcludeCategories} personas={personas} excludeCategories={excludeCategories} setExcludeCategories={setExcludeCategories} currentlySelectedPersona={currentlySelectedPersona} setCurrentlySelectedPersona={setCurrentlySelectedPersona} currentlySelectedPersonaAllergies={currentlySelectedPersonaAllergies} setCurrentlySelectedPersonaAllergies={setCurrentlySelectedPersonaAllergies} setMenuId={setMenuId} setTableNumber={setTableNumber} setSessionId={setSessionId} />} />
             <Route path='/customer/:sessionId/:menuId/:categoryId/:tableNumber/:foodId' element={<FoodItemPage currentlySelectedPersona={currentlySelectedPersona}/>} />
             <Route path='/customer/:sessionId/:menuId/:tableNumber/personalise' element={<PersonalisePage personas={personas} handlePersonas={handlePersonas} handleCurrentlySelectedPersona={handleCurrentlySelectedPersona}/>} />
             <Route path='/customer/:sessionId/view_order/:menuId/:tableNumber' element={<CustomerViewOrderPage personas={personas}/>} />
