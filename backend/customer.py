@@ -272,14 +272,14 @@ def customer_menu_search(cur, query):
     # menu.update({'menu_list': list2})
     return list2
 
-def customer_give_rating(cur, menu_item_id, rating):
+def customer_give_rating(cur, menu_item_id, rating, amount):
 
     invalid_menu_item_id = { 'error': 'invalid menu_item_id' }
     update_failed = { 'error': 'the update failed' }
     update_success = { 'success': 'update success' }
 
     query_get_curr_rating = """
-    select total_ratings
+    select total_ratings, points
     from menu_items
     where id = %s
     ;
@@ -291,26 +291,29 @@ def customer_give_rating(cur, menu_item_id, rating):
 
     if res is None:
         return invalid_menu_item_id
-    
-    current_rating = res[0]
 
-    new_rating = current_rating + rating
+    if rating < 1:
+        rating = 1
+
+    new_rating = int(res[0]) + rating
+
+    new_amount = int(res[1]) + amount
 
     query_update_rating = """
     update menu_items
-    set total_ratings = %s
+    set total_ratings = %s, points = %s
     where id = %s
     ;
     """
 
-    cur.execute(query_update_rating, [new_rating, menu_item_id])
+    cur.execute(query_update_rating, [str(new_rating), str(new_amount), menu_item_id])
 
     # Check that the update worked
 
     cur.execute(query_get_curr_rating, [menu_item_id])
     res = cur.fetchone()
 
-    if res[0] == new_rating:
+    if int(res[0]) == new_rating and int(res[1]) == new_amount:
         return update_success
     else:
         return update_failed
