@@ -5,17 +5,19 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { StyledButton } from '../pages/CustomerOrStaff';
 import makeRequest from '../makeRequest';
 import DoneIcon from '@mui/icons-material/Done';
+import DirectionsWalkIcon from '@mui/icons-material/DirectionsWalk';
+import BrunchDiningIcon from '@mui/icons-material/BrunchDining';
 
 function WaitStaffOrder(props) {
-    // const [status, setStatus] = React.useState('none');
+    const [status, setStatus] = React.useState('none');
 
-  // const handleClick = () => {
-  //   if (status === 'none') {
-  //     markAssisting();
-  //   } else if (status === 'assisting'){
-  //     completeOrder();
-  //   }
-  // };
+  const handleClick = () => {
+    if (status === 'none') {
+      markServing();
+    } else if (status === 'serving'){
+      completeOrder();
+    }
+  };
   const [timestamp, setTimestamp] = React.useState(0)
   const [minutes, setMinutes] = React.useState(0)
   const [seconds, setSeconds] = React.useState(0)
@@ -28,6 +30,24 @@ function WaitStaffOrder(props) {
     setMinutes(minutes)
     setSeconds(seconds)
   };
+
+  const markServing = () => {
+    // console.log('order assisting');
+    // const body = JSON.stringify({
+    //   'menu_id': props.menuId,
+    //   'session_id': props.sessionId,
+    //   'table_id': props.tableId
+    // });
+    // makeRequest('/wait_staff/mark_currently_assisting', 'POST', body, undefined)
+    //   .then(data => {
+    //     console.log(data);
+    //     setStatus('assisting')
+    //     props.setNotificationTrigger(!props.notificationTrigger);
+    //   })
+    //   .catch(e => console.log('Error: ' + e));
+      setStatus('serving')
+      props.setOrderTrigger(!props.orderTrigger);
+    };
   
   React.useEffect(() => {  
     const timer = () => {
@@ -92,7 +112,7 @@ function WaitStaffOrder(props) {
             </div>
           ))}
         </div>
-        <StyledButton startIcon={<DoneIcon />} variant='outlined' onClick={completeOrder} style={{ width: '45vw', marginBottom: '2vh' }}>Completed Serving</StyledButton>
+        <StyledButton startIcon={status === 'none' ? <BrunchDiningIcon /> : <DoneIcon />} variant='outlined' onClick={handleClick} style={{ width: '30vw', marginTop: '2vh', marginBottom: '2vh' }}>{status === 'none' ? 'Start Serving' : 'Serving Completed'}</StyledButton>
       </div>
     </div>
     </>
