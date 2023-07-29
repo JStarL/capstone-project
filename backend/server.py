@@ -10,7 +10,7 @@ import ast
 
 from manager import manager_view_menu, manager_view_category, manager_view_menu_item, manager_add_category, manager_delete_category, manager_add_menu_item, manager_delete_menu_item, manager_update_category, manager_update_menu_item, manager_update_category_ordering, manager_update_menu_item_ordering
 from auth import login_backend, register_backend, auth_add_staff_backend
-from customer import customer_view_menu, customer_view_category, customer_view_menu_item, customer_menu_search
+from customer import customer_view_menu, customer_view_category, customer_view_menu_item, customer_menu_search, customer_give_rating
 
 def quit_gracefully(*args):
     '''For coverage'''
@@ -719,7 +719,28 @@ def customer_request_assistance_flask():
     else:    
         return dumps(fail)
     
+
+@APP.route("/customer/give_rating", methods=['POST'])
+def customer_give_rating_flask():
+    data = ast.literal_eval(request.get_json())
+    session_id = data['session_id']
+    menu_item_id = data['menu_item_id']
+    rating = int(data['rating'])
     
+    cur = None
+    if session_id in cur_dict['customers']:
+        cur = cur_dict['customers'][session_id]
+    else:
+        cur = db_conn.cursor()
+        cur_dict['customers'][session_id] = cur
+
+    return_val = customer_give_rating(cur, menu_item_id, rating)
+
+    return dumps(return_val)
+
+
+
+
 # Kitchen Staff functions
 
 @APP.route("/kitchen_staff/get_order_list", methods=['GET'])
@@ -961,7 +982,7 @@ def wait_staff_mark_notification_complete_flask():
 @APP.route("/wait_staff/get_assistance_notifications", methods=['GET'])
 def wait_staff_get_assistance_notifications_flask():
     menu_id = request.args.get('menu_id')    
-    empty = {"error": "Menu_id did not return anything or there are no notifications yet"}
+    # empty = {"error": "Menu_id did not return anything or there are no notifications yet"}
 
     if menu_id in notifications:
         notification_list = notifications[menu_id]
@@ -971,7 +992,7 @@ def wait_staff_get_assistance_notifications_flask():
                 output.append(notification)
         return dumps(output)
     else:
-        return dumps(empty)
+        return dumps([])
 
 @APP.route("/wait_staff/mark_currently_assisting", methods=['POST'])
 def wait_staff_mark_currently_assisting_flask():
