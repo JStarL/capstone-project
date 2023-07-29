@@ -3,8 +3,10 @@ import '../App.css';
 import { Typography, Paper, FormLabel, FormControl, Radio, RadioGroup, FormControlLabel } from '@mui/material';
 import ReceiptLongIcon from '@mui/icons-material/ReceiptLong';
 import { StyledRadio } from '../components/NewStaffForm';
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import makeRequest from '../makeRequest';
+import { StyledButton } from './CustomerOrStaff';
+import StarsIcon from '@mui/icons-material/Stars';
 
 function CustomerPayPage(props) {
 	const [paymentType, setPaymentType] = React.useState('group');
@@ -12,8 +14,10 @@ function CustomerPayPage(props) {
 	const tableId = params.tableNumber;
 	const sessionId = params.sessionId;
 	const menuId = params.menuId;
+	const tableNumber = params.tableNumber;
 	const [totalPrice, setTotalPrice] = React.useState(null);
 	const [personaPrices, setPersonaPrices] = React.useState({});
+	const navigate = useNavigate();
 
 	React.useEffect(() => {
 		fetchData();
@@ -35,7 +39,7 @@ function CustomerPayPage(props) {
 
 		// Loop through each key-value pair in the payData object
 		for (const [persona, price] of Object.entries(payData)) {
-			console.log(price)	
+			console.log(price)
 			totalPrice += Number(price);
 		}
 		return totalPrice;
@@ -102,6 +106,7 @@ function CustomerPayPage(props) {
 						))}
 					</>
 				)}
+				<StyledButton startIcon={<StarsIcon />} variant='outlined' onClick={() => navigate(`/customer/${sessionId}/view_order/${menuId}/${tableNumber}/rate`)} style={{ width: '20vw', marginBottom: '2vh' }}>Rate your food</StyledButton>
 			</Paper>
 		</div>
 	);

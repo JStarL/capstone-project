@@ -124,3 +124,5 @@ Week 8
   - Working on: 
     - Payment screen (split the bill based on persona or pay as a group)
     - Styling for kitchen staff
+    - Bug fixes 
+    - Ratings Page 
