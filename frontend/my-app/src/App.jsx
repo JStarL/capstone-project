@@ -1,32 +1,24 @@
 import './App.css';
 import React from 'react';
-import { BrowserRouter, Routes, Route, Link, useLocation } from 'react-router-dom';
-import PersonAddAlt1SharpIcon from '@mui/icons-material/PersonAddAlt1Sharp';
-import RestaurantMenuIcon from '@mui/icons-material/RestaurantMenu';
-import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
-import SettingsIcon from '@mui/icons-material/Settings';
-import ManagerLoginPage from './pages/ManagerLoginPage'
+import { Routes, Route, useLocation } from 'react-router-dom';
+import LoginPage from './pages/LoginPage'
 import AddStaffPage from './pages/AddStaffPage';
 import ManagerMenuPage from './pages/ManagerMenuPage';
 import NewMenuItemPage from './pages/NewMenuItemPage';
 import RegisterPage from './pages/RegisterPage';
 import CustomerMenuPage from './pages/CustomerMenuPage';
-import LogoutIcon from '@mui/icons-material/Logout';
 import CustomerOrStaff from './pages/CustomerOrStaff';
 import FoodItemPage from './pages/FoodItemPage';
 import WaitStaffPage from './pages/WaitStaffPage';
 import KitchenStaffPage from './pages/KitchenStaffPage';
-import makeRequest from './makeRequest';
-import { StyledButton } from './pages/CustomerOrStaff';
 import SelectTableNumber from './pages/SelectTableNumber';
 import SearchRestaurant from './pages/SearchRestaurant';
 import CustomerViewOrderPage from './pages/CustomerViewOrderPage';
 import CustomerPayPage from './pages/CustomerPayPage';
 import CustomerRatePage from './pages/CustomerRatePage';
 import PersonalisePage from './pages/PersonalisePage';
-import { Typography } from '@mui/material';
-import Footer from './components/Footer'
-import BackHandIcon from '@mui/icons-material/BackHand';
+import Footer from './components/Footer';
+import Nav from './components/Nav';
 
 function App() {
   const [id, setId] = React.useState(null);
@@ -36,26 +28,12 @@ function App() {
   const [tableNumber, setTableNumber] = React.useState('')
   const [currentlySelectedPersona, setCurrentlySelectedPersona] = React.useState(0);
   const [currentlySelectedPersonaAllergies, setCurrentlySelectedPersonaAllergies] = React.useState([]);
-
   const [personas, setPersonas] = React.useState([['Default', [null]]])
-  // React.useEffect(function () {
-  //   if (localStorage.getItem('staff_id')) {
-  //     setId(localStorage.getItem('staff_id'));
-  //   }
-  //   if (localStorage.getItem('staff_type')) {
-  //     setStaffType(localStorage.getItem('staff_type'));
-  //   }
-  //   if (localStorage.getItem('menu_id')) {
-  //     setStaffType(localStorage.getItem('menu_id'));
-  //   }
-  // }, []);
-
   const [isCustomer, setIsCustomer] = React.useState(false);
   const [isManager, setIsManager] = React.useState(false);
   const [isStaff, setIsStaff] = React.useState(false);
   const [isKitchen, setIsKitchen] = React.useState(false);
   const [isWait, setIsWait] = React.useState(false);
-
 
   const location = useLocation();
 
@@ -73,7 +51,6 @@ function App() {
     const pathname = location.pathname;
     const hasManagerPath = pathname.includes('/manager/');
     setIsManager(hasManagerPath);
-    // setIsStaff(hasManagerPath)
   }, [location]);
 
   React.useEffect(() => {
@@ -85,7 +62,6 @@ function App() {
     setIsKitchen(hasKitchenStaff)
     setIsWait(hasWaitStaff)
   }, [location]);
-
 
   const handlePersonas = (name, allergies) => {
     const persona = [name, allergies];
@@ -105,18 +81,6 @@ function App() {
     setSessionId(session_id)
   }
 
-  // const requestAssistance = () => {
-  //   const body = JSON.stringify({
-  //     table_id: tableNumber,
-  //     session_id: sessionId,
-  //     menu_id: menuId,
-  //   });
-  //   makeRequest('/customer/request_assistance', 'POST', body, undefined)
-  //     .then(data => {
-  //       console.log(data);
-  //     })
-  //     .catch(e => console.log('Error: ' + e));
-  // }
   const reset = (staff_type, session_id, menu_id, table_number) => {
     setStaffType(staff_type)
     setSessionId(session_id)
@@ -136,123 +100,17 @@ function App() {
     setId(staff_id);
     setStaffType(staff_type);
     setMenuId(menu_id)
-    // localStorage.setItem('staff_id', staff_id);
   }
-
-  const logout = () => {
-    const body = JSON.stringify({
-      'staff_id': id.toString(),
-    })
-    makeRequest('/auth/logout', 'POST', body, undefined)
-      .then(data => {
-        console.log(data)
-      })
-      .catch(e => console.log('Error: ' + e))
-    setId(null);
-    setStaffType(null);
-    setIsCustomer(false);
-    setIsStaff(false)
-    // localStorage.removeItem('staff_id');
-    // localStorage.removeItem('manager_id');
-    // localStorage.removeItem('menu_id');
-    // localStorage.removeItem('staff_type');
-    localStorage.clear()
-  }
-
-  const LogoutButton = () => {
-    return (
-      <nav sx={{ display: 'flex' }}>
-        <div className='links-container' style={{ marginRight: 'auto', marginTop: '5px', marginLeft: '20px' }}>
-          <Typography style={{ color: 'white' }} variant="overline" gutterBottom>{isManager ? 'Manager' : isKitchen ? 'Kitchen Staff' : 'Wait Staff'}</Typography>
-        </div>
-        <div className='nav-container'>
-          <StyledButton sx={{
-            margin: '5px',
-            marginLeft: 'auto',
-            width: '70%',
-            height: '70%',
-          }} onClick={logout} startIcon={<LogoutIcon />}>
-            <a className='toNavy' href='/'>
-              Logout
-            </a>
-          </StyledButton>
-        </div>
-      </nav>
-    )
-  }
-
-  const Nav = () => {
-    return (
-      <nav>
-        <div className='customer-nav-container' sx={{ zIndex: 100, display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-          <div className='links-container'>
-            <span className="link"><Link to='/'>Home</Link></span>
-          </div>
-          {tableNumber ? (<div className='links-container' style={{ marginLeft: 'auto', marginTop: '5px' }}>
-            <Typography style={{ color: 'white', marginRight: '50px' }} variant="overline" gutterBottom>Current Persona: {personas[currentlySelectedPersona][0]}</Typography>
-            <Typography style={{ color: 'white' }} variant="overline" gutterBottom>Table Number: {tableNumber}</Typography>
-            </div>)
-          : null}
-        </div>
-      </nav>
-    )
-  }
-
-  // const Footer = () => {
-  //   if (isManager) {
-  //     return (
-  //       <div className="footer-container">
-  //         <StyledButton startIcon={<PersonAddAlt1SharpIcon />}>
-  //           <Link to={`/manager/addstaff/${menuId}/${id}`} className="toNavy">Add Staff</Link>
-  //         </StyledButton>
-  //         <StyledButton startIcon={<RestaurantMenuIcon />}>
-  //           <Link to={`/manager/menu/${menuId}`} className="toNavy">Go to Menu</Link>
-  //         </StyledButton>
-  //       </div>
-  //     );
-  //   } else if (isCustomer) {
-  //     return (
-  //       <div className="footer-container">
-  //         <StyledButton startIcon={<ShoppingCartIcon />}>
-  //           <Link to={`/customer/${sessionId}/view_order/${menuId}/${tableNumber}`} className="toNavy">View Cart</Link>
-  //         </StyledButton>
-  //         <StyledButton startIcon={<RestaurantMenuIcon />}>
-  //           <Link to={`/customer/${sessionId}/${menuId}/${tableNumber}`} className="toNavy">Go to Menu</Link>
-  //         </StyledButton>
-  //         <StyledButton startIcon={<SettingsIcon />}>
-  //           <Link to={`/customer/${sessionId}/${menuId}/${tableNumber}/personalise`} className="toNavy">Personalise</Link>
-  //         </StyledButton>
-  //         <StyledButton onClick={requestAssistance} startIcon={<BackHandIcon />} className="toNavy" >
-  //           Request Assistance
-  //         </StyledButton>
-  //       </div>
-  //     );
-  //   } else {
-  //     return null; // Render nothing if menuId or tableNumber is missing
-  //   }
-  // };
-
-
-
-  // React.useEffect(function () {
-  //   if (localStorage.getItem('staff_id')) {
-  //     setId(localStorage.getItem('staff_id'));
-  //   }
-  // }, []);
 
   return (
     <div className="App">
-      {/* <BrowserRouter> */}
         <header>
-          {!isStaff
-            ? <Nav />
-            : <LogoutButton className='logout-button' onClick={logout}></LogoutButton>
-          }
+          <Nav id = {id} setId={setId} setStaffType={setStaffType} setIsCustomer={setIsCustomer} setIsStaff={setIsStaff} isManager={isManager} isKitchen={isKitchen} tableNumber={tableNumber} personas={personas} currentlySelectedPersona={currentlySelectedPersona} isStaff={isStaff}/>
         </header>
         <main>
           <Routes>
             <Route path='/' element={<CustomerOrStaff onSuccess={customer} reset={reset}/>} />
-            <Route path='/login' element={<ManagerLoginPage onSuccess={login} />} />
+            <Route path='/login' element={<LoginPage onSuccess={login} />} />
             <Route path='/register' element={<RegisterPage onSuccess={login} />} />
             <Route path='/manager/addstaff/:menuId/:managerId' element={<AddStaffPage />} />
             <Route path='/manager/menu/:menuId/:managerId' element={<ManagerMenuPage />} />
@@ -274,8 +132,6 @@ function App() {
         <footer>
           <Footer tableNumber={tableNumber} sessionId={sessionId} menuId={menuId} id={id} isManager={isManager} isCustomer={isCustomer}/>
         </footer>
-
-      {/* </BrowserRouter> */}
     </div>
   );
 }
