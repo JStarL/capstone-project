@@ -113,7 +113,6 @@ function App() {
     personas?.map((persona, index) => {
       if (persona[0] === personaName) {
         setCurrentlySelectedPersona(index)
-        setExcludeCategories(persona[2])
         personaExists = true
       }
     })
