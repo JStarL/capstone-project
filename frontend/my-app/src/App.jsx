@@ -87,7 +87,7 @@ function App() {
       const existingCategories = [...updatedPersonas[existingPersonaIndex][2], category]
       console.log(existingCategories)
       const persona = [name, currentlySelectedPersonaAllergies, existingCategories];
-
+      setExcludeCategories(existingCategories);
       updatedPersonas[existingPersonaIndex] = persona;
     }
     setPersonas(updatedPersonas);
