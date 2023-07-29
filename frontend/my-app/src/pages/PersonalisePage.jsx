@@ -30,28 +30,28 @@ function PersonalisePage({ personas, handlePersonas, handleCurrentlySelectedPers
     else {
       setSelectedAllergies([])
     }
-	}, [currentlySelectedPersona]);
+}, [currentlySelectedPersona]);
 
-	async function fetchAllergies() {
-		const url = '/get_allergies';
-		const data = await makeRequest(url, 'GET', undefined, undefined);
-		setAllergies(data);
-		return data;
+async function fetchAllergies() {
+	const url = '/get_allergies';
+	const data = await makeRequest(url, 'GET', undefined, undefined);
+	setAllergies(data);
+	return data;
+}
+
+const handleCheckboxChange = (event) => {
+	const { value, checked } = event.target;
+	if (checked) {
+		setSelectedAllergies((prevSelectedAllergies) => [
+			...prevSelectedAllergies,
+			value,
+		]);
+	} else {
+		setSelectedAllergies((prevSelectedAllergies) =>
+			prevSelectedAllergies.filter((allergy) => allergy !== value)
+		);
 	}
-
-	const handleCheckboxChange = (event) => {
-		const { value, checked } = event.target;
-		if (checked) {
-			setSelectedAllergies((prevSelectedAllergies) => [
-				...prevSelectedAllergies,
-				value,
-			]);
-		} else {
-			setSelectedAllergies((prevSelectedAllergies) =>
-				prevSelectedAllergies.filter((allergy) => allergy !== value)
-			);
-		}
-	};
+};
 	const handleFormSubmit = (event) => {
 		event.preventDefault();
     if (personaName === '') {
