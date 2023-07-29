@@ -77,8 +77,6 @@ function WaitStaffPage() {
           {orderList.length === 0 ? (
             <div style={{ display: 'flex', justifyContent: 'center', marginTop: '30px' }}>
               <Typography style={{
-                color: 'red',
-                borderColor: '#002250',
                 boxShadow: "0 3px 6px rgba(0, 0, 0, 0.4)",
                 borderRadius: '10px',
                 padding: '1vw',
@@ -106,8 +104,6 @@ function WaitStaffPage() {
           {notificationsList.length === 0 ? (
             <div style={{ display: 'flex', justifyContent: 'center', marginTop: '30px' }}>
               <Typography style={{
-                color: 'red',
-                borderColor: '#002250',
                 boxShadow: "0 3px 6px rgba(0, 0, 0, 0.4)",
                 borderRadius: '10px',
                 padding: '1vw',
