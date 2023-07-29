@@ -387,10 +387,11 @@ def customer_view_menu_flask():
     menu_id = request.args.get("menu_id")
     session_id = request.args.get("session_id")
     allergy_ids = ast.literal_eval(request.args.get("allergies"))
-    
-    excluded_cat_ids = [-1]
-    if 'excluded_cat_ids' in request.args:
-        excluded_cat_ids = ast.literal_eval(request.args.get("excluded_cat_ids"))
+    excluded_cat_ids = ast.literal_eval(request.args.get("excluded_cat_ids"))
+
+    if len(excluded_cat_ids) == 0:
+        excluded_cat_ids = [-1]
+        
     top_k = 100
     if 'top_k' in request.args:
         top_k = request.args.get('top_k')
@@ -408,10 +409,11 @@ def customer_view_category_flask():
     session_id = request.args.get("session_id")
     category_id = request.args.get("category_id")
     allergy_ids = ast.literal_eval(request.args.get("allergies"))
+    excluded_cat_ids = ast.literal_eval(request.args.get("excluded_cat_ids"))
 
-    excluded_cat_ids = [-1]
-    if 'excluded_cat_ids' in request.args:
-        excluded_cat_ids = ast.literal_eval(request.args.get("excluded_cat_ids"))
+    if len(excluded_cat_ids) == 0:
+        excluded_cat_ids = [-1]
+
     top_k = 100
     if 'top_k' in request.args:
         top_k = request.args.get('top_k')
