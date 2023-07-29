@@ -59,9 +59,11 @@ function CustomerMenuPage({ personas, handleExcludeCategories, currentlySelected
     const selectedIndex = event.target.value;
     const selectedPersona = personas[selectedIndex];
     const selectedPersonaAllergies = selectedPersona[1] || [];
-  
+    const selectedPersonaExcludedCatList = selectedPersona[2] || [];
+
     setCurrentlySelectedPersona(selectedIndex); // Use the index as the selected value
     setCurrentlySelectedPersonaAllergies(selectedPersonaAllergies);
+    setExcludeCategories(selectedPersonaExcludedCatList);
   };
 
 
