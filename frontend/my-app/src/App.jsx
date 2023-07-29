@@ -78,18 +78,29 @@ function App() {
       setPersonas(updatedPersonas);
   };
 
-  const handleExcludeCategories = (name, category) => {
+  const handleExcludeCategories = (name, category, addExclude) => {
     // const persona = [name, currentlySelectedPersonaAllergies, [category]];
     const updatedPersonas = [...personas];
 
     const existingPersonaIndex = updatedPersonas.findIndex((p) => p[0] === name);
     if (existingPersonaIndex !== -1) {
-      const existingCategories = [...updatedPersonas[existingPersonaIndex][2], category]
-      console.log(existingCategories)
-      const persona = [name, currentlySelectedPersonaAllergies, existingCategories];
-      if (existingCategories[0] === null) {
-        existingCategories.splice(0, 1);
+      let existingCategories;
+      let persona = [name, currentlySelectedPersonaAllergies];
+      if (addExclude) {
+        existingCategories = [...updatedPersonas[existingPersonaIndex][2], category]
+        console.log(existingCategories)
+        if (existingCategories[0] === null) {
+          existingCategories.splice(0, 1);
+        }  
+      } else {
+        const indexOfCategory = updatedPersonas[existingPersonaIndex][2].indexOf(category);
+        if (indexOfCategory !== -1) {
+          updatedPersonas[existingPersonaIndex][2].splice(indexOfCategory, 1);
+        }
+        existingCategories = updatedPersonas[existingPersonaIndex][2];
+
       }
+      persona.push(existingCategories);
       setExcludeCategories(existingCategories);
       updatedPersonas[existingPersonaIndex] = persona;
     }
@@ -159,7 +170,7 @@ function App() {
             <Route path='/customer/:sessionId/:menuId/:tableNumber' element={<CustomerMenuPage handleExcludeCategories={handleExcludeCategories} personas={personas} excludeCategories={excludeCategories} setExcludeCategories={setExcludeCategories} currentlySelectedPersona={currentlySelectedPersona} setCurrentlySelectedPersona={setCurrentlySelectedPersona} currentlySelectedPersonaAllergies={currentlySelectedPersonaAllergies} setCurrentlySelectedPersonaAllergies={setCurrentlySelectedPersonaAllergies} setMenuId={setMenuId} setTableNumber={setTableNumber} setSessionId={setSessionId} />} />
             <Route path='/customer/:sessionId/:menuId/:categoryId/:tableNumber/:foodId' element={<FoodItemPage currentlySelectedPersona={currentlySelectedPersona}/>} />
             <Route path='/customer/:sessionId/:menuId/:tableNumber/personalise' element={<PersonalisePage personas={personas} handlePersonas={handlePersonas} handleCurrentlySelectedPersona={handleCurrentlySelectedPersona}/>} />
-            <Route path='/customer/:sessionId/view_order/:menuId/:tableNumber' element={<CustomerViewOrderPage personas={personas}/>} />
+            <Route path='/customer/:sessionId/view_order/:menuId/:tableNumber' element={<CustomerViewOrderPage personas={personas} currentlySelectedPersona={currentlySelectedPersona} handleExcludeCategories={handleExcludeCategories} />} />
             <Route path='/customer/:sessionId/view_order/:menuId/:tableNumber/pay' element={<CustomerPayPage personas={personas}/>} />
             <Route path='/customer/:sessionId/view_order/:menuId/:tableNumber/rate' element={<CustomerRatePage personas={personas}/>} />
           </Routes>

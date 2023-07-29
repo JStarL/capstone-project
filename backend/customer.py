@@ -145,7 +145,7 @@ def customer_view_category(cur, category_id, allergies_list, excluded_cat_list, 
     if len(allergies_list) == 0:
         if (best_selling):
             query1 = """
-                select m.id, m.title, m.description, m.image, m.price, b.ordering_id
+                select m.id, m.title, m.description, m.image, m.price, b.ordering_id, m.category_id
                 from menu_items m join best_selling_items b on (m.menu_id = b.menu_id and m.id = b.menu_item_id)
                 where m.menu_id = %s
                 and m.category_id not in %s
@@ -157,7 +157,7 @@ def customer_view_category(cur, category_id, allergies_list, excluded_cat_list, 
             cur.execute(query1, [list1[0][2], excluded_cat_tuple, top_k])
         else:
             query1 = """
-                select id, title, description, image, price, ordering_id
+                select id, title, description, image, price, ordering_id, category_id
                 from menu_items
                 where category_id = %s
                 order by ordering_id
@@ -169,7 +169,7 @@ def customer_view_category(cur, category_id, allergies_list, excluded_cat_list, 
         allergies_tuple = tuple(allergies_list)
         if (best_selling):
             query1 = """
-                select m.id, m.title, m.description, m.image, m.price, b.ordering_id
+                select m.id, m.title, m.description, m.image, m.price, b.ordering_id, m.category_id
                 from menu_items m join best_selling_items b on (m.menu_id = b.menu_id and m.id = b.menu_item_id)
                 where m.menu_id = %s
                 and m.category_id not in %s
@@ -187,7 +187,7 @@ def customer_view_category(cur, category_id, allergies_list, excluded_cat_list, 
             cur.execute(query1, [list1[0][2], excluded_cat_tuple, allergies_tuple, top_k])
         else:
             query1 = """
-                select id, title, description, image, price, ordering_id
+                select id, title, description, image, price, ordering_id, category_id
                 from menu_items m
                 where category_id = %s
                 and not exists (
@@ -225,6 +225,7 @@ def customer_view_category(cur, category_id, allergies_list, excluded_cat_list, 
         tmp.update({'food_price': tup[4]})
         tmp.update({'food_ordering_id': tup[5]})
         tmp.update({'food_ingredients': ingredients_list})
+        tmp.update({'food_category_id': tup[6]})
         menu_items.append(tmp)
 
     return menu_items

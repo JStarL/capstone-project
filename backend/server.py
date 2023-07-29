@@ -486,7 +486,7 @@ def customer_add_menu_item_flask():
         return { 'error': 'amount cannot be negative' }
     
     menu_item_query = """
-        SELECT title, description, image, price 
+        SELECT title, description, image, price, category_id
         FROM menu_items
         WHERE id = %s;
     """
@@ -520,7 +520,8 @@ def customer_add_menu_item_flask():
                 "description": item[1],
                 "image": item[2],
                 "price": item[3],
-                "persona": persona
+                "persona": persona,
+                "category_id": item[4]
             } )
         return order_list[0]
     else:

@@ -88,7 +88,8 @@ function OrderItem (props) {
     })
     makeRequest('/customer/remove_menu_item', 'DELETE', body, undefined)
       .then(data => {
-        props.fetchOrder()
+        props.handleExcludeCategories(props.personas[props.currentlySelectedPersona][0], props.foodCategoryId, false);
+        props.fetchOrder();
       })
       .catch(e => console.log('Error: ' + e))
   }

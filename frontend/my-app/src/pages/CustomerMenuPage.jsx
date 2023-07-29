@@ -126,7 +126,7 @@ function CustomerMenuPage({ personas, handleExcludeCategories, currentlySelected
               originalImage={menuItem.food_image}
               originalIngredients={menuItem.food_ingredients}
               foodId={menuItem.food_id.toString()}
-              categoryId={currentSelectedCategoryId}
+              foodCategoryId={menuItem.food_category_id}
               fetchAllMenuData={fetchAllMenuData}
               fetchCategoryMenuItems={fetchCategoryMenuItems}
               currentlySelectedPersona={currentlySelectedPersona}

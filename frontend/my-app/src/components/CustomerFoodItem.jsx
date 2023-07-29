@@ -29,8 +29,7 @@ function CustomerFoodItem(props) {
       .then(data => {
         console.log(data);
         setSnackbarOpen(true);
-        props.handleExcludeCategories(props.personas[props.currentlySelectedPersona][0], props.categoryId)
-        
+        props.handleExcludeCategories(props.personas[props.currentlySelectedPersona][0], props.foodCategoryId, true);
         setTrigger(!trigger)
       })
       .catch(e => console.log('Error: ' + e));
@@ -38,7 +37,7 @@ function CustomerFoodItem(props) {
 
   React.useEffect(() => {
     console.log(props.personas)
-    // props.handleExcludeCategories(props.personas[props.currentlySelectedPersona][0], props.categoryId)
+    // props.handleExcludeCategories(props.personas[props.currentlySelectedPersona][0], props.foodCategoryId, true)
 	}, [trigger]);
 
   const handleSnackbarClose = () => {
@@ -71,7 +70,7 @@ function CustomerFoodItem(props) {
           <StyledButton
             variant='outlined'
             style={{ margin: '10px' }}
-            onClick={() => navigate(`/customer/${sessionId}/${menuId}/${props.categoryId}/${tableNumber}/${props.foodId}`)}
+            onClick={() => navigate(`/customer/${sessionId}/${menuId}/${props.currentSelectedCategoryId}/${tableNumber}/${props.foodId}`)}
           >
             Find out more
           </StyledButton>
