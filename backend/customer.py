@@ -18,7 +18,7 @@ def customer_view_menu(cur, menu_id, allergies_list, excluded_cat_list, top_k):
     cur.execute(query_num_categories, [menu_id])
     res = cur.fetchone()
 
-    if int(res[0]) == len(excluded_cat_list):
+    if int(res[0]) == len(excluded_cat_list) + 1:
         excluded_cat_list = [-1]
 
     query_categories = """
