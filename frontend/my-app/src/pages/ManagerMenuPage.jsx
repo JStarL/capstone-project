@@ -22,10 +22,6 @@ function ManagerMenuPage() {
   const managerId = params.managerId;
   const menuId = params.menuId;
 
-  // React.useEffect(() => {
-  //   setMenuId(menuId)
-  // }, []);
-
   React.useEffect(() => {
     const fetchData = async () => {
       const data = await fetchAllMenuData();
@@ -181,7 +177,7 @@ function ManagerMenuPage() {
           />
         </div>
         <div style={{ width: '75%', height: '100%' }}>
-          <Typography className='h4' variant="h4" gutterBottom>Manager Menu Page - {currentSelectedCategory}</Typography>
+          <Typography className='h4' variant="overline" style={{fontSize: '2rem', margin: '10px'}} gutterBottom><b>{currentSelectedCategory}</b></Typography>
           <div>
             {menuItems && menuItems.length > 0 && menuItems.map((menuItem, index) => (
               currentSelectedCategory === 'Best Selling' ? (

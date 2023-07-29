@@ -90,6 +90,9 @@ Meeting/Tutorial (24/7/2023 2pm)
 - Add child issues and allocate roles on Jira
 - Discuss ways to sned and retrieve data from customer to staff - Notifications and Orders
 - Create deadlines for frontend skeleton --> Friday Week 9 (28/7/2023)
+- Create deadling for all coding (except styling / code clean up) --> Tuesday Week 10 (1/8/2023)
 
 Work Done:
-- Kitchen Staff and Wait Staff Pages
+- Kitchen Staff and Wait Staff Pages - add intermediate stages
+- Remove all localStorage usage and focus on params
+- Clean up App.jsx file - Footer and Nav bars
