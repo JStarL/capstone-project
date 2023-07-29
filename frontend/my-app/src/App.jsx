@@ -42,7 +42,7 @@ function App() {
     const hasCustomerPath = /^\/customer\/\d+\/\d+\/\d+$/.test(pathname);
     const isPersonalisePage = /^\/customer\/\d+\/\d+\/\d+\/personalise$/.test(pathname);
     const isViewOrderPage = /^\/customer\/\d+\/view_order\/\d+\/\d+$/.test(pathname);
-    const isFoodItemPage = /^\/customer\/\d+\/\d+\/\d+\/\w+$/.test(pathname);
+    const isFoodItemPage = /^\/customer\/\d+\/\d+\/\d+\/\d+\/\w+$/.test(pathname)
 
     setIsCustomer(hasCustomerPath || isPersonalisePage || isViewOrderPage || isFoodItemPage);
   }, [location]);

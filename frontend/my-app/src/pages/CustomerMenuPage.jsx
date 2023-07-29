@@ -11,8 +11,6 @@ function CustomerMenuPage({ personas, currentlySelectedPersona, setCurrentlySele
   const [currentSelectedCategory, setCurrentSelectedCategory] = React.useState('Best Selling');
   const [currentSelectedCategoryId, setCurrentSelectedCategoryId] = React.useState(-1);
   const [menuItems, setMenuItems] = React.useState([]);
-  // const [currentlySelectedPersona, setCurrentlySelectedPersona] = React.useState(0);
-  // const [currentlySelectedPersonaAllergies, setCurrentlySelectedPersonaAllergies] = React.useState([]);
   const [trigger, setTrigger] = React.useState(0);
 
   const params = useParams()
@@ -113,8 +111,6 @@ function CustomerMenuPage({ personas, currentlySelectedPersona, setCurrentlySele
                     </MenuItem>
                   ))}
                 </Select>
-
-
               </FormControl>
             </div>
           </div>
