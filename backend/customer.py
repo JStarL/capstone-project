@@ -138,7 +138,7 @@ def customer_view_category(cur, category_id, allergies_list, excluded_cat_list, 
     cur.execute(query_num_categories, [list1[0][2]])
     res = cur.fetchone()
 
-    if int(res[0]) == len(excluded_cat_list):
+    if res[0] == len(excluded_cat_list) + 1:
         excluded_cat_list = [-1]
 
     query1 = None
