@@ -84,6 +84,7 @@ function WaitStaffPage() {
             orderList.map((order, index) => (
               <WaitStaffOrder
                 key={index}
+                timestamp={order.timestamp}
                 menuId={menuId}
                 staffId={staffId}
                 tableId={order.table_id}
@@ -113,6 +114,7 @@ function WaitStaffPage() {
               <WaitStaffNotifications
                 key={index}
                 menuId={menuId}
+                timestamp={notification.timestamp}
                 staffId={staffId}
                 tableId={notification.table_id}
                 sessionId={notification.session_id}
