@@ -21,7 +21,6 @@ function WaitStaffPage() {
   React.useEffect(() => {
     async function fetchData() {
       await getOrderList();
-      console.log('orders refresh')
     }
     fetchData();
 
@@ -37,7 +36,6 @@ function WaitStaffPage() {
   React.useEffect(() => {
     async function fetchData() {
       await getNotificationList();
-      console.log('notifications refresh')
     }
     fetchData();
 
@@ -77,8 +75,9 @@ function WaitStaffPage() {
                 borderRadius: '10px',
                 padding: '1vw',
                 width: 'auto',
+                marginLeft: '10px',
                 textAlign: 'center', // Center the text horizontally
-              }} variant="h6" gutterBottom>No Pending orders at the moment</Typography>
+              }} variant="overline" gutterBottom>No Pending orders at the moment</Typography>
             </div>
           ) : (
             orderList.map((order, index) => (
@@ -107,8 +106,9 @@ function WaitStaffPage() {
                 borderRadius: '10px',
                 padding: '1vw',
                 width: 'auto',
+                marginLeft: '10px',
                 textAlign: 'center', // Center the text horizontally
-              }} variant="h6" gutterBottom>No customers need assistance at the moment</Typography>
+              }} variant="overline" gutterBottom>No customers need assistance at the moment</Typography>
             </div>
           ) : (
             notificationsList.map((notification, index) => (

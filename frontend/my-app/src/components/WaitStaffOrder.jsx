@@ -6,7 +6,6 @@ import DoneIcon from '@mui/icons-material/Done';
 import BrunchDiningIcon from '@mui/icons-material/BrunchDining';
 
 function WaitStaffOrder(props) {
-  const [status, setStatus] = React.useState('none');
   const [timestamp, setTimestamp] = React.useState(0)
   const [minutes, setMinutes] = React.useState(0)
   const [seconds, setSeconds] = React.useState(0)
@@ -14,7 +13,7 @@ function WaitStaffOrder(props) {
   const handleClick = () => {
     if (props.status === 'wait') {
       markServing();
-    } else if (status === 'serving'){
+    } else if (props.status === 'serving'){
       completeOrder();
     }
   };
@@ -28,7 +27,6 @@ function WaitStaffOrder(props) {
   };
 
   const markServing = () => {
-    console.log('order serving');
     const body = JSON.stringify({
       'menu_id': props.menuId,
       'session_id': props.sessionId,
@@ -37,13 +35,9 @@ function WaitStaffOrder(props) {
     });
     makeRequest('/wait_staff/mark_currently_serving', 'POST', body, undefined)
       .then(data => {
-        console.log(data);
-        // setStatus('assisting')
         props.setOrderTrigger(!props.orderTrigger);
     })
       .catch(e => console.log('Error: ' + e));
-      // setStatus('serving')
-      // props.setOrderTrigger(!props.orderTrigger);
     };
   
     React.useEffect(() => {  
@@ -51,7 +45,6 @@ function WaitStaffOrder(props) {
         const timeCustomerOrdered = new Date(props.timestamp);
         const timeNow = new Date(Date.now());
         const timeDifference = timeNow - timeCustomerOrdered
-        console.log(timeDifference)
         setTimestamp(timeDifference / 1000);
       };
       const timerFunction = setInterval(timer, 1000);
@@ -63,18 +56,15 @@ function WaitStaffOrder(props) {
     }, [timestamp]);
 
   const completeOrder = () => {
-    console.log('order completed');
     const body = JSON.stringify({
       'menu_id': props.menuId,
       'session_id': props.sessionId,
     });
     makeRequest('/wait_staff/mark_order_complete', 'DELETE', body, undefined)
       .then(data => {
-        console.log(data);
-        // setStatus('completed')
+        props.setOrderTrigger(!props.orderTrigger);
       })
       .catch(e => console.log('Error: ' + e));
-    props.setOrderTrigger(!props.orderTrigger);
   };
 
   return (

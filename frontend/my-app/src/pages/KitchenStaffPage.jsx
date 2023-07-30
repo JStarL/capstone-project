@@ -16,7 +16,6 @@ function KitchenStaffPage() {
   React.useEffect(() => {
     async function fetchData() {
       await getOrderList();
-      console.log('refresh');
     }
 
     fetchData();
@@ -36,7 +35,6 @@ function KitchenStaffPage() {
     const url = `/kitchen_staff/get_order_list?menu_id=${menuId}&kitchen_staff_id=${staffId}`;
     const data = await makeRequest(url, 'GET', undefined, undefined);
     setOrderList(data);
-    console.log(data);
   }
 
   return (
@@ -55,8 +53,9 @@ function KitchenStaffPage() {
             borderRadius: '10px',
             padding: '1vw',
             width: 'auto',
+            marginLeft: '10px',
             textAlign: 'center', // Center the text horizontally
-          }} variant="h6" gutterBottom>No Pending orders at the moment</Typography>
+          }} variant="overline" gutterBottom>No Pending orders at the moment</Typography>
         </div>
       ) : (
         orderList.map((order, index) => (

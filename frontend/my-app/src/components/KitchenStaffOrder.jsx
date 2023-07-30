@@ -1,16 +1,11 @@
 import React from 'react';
 import './Components.css';
-import { Typography, Button, Snackbar, Alert } from '@mui/material';
-import { useNavigate, useParams } from 'react-router-dom';
 import { StyledButton } from '../pages/CustomerOrStaff';
-import CheckBoxOutlineBlankIcon from '@mui/icons-material/CheckBoxOutlineBlank';
 import RestaurantMenuIcon from '@mui/icons-material/RestaurantMenu';
-import CheckBoxIcon from '@mui/icons-material/CheckBox'
 import makeRequest from '../makeRequest';
 import DoneIcon from '@mui/icons-material/Done';
 
 function KitchenStaffOrder(props) {
-  const [status, setStatus] = React.useState('none');
   const [timestamp, setTimestamp] = React.useState(0)
   const [minutes, setMinutes] = React.useState(0)
   const [seconds, setSeconds] = React.useState(0)
@@ -23,14 +18,11 @@ function KitchenStaffOrder(props) {
     setSeconds(seconds)
   };
 
-  console.log(props.status)
-
   React.useEffect(() => {  
     const timer = () => {
       const timeCustomerOrdered = new Date(props.timestamp);
       const timeNow = new Date(Date.now());
       const timeDifference = timeNow - timeCustomerOrdered
-      console.log(timeDifference)
       setTimestamp(timeDifference / 1000);
     };
     const timerFunction = setInterval(timer, 1000);
@@ -51,7 +43,6 @@ function KitchenStaffOrder(props) {
   };
   
   const markCooking = () => {
-    console.log('order cooking');
     const body = JSON.stringify({
       'menu_id': props.menuId,
       'session_id': props.sessionId,
@@ -60,16 +51,11 @@ function KitchenStaffOrder(props) {
     });
     makeRequest('/kitchen_staff/mark_currently_cooking', 'POST', body, undefined)
       .then(data => {
-        console.log(data);
-        // setStatus('cooking')
         props.setTrigger(!props.trigger);
       })
       .catch(e => console.log('Error: ' + e));
-      // setStatus('cooking')
-      // props.setTrigger(!props.trigger);
     };
   const completeOrder = () => {
-    console.log('order completed');
     const body = JSON.stringify({
       'menu_id': props.menuId,
       'session_id': props.sessionId,
@@ -78,7 +64,6 @@ function KitchenStaffOrder(props) {
     });
     makeRequest('/kitchen_staff/mark_order_complete', 'POST', body, undefined)
       .then(data => {
-        console.log(data);
         props.setTrigger(!props.trigger);
       })
       .catch(e => console.log('Error: ' + e));
