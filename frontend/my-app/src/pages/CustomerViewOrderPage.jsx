@@ -58,7 +58,7 @@ function CustomerViewOrderPage(props) {
 
 	return (
     <>
-    <Typography className='h4' variant="h4" gutterBottom>Your Order</Typography>
+    <Typography className='h4' variant="overline" style={{fontSize: '2rem', margin: '10px'}} gutterBottom><b>Your Order</b></Typography>
 		<div className='view-order-page' style={{justifywidth: '100%', alignItems:'center' }}>
       {orders?.map((order, index) => (
         <OrderItem

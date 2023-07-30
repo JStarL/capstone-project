@@ -1,15 +1,15 @@
 import React from 'react';
 import './Components.css';
-import { Typography, Button, Snackbar, Alert } from '@mui/material';
-import { useNavigate, useParams } from 'react-router-dom';
 import { StyledButton } from '../pages/CustomerOrStaff';
 import makeRequest from '../makeRequest';
 import DoneIcon from '@mui/icons-material/Done';
-import DirectionsWalkIcon from '@mui/icons-material/DirectionsWalk';
 import BrunchDiningIcon from '@mui/icons-material/BrunchDining';
 
 function WaitStaffOrder(props) {
-    const [status, setStatus] = React.useState('none');
+  const [status, setStatus] = React.useState('none');
+  const [timestamp, setTimestamp] = React.useState(0)
+  const [minutes, setMinutes] = React.useState(0)
+  const [seconds, setSeconds] = React.useState(0)
 
   const handleClick = () => {
     if (status === 'none') {
@@ -18,10 +18,7 @@ function WaitStaffOrder(props) {
       completeOrder();
     }
   };
-  const [timestamp, setTimestamp] = React.useState(0)
-  const [minutes, setMinutes] = React.useState(0)
-  const [seconds, setSeconds] = React.useState(0)
-
+  
   const convertToMinutesAndHours = (totalSeconds) => {
     const hours = Math.floor(totalSeconds / 3600);
     const remainingSeconds = totalSeconds % 3600;
@@ -32,35 +29,39 @@ function WaitStaffOrder(props) {
   };
 
   const markServing = () => {
-    // console.log('order assisting');
-    // const body = JSON.stringify({
-    //   'menu_id': props.menuId,
-    //   'session_id': props.sessionId,
-    //   'table_id': props.tableId
-    // });
-    // makeRequest('/wait_staff/mark_currently_assisting', 'POST', body, undefined)
-    //   .then(data => {
-    //     console.log(data);
-    //     setStatus('assisting')
-    //     props.setNotificationTrigger(!props.notificationTrigger);
-    //   })
-    //   .catch(e => console.log('Error: ' + e));
-      setStatus('serving')
-      props.setOrderTrigger(!props.orderTrigger);
+    console.log('order assisting');
+    const body = JSON.stringify({
+      'menu_id': props.menuId,
+      'session_id': props.sessionId,
+      'table_id': props.tableId,
+      'wait_staff_id': props.staffId
+    });
+    makeRequest('/wait_staff/mark_currently_serving', 'POST', body, undefined)
+      .then(data => {
+        console.log(data);
+        setStatus('assisting')
+        props.setOrderTrigger(!props.orderTrigger);
+    })
+      .catch(e => console.log('Error: ' + e));
+      // setStatus('serving')
+      // props.setOrderTrigger(!props.orderTrigger);
     };
   
-  React.useEffect(() => {  
-    const timer = () => {
-      setTimestamp(prevTime => prevTime + 1); // Increment time instead of decrementing
-    };
+    React.useEffect(() => {  
+      const timer = () => {
+        const timeCustomerOrdered = new Date(props.timestamp);
+        const timeNow = new Date(Date.now());
+        const timeDifference = timeNow - timeCustomerOrdered
+        console.log(timeDifference)
+        setTimestamp(timeDifference / 1000);
+      };
+      const timerFunction = setInterval(timer, 1000);
+      convertToMinutesAndHours(timestamp)
   
-    const timerFunction = setInterval(timer, 1000);
-    convertToMinutesAndHours(timestamp)
-
-    return () => {
-      clearInterval(timerFunction);
-    };
-  }, [timestamp]);
+      return () => {
+        clearInterval(timerFunction);
+      };
+    }, [timestamp]);
 
   const completeOrder = () => {
     console.log('order completed');

@@ -18,8 +18,6 @@ function WaitStaffPage() {
   const menuId = params.menuId;
   const staffId = params.staffId;
 
-  console.log(typeof (staffId));
-
   React.useEffect(() => {
     async function fetchData() {
       await getOrderList();
@@ -57,14 +55,12 @@ function WaitStaffPage() {
     const url = `/wait_staff/get_order_list?menu_id=${menuId}`;
     const data = await makeRequest(url, 'GET', undefined, undefined);
     setOrderList(data);
-    console.log(data);
   }
 
   async function getNotificationList() {
     const url = `/wait_staff/get_assistance_notifications?menu_id=${menuId}`;
     const data = await makeRequest(url, 'GET', undefined, undefined);
     setNotificationsList(data);
-    console.log(data);
   }
 
   return (
@@ -89,6 +85,7 @@ function WaitStaffPage() {
               <WaitStaffOrder
                 key={index}
                 menuId={menuId}
+                staffId={staffId}
                 tableId={order.table_id}
                 menuItems={order.menu_items}
                 sessionId={order.session_id}
@@ -116,6 +113,7 @@ function WaitStaffPage() {
               <WaitStaffNotifications
                 key={index}
                 menuId={menuId}
+                staffId={staffId}
                 tableId={notification.table_id}
                 sessionId={notification.session_id}
                 notificationTrigger={notificationTrigger}
