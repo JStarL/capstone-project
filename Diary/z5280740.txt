@@ -98,3 +98,22 @@ complete our retrospective afterwards.
 
 The plan for next week is to improve the implementation of the automated Best Selling Category using more parameters, and work on debugging the kitchen 
 and wait staff screens and routes.
+
+Week 9
+Completed a lot of major things this week, especially over the weekend. During the week, mainly helped in debugging, testing and correcting code
+snippets, and maintained consistent interactions with the frontend and backend. For the backend, we completed the final routes by the end of Friday.
+
+On Saturday I implemented the second version of the Best Selling Automation using two parameters - the ratio of times the dish was ordered, and the
+average rating given to that menu item. This was implemented across the backend and database layers, and involved complex trigger and plpgsql function
+understanding in the database to complete.
+
+On Sunday Hannah and I were working on implementing category exclusion of certain menu items from the Best Selling category based on what menu items
+have already been ordered by a given persona. This proved to be the most challenging task encountered thus far! Hannah understood the main idea and
+added some basic code in the architecture of the frontend. I spent a lot of time reading the frontend code to first understand it, and then based on what
+I understood I wrote additional code to complete all related parts of the functionality of it, for example when a menu item is added to an order, the
+category id to which it belongs gets automatically added to the exclusion list, or another example when a menu item is removed completely from the orders
+list meaning its count is zero, its corresponding category id get removed from the exclusion list for that persona. Separate lists were maintained for
+separate personas.
+
+Next week we plan to refactor, style up and comment our codebase, finish the report, decide on a structure for the final demo, and then deliver the
+project deliverables, one at a time.
