@@ -8,8 +8,21 @@ def customer_view_menu(cur, menu_id, allergies_list, excluded_cat_list, top_k):
         if "0" in allergies_list:
             allergies_list.remove("0")
 
+    query_num_categories = """
+        select count(*)
+        from categories
+        where menu_id = %s
+        ;
+    """
+
+    cur.execute(query_num_categories, [menu_id])
+    res = cur.fetchone()
+
+    if int(res[0]) == len(excluded_cat_list):
+        excluded_cat_list = [-1]
+
     query_categories = """
-    select id, name, ordering_id from categories where menu_id = %s order by ordering_id;
+        select id, name, ordering_id from categories where menu_id = %s order by ordering_id;
     """
     
     query_menu_items = None
@@ -114,6 +127,19 @@ def customer_view_category(cur, category_id, allergies_list, excluded_cat_list, 
     best_selling = False
     if list1[0][1] == 'Best Selling':
         best_selling = True
+
+    query_num_categories = """
+        select count(*)
+        from categories
+        where menu_id = %s
+        ;
+    """
+
+    cur.execute(query_num_categories, [list1[0][2]])
+    res = cur.fetchone()
+
+    if int(res[0]) == len(excluded_cat_list):
+        excluded_cat_list = [-1]
 
     query1 = None
     if len(allergies_list) == 0:
