@@ -52,13 +52,13 @@ function WaitStaffPage() {
   }, [notificationTrigger])
 
   async function getOrderList() {
-    const url = `/wait_staff/get_order_list?menu_id=${menuId}`;
+    const url = `/wait_staff/get_order_list?menu_id=${menuId}&wait_staff_id=${staffId}`;
     const data = await makeRequest(url, 'GET', undefined, undefined);
     setOrderList(data);
   }
 
   async function getNotificationList() {
-    const url = `/wait_staff/get_assistance_notifications?menu_id=${menuId}`;
+    const url = `/wait_staff/get_assistance_notifications?menu_id=${menuId}&wait_staff_id=${staffId}`;
     const data = await makeRequest(url, 'GET', undefined, undefined);
     setNotificationsList(data);
   }
@@ -85,6 +85,7 @@ function WaitStaffPage() {
               <WaitStaffOrder
                 key={index}
                 timestamp={order.timestamp}
+                status={order.status}
                 menuId={menuId}
                 staffId={staffId}
                 tableId={order.table_id}
@@ -114,6 +115,7 @@ function WaitStaffPage() {
               <WaitStaffNotifications
                 key={index}
                 menuId={menuId}
+                status={notification.status}
                 timestamp={notification.timestamp}
                 staffId={staffId}
                 tableId={notification.table_id}
