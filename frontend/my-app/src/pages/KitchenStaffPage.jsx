@@ -60,6 +60,7 @@ function KitchenStaffPage() {
         orderList.map((order, index) => (
           <KitchenStaffOrder
             key={index}
+            status={order.status}
             timestamp={order.timestamp}
             tableId={order.table_id}
             menuItems={order.menu_items}

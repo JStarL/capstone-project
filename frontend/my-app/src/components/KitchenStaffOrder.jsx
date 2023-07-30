@@ -23,6 +23,8 @@ function KitchenStaffOrder(props) {
     setSeconds(seconds)
   };
 
+  console.log(props.status)
+
   React.useEffect(() => {  
     const timer = () => {
       const timeCustomerOrdered = new Date(props.timestamp);
@@ -40,10 +42,12 @@ function KitchenStaffOrder(props) {
   }, [timestamp]);
 
   const handleClick = () => {
-    if (status === 'none') {
-      markCooking();
-    } else if (status === 'cooking'){
+    if (props.status === 'kitchen') {
+      // markCooking();
       completeOrder();
+
+    } else if (props.status === 'cooking'){
+      // completeOrder();
     }
   };
   
@@ -69,7 +73,9 @@ function KitchenStaffOrder(props) {
     console.log('order completed');
     const body = JSON.stringify({
       'menu_id': props.menuId,
-      'session_id': props.sessionId
+      'session_id': props.sessionId,
+      'kitchen_staff_id': props.staffId
+
     });
     makeRequest('/kitchen_staff/mark_order_complete', 'POST', body, undefined)
       .then(data => {
