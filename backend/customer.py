@@ -101,24 +101,23 @@ def customer_view_category(cur, category_id, allergies_list, excluded_cat_list, 
         if "0" in allergies_list:
             allergies_list.remove("0")
 
-    query0 = """
+    query_categories = """
     select id, name, menu_id from categories where id = %s;
     """
 
-    cur.execute(query0, [category_id])
-    list1 = cur.fetchall()
+    cur.execute(query_categories, [category_id])
+    categories_list = cur.fetchall()
 
-    if len(list1) == 0:
+    if len(categories_list) == 0:
         return invalid_category_id
 
     best_selling = False
-    if list1[0][1] == 'Best Selling':
+    if categories_list[0][1] == 'Best Selling':
         best_selling = True
 
-    query1 = None
     if len(allergies_list) == 0:
         if (best_selling):
-            query1 = """
+            menu_items_query = """
                 select m.id, m.title, m.description, m.image, m.price, b.ordering_id
                 from menu_items m join best_selling_items b on (m.menu_id = b.menu_id and m.id = b.menu_item_id)
                 where m.menu_id = %s
@@ -128,9 +127,9 @@ def customer_view_category(cur, category_id, allergies_list, excluded_cat_list, 
                 ;
             """
             excluded_cat_tuple = tuple(excluded_cat_list)
-            cur.execute(query1, [list1[0][2], excluded_cat_tuple, top_k])
+            cur.execute(menu_items_query, [categories_list[0][2], excluded_cat_tuple, top_k])
         else:
-            query1 = """
+            menu_items_query = """
                 select id, title, description, image, price, ordering_id
                 from menu_items
                 where category_id = %s
@@ -138,11 +137,11 @@ def customer_view_category(cur, category_id, allergies_list, excluded_cat_list, 
                 limit %s
                 ;
             """
-            cur.execute(query1, [category_id, top_k])
+            cur.execute(menu_items_query, [category_id, top_k])
     else:
         allergies_tuple = tuple(allergies_list)
         if (best_selling):
-            query1 = """
+            menu_items_query = """
                 select m.id, m.title, m.description, m.image, m.price, b.ordering_id
                 from menu_items m join best_selling_items b on (m.menu_id = b.menu_id and m.id = b.menu_item_id)
                 where m.menu_id = %s
@@ -158,9 +157,9 @@ def customer_view_category(cur, category_id, allergies_list, excluded_cat_list, 
                 ;
             """
             excluded_cat_tuple = tuple(excluded_cat_list)
-            cur.execute(query1, [list1[0][2], excluded_cat_tuple, allergies_tuple, top_k])
+            cur.execute(menu_items_query, [categories_list[0][2], excluded_cat_tuple, allergies_tuple, top_k])
         else:
-            query1 = """
+            menu_items_query = """
                 select id, title, description, image, price, ordering_id
                 from menu_items m
                 where category_id = %s
@@ -174,11 +173,11 @@ def customer_view_category(cur, category_id, allergies_list, excluded_cat_list, 
                 limit %s
                 ;
             """
-            cur.execute(query1, [category_id, allergies_tuple, top_k])
+            cur.execute(menu_items_query, [category_id, allergies_tuple, top_k])
 
-    list1 = cur.fetchall()
+    menu_items_list = cur.fetchall()
 
-    for tup in list1:
+    for tup in menu_items_list:
         
         query_ingredients = """
         select name, allergy_id from ingredients where menu_item_id = %s;
@@ -206,21 +205,22 @@ def customer_view_category(cur, category_id, allergies_list, excluded_cat_list, 
 
 def customer_view_menu_item(cur, menu_item_id):
     invalid_id = { 'error': 'invalid menu_item_id' } # error message
-    food = { 'success': 'Show food' } # supposed to show the food lol
+    food = {}
     
-    query1 = """
+    menu_items_query = """
     select title, description, image, price, category_id, ordering_id from menu_items where id = %s;
     """ 
     
-    cur.execute(query1, [menu_item_id])
+    cur.execute(menu_items_query, [menu_item_id])
     
-    list1 = cur.fetchall()
+    menu_items_list = cur.fetchall()
     
-    if len(list1) == 0: #No menu or something went wrong with the id
-        #test
+    if len(menu_items_list) == 0:
+        # No menu or something went wrong with the id
         return invalid_id
-    else: #shows the food item
-        tup = list1[0]
+    else: 
+        # shows the food item
+        tup = menu_items_list[0]
 
         query_ingredients = """
         select name, allergy_id from ingredients where menu_item_id = %s;
@@ -243,31 +243,26 @@ def customer_view_menu_item(cur, menu_item_id):
         food.update({'food_ingredients': ingredients_list})
         return food
     
-def customer_menu_search(cur, query):
-    invalid_menu = { 'error': 'No menus' } # error message
-    # menu = { 'success': 'Show menu' } # supposed to show the food lol
-    
+def customer_menu_search(cur, query):    
     regex = '.*' + query + '.*'
 
-    query1 = """
-    SELECT id, restaurant_name, restaurant_loc
-    FROM menus
+    restaurant_query = """
+    select id, restaurant_name, restaurant_loc
+    from menus
     where restaurant_name ~* %s
     or restaurant_loc ~* %s
     ;
     """ 
     
-    cur.execute(query1, [regex, regex])
+    cur.execute(restaurant_query, [regex, regex])
     
-    list1 = cur.fetchall()
+    restaurant_list = cur.fetchall()
     
-    
-    list2 = []
-    for tup in list1:
+    return_list = []
+    for tup in restaurant_list:
         dict_res = {}
         dict_res.update({'menu_id': tup[0]})
         dict_res.update({'restaurant_name': tup[1]})
         dict_res.update({'restaurant_address': tup[2]})
-        list2.append(dict_res)
-    # menu.update({'menu_list': list2})
-    return list2
+        return_list.append(dict_res)
+    return return_list
