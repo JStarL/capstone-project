@@ -2,10 +2,11 @@ import React from 'react';
 import './Components.css';
 import { StyledButton } from '../pages/CustomerOrStaff';
 import makeRequest from '../makeRequest';
+import { Typography } from '@mui/material';
 import CheckBoxOutlineBlankIcon from '@mui/icons-material/CheckBoxOutlineBlank';
 import CheckBoxIcon from '@mui/icons-material/CheckBox';
 import DoneIcon from '@mui/icons-material/Done';
-
+import PriorityHighIcon from '@mui/icons-material/PriorityHigh';
 
 function WaitStaffNotifications(props) {
   const [timestamp, setTimestamp] = React.useState(0)
@@ -75,8 +76,9 @@ function WaitStaffNotifications(props) {
       <div className='wait-staff-order'>
         <div style={{ width: '100%' }} className='wait-staff-order-div'>
           <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '2em', marginTop: '30px' }}><b>Table Number: {props.tableId}</b></div>
-          <div>Time since assistance requested: <b>{minutes} minute(s) and {seconds} second(s)</b> ago</div>
-        <StyledButton startIcon={props.status === 'customer' ? <CheckBoxOutlineBlankIcon /> : <CheckBoxIcon />} variant='outlined' onClick={handleClick} style={{ width: '30vw', marginTop: '2vh', marginBottom: '2vh' }}>{props.status === 'customer' ? 'Start Assisting' : 'Mark Assistance Completed'}</StyledButton>
+          <div>Time since assistance requested: <b>{minutes === 0 ? '' : `${minutes} minute(s) and `} {seconds} second(s)</b> ago</div>
+        <Typography style={{ marginTop: '10px' }} variant='overline'>{props.status === 'wait' ? 'You are assisting this table' : ''}</Typography>
+        <StyledButton startIcon={props.status === 'customer' ? <PriorityHighIcon /> : <DoneIcon />} variant='outlined' onClick={handleClick} style={{ width: '30vw', marginTop: '1vh', marginBottom: '2vh' }}>{props.status === 'customer' ? 'Start Assisting' : 'Mark Assistance Completed'}</StyledButton>
       </div>
     </div>
     </>

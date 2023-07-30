@@ -1,5 +1,6 @@
 import React from 'react';
 import './Components.css';
+import { Typography } from '@mui/material';
 import { StyledButton } from '../pages/CustomerOrStaff';
 import RestaurantMenuIcon from '@mui/icons-material/RestaurantMenu';
 import makeRequest from '../makeRequest';
@@ -74,7 +75,7 @@ function KitchenStaffOrder(props) {
       <div className='kitchen-staff-order'>
         <div style={{ width: '60%' }} className='kitchen-staff-order-div'>
             <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '2em', marginTop: '30px' }}><b>Table Number: {props.tableId}</b></div>
-            <div>Time since order was placed: <b>{minutes} minute(s) and {seconds} second(s)</b> ago</div>
+            <div>Time since order was placed: <b>{minutes === 0 ? '' : `${minutes} minute(s) and `} {seconds} second(s)</b> ago</div>
           <div className='kitchen-staff-menu-items-container'>
             {props.menuItems?.map((menuItem) => (
               <div key={menuItem.food_name} className='kitchen-staff-menu-item'>
@@ -104,6 +105,7 @@ function KitchenStaffOrder(props) {
               </div>
             ))}
           </div>
+          <Typography style={{ padding: '5px' }} variant='overline'>{props.status === 'cooking' ? 'You are cooking this order' : ''}</Typography>
           <StyledButton startIcon={props.status === 'kitchen' ? <RestaurantMenuIcon /> : <DoneIcon />} variant='outlined' onClick={handleClick} style={{ width: '45vw', marginBottom: '2vh' }}>{props.status === 'kitchen' ? 'Start Cooking' : 'Complete Order'}</StyledButton>
         </div>
       </div>
