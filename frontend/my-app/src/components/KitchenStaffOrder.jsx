@@ -43,11 +43,10 @@ function KitchenStaffOrder(props) {
 
   const handleClick = () => {
     if (props.status === 'kitchen') {
-      // markCooking();
-      completeOrder();
+      markCooking();
 
     } else if (props.status === 'cooking'){
-      // completeOrder();
+      completeOrder();
     }
   };
   
@@ -120,7 +119,7 @@ function KitchenStaffOrder(props) {
               </div>
             ))}
           </div>
-          <StyledButton startIcon={status === 'none' ? <RestaurantMenuIcon /> : <DoneIcon />} variant='outlined' onClick={handleClick} style={{ width: '45vw', marginBottom: '2vh' }}>{status === 'none' ? 'Start Cooking' : 'Complete Order'}</StyledButton>
+          <StyledButton startIcon={props.status === 'kitchen' ? <RestaurantMenuIcon /> : <DoneIcon />} variant='outlined' onClick={handleClick} style={{ width: '45vw', marginBottom: '2vh' }}>{props.status === 'kitchen' ? 'Start Cooking' : 'Complete Order'}</StyledButton>
         </div>
       </div>
     </>

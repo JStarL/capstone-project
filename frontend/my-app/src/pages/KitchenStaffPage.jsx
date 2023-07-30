@@ -30,8 +30,10 @@ function KitchenStaffPage() {
     };
   }, [trigger]);
 
+  console.log(staffId)
+
   async function getOrderList() {
-    const url = `/kitchen_staff/get_order_list?menu_id=${menuId}`;
+    const url = `/kitchen_staff/get_order_list?menu_id=${menuId}?kitchen_staff_id=${staffId}`;
     const data = await makeRequest(url, 'GET', undefined, undefined);
     setOrderList(data);
     console.log(data);
