@@ -6,7 +6,7 @@ import makeRequest from '../makeRequest';
 import { Typography, Select, MenuItem, FormControl, InputLabel, useThemeProps } from '@mui/material';
 import { useParams } from 'react-router-dom';
 
-function CustomerMenuPage({ personas, currentlySelectedPersona, setCurrentlySelectedPersona, currentlySelectedPersonaAllergies, setCurrentlySelectedPersonaAllergies, setMenuId, setSessionId, setTableNumber }) {
+function CustomerMenuPage({ personas, handleExcludeCategories, currentlySelectedPersona, setCurrentlySelectedPersona, currentlySelectedPersonaAllergies, setCurrentlySelectedPersonaAllergies, setMenuId, setSessionId, setTableNumber, setExcludeCategories, excludeCategories }) {
   const [categories, setCategories] = React.useState([]);
   const [currentSelectedCategory, setCurrentSelectedCategory] = React.useState('Best Selling');
   const [currentSelectedCategoryId, setCurrentSelectedCategoryId] = React.useState(-1);
@@ -34,12 +34,12 @@ function CustomerMenuPage({ personas, currentlySelectedPersona, setCurrentlySele
     };
 
     fetchData();
-  }, [currentlySelectedPersona]);
+  }, [currentlySelectedPersona, excludeCategories]);
 
   React.useEffect(() => {
     const fetchCategoryData = async () => {
       if (currentSelectedCategoryId !== -1) {
-        const url = `/customer/view_category?session_id=${sessionId}&category_id=${currentSelectedCategoryId}&allergies=[${currentlySelectedPersonaAllergies}]`;
+        const url = `/customer/view_category?session_id=${sessionId}&category_id=${currentSelectedCategoryId}&allergies=[${currentlySelectedPersonaAllergies}]&excluded_cat_ids=[${excludeCategories}]`;
         const data = await makeRequest(url, 'GET', undefined, undefined);
         setMenuItems(data);
         fetchAllMenuData();
@@ -49,7 +49,7 @@ function CustomerMenuPage({ personas, currentlySelectedPersona, setCurrentlySele
   }, [currentSelectedCategoryId, trigger]);
 
   async function fetchAllMenuData() {
-    const url = `/customer/view_menu?session_id=${sessionId}&menu_id=${menuId}&allergies=[${currentlySelectedPersonaAllergies}]`;
+    const url = `/customer/view_menu?session_id=${sessionId}&menu_id=${menuId}&allergies=[${currentlySelectedPersonaAllergies}]&excluded_cat_ids=[${excludeCategories}]`;
     const data = await makeRequest(url, 'GET', undefined, undefined);
     setCategories(data);
     return data;
@@ -71,6 +71,8 @@ function CustomerMenuPage({ personas, currentlySelectedPersona, setCurrentlySele
     setMenuItems(data);
     return data;
   }
+
+  console.log(currentSelectedCategoryId)
 
   if (!categories || !Array.isArray(categories)) return <>loading...</>;
 
@@ -128,6 +130,11 @@ function CustomerMenuPage({ personas, currentlySelectedPersona, setCurrentlySele
               fetchAllMenuData={fetchAllMenuData}
               fetchCategoryMenuItems={fetchCategoryMenuItems}
               currentlySelectedPersona={currentlySelectedPersona}
+              currentSelectedCategoryId={currentSelectedCategoryId}
+              personas={personas}
+              setExcludeCategories={setExcludeCategories}
+              excludeCategories={excludeCategories}
+              handleExcludeCategories={handleExcludeCategories}
             />
           ))}
         </div>
