@@ -22,8 +22,8 @@ function RatingItem(props) {
 	};
 
 	const handleRatingSubmit = () => {
-		if (!isRatingSubmitted) {
-			console.log(`Submit rating for menu item: ${props.foodName} with Id: ${props.menu_item_id} with rating: ${rating}`);
+		if (rating !== 0 && !isRatingSubmitted) {
+			// console.log(`Submit rating for menu item: ${props.foodName} with Id: ${props.menu_item_id} with rating: ${rating}`);
 			const body = JSON.stringify({
 				session_id: sessionId,
 				menu_item_id: props.menu_item_id,
@@ -41,6 +41,8 @@ function RatingItem(props) {
 					console.error('Error submitting rating:', error);
 					// Handle error or show an error message
 				});
+		} else {
+			alert('Rating cannot be 0')
 		}
 	};
 

@@ -46,10 +46,12 @@ function NewStaffForm({ onSuccess }) {
 					setName('')
 					setEmail('')
 					setPassword('')
-					setStaffType('kitchen')
+					// setStaffType('kitchen')
 				}
 			})
 			.catch(e => console.log('Error: ' + e))
+			
+		
 	}
 
 	return (
@@ -119,11 +121,7 @@ function NewStaffForm({ onSuccess }) {
 					anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
 				>
 					<Alert onClose={handleSnackbarClose} severity="success" sx={{ fontSize: '2rem', width: 'auto' }}>
-						{`Successfully registered `}
-						<Typography variant="inherit" fontWeight="bold" display="inline">
-							{name}
-						</Typography>
-						{` as a `}
+						{`Successfully registered as a `}
 						<Typography variant="inherit" fontWeight="bold" display="inline">
 							{staffType === 'kitchen' ? 'Kitchen' : 'Wait'} Staff
 						</Typography>
