@@ -1,6 +1,6 @@
 import signal
 from json import dumps
-from flask import Flask, request
+from flask import Flask, request, abort
 from flask_cors import CORS
 import psycopg2
 
@@ -1061,7 +1061,7 @@ def wait_staff_get_assistance_notifications_flask():
 
 @APP.route("/wait_staff/mark_currently_assisting", methods=['POST'])
 def wait_staff_mark_currently_assisting_flask():
-    data = ast.literal_eval(request.get_json())
+    data = ast.literal_eval(str(request.get_json()))
     session_id = data['session_id']
     menu_id = data['menu_id']
     table_id = data['table_id']
@@ -1072,7 +1072,7 @@ def wait_staff_mark_currently_assisting_flask():
     success = { 'success': 'marked currently assisting' }
 
     if menu_id not in notifications:
-        return dumps(invalid_menu_id)
+        return abort(400, invalid_menu_id['error'])
     
     for notification in notifications[menu_id]:
         if notification['table_id'] == table_id and notification['session_id'] == session_id:

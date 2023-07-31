@@ -7,13 +7,13 @@ import { useParams } from 'react-router-dom';
 import { styled } from '@mui/material';
 
 export const StyledRadio = styled(Radio)({
-	color: 'black', // Replace with your desired color
+	color: 'black',
 	'&.Mui-checked': {
-		color: '#002250', // Replace with your desired color when the radio button is checked
+		color: '#002250',
 	}
 })
 
-function NewStaffForm({ onSuccess }) {
+function NewStaffForm() {
 	const [name, setName] = React.useState('')
 	const [email, setEmail] = React.useState('')
 	const [password, setPassword] = React.useState('')
@@ -40,13 +40,10 @@ function NewStaffForm({ onSuccess }) {
 		makeRequest('/manager/add_staff', 'POST', body, undefined)
 			.then(data => {
 				if (data.hasOwnProperty('success')) {
-					// onSuccess(name, staffType)
 					setSnackbarOpen(true);
-					// console.log(data)
 					setName('')
 					setEmail('')
 					setPassword('')
-					// setStaffType('kitchen')
 				}
 			})
 			.catch(e => console.log('Error: ' + e))

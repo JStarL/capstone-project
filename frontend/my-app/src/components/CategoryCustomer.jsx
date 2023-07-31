@@ -7,7 +7,6 @@ function CategoryCustomer(props) {
 	function selectCategory() {
 		props.setCurrentSelectedCategory(categoryName)
 		props.setCurrentSelectedCategoryId(categoryId)
-		console.log(categoryId)
 	}
 
 	return <>

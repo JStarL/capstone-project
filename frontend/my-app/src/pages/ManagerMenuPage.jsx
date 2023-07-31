@@ -39,7 +39,6 @@ function ManagerMenuPage() {
         const url = `/manager/view_category?manager_id=${managerId}&category_id=${currentSelectedCategoryId}`;
         const data = await makeRequest(url, 'GET', undefined, undefined)
         setMenuItems(data);
-        console.log(data);
       }
     };
     fetchCategoryData();
@@ -70,7 +69,6 @@ function ManagerMenuPage() {
     const url = `/manager/view_category?manager_id=${managerId}&category_id=${currentSelectedCategoryId}`;
     const data = await makeRequest(url, 'GET', undefined, undefined)
     setMenuItems(data);
-    console.log(data);
     return data
   }
 
@@ -116,7 +114,6 @@ function ManagerMenuPage() {
     menuItemId = Number(menuItemId);
     menuItems.every((obj, index) => {
       let foodId = Number(obj['food_id'])
-      console.log('foodId is: ' + foodId);
       if (foodId === menuItemId) {
         menuItemIndex = index;
         return false;
