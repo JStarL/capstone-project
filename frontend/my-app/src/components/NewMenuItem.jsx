@@ -44,7 +44,6 @@ function NewMenuItem(props) {
 
     makeRequest('/manager/add_menu_item', 'POST', body, undefined)
       .then(data => {
-        console.log(data);
         navigate(`/manager/menu/${menu_id}/${manager_id}`);
       })
       .catch(e => console.log('Error: ' + e));
@@ -53,7 +52,6 @@ function NewMenuItem(props) {
   React.useEffect(() => {
     const fetchData = async () => {
       const data = await fetchAllergies();
-      console.log(data);
     };
     fetchData();
   }, []);
@@ -62,7 +60,6 @@ function NewMenuItem(props) {
     const url = '/get_allergies';
     const data = await makeRequest(url, 'GET', undefined, undefined);
     setAllergies([...allergies, ...data]);
-    console.log(allergies)
     return data;
   }
 
@@ -183,7 +180,6 @@ function NewMenuItem(props) {
                 onClick={() => addIngredientAllergyPair()}
                 startIcon={<AddIcon />}
               ></StyledButton>
-              {console.log(ingredientAndAllergyList)}
             </div>
 
             {image ? (

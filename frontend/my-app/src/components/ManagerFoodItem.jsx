@@ -70,7 +70,6 @@ function ManagerFoodItem({ allergies, fetchAllMenuData, originalFoodName, origin
 
     makeRequest('/manager/delete_menu_item', 'DELETE', body, undefined)
       .then(data => {
-        console.log(data);
         fetchCategoryMenuItems();
       })
       .catch(e => console.log('Error: ' + e));
@@ -78,7 +77,6 @@ function ManagerFoodItem({ allergies, fetchAllMenuData, originalFoodName, origin
 
   function reorderMenuItem(prev_ordering_id, new_ordering_id) {
     if (!new_ordering_id) {
-      console.log("new_ordering_id is: " + new_ordering_id);
       return;
     }
     const body = JSON.stringify({
@@ -113,9 +111,6 @@ function ManagerFoodItem({ allergies, fetchAllMenuData, originalFoodName, origin
     setSelectedAllergy(0);
     setIngredient('');
   }
-
-  console.log(index)
-
   return (
     <>
       <div className='food-item-div'>
