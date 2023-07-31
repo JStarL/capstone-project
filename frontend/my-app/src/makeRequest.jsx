@@ -54,15 +54,15 @@ const makeRequest = async (route, method, body, staff_id) => {
 
   const response = await fetch('http://localhost:' + BACKEND_PORT + route, options);
   const data = await response.json();
-
+  console.log(data)
   if (response.ok) {
     console.log(data);
     return data;
   } else {
     // The response status code indicates an error (4xx or 5xx range)
-    console.error('There was an error:', response.status, response.statusText);
-    return;
-    // alert('An error occurred.');
+    console.error('There was an error:', data.name, data.message);
+    // return;
+    alert(`An error occurred:${data.message}`);
   }
 
   // const response = await fetch('http://localhost:' + BACKEND_PORT + route, options)
