@@ -40,14 +40,13 @@ function NewStaffForm({ onSuccess }) {
 		makeRequest('/manager/add_staff', 'POST', body, undefined)
 			.then(data => {
 				if (data.hasOwnProperty('success')) {
-					onSuccess(name, staffType)
+					// onSuccess(name, staffType)
 					setSnackbarOpen(true);
-					console.log(data)
+					// console.log(data)
 					setName('')
 					setEmail('')
 					setPassword('')
-					setStaffType('')
-					// navigate(`/manager/menu/${menuId}`)
+					setStaffType('kitchen')
 				}
 			})
 			.catch(e => console.log('Error: ' + e))

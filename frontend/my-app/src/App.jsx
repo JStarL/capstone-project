@@ -136,6 +136,7 @@ function App() {
     setPersonas([['Default', [null], [null]]])
     setCurrentlySelectedPersona(0)
     setCurrentlySelectedPersonaAllergies([])
+    setExcludeCategories([])
   }
   const restaurantSuccess = (menu_id) => {
     setMenuId(menu_id)
