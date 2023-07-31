@@ -37,7 +37,6 @@ function App() {
   const [isWait, setIsWait] = React.useState(false);
 
   const location = useLocation();
-  console.log(personas)
   React.useEffect(() => {
     const pathname = location.pathname;
     const hasCustomerPath = /^\/customer\/\d+\/\d+\/\d+$/.test(pathname);
@@ -88,7 +87,6 @@ function App() {
       let persona = [name, currentlySelectedPersonaAllergies];
       if (addExclude) {
         existingCategories = [...updatedPersonas[existingPersonaIndex][2], category]
-        console.log(existingCategories)
         if (existingCategories[0] === null) {
           existingCategories.splice(0, 1);
         }  
@@ -160,7 +158,7 @@ function App() {
             <Route path='/' element={<CustomerOrStaff onSuccess={customer} reset={reset}/>} />
             <Route path='/login' element={<LoginPage onSuccess={login} />} />
             <Route path='/register' element={<RegisterPage onSuccess={login} />} />
-            <Route path='/manager/addstaff/:menuId/:managerId' element={<AddStaffPage />} />
+            <Route path='/manager/addstaff/:menuId/:managerId' element={<AddStaffPage setId={setId} setMenuId={setMenuId}/>} />
             <Route path='/manager/menu/:menuId/:managerId' element={<ManagerMenuPage />} />
             <Route path='/manager/addnewmenuitem/:menuId/:managerId/:categoryName/:categoryId' element={<NewMenuItemPage />} />
 
