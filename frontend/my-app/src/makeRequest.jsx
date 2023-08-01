@@ -60,9 +60,9 @@ const makeRequest = async (route, method, body, staff_id) => {
     return data;
   } else {
     // The response status code indicates an error (4xx or 5xx range)
-    console.error('There was an error:', data.name, data.message);
+    console.error('There was an error:', data.error);
     // return;
-    alert(`An error occurred:${data.message}`);
+    alert(`An error occurred:${data.error}`);
   }
 
   // const response = await fetch('http://localhost:' + BACKEND_PORT + route, options)

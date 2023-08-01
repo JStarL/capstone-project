@@ -225,8 +225,8 @@ notifications = {}
 
 @APP.errorhandler(400)
 def error_page(error):
-    print(error)
-    return []
+    return {'error': error.description}, 400
+    
 
 # Auth functions
 
@@ -406,7 +406,12 @@ def customer_view_menu_flask():
     else:
         cur = db_conn.cursor()
         cur_dict['customers'][session_id] = cur
-    return dumps(customer_view_menu(cur, menu_id, allergy_ids, excluded_cat_ids, top_k))
+    
+    return_obj = customer_view_menu(cur, menu_id, allergy_ids, excluded_cat_ids, top_k)
+    if 'error' in return_obj:
+        abort(400, return_obj['error'])
+        
+    return dumps(return_obj)
 
 @APP.route("/customer/view_category", methods=['GET'])
 def customer_view_category_flask():
