@@ -34,6 +34,10 @@ function AddStaffPage(props) {
 	};
 
 	function addNewStaff() {
+    if (name === '') {
+      alert('Staff name cannot be empty')
+      return;
+    }
 		const body = JSON.stringify({
 			'manager_id': managerId,
 			'staff_type': staffType,
