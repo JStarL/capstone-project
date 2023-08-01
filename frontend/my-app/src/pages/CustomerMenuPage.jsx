@@ -74,8 +74,6 @@ function CustomerMenuPage({ personas, handleExcludeCategories, currentlySelected
     return data;
   }
 
-  console.log(currentSelectedCategoryId)
-
   if (!categories || !Array.isArray(categories)) return <>loading...</>;
 
   return (

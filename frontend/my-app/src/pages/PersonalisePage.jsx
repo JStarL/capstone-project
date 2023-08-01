@@ -85,7 +85,7 @@ const handleCheckboxChange = (event) => {
             borderColor: currentlySelectedPersona[0] === persona[0] ? '#002250' : undefined, 
             boxShadow: currentlySelectedPersona[0] === persona[0] ? "0 6px 12px rgba(0, 0, 0, 0.4)" : undefined,
             borderRadius: '20px'
-          }} variant="outlined" onClick={() => {handlePersonaChange(persona)}}>{persona[0]}</Card>
+          }} variant="outlined" onClick={() => {handlePersonaChange(persona)}}><Typography style={{ fontSize: '14px' }} variant='overline'><b>{persona[0]}</b></Typography></Card>
         ))}
          <Card
           sx={{ m: 2, p: 7, display: 'flex', flexDirection: 'column', alignItems: 'center' }}
@@ -99,7 +99,7 @@ const handleCheckboxChange = (event) => {
           onClick={handleNewPersona}
         >
           <PersonAddAlt1Icon fontSize="small" style={{ marginBottom: '10px' }} />
-          <Typography>Add New Persona</Typography>
+          <Typography variant='overline' style={{ fontSize: '14px' }}><b>Add New Persona</b></Typography>
         </Card>
       </div>
 			<div style={{ marginRight: '250px' }}className="login-page" sx={{ alignItems: 'center' }}>
@@ -114,7 +114,7 @@ const handleCheckboxChange = (event) => {
               value={personaName}
               onChange={(e) => setPersonaName(e.target.value)}
             />
-          ) : <Typography style={{ margin: '15px' }}><b>{personaName}</b></Typography>}
+          ) : <Typography variant='overline' style={{ margin: '15px', fontSize:'18px' }}><b>{personaName}</b></Typography>}
 
 					<form onSubmit={handleFormSubmit}>
 						<div
