@@ -11,7 +11,7 @@ def login_backend(cur, email, password):
 
     Returns:
         - logged_in (dictionary): If logged in successfully, updates the staff type of the member to be
-        manager, wait or kitchen based on who they are.
+        manager, wait or kitchen based on who they are
 
         OR
 
@@ -19,12 +19,13 @@ def login_backend(cur, email, password):
 
         OR
 
-        - invalid_password (dictionary): Error message if password entered is invalid.
+        - invalid_password (dictionary): Error message if password entered is invalid
+
+        OR
+
+        - invalid_type (dictionary): Error message is staff_type is invalid
 
     """
-
-    # NOTE: The token used is their 'email' for now,
-    # since managers and staff are stored in different tables
     
     invalid_email = { 'error': 'invalid email' }
     invalid_password = { 'error': 'invalid password' }
@@ -40,25 +41,25 @@ def login_backend(cur, email, password):
     
     if len(staff_list) == 0:
         return invalid_email
-    else:
-        # Access and compare staff's password
-        logged_in_tuple = staff_list[0]
-        if password == logged_in_tuple[0]:
-            logged_in['staff_id'] = logged_in_tuple[1]
-            logged_in['menu_id'] = logged_in_tuple[2]
-            
-            staff_type = logged_in_tuple[3]
-            if staff_type == 'M':
-                logged_in['staff_type'] = 'manager'
-            elif staff_type == 'W':
-                logged_in['staff_type'] = 'wait'
-            elif staff_type == 'K':
-                logged_in['staff_type'] = 'kitchen'
-            else:
-                return invalid_type
-            return logged_in
+
+    # Access and compare staff's password
+    logged_in_tuple = staff_list[0]
+    if password == logged_in_tuple[0]:
+        logged_in['staff_id'] = logged_in_tuple[1]
+        logged_in['menu_id'] = logged_in_tuple[2]
+        
+        staff_type = logged_in_tuple[3]
+        if staff_type == 'M':
+            logged_in['staff_type'] = 'manager'
+        elif staff_type == 'W':
+            logged_in['staff_type'] = 'wait'
+        elif staff_type == 'K':
+            logged_in['staff_type'] = 'kitchen'
         else:
-            return invalid_password
+            return invalid_type
+        return logged_in
+    else:
+        return invalid_password
         
 def register_backend(cur, email, password, name, resturant_name, location):
     """
@@ -66,9 +67,9 @@ def register_backend(cur, email, password, name, resturant_name, location):
 
     Inputs:
         - cur (cursor): The active cursor
-        - email (string): Email of the staff member registering
-        - password (string): Password entered by staff member registering
-        - name (string): Name of the staff member registering
+        - email (string): Email of the manager registering
+        - password (string): Password entered by manager registering
+        - name (string): Name of the manager registering
         - resturant_name (string): Name of restaurant they are registering  
         - location (string): Address of restaurant
 
@@ -89,7 +90,7 @@ def register_backend(cur, email, password, name, resturant_name, location):
 
     """
 
-    invalid_register = { 'error': 'invalid' }
+    invalid_register = { 'error': 'failed to register manager' }
     already_registered = { 'error': 'This email is already registered'}
     failed_category_insert = { 'error': 'failed to insert "Best Selling" category' }
     registered = { 'success': 'registered' }
@@ -120,7 +121,7 @@ def register_backend(cur, email, password, name, resturant_name, location):
         and restaurant_loc = %s;
     """
 
-    add_staff_query = """
+    add_manager_query = """
         insert into staff (email, name, password, menu_id, staff_type)
         values (%s, %s, %s, %s, 'M');
     """
@@ -128,21 +129,19 @@ def register_backend(cur, email, password, name, resturant_name, location):
 
     add_best_selling_query = """
         insert into categories(name, menu_id)
-        values ('Best Selling', %s)
-        ;
+        values ('Best Selling', %s);
     """
 
     check_best_selling_query = """
         select id
         from categories
         where name = 'Best Selling'
-        and menu_id = %s
-        ;
+        and menu_id = %s;
     """
 
-    # adding in the database of the menus
+    # adding restaurant details into the database table 'menus'
     cur.execute(add_resturant_query, [resturant_name, location])
-    # grabbing the id of the menu
+    # gettting the id of the menu
     cur.execute(menu_query, [resturant_name, location]) 
     list1 = cur.fetchall()
     
@@ -151,13 +150,13 @@ def register_backend(cur, email, password, name, resturant_name, location):
     
     menu_id = list1[0][0]
 
-    # adding in the database of the staff
-    cur.execute(add_staff_query, [email, name, password, menu_id])
-    # grabbing the manager id
+    # adding manager details into the database table 'staff'
+    cur.execute(add_manager_query, [email, name, password, menu_id])
+    # getting the manager id
     cur.execute(staff_query, [email])
     list1 = cur.fetchall()
     
-    # if it breaks and didn't get anything
+    # if the manager failed to register into 'staff'
     if len(list1) == 0:
         return invalid_register
     
@@ -189,8 +188,8 @@ def auth_add_staff_backend(cur, email, password, staff_type, name, menu_id):
     Inputs:
         - cur (cursor): The active cursor
         - email (string): Email of the staff member who wants to be registered into the system
-        - password (string): Password entered by staff member registering into the system
-        - staff_type (string): 'kitchen' or 'staff', depending on who the manager is registering into the system
+        - password (string): entered password of staff member registering into the system
+        - staff_type (string): 'kitchen' or 'staff', depending on what the manager entered while registering into the system
         - name (string): Name of the staff member registering into the system
         - menu_id (int): Menu id of menu associated with the staff member registering into the system
 
@@ -216,6 +215,8 @@ def auth_add_staff_backend(cur, email, password, staff_type, name, menu_id):
     insert_fail = { 'error': 'failed to insert new staff member'}
     success = { 'success': 'successfully registered staff' }
 
+    # Set the staff_char variable
+
     staff_char = None
     if staff_type == 'kitchen':
         staff_char = 'K'
@@ -223,6 +224,8 @@ def auth_add_staff_backend(cur, email, password, staff_type, name, menu_id):
         staff_char = 'W'
     else:
         return invalid_staff_type
+
+    # Check whether staff member already exists registered in the system
 
     staff_query = """
         select id from staff where email = %s;
