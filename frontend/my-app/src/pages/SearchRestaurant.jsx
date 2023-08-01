@@ -1,11 +1,15 @@
 import React from 'react';
 import { Typography, Paper, TextField } from '@mui/material';
+import { useParams } from 'react-router-dom';
 import makeRequest from '../makeRequest';
 import RestaurantDetails from '../components/RestaurantDetails';
 
 function SearchRestaurant({ onSuccess }) {
 	const [searchQuery, setSearchQuery] = React.useState('');
 	const [restaurants, setRestaurants] = React.useState([]);
+
+	const params = useParams();
+	const sessionId = params.sessionId
 
 	React.useEffect(() => {
 		const fetchData = async () => {
@@ -15,7 +19,7 @@ function SearchRestaurant({ onSuccess }) {
 	}, [searchQuery]);
 
 	async function fetchRestaurants() {
-		const url = `/customer/menu/search?session_id=${localStorage.getItem('session_id')}&query=${searchQuery}`;
+		const url = `/customer/menu/search?session_id=${sessionId}&query=${searchQuery}`;
 		const data = await makeRequest(url, 'GET', undefined, undefined);
 		setRestaurants(data);
 		return data; // Return the fetched data
@@ -33,7 +37,7 @@ function SearchRestaurant({ onSuccess }) {
 					value={searchQuery}
 				/>
 				<div>
-					{restaurants?.map((restaurant) => (
+					{restaurants?.map((restaurant, index) => (
 						<RestaurantDetails
 							key={restaurant.menu_id}
 							restaurantName={restaurant.restaurant_name}

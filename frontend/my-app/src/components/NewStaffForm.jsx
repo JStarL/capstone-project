@@ -2,24 +2,27 @@ import React from 'react';
 import { TextField, Typography, Paper, FormLabel, FormControl, Radio, RadioGroup, FormControlLabel, Snackbar, Alert } from '@mui/material';
 import makeRequest from '../makeRequest';
 import { StyledButton } from '../pages/CustomerOrStaff';
+import { useParams } from 'react-router-dom';
+
 import { styled } from '@mui/material';
 
-const StyledRadio = styled(Radio)({
-	color: 'black', // Replace with your desired color
+export const StyledRadio = styled(Radio)({
+	color: 'black',
 	'&.Mui-checked': {
-		color: '#002250', // Replace with your desired color when the radio button is checked
+		color: '#002250',
 	}
 })
 
-function NewStaffForm({ onSuccess }) {
+function NewStaffForm() {
 	const [name, setName] = React.useState('')
 	const [email, setEmail] = React.useState('')
 	const [password, setPassword] = React.useState('')
 	const [staffType, setStaffType] = React.useState('kitchen')
 	const [isSnackbarOpen, setSnackbarOpen] = React.useState(false);
 
-	const managerId = localStorage.getItem('staff_id')
-	const menuId = localStorage.getItem('menu_id')
+	const params = useParams()
+	const managerId = params.managerId
+	const menuId = params.menuId
 
 	const handleSnackbarClose = () => {
 		setSnackbarOpen(false);
@@ -37,17 +40,15 @@ function NewStaffForm({ onSuccess }) {
 		makeRequest('/manager/add_staff', 'POST', body, undefined)
 			.then(data => {
 				if (data.hasOwnProperty('success')) {
-					onSuccess(name, staffType)
 					setSnackbarOpen(true);
-					console.log(data)
 					setName('')
 					setEmail('')
 					setPassword('')
-					setStaffType('kitchen')
-					// navigate(`/manager/menu/${menuId}`)
 				}
 			})
 			.catch(e => console.log('Error: ' + e))
+			
+		
 	}
 
 	return (
@@ -117,11 +118,7 @@ function NewStaffForm({ onSuccess }) {
 					anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
 				>
 					<Alert onClose={handleSnackbarClose} severity="success" sx={{ fontSize: '2rem', width: 'auto' }}>
-						{`Successfully registered `}
-						<Typography variant="inherit" fontWeight="bold" display="inline">
-							{name}
-						</Typography>
-						{` as a `}
+						{`Successfully registered as a `}
 						<Typography variant="inherit" fontWeight="bold" display="inline">
 							{staffType === 'kitchen' ? 'Kitchen' : 'Wait'} Staff
 						</Typography>

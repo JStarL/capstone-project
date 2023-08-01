@@ -51,4 +51,20 @@ Week 6
 - Next week, I want all of my code to be completed and to do more API Client Testing.
 
 Week 7
-- I completed all my functions that I had to do but had to make some slight changes...
+- I completed all my functions that I had to do but had to make some slight changes
+- We have to prepare for our demo and ensure we spend enough time on the user stories of this sprint.
+- Didn't really run into any challenges on the backend!
+- Plan for next week is to practice our demo a few times and ensure that all user stories are covered within 12 mins.
+
+Week 8
+- We completed our demo B succesfully within 12 mins!
+- We completed all the relevant user stories for this sprint and ensure that the backend and frontend worked well together.
+- We also ran into a few issues of where some of the user stories in the first sprint stopped working, but we debugged that.
+- We completed our retrospective soon after, and we found that we had tried out most of the things we set out to do and it had helped us achieve a more organized timeline of our sprint.
+- Next week, we plan on allocating user stories for us to do in the last sprint.
+
+Week 9
+- I had completed my 4 routes already! (wait_staff/get_ordered_list, wait_staff/mark_order_complete, wait_staff/get_assistance_notifications, wait_staff/mark_notification_complete)
+- These were fairly easy for me to code up as it was just dictionary manipulation
+- Next week the plan is to refactor all our code and eliminate all code smells
+- We also plan on preparing our report, and preparing our final demo.

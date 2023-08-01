@@ -8,8 +8,21 @@ def customer_view_menu(cur, menu_id, allergies_list, excluded_cat_list, top_k):
         if "0" in allergies_list:
             allergies_list.remove("0")
 
+    query_num_categories = """
+        select count(*)
+        from categories
+        where menu_id = %s
+        ;
+    """
+
+    cur.execute(query_num_categories, [menu_id])
+    res = cur.fetchone()
+
+    if int(res[0]) == len(excluded_cat_list) + 1:
+        excluded_cat_list = [-1]
+
     query_categories = """
-    select id, name, ordering_id from categories where menu_id = %s order by ordering_id;
+        select id, name, ordering_id from categories where menu_id = %s order by ordering_id;
     """
     
     query_menu_items = None
@@ -115,11 +128,24 @@ def customer_view_category(cur, category_id, allergies_list, excluded_cat_list, 
     if list1[0][1] == 'Best Selling':
         best_selling = True
 
+    query_num_categories = """
+        select count(*)
+        from categories
+        where menu_id = %s
+        ;
+    """
+
+    cur.execute(query_num_categories, [list1[0][2]])
+    res = cur.fetchone()
+
+    if res[0] == len(excluded_cat_list) + 1:
+        excluded_cat_list = [-1]
+
     query1 = None
     if len(allergies_list) == 0:
         if (best_selling):
             query1 = """
-                select m.id, m.title, m.description, m.image, m.price, b.ordering_id
+                select m.id, m.title, m.description, m.image, m.price, b.ordering_id, m.category_id
                 from menu_items m join best_selling_items b on (m.menu_id = b.menu_id and m.id = b.menu_item_id)
                 where m.menu_id = %s
                 and m.category_id not in %s
@@ -131,7 +157,7 @@ def customer_view_category(cur, category_id, allergies_list, excluded_cat_list, 
             cur.execute(query1, [list1[0][2], excluded_cat_tuple, top_k])
         else:
             query1 = """
-                select id, title, description, image, price, ordering_id
+                select id, title, description, image, price, ordering_id, category_id
                 from menu_items
                 where category_id = %s
                 order by ordering_id
@@ -143,7 +169,7 @@ def customer_view_category(cur, category_id, allergies_list, excluded_cat_list, 
         allergies_tuple = tuple(allergies_list)
         if (best_selling):
             query1 = """
-                select m.id, m.title, m.description, m.image, m.price, b.ordering_id
+                select m.id, m.title, m.description, m.image, m.price, b.ordering_id, m.category_id
                 from menu_items m join best_selling_items b on (m.menu_id = b.menu_id and m.id = b.menu_item_id)
                 where m.menu_id = %s
                 and m.category_id not in %s
@@ -161,7 +187,7 @@ def customer_view_category(cur, category_id, allergies_list, excluded_cat_list, 
             cur.execute(query1, [list1[0][2], excluded_cat_tuple, allergies_tuple, top_k])
         else:
             query1 = """
-                select id, title, description, image, price, ordering_id
+                select id, title, description, image, price, ordering_id, category_id
                 from menu_items m
                 where category_id = %s
                 and not exists (
@@ -199,6 +225,7 @@ def customer_view_category(cur, category_id, allergies_list, excluded_cat_list, 
         tmp.update({'food_price': tup[4]})
         tmp.update({'food_ordering_id': tup[5]})
         tmp.update({'food_ingredients': ingredients_list})
+        tmp.update({'food_category_id': tup[6]})
         menu_items.append(tmp)
 
     return menu_items
@@ -271,3 +298,49 @@ def customer_menu_search(cur, query):
         list2.append(dict_res)
     # menu.update({'menu_list': list2})
     return list2
+
+def customer_give_rating(cur, menu_item_id, rating, amount):
+
+    invalid_menu_item_id = { 'error': 'invalid menu_item_id' }
+    update_failed = { 'error': 'the update failed' }
+    update_success = { 'success': 'update success' }
+
+    query_get_curr_rating = """
+    select total_ratings, points
+    from menu_items
+    where id = %s
+    ;
+    """
+
+    cur.execute(query_get_curr_rating, [menu_item_id])
+
+    res = cur.fetchone()
+
+    if res is None:
+        return invalid_menu_item_id
+
+    if rating < 1:
+        rating = 1
+
+    new_rating = int(res[0]) + rating
+
+    new_amount = int(res[1]) + amount
+
+    query_update_rating = """
+    update menu_items
+    set total_ratings = %s, points = %s
+    where id = %s
+    ;
+    """
+
+    cur.execute(query_update_rating, [str(new_rating), str(new_amount), menu_item_id])
+
+    # Check that the update worked
+
+    cur.execute(query_get_curr_rating, [menu_item_id])
+    res = cur.fetchone()
+
+    if int(res[0]) == new_rating and int(res[1]) == new_amount:
+        return update_success
+    else:
+        return update_failed

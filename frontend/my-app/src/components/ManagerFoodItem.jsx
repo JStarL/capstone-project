@@ -1,6 +1,8 @@
 import React from 'react';
 import './Components.css';
+import { useParams } from 'react-router-dom';
 import { Typography, Button, TextField, Input, Select } from '@mui/material';
+import { Snackbar, Alert } from '@mui/material';
 import { fileToDataUrl } from './helperFunctions';
 import MenuItem from '@mui/material/MenuItem';
 import DeleteIcon from '@mui/icons-material/Delete';
@@ -14,7 +16,7 @@ import IngredientAllergyPair from './IngredientAllergyPair';
 import ArrowUpwardIcon from '@mui/icons-material/ArrowUpward';
 import ArrowDownwardIcon from '@mui/icons-material/ArrowDownward';
 import AddIcon from '@mui/icons-material/Add';
-import SaveAltIcon from '@mui/icons-material/SaveAlt';
+import UpdateIcon from '@mui/icons-material/Update';
 
 function ManagerFoodItem({ allergies, fetchAllMenuData, originalFoodName, originalFoodDescription, originalPrice, originalImage, originalIngredients, foodId, categoryId, categoryName, fetchCategoryMenuItems, orderingId, getOtherMenuItemOrderingId, index, menuItemsSize }) {
   const [foodName, setFoodName] = React.useState('');
@@ -25,6 +27,13 @@ function ManagerFoodItem({ allergies, fetchAllMenuData, originalFoodName, origin
   const [isListVisible, setListVisible] = React.useState(false);
   const [ingredient, setIngredient] = React.useState('');
   const [selectedAllergy, setSelectedAllergy] = React.useState(0); // New state variable for selected allergy
+
+  const params = useParams()
+  const [isSnackbarOpen, setSnackbarOpen] = React.useState(false);
+
+  const managerId = params.managerId
+  const menuId = params.menuId
+
   React.useEffect(() => {
     setFoodName(originalFoodName)
     setFoodDescription(originalFoodDescription)
@@ -37,8 +46,10 @@ function ManagerFoodItem({ allergies, fetchAllMenuData, originalFoodName, origin
     const thumbnailUrl = await fileToDataUrl(event.target.files[0])
     setImage(thumbnailUrl);
   }
-  const managerId = localStorage.getItem('staff_id')
-  const menuId = localStorage.getItem('menu_id')
+
+  const handleSnackbarClose = () => {
+    setSnackbarOpen(false);
+  };
 
   function updateFoodItem() {
     const body = JSON.stringify({
@@ -54,7 +65,10 @@ function ManagerFoodItem({ allergies, fetchAllMenuData, originalFoodName, origin
     });
     makeRequest('/manager/update_menu_item', 'POST', body, undefined)
       .then(data => {
-        console.log(data)
+        console.log(data);
+
+        // Trigger the snackbar here
+        setSnackbarOpen(true);
       })
       .catch(e => console.log('Error: ' + e));
   }
@@ -67,7 +81,6 @@ function ManagerFoodItem({ allergies, fetchAllMenuData, originalFoodName, origin
 
     makeRequest('/manager/delete_menu_item', 'DELETE', body, undefined)
       .then(data => {
-        console.log(data);
         fetchCategoryMenuItems();
       })
       .catch(e => console.log('Error: ' + e));
@@ -75,7 +88,6 @@ function ManagerFoodItem({ allergies, fetchAllMenuData, originalFoodName, origin
 
   function reorderMenuItem(prev_ordering_id, new_ordering_id) {
     if (!new_ordering_id) {
-      console.log("new_ordering_id is: " + new_ordering_id);
       return;
     }
     const body = JSON.stringify({
@@ -110,9 +122,6 @@ function ManagerFoodItem({ allergies, fetchAllMenuData, originalFoodName, origin
     setSelectedAllergy(0);
     setIngredient('');
   }
-
-  console.log(index)
-
   return (
     <>
       <div className='food-item-div'>
@@ -211,8 +220,8 @@ function ManagerFoodItem({ allergies, fetchAllMenuData, originalFoodName, origin
                     onChange={e => setSelectedAllergy(e.target.value)}
                     label="Add Allergy"
                   >
-                    {allergies.map(allergy => (
-                      <MenuItem key={allergy[0]} value={allergy[0]}>
+                    {allergies.map((allergy, index) => (
+                      <MenuItem key={index} value={allergy[0]}>
                         {allergy[1]}
                       </MenuItem>
                     ))}
@@ -243,13 +252,10 @@ function ManagerFoodItem({ allergies, fetchAllMenuData, originalFoodName, origin
                 />
               )}
               <Button
-                  style={{ color: '#002250', fontSize: '2vw', marginLeft: '1vw', marginRight: '1vw' }}
-                  onClick={updateFoodItem}
-                  startIcon={<SaveAltIcon style={{ fontSize: '2vw' }} />}
-                />
-              {/* <StyledButton style={{ width: 'auto', fontSize: '1vw', marginLeft: '1vw', marginRight: '1vw' }} onClick={updateFoodItem}>
-                UPDATE
-              </StyledButton> */}
+                style={{ color: '#002250', fontSize: '2vw', marginLeft: '1vw', marginRight: '1vw' }}
+                onClick={updateFoodItem}
+                startIcon={<UpdateIcon style={{ fontSize: '2vw' }} />}
+              />
             </div>
             <Button
               sx={{ color: '#002250', fontSize: '2vw', margin: '1vw' }}
@@ -259,7 +265,25 @@ function ManagerFoodItem({ allergies, fetchAllMenuData, originalFoodName, origin
           </div>
         </div>
 
-
+        <Snackbar
+          sx={{
+            width: '50%',
+            '& .MuiSnackbarContent-root': {
+              fontSize: '1.2rem',
+            },
+          }}
+          open={isSnackbarOpen}
+          autoHideDuration={4000}
+          onClose={handleSnackbarClose}
+          anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
+        >
+          <Alert onClose={handleSnackbarClose} severity="success" sx={{ fontSize: '2rem', width: 'auto' }}>
+            {`Changes saved for `}
+            <Typography variant="inherit" fontWeight="bold" display="inline">
+              {foodName}
+            </Typography>
+          </Alert>
+        </Snackbar>
       </div>
     </>
   );

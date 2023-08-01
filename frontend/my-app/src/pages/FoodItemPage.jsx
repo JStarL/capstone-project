@@ -6,15 +6,17 @@ import { useNavigate, useParams } from 'react-router-dom';
 import makeRequest from '../makeRequest';
 import { StyledButton } from './CustomerOrStaff';
 
-function FoodItemPage() {
+function FoodItemPage(props) {
   const navigate = useNavigate();
+  const params = useParams();
+  
   // Change to get from params
-  const sessionId = localStorage.getItem('session_id');
-  const menuId = localStorage.getItem('menu_id');
-  const tableNumber = localStorage.getItem('table_number');
+  const sessionId = params.sessionId;
+  const menuId = params.menuId;
+  const tableNumber = params.tableNumber
 
   const [foodData, setFoodData] = React.useState({});
-  const params = useParams();
+  
   const [foodId, setFoodId] = React.useState(params.foodId);
   const [isSnackbarOpen, setSnackbarOpen] = React.useState(false);
 
@@ -40,7 +42,8 @@ function FoodItemPage() {
       menu_id: menuId,
       menu_item_id: foodId,
       amount: 1,
-      title: foodData.food_name
+      title: foodData.food_name, 
+      persona_name: props.currentlySelectedPersona
     });
 
     makeRequest('/customer/add_menu_item', 'POST', body, undefined)

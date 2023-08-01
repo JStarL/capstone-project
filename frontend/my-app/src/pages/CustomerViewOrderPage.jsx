@@ -5,7 +5,7 @@ import makeRequest from '../makeRequest';
 import OrderItem from '../components/OrderItem';
 import { StyledButton } from './CustomerOrStaff';
 
-function CustomerViewOrderPage() {
+function CustomerViewOrderPage(props) {
   const [orders, setOrders] = React.useState([])
   const [totalCost, setTotalCost] = React.useState(0)
 	const params = useParams();
@@ -27,7 +27,7 @@ function CustomerViewOrderPage() {
     orders?.map((order) => {
       const subtotal = order.price * order.amount;
       total += subtotal;
-      setTotalCost(total);
+      setTotalCost(total.toFixed(2));
     })
     if (orders.length === 0) {
       setTotalCost(0)
@@ -49,7 +49,7 @@ function CustomerViewOrderPage() {
     makeRequest('/customer/finalise_order', 'POST', body, undefined)
       .then(data => {
         console.log(data);
-        navigate(`/customer/${sessionId}/${menuId}/${tableId}`);
+        navigate(`/customer/${sessionId}/view_order/${menuId}/${tableId}/pay`);
       })
       .catch(e => console.log('Error: ' + e));
   }
@@ -58,23 +58,29 @@ function CustomerViewOrderPage() {
 
 	return (
     <>
-    <div><b>YOUR ORDER</b></div>
-		<div className='view-order-page' style={{ justifywidth: '100%', alignItems:'center' }} sx={{ alignItems: 'center' }}>
-    {orders?.map((order) => (
+    <Typography className='h4' variant="overline" style={{fontSize: '2rem', margin: '10px'}} gutterBottom><b>Your Order</b></Typography>
+		<div className='view-order-page' style={{justifywidth: '100%', alignItems:'center' }}>
+      {orders?.map((order, index) => (
         <OrderItem
+          key={index}
           amount={order.amount}
           menu_item_id={order.menu_item_id}
           foodName={order.title}
           foodDescription={order.description}
           foodImage={order.image}
           foodPrice={order.price}
+          foodCategoryId={order.category_id}
           fetchOrder={fetchOrder}
           setTotalCost={setTotalCost}
+          orderedByPersona={order.persona}
+          personas={props.personas}
+          currentlySelectedPersona={props.currentlySelectedPersona}
+          handleExcludeCategories={props.handleExcludeCategories}
         >
         </OrderItem>
       ))}
 		</div>
-    <Typography style={{ padding: '5px', margin: '20px' }}><b>Total: ${totalCost}</b></Typography>
+    <Typography variant="h4" style={{ padding: '5px', margin: '20px' }}><b>Total: ${totalCost}</b></Typography>
     <StyledButton onClick={() => finaliseOrder()} style={{ width: '70%'}}>Finalise Order</StyledButton>
     </>
 	);

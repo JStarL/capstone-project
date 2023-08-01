@@ -19,7 +19,7 @@ function ManagerMenuPage() {
   const navigate = useNavigate();
   const params = useParams();
 
-  const managerId = localStorage.getItem('staff_id');
+  const managerId = params.managerId;
   const menuId = params.menuId;
 
   React.useEffect(() => {
@@ -39,7 +39,6 @@ function ManagerMenuPage() {
         const url = `/manager/view_category?manager_id=${managerId}&category_id=${currentSelectedCategoryId}`;
         const data = await makeRequest(url, 'GET', undefined, undefined)
         setMenuItems(data);
-        console.log(data);
       }
     };
     fetchCategoryData();
@@ -70,7 +69,6 @@ function ManagerMenuPage() {
     const url = `/manager/view_category?manager_id=${managerId}&category_id=${currentSelectedCategoryId}`;
     const data = await makeRequest(url, 'GET', undefined, undefined)
     setMenuItems(data);
-    console.log(data);
     return data
   }
 
@@ -116,7 +114,6 @@ function ManagerMenuPage() {
     menuItemId = Number(menuItemId);
     menuItems.every((obj, index) => {
       let foodId = Number(obj['food_id'])
-      console.log('foodId is: ' + foodId);
       if (foodId === menuItemId) {
         menuItemIndex = index;
         return false;
@@ -153,7 +150,6 @@ function ManagerMenuPage() {
       <div style={{ display: 'flex', flexDirection: 'row' }}>
         <div style={{ width: '25%', backgroundColor: 'white', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
           {categories?.map((category, index) => (
-
             <CategoryManager
               categoryName={category[Object.keys(category)[0]][0]}
               key={Object.keys(category)[0]} // category id 
@@ -170,7 +166,6 @@ function ManagerMenuPage() {
               categoriesSize={categories.length}
             >
             </CategoryManager>
-
           ))}
           <NewCategoryField
             menuId={menuId}
@@ -179,9 +174,9 @@ function ManagerMenuPage() {
           />
         </div>
         <div style={{ width: '75%', height: '100%' }}>
-          <Typography className='h4' variant="h4" gutterBottom>Manager Menu Page - {currentSelectedCategory}</Typography>
+          <Typography className='h4' variant="overline" style={{fontSize: '2rem', margin: '10px'}} gutterBottom><b>{currentSelectedCategory}</b></Typography>
           <div>
-            {menuItems?.map((menuItem, index) =>
+            {menuItems && menuItems.length > 0 && menuItems.map((menuItem, index) => (
               currentSelectedCategory === 'Best Selling' ? (
                 <BestSellingFoodItem
                   key={menuItem.food_id}
@@ -210,12 +205,12 @@ function ManagerMenuPage() {
                 >
                 </ManagerFoodItem>
               )
-            )}
+            ))}
           </div>
           <div>
             <br></br>
             {currentSelectedCategory !== 'Best Selling'
-              ? <StyledButton variant='outlined' sx={{ width: '25%' }} onClick={() => { navigate(`/manager/addnewmenuitem/${menuId}/${currentSelectedCategory}/${currentSelectedCategoryId}`) }}>Add new menu item</StyledButton>
+              ? <StyledButton variant='outlined' sx={{ width: '25%' }} onClick={() => { navigate(`/manager/addnewmenuitem/${menuId}/${managerId}/${currentSelectedCategory}/${currentSelectedCategoryId}`) }}>Add new menu item</StyledButton>
               : null
             }
           </div>

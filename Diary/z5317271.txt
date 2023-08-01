@@ -1,11 +1,11 @@
-WEEK ONE
+WEEK 1
 - Brief overview for each project proposal and discussed possible novel functionalities for each project
 - Decided on Scrum Master
 - Set up Jira
 - Allocation of roles: Frontend
 - Chose a weekly meeting day: Monday 2pm
 
-WEEK TWO
+WEEK 2
 Meeting/Tutorial
 - Chose Project: Project 1 Wait Management
 - Presentation and discussion of possible novel function ideas to tutor
@@ -16,7 +16,7 @@ Meeting/Tutorial
 Work Done:
 - Added acceptance criterias to each user story
 
-WEEK THREE
+WEEK 3
 Meeting/Tutorial
 - Continued to work on screens needed for the project
 - Discussed possible ways a manager can register
@@ -30,7 +30,7 @@ Work Done:
   - Kitchen staff - view pending orders screen
   - Manager - screen to edit, add, delete categories/menu items on the menu
 
-WEEK FOUR
+WEEK 4
 Meeting/Tutorial
 - Made a document with all HTTP Routes needed to connect the frontend and backend
 - Allocated tasks to work on different screens for the frontend
@@ -42,8 +42,8 @@ Work Done:
 - Created folders for components and pages
 - Created an interface with dummy buttons, so that when backend is ready, all we have to do is connect them both
 
-WEEK FIVE
-Meeting/Tutorial (26/7/2023 1pm)
+WEEK 5
+Meeting/Tutorial (26/7/2023 2pm)
 - Finish setting up backend/frontend locally and on vm
 - Link backend and frontend together - manager page, customer page, add staff
 - Discussed how data will be shown in the frontend
@@ -53,7 +53,7 @@ Work Done:
 - Demo: Demonstrated manager pages (add menu item and categories)
 - Retrospective
 
-WEEK SIX (3/7/2023 1pm)
+WEEK 6 (3/7/2023 2pm)
 Meeting
 - Allocated tasks for the next sprint
 - Delegated tasks between the frontend
@@ -64,8 +64,8 @@ Work Done:
 - Debug any issues from Sprint 1
 
 
-WEEK SEVEN
-Meeting/Tutorial (10/7/2023 1pm)
+WEEK 7
+Meeting/Tutorial (10/7/2023 2pm)
 - Catch up with work that has been done during flex week
 - Discuss how to implement personas
 
@@ -73,8 +73,8 @@ Work Done:
 - Personalisation working with the backend
 - View Order page for customers
 
-WEEK EIGHT
-Meeting/Tutorial (17/7/2023 1pm)
+WEEK 8
+Meeting/Tutorial (17/7/2023 2pm)
 - Discuss and work on debugging for errors arised in meeting
 - Discuss how to implement split payments
 - Practice Demo (19/7/2023 11pm)
@@ -82,3 +82,26 @@ Meeting/Tutorial (17/7/2023 1pm)
 Work Done: 
 - Work on personas allowing user's to add persona names and edit their allergies
 - Implement total cost in View Order Page
+- Clean up code
+
+WEEK 9
+Meeting/Tutorial (24/7/2023 2pm)
+- Plan and allocate tasks for the last sprint
+- Add child issues and allocate roles on Jira
+- Discuss ways to sned and retrieve data from customer to staff - Notifications and Orders
+- Create deadlines for frontend skeleton --> Friday Week 9 (28/7/2023)
+- Create deadling for all coding (except styling / code clean up) --> Tuesday Week 10 (1/8/2023)
+
+Work Done:
+- Kitchen Staff and Wait Staff Pages - add intermediate stages
+- Remove all localStorage usage and focus on params
+- Clean up App.jsx file - Footer and Nav bars
+
+WEEK 10
+Meeting (31/07/2023 2pm)
+- Discuss how demo will be conducted and allocate roles of who is explaining which functionality
+- Practice Demo (1/8/2023 2pm)
+
+Work Done: 
+- Finish Styling
+- Demo: Explain Kitchen staff and Wait staff functionalities

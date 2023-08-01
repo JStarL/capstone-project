@@ -8,8 +8,10 @@ import makeRequest from '../makeRequest';
 function CustomerFoodItem(props) {
   const navigate = useNavigate();
   const params = useParams();
-  const sessionId = localStorage.getItem('session_id');
+  const sessionId = params.sessionId
   const menuId = params.menuId;
+  const tableNumber = params.tableNumber
+  const [trigger, setTrigger] = React.useState(true)
   const [isSnackbarOpen, setSnackbarOpen] = React.useState(false);
 
   function addToOrder() {
@@ -18,13 +20,15 @@ function CustomerFoodItem(props) {
       menu_id: menuId,
       menu_item_id: props.foodId,
       amount: 1,
-      title: props.originalFoodName
+      title: props.originalFoodName,
+      persona_name: props.currentlySelectedPersona
     });
 
     makeRequest('/customer/add_menu_item', 'POST', body, undefined)
       .then(data => {
-        console.log(data);
         setSnackbarOpen(true);
+        props.handleExcludeCategories(props.personas[props.currentlySelectedPersona][0], props.foodCategoryId, true);
+        setTrigger(!trigger)
       })
       .catch(e => console.log('Error: ' + e));
   }
@@ -52,14 +56,14 @@ function CustomerFoodItem(props) {
           <div className='div-section'>
             <b>{props.originalFoodName}</b>
           </div>
-          <div className='div-section'>{props.originalFoodDescription}</div>
-          <div className='div-section'>Price: $ {props.originalPrice}</div>
+          <div className='div-section'><i>{props.originalFoodDescription}</i></div>
+          <div className='div-section'><b>Price:</b> ${props.originalPrice}</div>
         </div>
         <div className='food-item-button'>
           <StyledButton
             variant='outlined'
             style={{ margin: '10px' }}
-            onClick={() => navigate(`/customer/${sessionId}/${menuId}/${props.categoryId}/${props.foodId}`)}
+            onClick={() => navigate(`/customer/${sessionId}/${menuId}/${props.currentSelectedCategoryId}/${tableNumber}/${props.foodId}`)}
           >
             Find out more
           </StyledButton>

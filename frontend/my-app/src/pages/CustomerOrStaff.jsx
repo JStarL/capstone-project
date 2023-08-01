@@ -19,15 +19,10 @@ function CustomerOrStaff({ onSuccess, reset }) {
 
   React.useEffect(function () {
     reset(null, null, null, null)
-    localStorage.clear()
   }, []);
 
   function selectCustomer() {
     const timestamp = Math.floor(Date.now() / 1000);
-    localStorage.setItem('session_id', timestamp);
-    localStorage.setItem('staff_type', 'customer')
-    localStorage.removeItem('menu_id')
-    localStorage.removeItem('table_number')
     onSuccess('customer', timestamp)
     navigate(`/customer/${timestamp}/searchrestaurant`);
   }

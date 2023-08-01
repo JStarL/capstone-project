@@ -24,11 +24,8 @@ function RegisterPage({ onSuccess }) {
     makeRequest('/auth/register', 'POST', body, undefined)
       .then(data => {
         if (data.hasOwnProperty('success')) {
-          onSuccess(data['staff_id'], 'manager', data['menu_id'])
-          localStorage.setItem('staff_id', data['manager_id']);
-          localStorage.setItem('menu_id', data['menu_id']);
-          localStorage.setItem('staff_type', 'manager');
-          navigate(`/manager/menu/${localStorage.getItem('menu_id')}`)
+          onSuccess(data['manager_id'], 'manager', data['menu_id'])
+          navigate(`/manager/menu/${data['menu_id']}/${data['manager_id']}`)
         } else {
           alert(data['error'])
         }
