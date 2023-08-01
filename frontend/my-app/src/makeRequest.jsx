@@ -52,15 +52,28 @@ const makeRequest = async (route, method, body, staff_id) => {
     options.body = JSON.stringify(body);
   }
 
-  const response = await fetch('http://localhost:' + BACKEND_PORT + route, options)
-  const data = await response.json()
-  if (data['error']) {
-    console.log('There was an error: ' + data['error'])
-    alert(data.error);
+  const response = await fetch('http://localhost:' + BACKEND_PORT + route, options);
+  const data = await response.json();
+  console.log(data)
+  if (response.ok) {
+    console.log(data);
+    return data;
   } else {
-    console.log(data)
-    return data
+    // The response status code indicates an error (4xx or 5xx range)
+    console.error('There was an error:', data.error);
+    // return;
+    alert(`An error occurred:${data.error}`);
   }
+
+  // const response = await fetch('http://localhost:' + BACKEND_PORT + route, options)
+  // const data = await response.json()
+  // if (data['error']) {
+  //   console.log('There was an error: ' + data['error'])
+  //   alert(data.error);
+  // } else {
+  //   console.log(data)
+  //   return data
+  // }
 }
 
 export default makeRequest

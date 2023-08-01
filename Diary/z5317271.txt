@@ -96,3 +96,12 @@ Work Done:
 - Kitchen Staff and Wait Staff Pages - add intermediate stages
 - Remove all localStorage usage and focus on params
 - Clean up App.jsx file - Footer and Nav bars
+
+WEEK 10
+Meeting (31/07/2023 2pm)
+- Discuss how demo will be conducted and allocate roles of who is explaining which functionality
+- Practice Demo (1/8/2023 2pm)
+
+Work Done: 
+- Finish Styling
+- Demo: Explain Kitchen staff and Wait staff functionalities

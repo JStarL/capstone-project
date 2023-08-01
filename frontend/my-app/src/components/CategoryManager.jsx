@@ -1,7 +1,7 @@
 import React from 'react';
 import './Components.css';
 import { useParams } from 'react-router-dom';
-import { Button, TextField, Card, CardContent, Box } from '@mui/material';
+import { Typography, Button, TextField, Card, CardContent, Box } from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete';
 import ArrowUpwardIcon from '@mui/icons-material/ArrowUpward';
 import ArrowDownwardIcon from '@mui/icons-material/ArrowDownward';
@@ -86,7 +86,7 @@ function CategoryManager(props) {
         style={{
           borderColor: props.currentSelectedCategoryId === props.id ? '#002250' : undefined,
           boxShadow: props.currentSelectedCategoryId === props.id ? "0 6px 12px rgba(0, 0, 0, 0.4)" : undefined,
-          width: '300px',
+          width: '36vh',
           marginRight: '0',
           borderRadius: '20px'
         }}
@@ -95,10 +95,10 @@ function CategoryManager(props) {
         sx={{ m: 2, p: 7 }}
         variant="outlined"
       >
-        <CardContent>
+  			<CardContent style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100%' }}>
           {categoryName === 'Best Selling' ? (
-            <div>Best Selling</div>
-          ) : (
+				  <Typography style={{ fontSize:'15px' }} variant='overline'><b>Best Selling</b></Typography>
+        ) : (
             <TextField
               fullWidth
               variant="standard"

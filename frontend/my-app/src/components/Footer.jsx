@@ -23,6 +23,9 @@ function Footer(props) {
       .then(data => {
         console.log(data);
         setSnackbarOpen(true); // Open the Snackbar on successful request
+        setTimeout(() => {
+          handleSnackbarClose(); // Close the Snackbar after 3 seconds
+        }, 3000);
       })
       .catch(e => console.log('Error: ' + e));
   }

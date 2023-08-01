@@ -7,13 +7,13 @@ import { useParams } from 'react-router-dom';
 import { styled } from '@mui/material';
 
 export const StyledRadio = styled(Radio)({
-	color: 'black', // Replace with your desired color
+	color: 'black',
 	'&.Mui-checked': {
-		color: '#002250', // Replace with your desired color when the radio button is checked
+		color: '#002250',
 	}
 })
 
-function NewStaffForm({ onSuccess }) {
+function NewStaffForm() {
 	const [name, setName] = React.useState('')
 	const [email, setEmail] = React.useState('')
 	const [password, setPassword] = React.useState('')
@@ -40,17 +40,15 @@ function NewStaffForm({ onSuccess }) {
 		makeRequest('/manager/add_staff', 'POST', body, undefined)
 			.then(data => {
 				if (data.hasOwnProperty('success')) {
-					onSuccess(name, staffType)
 					setSnackbarOpen(true);
-					console.log(data)
 					setName('')
 					setEmail('')
 					setPassword('')
-					setStaffType('')
-					// navigate(`/manager/menu/${menuId}`)
 				}
 			})
 			.catch(e => console.log('Error: ' + e))
+			
+		
 	}
 
 	return (
@@ -120,11 +118,7 @@ function NewStaffForm({ onSuccess }) {
 					anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
 				>
 					<Alert onClose={handleSnackbarClose} severity="success" sx={{ fontSize: '2rem', width: 'auto' }}>
-						{`Successfully registered `}
-						<Typography variant="inherit" fontWeight="bold" display="inline">
-							{name}
-						</Typography>
-						{` as a `}
+						{`Successfully registered as a `}
 						<Typography variant="inherit" fontWeight="bold" display="inline">
 							{staffType === 'kitchen' ? 'Kitchen' : 'Wait'} Staff
 						</Typography>

@@ -27,7 +27,7 @@ function CustomerViewOrderPage(props) {
     orders?.map((order) => {
       const subtotal = order.price * order.amount;
       total += subtotal;
-      setTotalCost(total);
+      setTotalCost(total.toFixed(2));
     })
     if (orders.length === 0) {
       setTotalCost(0)
@@ -69,11 +69,13 @@ function CustomerViewOrderPage(props) {
           foodDescription={order.description}
           foodImage={order.image}
           foodPrice={order.price}
+          foodCategoryId={order.category_id}
           fetchOrder={fetchOrder}
           setTotalCost={setTotalCost}
           orderedByPersona={order.persona}
           personas={props.personas}
           currentlySelectedPersona={props.currentlySelectedPersona}
+          handleExcludeCategories={props.handleExcludeCategories}
         >
         </OrderItem>
       ))}

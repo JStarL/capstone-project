@@ -18,7 +18,7 @@ def customer_view_menu(cur, menu_id, allergies_list, excluded_cat_list, top_k):
     cur.execute(query_num_categories, [menu_id])
     res = cur.fetchone()
 
-    if int(res[0]) == len(excluded_cat_list):
+    if int(res[0]) == len(excluded_cat_list) + 1:
         excluded_cat_list = [-1]
 
     query_categories = """
@@ -138,7 +138,7 @@ def customer_view_category(cur, category_id, allergies_list, excluded_cat_list, 
     cur.execute(query_num_categories, [categories_list[0][2]])
     res = cur.fetchone()
 
-    if int(res[0]) == len(excluded_cat_list):
+    if res[0] == len(excluded_cat_list) + 1:
         excluded_cat_list = [-1]
 
     if len(allergies_list) == 0:
@@ -224,6 +224,7 @@ def customer_view_category(cur, category_id, allergies_list, excluded_cat_list, 
         tmp.update({'food_price': tup[4]})
         tmp.update({'food_ordering_id': tup[5]})
         tmp.update({'food_ingredients': ingredients_list})
+        tmp.update({'food_category_id': tup[6]})
         menu_items.append(tmp)
 
     return menu_items

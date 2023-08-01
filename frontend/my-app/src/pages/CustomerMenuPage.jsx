@@ -59,9 +59,11 @@ function CustomerMenuPage({ personas, handleExcludeCategories, currentlySelected
     const selectedIndex = event.target.value;
     const selectedPersona = personas[selectedIndex];
     const selectedPersonaAllergies = selectedPersona[1] || [];
-  
+    const selectedPersonaExcludedCatList = selectedPersona[2] || [];
+
     setCurrentlySelectedPersona(selectedIndex); // Use the index as the selected value
     setCurrentlySelectedPersonaAllergies(selectedPersonaAllergies);
+    setExcludeCategories(selectedPersonaExcludedCatList);
   };
 
 
@@ -71,8 +73,6 @@ function CustomerMenuPage({ personas, handleExcludeCategories, currentlySelected
     setMenuItems(data);
     return data;
   }
-
-  console.log(currentSelectedCategoryId)
 
   if (!categories || !Array.isArray(categories)) return <>loading...</>;
 
@@ -126,7 +126,7 @@ function CustomerMenuPage({ personas, handleExcludeCategories, currentlySelected
               originalImage={menuItem.food_image}
               originalIngredients={menuItem.food_ingredients}
               foodId={menuItem.food_id.toString()}
-              categoryId={currentSelectedCategoryId}
+              foodCategoryId={menuItem.food_category_id}
               fetchAllMenuData={fetchAllMenuData}
               fetchCategoryMenuItems={fetchCategoryMenuItems}
               currentlySelectedPersona={currentlySelectedPersona}

@@ -126,3 +126,9 @@ Week 8
     - Styling for kitchen staff
     - Bug fixes 
     - Ratings Page 
+
+  Week 10
+  - Meeting Monday 31/7/23: 
+    - Going through every user story to check if all functionality is working 
+    - Assign roles for final demo 
+    - Do a practice demo 

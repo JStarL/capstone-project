@@ -15,7 +15,6 @@ function CustomerFoodItem(props) {
   const [isSnackbarOpen, setSnackbarOpen] = React.useState(false);
 
   function addToOrder() {
-    console.log(props.currentlySelectedPersona)
     const body = JSON.stringify({
       session_id: sessionId,
       menu_id: menuId,
@@ -27,19 +26,12 @@ function CustomerFoodItem(props) {
 
     makeRequest('/customer/add_menu_item', 'POST', body, undefined)
       .then(data => {
-        console.log(data);
         setSnackbarOpen(true);
-        props.handleExcludeCategories(props.personas[props.currentlySelectedPersona][0], props.categoryId)
-        
+        props.handleExcludeCategories(props.personas[props.currentlySelectedPersona][0], props.foodCategoryId, true);
         setTrigger(!trigger)
       })
       .catch(e => console.log('Error: ' + e));
   }
-
-  React.useEffect(() => {
-    console.log(props.personas)
-    // props.handleExcludeCategories(props.personas[props.currentlySelectedPersona][0], props.categoryId)
-	}, [trigger]);
 
   const handleSnackbarClose = () => {
     setSnackbarOpen(false);
@@ -71,7 +63,7 @@ function CustomerFoodItem(props) {
           <StyledButton
             variant='outlined'
             style={{ margin: '10px' }}
-            onClick={() => navigate(`/customer/${sessionId}/${menuId}/${props.categoryId}/${tableNumber}/${props.foodId}`)}
+            onClick={() => navigate(`/customer/${sessionId}/${menuId}/${props.currentSelectedCategoryId}/${tableNumber}/${props.foodId}`)}
           >
             Find out more
           </StyledButton>
