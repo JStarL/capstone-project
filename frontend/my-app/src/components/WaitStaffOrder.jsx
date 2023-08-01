@@ -1,26 +1,71 @@
 import React from 'react';
 import './Components.css';
-import { Typography, Button, Snackbar, Alert } from '@mui/material';
-import { useNavigate, useParams } from 'react-router-dom';
+import { Typography } from '@mui/material';
 import { StyledButton } from '../pages/CustomerOrStaff';
 import makeRequest from '../makeRequest';
 import DoneIcon from '@mui/icons-material/Done';
+import BrunchDiningIcon from '@mui/icons-material/BrunchDining';
 
 function WaitStaffOrder(props) {
-  const [cooking, setCooking] = React.useState(false);
+  const [timestamp, setTimestamp] = React.useState(0)
+  const [minutes, setMinutes] = React.useState(0)
+  const [seconds, setSeconds] = React.useState(0)
+
+  const handleClick = () => {
+    if (props.status === 'wait') {
+      markServing();
+    } else if (props.status === 'serving'){
+      completeOrder();
+    }
+  };
+  
+  const convertToMinutesAndHours = (totalSeconds) => {
+    const remainingSeconds = totalSeconds % 3600;
+    const minutes = Math.floor(remainingSeconds / 60);
+    const seconds = Math.floor(remainingSeconds % 60)
+    setMinutes(minutes)
+    setSeconds(seconds)
+  };
+
+  const markServing = () => {
+    const body = JSON.stringify({
+      'menu_id': props.menuId,
+      'session_id': props.sessionId,
+      'table_id': props.tableId,
+      'wait_staff_id': props.staffId
+    });
+    makeRequest('/wait_staff/mark_currently_serving', 'POST', body, undefined)
+      .then(data => {
+        props.setOrderTrigger(!props.orderTrigger);
+    })
+      .catch(e => console.log('Error: ' + e));
+    };
+  
+    React.useEffect(() => {  
+      const timer = () => {
+        const timeCustomerOrdered = new Date(props.timestamp);
+        const timeNow = new Date(Date.now());
+        const timeDifference = timeNow - timeCustomerOrdered
+        setTimestamp(timeDifference / 1000);
+      };
+      const timerFunction = setInterval(timer, 1000);
+      convertToMinutesAndHours(timestamp)
+  
+      return () => {
+        clearInterval(timerFunction);
+      };
+    }, [timestamp]);
 
   const completeOrder = () => {
-    console.log('order completed');
     const body = JSON.stringify({
       'menu_id': props.menuId,
       'session_id': props.sessionId,
     });
     makeRequest('/wait_staff/mark_order_complete', 'DELETE', body, undefined)
       .then(data => {
-        console.log(data);
+        props.setOrderTrigger(!props.orderTrigger);
       })
       .catch(e => console.log('Error: ' + e));
-    props.setOrderTrigger(!props.orderTrigger);
   };
 
   return (
@@ -28,7 +73,7 @@ function WaitStaffOrder(props) {
       <div className='wait-staff-order'>
         <div style={{ width: '100%' }} className='wait-staff-order-div'>
           <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '2em', marginTop: '30px' }}><b>Table Number: {props.tableId}</b></div>
-          <div>Time since order was placed: TIMESTAMP</div>
+          <div>Time since order finished cooking: <b>{minutes === 0 ? '' : `${minutes} minute(s) and `} {seconds} second(s)</b> ago</div>
         <div className='kitchen-staff-menu-items-container'>
           {props.menuItems?.map((menuItem) => (
             <div key={menuItem.food_name} className='kitchen-staff-menu-item'>
@@ -58,7 +103,8 @@ function WaitStaffOrder(props) {
             </div>
           ))}
         </div>
-        <StyledButton startIcon={<DoneIcon />} variant='outlined' onClick={completeOrder} style={{ width: '45vw', marginBottom: '2vh' }}>Finished Serving</StyledButton>
+        <Typography style={{ marginTop: '10px' }} variant='overline'>{props.status === 'serving' ? 'You are serving this order' : ''}</Typography>
+        <StyledButton startIcon={props.status === 'wait' ? <BrunchDiningIcon /> : <DoneIcon />} variant='outlined' onClick={handleClick} style={{ width: '30vw', marginTop: '1vh', marginBottom: '2vh' }}>{props.status === 'wait' ? 'Start Serving' : 'Serving Completed'}</StyledButton>
       </div>
     </div>
     </>

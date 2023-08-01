@@ -11,6 +11,7 @@ function CustomerFoodItem(props) {
   const sessionId = params.sessionId
   const menuId = params.menuId;
   const tableNumber = params.tableNumber
+  const [trigger, setTrigger] = React.useState(true)
   const [isSnackbarOpen, setSnackbarOpen] = React.useState(false);
 
   function addToOrder() {
@@ -28,9 +29,17 @@ function CustomerFoodItem(props) {
       .then(data => {
         console.log(data);
         setSnackbarOpen(true);
+        props.handleExcludeCategories(props.personas[props.currentlySelectedPersona][0], props.categoryId)
+        
+        setTrigger(!trigger)
       })
       .catch(e => console.log('Error: ' + e));
   }
+
+  React.useEffect(() => {
+    console.log(props.personas)
+    // props.handleExcludeCategories(props.personas[props.currentlySelectedPersona][0], props.categoryId)
+	}, [trigger]);
 
   const handleSnackbarClose = () => {
     setSnackbarOpen(false);

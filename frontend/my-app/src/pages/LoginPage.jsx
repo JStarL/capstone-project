@@ -5,7 +5,7 @@ import { TextField, Typography, Paper } from '@mui/material';
 import makeRequest from '../makeRequest.jsx'
 import { StyledButton } from './CustomerOrStaff';
 
-function ManagerLoginPage({ onSuccess }) {
+function LoginPage({ onSuccess }) {
   const [email, setEmail] = React.useState('');
   const [password, setPassword] = React.useState('');
   const navigate = useNavigate();
@@ -19,9 +19,6 @@ function ManagerLoginPage({ onSuccess }) {
       .then(data => {
         if (data.hasOwnProperty('success')) {
           onSuccess(data['staff_id'], data['staff_type'], data['menu_id'])
-          // localStorage.setItem('staff_id', data['staff_id']);
-          // localStorage.setItem('menu_id', data['menu_id']);
-          // localStorage.setItem('staff_type', data['staff_type']);
           if (data['staff_type'] === 'kitchen') {
             navigate(`/kitchen_staff/${data['menu_id']}/${data['staff_id']}`)
           }
@@ -74,4 +71,4 @@ function ManagerLoginPage({ onSuccess }) {
   </>;
 }
 
-export default ManagerLoginPage;
+export default LoginPage;

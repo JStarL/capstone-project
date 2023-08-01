@@ -6,11 +6,12 @@ import psycopg2
 
 import sys
 import ast
+from datetime import datetime
 
 
 from manager import manager_view_menu, manager_view_category, manager_view_menu_item, manager_add_category, manager_delete_category, manager_add_menu_item, manager_delete_menu_item, manager_update_category, manager_update_menu_item, manager_update_category_ordering, manager_update_menu_item_ordering
 from auth import login_backend, register_backend, auth_add_staff_backend
-from customer import customer_view_menu, customer_view_category, customer_view_menu_item, customer_menu_search
+from customer import customer_view_menu, customer_view_category, customer_view_menu_item, customer_menu_search, customer_give_rating
 
 def quit_gracefully(*args):
     '''For coverage'''
@@ -386,10 +387,11 @@ def customer_view_menu_flask():
     menu_id = request.args.get("menu_id")
     session_id = request.args.get("session_id")
     allergy_ids = ast.literal_eval(request.args.get("allergies"))
-    
-    excluded_cat_ids = [-1]
-    if 'excluded_cat_ids' in request.args:
-        excluded_cat_ids = ast.literal_eval(request.args.get("excluded_cat_ids"))
+    excluded_cat_ids = ast.literal_eval(request.args.get("excluded_cat_ids"))
+
+    if len(excluded_cat_ids) == 0:
+        excluded_cat_ids = [-1]
+        
     top_k = 100
     if 'top_k' in request.args:
         top_k = request.args.get('top_k')
@@ -407,10 +409,11 @@ def customer_view_category_flask():
     session_id = request.args.get("session_id")
     category_id = request.args.get("category_id")
     allergy_ids = ast.literal_eval(request.args.get("allergies"))
+    excluded_cat_ids = ast.literal_eval(request.args.get("excluded_cat_ids"))
 
-    excluded_cat_ids = [-1]
-    if 'excluded_cat_ids' in request.args:
-        excluded_cat_ids = ast.literal_eval(request.args.get("excluded_cat_ids"))
+    if len(excluded_cat_ids) == 0:
+        excluded_cat_ids = [-1]
+
     top_k = 100
     if 'top_k' in request.args:
         top_k = request.args.get('top_k')
@@ -622,30 +625,30 @@ def customer_finalise_order_flask():
     session_id = data["session_id"]
     menu_id = data["menu_id"]
     
-    update_points_query = """
-        UPDATE menu_items
-        SET points = %s
-        WHERE id = %s;
-    """
+    # update_points_query = """
+    #     UPDATE menu_items
+    #     SET points = %s
+    #     WHERE id = %s;
+    # """
     
-    get_menu_items = """
-        SELECT id, points
-        FROM menu_items
-        WHERE menu_id = %s;
-    """
+    # get_menu_items = """
+    #     SELECT id, points
+    #     FROM menu_items
+    #     WHERE menu_id = %s;
+    # """
     
-    cur = None
-    if session_id in cur_dict['customers']:
-        cur = cur_dict['customers'][session_id]
-    else:
-        cur = db_conn.cursor()
-        cur_dict['customers'][session_id] = cur
+    # cur.execute(get_menu_items, [menu_id])
+    
+    # menu_items_list = cur.fetchall()
+    
+    # tmp_list = []
 
-    cur.execute(get_menu_items, [menu_id])
-    
-    menu_items_list = cur.fetchall()
-    
-    tmp_list = []
+    # cur = None
+    # if session_id in cur_dict['customers']:
+    #     cur = cur_dict['customers'][session_id]
+    # else:
+    #     cur = db_conn.cursor()
+    #     cur_dict['customers'][session_id] = cur
     
     orders_list = None
     if menu_id in orders:
@@ -661,20 +664,21 @@ def customer_finalise_order_flask():
             return { 'error': 'Already sent to kitchen'}
         else:
             order_list[0]['status'] = 'kitchen'
+            order_list[0]['timestamp'] = datetime.now().strftime("%d %B %Y, %H:%M:%S")
             
-        for menu_item in order_list[0]['menu_items']:
-            for menu_item_cur in menu_items_list:
-                if int(menu_item_cur[0]) == int(menu_item['menu_item_id']):
-                    tmp_list.append({
-                        "menu_item_id" : menu_item['menu_item_id'],
-                        "points" : str(int(menu_item['amount']) + int(menu_item_cur[1]))
-                    })
+        # for menu_item in order_list[0]['menu_items']:
+        #     for menu_item_cur in menu_items_list:
+        #         if int(menu_item_cur[0]) == int(menu_item['menu_item_id']):
+        #             tmp_list.append({
+        #                 "menu_item_id" : menu_item['menu_item_id'],
+        #                 "points" : str(int(menu_item['amount']) + int(menu_item_cur[1]))
+        #             })
         
-        for apply in tmp_list:
-            cur.execute(update_points_query, [apply['points'], apply['menu_item_id']])
+        # for apply in tmp_list:
+        #     cur.execute(update_points_query, [apply['points'], apply['menu_item_id']])
             
         
-        db_conn.commit()
+        # db_conn.commit()
         return {'success': 'order finalised'}
     else:
         return {'error': 'invalid session_id' }
@@ -705,8 +709,8 @@ def customer_request_assistance_flask():
     notifications[menu_id].append( {
         "session_id": session_id,
         "table_id": table_id,
-        "status": 'customer'
-        #message: 'Where can I pay the bill?' not sure to add in yet
+        "status": 'customer',
+        "timestamp": datetime.now().strftime("%d %B %Y, %H:%M:%S")
     } )
         
     for notice in notifications[menu_id]: #just to check if the notifcation has been added to the dictionary
@@ -719,14 +723,35 @@ def customer_request_assistance_flask():
     else:    
         return dumps(fail)
     
+@APP.route("/customer/give_rating", methods=['POST'])
+def customer_give_rating_flask():
+    data = ast.literal_eval(request.get_json())
+    session_id = data['session_id']
+    menu_item_id = data['menu_item_id']
+    rating = int(data['rating'])
+    amount = int(data['amount'])
     
+    cur = None
+    if session_id in cur_dict['customers']:
+        cur = cur_dict['customers'][session_id]
+    else:
+        cur = db_conn.cursor()
+        cur_dict['customers'][session_id] = cur
+
+    return_val = customer_give_rating(cur, menu_item_id, rating, amount)
+
+    db_conn.commit()
+
+    return dumps(return_val)
+
 # Kitchen Staff functions
 
 @APP.route("/kitchen_staff/get_order_list", methods=['GET'])
 def kitchen_staff_get_order_list_flask():   
     # kitchen_id = request.args.get('kitchen_staff_id')
     menu_id = request.args.get('menu_id')
-    
+    kitchen_staff_id = request.args.get('kitchen_staff_id')
+
     output = []
     
     # invalid_id = { 'error': 'invalid kitchen_staff_id' } # error message
@@ -755,7 +780,7 @@ def kitchen_staff_get_order_list_flask():
         temp_dict = {}
         
         temp_list = []
-        if customer_order['status'] == 'kitchen':
+        if customer_order['status'] == 'kitchen' or (customer_order['status'] == 'cooking' and customer_order['kitchen_staff_id'] == kitchen_staff_id):
             for menu_item in customer_order['menu_items']:
                 temp_list_dict = {}
                 temp_list_dict.update({'food_id': menu_item['menu_item_id']})
@@ -768,11 +793,39 @@ def kitchen_staff_get_order_list_flask():
                 temp_dict.update({'session_id': customer_order['session_id']})
                 temp_dict.update({'table_id': customer_order['table_id']})
                 temp_dict.update({'status': customer_order['status']})
+                temp_dict.update({'timestamp': customer_order['timestamp']})
                 temp_dict.update({'menu_items': temp_list})
                 output.append(temp_dict)
     
         
     return dumps(output)
+
+@APP.route("/kitchen_staff/mark_currently_cooking", methods=['POST'])
+def kitchen_staff_mark_currently_cooking_flask():
+    data = ast.literal_eval(request.get_json())
+    menu_id = data['menu_id']
+    session_id = data['session_id']
+    kitchen_staff_id = data['kitchen_staff_id']
+
+    success = {'success': 'Marked as currently cooking'}
+    fail = {'fail': 'could not change order status'}
+    invalid_id = { 'error': 'invalid menu_id' }
+
+    if menu_id not in orders:
+        return  dumps(invalid_id)
+
+    order_list = orders[menu_id]
+
+    for order in order_list:
+        if order['session_id'] == session_id and order['status'] == 'kitchen':
+            order['status'] = 'cooking'
+            order['kitchen_staff_id'] = kitchen_staff_id
+            
+    for order in order_list: #check if it got changed
+        if order['session_id'] == session_id and order['status'] != 'cooking':
+            return dumps(fail)
+            
+    return dumps(success)
 
 @APP.route("/kitchen_staff/mark_order_complete", methods=['POST'])
 def kitchen_staff_mark_order_complete_flask():   
@@ -807,8 +860,9 @@ def kitchen_staff_mark_order_complete_flask():
     order = orders[menu_id] # grabbing the orders from the dictionary
     
     for customer_order in order:
-        if customer_order['session_id'] == session_id and customer_order['status'] == 'kitchen':
+        if customer_order['session_id'] == session_id and customer_order['status'] == 'cooking':
             customer_order['status'] = 'wait'
+            customer_order['timestamp'] = datetime.now().strftime("%d %B %Y, %H:%M:%S")
             
     for customer_order in order: #check if it got changed
         if customer_order['session_id'] == session_id and customer_order['status'] != 'wait':
@@ -824,7 +878,8 @@ def kitchen_staff_mark_order_complete_flask():
 def wait_staff_get_order_list_flask():   
     # wait_id = request.args.get('wait_staff_id')
     menu_id = request.args.get('menu_id')
-    
+    wait_staff_id = request.args.get('wait_staff_id')
+
     output = []
 
     # invalid_id = { 'error': 'invalid wait_staff_id' } # error message
@@ -847,14 +902,14 @@ def wait_staff_get_order_list_flask():
     if menu_id not in orders:
         return dumps(output)
 
-    order = orders[menu_id] # grabbing the orders from the dictionary
+    order_list = orders[menu_id] # grabbing the orders from the dictionary
     
-    for customer_order in order:
+    for order in order_list:
         temp_dict = {}
         
         temp_list = []
-        if customer_order['status'] == 'wait':
-            for menu_item in customer_order['menu_items']:
+        if order['status'] == 'wait' or (order['status'] == 'serving' and order['wait_staff_id'] == wait_staff_id):
+            for menu_item in order['menu_items']:
                 temp_list_dict = {}
                 temp_list_dict.update({'food_id': menu_item['menu_item_id']})
                 temp_list_dict.update({'food_name': menu_item['title']})
@@ -863,14 +918,43 @@ def wait_staff_get_order_list_flask():
                 temp_list.append(temp_list_dict)
                     
             if len(temp_list) != 0:
-                temp_dict.update({'session_id': customer_order['session_id']})
-                temp_dict.update({'table_id': customer_order['table_id']})
-                temp_dict.update({'status': customer_order['status']})
+                temp_dict.update({'session_id': order['session_id']})
+                temp_dict.update({'table_id': order['table_id']})
+                temp_dict.update({'status': order['status']})
+                temp_dict.update({'timestamp': order['timestamp']})
                 temp_dict.update({'menu_items': temp_list})
                 output.append(temp_dict)
     
         
     return dumps(output)
+
+@APP.route("/wait_staff/mark_currently_serving", methods=['POST'])
+def wait_staff_mark_currently_serving_flask():
+    data = ast.literal_eval(request.get_json())
+
+    menu_id = data['menu_id']
+    session_id = data['session_id']
+    wait_staff_id = data['wait_staff_id']
+
+    invalid_id = { 'error': 'invalid menu_id, or there are no orders' } # error message
+    success = {'success': 'Order marked as currently serving'}
+    fail = {'fail': 'could not mark order as being served'}
+
+    if menu_id not in orders:
+        return  dumps(invalid_id)
+
+    order_list = orders[menu_id]
+
+    for order in order_list:
+        if order['session_id'] == session_id and order['status'] == 'wait':
+            order['status'] = 'serving'
+            order['wait_staff_id'] = wait_staff_id
+
+    for order in order_list: # check if it got updated
+        if order['session_id'] == session_id and order['status'] != 'serving':
+            return dumps(fail)
+    
+    return dumps(success)
 
 
 @APP.route("/wait_staff/mark_order_complete", methods=['DELETE'])
@@ -879,6 +963,7 @@ def wait_staff_mark_order_complete_flask():
     # wait_id = data['wait_staff_id']
     # cur = cur_dict['staff'][wait_id]
     menu_id = data['menu_id']
+    session_id = data['session_id']
 
 
     invalid_id = { 'error': 'invalid menu_id, or there are no orders' } # error message
@@ -906,11 +991,11 @@ def wait_staff_mark_order_complete_flask():
     customer_orders = orders[menu_id] # grabbing the orders from the dictionary
     
     for customer_order in customer_orders:
-        if customer_order['session_id'] == data['session_id'] and customer_order['status'] == 'wait':
+        if customer_order['session_id'] == session_id and customer_order['status'] == 'serving':
             customer_orders.remove(customer_order) # once marked as completed, remove it from the dictionary of orders
             
-    for customer_order in customer_orders: #check if it got removed
-        if customer_order['session_id'] == data['session_id'] and customer_order['status'] == 'wait':
+    for customer_order in customer_orders: # check if it got removed
+        if customer_order['session_id'] == session_id and customer_order['status'] == 'serving':
             return dumps(fail)
     
     return dumps(success)
@@ -952,7 +1037,7 @@ def wait_staff_mark_notification_complete_flask():
         if notif['session_id'] == session_id and notif['table_id'] == table_id:
             notifications_list.remove(notif) # once marked as completed, remove it from the list of notifications
             
-    for notif in notifications_list: #check if it got removed
+    for notif in notifications_list: # check if it got removed
         if notif['session_id'] == session_id and notif['table_id'] == table_id:
             return dumps(fail)
     
@@ -961,13 +1046,13 @@ def wait_staff_mark_notification_complete_flask():
 @APP.route("/wait_staff/get_assistance_notifications", methods=['GET'])
 def wait_staff_get_assistance_notifications_flask():
     menu_id = request.args.get('menu_id')    
-    # empty = {"error": "Menu_id did not return anything or there are no notifications yet"}
+    wait_staff_id = request.args.get('wait_staff_id')
 
     if menu_id in notifications:
         notification_list = notifications[menu_id]
         output = []
         for notification in notification_list:
-            if notification['status'] == 'customer':
+            if notification['status'] == 'customer' or (notification['status'] == 'wait' and notification['wait_staff_id'] == wait_staff_id):
                 output.append(notification)
         return dumps(output)
     else:
@@ -979,6 +1064,7 @@ def wait_staff_mark_currently_assisting_flask():
     session_id = data['session_id']
     menu_id = data['menu_id']
     table_id = data['table_id']
+    wait_staff_id = data['wait_staff_id']
     
     invalid_menu_id = { 'error': 'invalid menu_id' }
     not_found = { 'error': 'notification not found' }
@@ -990,6 +1076,7 @@ def wait_staff_mark_currently_assisting_flask():
     for notification in notifications[menu_id]:
         if notification['table_id'] == table_id and notification['session_id'] == session_id:
             notification['status'] = 'wait'
+            notification['wait_staff_id'] = wait_staff_id
             return dumps(success)
 
     return dumps(not_found)

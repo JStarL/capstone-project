@@ -1,70 +1,78 @@
 import React from 'react';
-import { Typography, Paper, Grid, TextField } from '@mui/material';
-import { useNavigate, useParams } from 'react-router-dom';
-import { StyledButton } from './CustomerOrStaff';
+import { Typography } from '@mui/material';
+import { useParams } from 'react-router-dom';
 import makeRequest from '../makeRequest';
 import KitchenStaffOrder from '../components/KitchenStaffOrder';
 import PendingActionsIcon from '@mui/icons-material/PendingActions';
 
 function KitchenStaffPage() {
-  const [orderList, setOrderList] = React.useState([])
-  const [trigger, setTrigger] = React.useState(true)
-  const params = useParams()
+  const [orderList, setOrderList] = React.useState([]);
+  const [trigger, setTrigger] = React.useState(true);
+  const params = useParams();
 
-  const menuId = params.menuId
-  const staffId = params.staffId
-  // React.useEffect(() => {
-  //   async function fetchData() {
-  //     await getOrderList();
-  //     console.log('refresh')
-  //   }
-  //   fetchData();
-  // }, [trigger])
+  const menuId = params.menuId;
+  const staffId = params.staffId;
 
   React.useEffect(() => {
     async function fetchData() {
       await getOrderList();
-      console.log('refresh');
     }
 
-    // Call fetchData initially
     fetchData();
 
-    // Setup an interval to call fetchData every 3 seconds
     const interval = setInterval(() => {
       fetchData();
     }, 3000);
 
-    // Clear the interval when the component unmounts
     return () => {
       clearInterval(interval);
     };
   }, [trigger]);
 
+  console.log(staffId)
+
   async function getOrderList() {
-    const url = `/kitchen_staff/get_order_list?menu_id=${menuId}`;
+    const url = `/kitchen_staff/get_order_list?menu_id=${menuId}&kitchen_staff_id=${staffId}`;
     const data = await makeRequest(url, 'GET', undefined, undefined);
-    setOrderList(data)
-    console.log(data)
+    setOrderList(data);
   }
+
   return (
     <>
-      {/* <Typography className='h4' variant="h4" gutterBottom>Kitchen Staff - Pending Orders</Typography> */}
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '1em'}}>
-        <PendingActionsIcon style={{fontSize: '2rem', margin: '10px'}} /><Typography fontSize='1.5em' variant="overline"><b>Pending Orders</b></Typography></div>
-      {orderList?.map((order, index) => (
-        <KitchenStaffOrder
-          key={index}
-          tableId={order.table_id}
-          menuItems={order.menu_items}
-          sessionId={order.session_id}
-          trigger={trigger}
-          setTrigger={setTrigger}
-          staffId={staffId}
-          menuId={menuId}
-        >
-        </KitchenStaffOrder>
-      ))}
+        <PendingActionsIcon style={{fontSize: '2rem', margin: '10px'}} />
+        <Typography fontSize='1.5em' variant="overline">
+          <b>Pending Orders</b>
+        </Typography>
+      </div>
+
+      {orderList.length === 0 ? (
+        <div style={{ display: 'flex', justifyContent: 'center', marginTop: '30px' }}>
+          <Typography style={{
+            boxShadow: "0 3px 6px rgba(0, 0, 0, 0.4)",
+            borderRadius: '10px',
+            padding: '1vw',
+            width: 'auto',
+            marginLeft: '10px',
+            textAlign: 'center', // Center the text horizontally
+          }} variant="overline" gutterBottom>No Pending orders at the moment</Typography>
+        </div>
+      ) : (
+        orderList.map((order, index) => (
+          <KitchenStaffOrder
+            key={index}
+            status={order.status}
+            timestamp={order.timestamp}
+            tableId={order.table_id}
+            menuItems={order.menu_items}
+            sessionId={order.session_id}
+            trigger={trigger}
+            setTrigger={setTrigger}
+            staffId={staffId}
+            menuId={menuId}
+          />
+        ))
+      )}
     </>
   );
 }

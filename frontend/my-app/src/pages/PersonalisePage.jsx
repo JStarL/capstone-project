@@ -4,7 +4,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import makeRequest from '../makeRequest';
 import { StyledButton } from './CustomerOrStaff';
 import PersonAddAlt1Icon from '@mui/icons-material/PersonAddAlt1';
-function PersonalisePage({ personas, handlePersonas, setCurrentlySelectedPersonaApp, setCurrentlySelectedPersonaAllergies }) {
+function PersonalisePage({ personas, handlePersonas, handleCurrentlySelectedPersona }) {
 	const [allergies, setAllergies] = React.useState([]);
   const [personaName, setPersonaName] = React.useState('')
   const [currentlySelectedPersona, setCurrentlySelectedPersona] = React.useState('')
@@ -30,28 +30,28 @@ function PersonalisePage({ personas, handlePersonas, setCurrentlySelectedPersona
     else {
       setSelectedAllergies([])
     }
-	}, [currentlySelectedPersona]);
+}, [currentlySelectedPersona]);
 
-	async function fetchAllergies() {
-		const url = '/get_allergies';
-		const data = await makeRequest(url, 'GET', undefined, undefined);
-		setAllergies(data);
-		return data;
+async function fetchAllergies() {
+	const url = '/get_allergies';
+	const data = await makeRequest(url, 'GET', undefined, undefined);
+	setAllergies(data);
+	return data;
+}
+
+const handleCheckboxChange = (event) => {
+	const { value, checked } = event.target;
+	if (checked) {
+		setSelectedAllergies((prevSelectedAllergies) => [
+			...prevSelectedAllergies,
+			value,
+		]);
+	} else {
+		setSelectedAllergies((prevSelectedAllergies) =>
+			prevSelectedAllergies.filter((allergy) => allergy !== value)
+		);
 	}
-
-	const handleCheckboxChange = (event) => {
-		const { value, checked } = event.target;
-		if (checked) {
-			setSelectedAllergies((prevSelectedAllergies) => [
-				...prevSelectedAllergies,
-				value,
-			]);
-		} else {
-			setSelectedAllergies((prevSelectedAllergies) =>
-				prevSelectedAllergies.filter((allergy) => allergy !== value)
-			);
-		}
-	};
+};
 	const handleFormSubmit = (event) => {
 		event.preventDefault();
     if (personaName === '') {
@@ -59,9 +59,7 @@ function PersonalisePage({ personas, handlePersonas, setCurrentlySelectedPersona
       return;
     }
 		handlePersonas(personaName, selectedAllergies)
-    console.log(personas.length)
-    setCurrentlySelectedPersonaApp(personas.length)
-    setCurrentlySelectedPersonaAllergies(selectedAllergies)
+    handleCurrentlySelectedPersona(personaName, selectedAllergies)
     navigate(`/customer/${sessionId}/${menuId}/${tableNumber}`)
 	};
 

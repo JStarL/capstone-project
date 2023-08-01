@@ -51,6 +51,12 @@ create table menu_items (
     category_id         integer not null,
     menu_id             integer not null,
     points              integer default 0,
+    total_ratings       integer default 0,
+    num_ratings         integer default 0,
+    avg_rating          float default 0.0,
+    points_percentage   float default 0.0,
+    rank                float default 0.0,
+
 
     primary key (id),
     foreign key (category_id) references categories(id) on delete cascade,
@@ -63,12 +69,59 @@ as $$
 declare
     _menu_item      record;
     _ordering_id    integer := 1;
+    _current_total  integer;
+    _total_points   integer;
 begin
-    if (tg_argv[0]) then
-        if (new.points = old.points) then
-            return new;
-        end if;
+    
+    if (new.total_ratings = old.total_ratings or new.points = old.points) then
+        return new;
     end if;
+
+
+    -- Update num_ratings
+    select num_ratings into _current_total
+    from menu_items
+    where id = new.id;
+
+    if (new.total_ratings > old.total_ratings) then
+        _current_total = _current_total + 1;
+    else
+        _current_total = _current_total - 1;
+    end if;
+
+    update menu_items
+    set num_ratings = _current_total
+    where id = new.id;
+
+    -- update avg rating (as a percentage)
+    if (_current_total > 0) then
+        update menu_items
+        set avg_rating = new.total_ratings::float * 20 / num_ratings
+        where id = new.id;
+    else
+        update menu_items
+        set avg_rating = 0.0
+        where id = new.id;
+    end if;
+
+    -- calculate points_percentage
+    select sum(points) into _total_points
+    from menu_items
+    where menu_id = new.menu_id;
+
+    if (_total_points > 0) then
+        update menu_items
+        set points_percentage = new.points::float * 100 / _total_points
+        where id = new.id;
+    end if;
+
+    -- calculate rank
+    update menu_items
+    set rank = 0.5 * avg_rating + 0.5 * points_percentage
+    where id = new.id;
+
+
+    -- re-order all best selling menu items in the best selling list
 
     delete from best_selling_items
     where menu_id=new.menu_id;
@@ -77,7 +130,7 @@ begin
         select id, menu_id
         from menu_items m
         where m.menu_id = new.menu_id
-        order by points desc, title asc
+        order by rank desc, title asc
     loop
         insert into best_selling_items(menu_id, menu_item_id, ordering_id)
         values (_menu_item.menu_id, _menu_item.id, _ordering_id);
@@ -92,12 +145,7 @@ $$ language plpgsql;
 create trigger update_best_selling_trigger
 after update on menu_items
 for each row
-execute procedure update_best_selling_function(true);
-
-create trigger insert_best_selling_trigger
-after insert on menu_items
-for each row
-execute procedure update_best_selling_function(false);
+execute procedure update_best_selling_function();
 
 create or replace view menu_items_and_categories(menu_item_id, title, description, image, price, category_id, category_name, menu_id) as
 select m.id, m.title, m.description, m.image, m.price, c.id, c.name, c.menu_id
