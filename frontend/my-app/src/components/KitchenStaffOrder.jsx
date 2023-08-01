@@ -5,6 +5,7 @@ import { StyledButton } from '../pages/CustomerOrStaff';
 import RestaurantMenuIcon from '@mui/icons-material/RestaurantMenu';
 import makeRequest from '../makeRequest';
 import DoneIcon from '@mui/icons-material/Done';
+import { convertToMinutesAndHours } from './helperFunctions';
 
 /**
  * Represents a component displaying an order assigned to a kitchen staff member.
@@ -24,18 +25,6 @@ function KitchenStaffOrder(props) {
   const [minutes, setMinutes] = React.useState(0);
   const [seconds, setSeconds] = React.useState(0);
 
-  /**
-   * Converts the total seconds to minutes and seconds.
-   * @param {number} totalSeconds - The total number of seconds.
-   */
-  const convertToMinutesAndHours = (totalSeconds) => {
-    const remainingSeconds = totalSeconds % 3600;
-    const minutes = Math.floor(remainingSeconds / 60);
-    const seconds = Math.floor(remainingSeconds % 60);
-    setMinutes(minutes);
-    setSeconds(seconds);
-  };
-
   React.useEffect(() => {
     const timer = () => {
       const timeCustomerOrdered = new Date(props.timestamp);
@@ -44,7 +33,7 @@ function KitchenStaffOrder(props) {
       setTimestamp(timeDifference / 1000);
     };
     const timerFunction = setInterval(timer, 1000);
-    convertToMinutesAndHours(timestamp);
+    convertToMinutesAndHours(timestamp, setMinutes, setSeconds);
 
     return () => {
       clearInterval(timerFunction);

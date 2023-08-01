@@ -5,6 +5,7 @@ import { StyledButton } from '../pages/CustomerOrStaff';
 import makeRequest from '../makeRequest';
 import DoneIcon from '@mui/icons-material/Done';
 import BrunchDiningIcon from '@mui/icons-material/BrunchDining';
+import { convertToMinutesAndHours } from './helperFunctions';
 
 /**
  * Represents a wait staff order component in the staff interface.
@@ -38,18 +39,6 @@ function WaitStaffOrder(props) {
     }
   };
 
-  /**
-   * Converts total seconds to minutes and seconds.
-   * @param {number} totalSeconds - The total number of seconds to convert.
-   */
-  const convertToMinutesAndHours = (totalSeconds) => {
-    const remainingSeconds = totalSeconds % 3600;
-    const minutes = Math.floor(remainingSeconds / 60);
-    const seconds = Math.floor(remainingSeconds % 60);
-    setMinutes(minutes);
-    setSeconds(seconds);
-  };
-
   const markServing = () => {
     const body = JSON.stringify({
       'menu_id': props.menuId,
@@ -72,7 +61,7 @@ function WaitStaffOrder(props) {
       setTimestamp(timeDifference / 1000);
     };
     const timerFunction = setInterval(timer, 1000);
-    convertToMinutesAndHours(timestamp);
+    convertToMinutesAndHours(timestamp, setMinutes, setSeconds);
 
     return () => {
       clearInterval(timerFunction);
