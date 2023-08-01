@@ -237,6 +237,8 @@ def register_flask():
     cur = db_conn.cursor()
     return_dict = register_backend(cur, data['email'], data['password'], data['name'], data['restaurant_name'], data['location'])
     return_val = dumps(return_dict)
+    if 'error' in return_dict:
+        abort(400, return_dict['error'])
     if 'success' in return_dict:
         cur_dict['staff'][str(return_dict['manager_id'])] = cur
         db_conn.commit()
@@ -248,6 +250,8 @@ def login_flask():
     cur = db_conn.cursor()
     return_dict = login_backend(cur, data['email'], data['password'])
     return_val = dumps(return_dict)
+    if 'error' in return_dict:
+        abort(400, return_dict['error'])
     if 'success' in return_dict:
         cur_dict['staff'][str(return_dict['staff_id'])] = cur
     return return_val
@@ -256,28 +260,30 @@ def login_flask():
 def auth_logout_flask():
     data = ast.literal_eval(request.get_json())
     logged_out = { 'success': 'logged out' }
-    error = { 'error': 'invalid staff_id'}
+    error = 'invalid staff_id'
     
     if data['staff_id'] in cur_dict['staff']:
         cur = cur_dict['staff'].pop(str(data['staff_id']))
         cur.close()
         return dumps(logged_out)
     else:
-        return dumps(error)
+        abort(400, error)
 
 @APP.route('/manager/add_staff', methods=['POST'])
 def auth_add_staff_flask():
     data = ast.literal_eval(request.get_json())
 
-    invalid_manager = { 'error': 'invalid manager_id' }
+    invalid_manager = 'invalid manager_id'
 
-    if data['manager_id'] in cur_dict['staff']:
-        cur = cur_dict['staff'][data['manager_id']]
-        return_val = dumps(auth_add_staff_backend(cur, data['email'], data['password'], data['staff_type'], data['name'], data['menu_id']))
-        db_conn.commit()
-        return return_val
-    else:
-        return dumps(invalid_manager)
+    if data['manager_id'] not in cur_dict['staff']:
+        abort(400, invalid_manager)
+    cur = cur_dict['staff'][data['manager_id']]
+    return_val = auth_add_staff_backend(cur, data['email'], data['password'], data['staff_type'], data['name'], data['menu_id'])
+    if 'error' in return_val:
+        abort(400, return_val['error'])
+    db_conn.commit()
+    return dumps(return_val)
+
 
 # Manager functions
 
@@ -293,7 +299,10 @@ def manager_view_menu_flask():
         top_k = request.args.get('top_k')
     cur = cur_dict['staff'][manager_id]
     
-    return dumps(manager_view_menu(cur,  menu_id, excluded_ids, top_k))
+    return_val = manager_view_menu(cur,  menu_id, excluded_ids, top_k)
+    if 'error' in return_val:
+        abort(400, return_val['error'])
+    return dumps(return_val)
 
 @APP.route("/manager/view_category", methods=['GET'])
 def manager_view_category_flask():
@@ -307,38 +316,50 @@ def manager_view_category_flask():
         top_k = request.args.get('top_k')
     cur = cur_dict['staff'][manager_id]
 
-    return dumps(manager_view_category(cur, category_id, excluded_ids, top_k))
+    return_val = manager_view_category(cur, category_id, excluded_ids, top_k)
+    if 'error' in return_val:
+        abort(400, return_val['error'])
+    return dumps(return_val)
 
 @APP.route("/manager/view_menu_item", methods=['GET'])
 def manager_view_menu_item_flask():
     manager_id = request.args.get("manager_id")
     food_id = request.args.get("menu_item_id")
     cur = cur_dict['staff'][manager_id]
-    return dumps(manager_view_menu_item(cur, food_id))
+    return_val = manager_view_menu_item(cur, food_id)
+    if 'error' in return_val:
+        abort(400, return_val['error'])
+    return dumps(return_val)
 
 @APP.route("/manager/add_category", methods=['POST'])
 def manager_add_category_flask():
     data = ast.literal_eval(request.get_json())
     cur = cur_dict['staff'][data['manager_id']]
-    return_val = dumps(manager_add_category(cur, data['category_name'], data['menu_id']))
+    return_val = manager_add_category(cur, data['category_name'], data['menu_id'])
+    if 'error' in return_val:
+        abort(400, return_val['error'])
     db_conn.commit()
-    return return_val
+    return dumps(return_val)
 
 @APP.route("/manager/delete_category", methods=['DELETE'])
 def manager_delete_category_flask():
     data = ast.literal_eval(request.get_json())
     cur = cur_dict['staff'][data['manager_id']]
-    return_val = dumps(manager_delete_category(cur, data['category_id']))
+    return_val = manager_delete_category(cur, data['category_id'])
+    if 'error' in return_val:
+        abort(400, return_val['error'])
     db_conn.commit()
-    return return_val
+    return dumps(return_val)
 
 @APP.route("/manager/update_category", methods=['POST'])
 def manager_update_category_flask():
     data = ast.literal_eval(request.get_json())
     cur = cur_dict['staff'][data['manager_id']]
-    return_val = dumps(manager_update_category(cur, data['category_name'], data['category_id']))
+    return_val = manager_update_category(cur, data['category_name'], data['category_id'])
+    if 'error' in return_val:
+        abort(400, return_val['error'])
     db_conn.commit()
-    return return_val
+    return dumps(return_val)
 
 @APP.route("/manager/add_menu_item", methods=['POST'])
 def manager_add_menu_item_flask():
@@ -348,41 +369,51 @@ def manager_add_menu_item_flask():
         data['image'] = ''
     if 'description' not in data:
         data['description'] = ''
-    return_val = dumps(manager_add_menu_item(cur, data['title'], data['price'], data['ingredients'], data['description'], data['category_id'], data['menu_id'], data['image']))
+    return_val = manager_add_menu_item(cur, data['title'], data['price'], data['ingredients'], data['description'], data['category_id'], data['menu_id'], data['image'])
+    if 'error' in return_val:
+        abort(400, return_val['error'])
     db_conn.commit()
-    return return_val
+    return dumps(return_val)
 
 @APP.route("/manager/delete_menu_item", methods=['DELETE'])
 def manager_delete_menu_item_flask():
     data = ast.literal_eval(request.get_json())
     cur = cur_dict['staff'][data['manager_id']]
-    return_val = dumps(manager_delete_menu_item(cur, data['menu_item_id']))
+    return_val = manager_delete_menu_item(cur, data['menu_item_id'])
+    if 'error' in return_val:
+        abort(400, return_val['error'])
     db_conn.commit()
-    return return_val
+    return dumps(return_val)
 
 @APP.route("/manager/update_menu_item", methods=['POST'])
 def manager_update_menu_item_flask():
     data = ast.literal_eval(request.get_json())
     cur = cur_dict['staff'][data['manager_id']]
-    return_val = dumps(manager_update_menu_item(cur, data['menu_item_id'], data['title'], data['price'], data['ingredients'], data['description'], data['category_id'], data['menu_id'], data['image']))
+    return_val = manager_update_menu_item(cur, data['menu_item_id'], data['title'], data['price'], data['ingredients'], data['description'], data['category_id'], data['menu_id'], data['image'])
+    if 'error' in return_val:
+        abort(400, return_val['error'])
     db_conn.commit()
-    return return_val
+    return dumps(return_val)
 
 @APP.route("/manager/update_category_ordering", methods=['POST'])
 def manager_update_category_ordering_flask():
     data = ast.literal_eval(request.get_json())
     cur = cur_dict['staff'][data['manager_id']]
-    return_val = dumps(manager_update_category_ordering(cur, data['category_id'], data['prev_ordering_id'], data['new_ordering_id']))
+    return_val = manager_update_category_ordering(cur, data['category_id'], data['prev_ordering_id'], data['new_ordering_id'])
+    if 'error' in return_val:
+        abort(400, return_val['error'])
     db_conn.commit()
-    return return_val
+    return dumps(return_val)
 
 @APP.route("/manager/update_menu_item_ordering", methods=['POST'])
 def manager_update_menu_item_ordering_flask():
     data = ast.literal_eval(request.get_json())
     cur = cur_dict['staff'][data['manager_id']]
-    return_val = dumps(manager_update_menu_item_ordering(cur, data['menu_item_id'], data['prev_ordering_id'], data['new_ordering_id']))
+    return_val = manager_update_menu_item_ordering(cur, data['menu_item_id'], data['prev_ordering_id'], data['new_ordering_id'])
+    if 'error' in return_val:
+        abort(400, return_val['error'])
     db_conn.commit()
-    return return_val
+    return dumps(return_val)
 
 # Customer functions
 
@@ -407,11 +438,11 @@ def customer_view_menu_flask():
         cur = db_conn.cursor()
         cur_dict['customers'][session_id] = cur
     
-    return_obj = customer_view_menu(cur, menu_id, allergy_ids, excluded_cat_ids, top_k)
-    if 'error' in return_obj:
-        abort(400, return_obj['error'])
+    return_val = customer_view_menu(cur, menu_id, allergy_ids, excluded_cat_ids, top_k)
+    if 'error' in return_val:
+        abort(400, return_val['error'])
         
-    return dumps(return_obj)
+    return dumps(return_val)
 
 @APP.route("/customer/view_category", methods=['GET'])
 def customer_view_category_flask():
@@ -433,7 +464,10 @@ def customer_view_category_flask():
     else:
         cur = db_conn.cursor()
         cur_dict['customers'][session_id] = cur
-    return dumps(customer_view_category(cur, category_id, allergy_ids, excluded_cat_ids, top_k))
+    return_val = customer_view_category(cur, category_id, allergy_ids, excluded_cat_ids, top_k)
+    if 'error' in return_val:
+        abort(400, return_val['error'])
+    return dumps(return_val)
 
 @APP.route("/customer/view_menu_item", methods=['GET'])
 def customer_view_menu_item_flask():
@@ -445,7 +479,10 @@ def customer_view_menu_item_flask():
     else:
         cur = db_conn.cursor()
         cur_dict['customers'][session_id] = cur
-    return dumps(customer_view_menu_item(cur, menu_item_id))
+    return_val = customer_view_menu_item(cur, menu_item_id)
+    if 'error' in return_val:
+        abort(400, return_val['error'])
+    return dumps(return_val)
 
 @APP.route("/customer/menu/table", methods=['POST'])
 def customer_menu_table_flask():
@@ -453,6 +490,9 @@ def customer_menu_table_flask():
     table_id = data['table_id']
     menu_id = data['menu_id']
     session_id = data['session_id']
+
+    invalid_table_id = 'invalid table_id'
+    success = {'table_id':  table_id}
 
     if table_id != None:
         
@@ -469,9 +509,9 @@ def customer_menu_table_flask():
             }
         )
         
-        return {'table_id':  table_id}
+        return success
     else:
-        return {'error': 'invalid table_id' }
+        abort(400, invalid_table_id)
 
 @APP.route("/customer/add_menu_item", methods=['POST'])
 def customer_add_menu_item_flask():
@@ -482,7 +522,10 @@ def customer_add_menu_item_flask():
     amount = int(data['amount'])
     persona = data['persona_name']
     
-    invalid_menu_item_id = {'error': 'menu_item_id invalid'}
+    invalid_menu_id = 'no orders with the given menu_id'
+    invalid_menu_item_id = 'menu_item_id invalid'
+    invalid_session_id = 'invalid session_id'
+    amount_negative_error = 'amount cannot be negative'
 
     cur = None
     if session_id in cur_dict['customers']:
@@ -492,7 +535,7 @@ def customer_add_menu_item_flask():
         cur_dict['customers'][session_id] = cur
 
     if amount < 0:
-        return { 'error': 'amount cannot be negative' }
+        abort(400, amount_negative_error)
     
     menu_item_query = """
         SELECT title, description, image, price, category_id
@@ -504,14 +547,14 @@ def customer_add_menu_item_flask():
     
     item = cur.fetchall() #menu item fetched
     if (len(item) == 0): #check if menu item exists
-        return invalid_menu_item_id
+        abort(400, invalid_menu_item_id)
     item = item[0]
 
     orders_list = None
     if menu_id in orders:
         orders_list = orders[menu_id]
     else:
-        return { 'error': 'no orders with the given menu_id'}
+        abort(400, invalid_menu_id)
 
     # find the order with session_id
     order_list = [order for order in orders_list if order["session_id"] == session_id]
@@ -534,7 +577,7 @@ def customer_add_menu_item_flask():
             } )
         return order_list[0]
     else:
-        return {'error': 'invalid session_id' }
+        abort(400, invalid_session_id)
 
 @APP.route("/customer/remove_menu_item", methods=['DELETE'])
 def customer_remove_menu_item_flask():
@@ -545,11 +588,17 @@ def customer_remove_menu_item_flask():
     amount_to_be_removed = data['amount']
     persona = data['persona']
 
+    invalid_menu_id = 'no orders with the given menu_id'
+    invalid_session_id = 'invalid session_id'
+    removing_extra = 'cant remove more menu_items than what is currently there'
+    invalid_menu_item_id_or_persona = 'menu_item_id with given persona doesnt exist in this order'
+
+
     orders_list = None
     if menu_id in orders:
         orders_list = orders[menu_id]
     else:
-        return { 'error': 'no orders with the given menu_id'}
+        abort(400, invalid_menu_id)
 
     # find the order with session_id 
     order_list = [order for order in orders_list if order["session_id"] == session_id]
@@ -566,24 +615,27 @@ def customer_remove_menu_item_flask():
             elif remaining_amount == 0:
                 order_list[0]['menu_items'].remove(menu_item_list[0])
             else:
-                return {'error' : 'cant remove more menu_items than what is currently there'}
+                abort(400, removing_extra)
             
             return order_list[0] 
         else:
-            return { 'error': 'menu_item_id with given persona doesnt exist in this order'}
+            abort(400, invalid_menu_item_id_or_persona)
     else:
-        return {'error': 'invalid session_id' }
+        abort(400, invalid_session_id)
 
 @APP.route("/customer/view_order", methods=['GET'])
 def customer_view_order_flask():
     session_id = request.args.get("session_id")
     menu_id = request.args.get('menu_id')
 
+    invalid_menu_id = 'no orders with the given menu_id'
+    invalid_session_id ='invalid session_id'
+
     orders_list = None
     if menu_id in orders:
         orders_list = orders[menu_id]
     else:
-        return { 'error': 'no orders with the given menu_id'}
+        abort(400, invalid_menu_id)
 
     # find the order with session_id
     order_list = [order for order in orders_list if order["session_id"] == session_id]
@@ -591,7 +643,7 @@ def customer_view_order_flask():
     if len(order_list) > 0:
         return order_list[0]
     else:
-        return {'error': 'invalid session_id' }
+        abort(400, invalid_session_id)
     
 @APP.route("/customer/menu/search", methods=['GET'])
 def customer_menu_search_flask():
@@ -605,7 +657,10 @@ def customer_menu_search_flask():
     else:
         cur = db_conn.cursor()
         cur_dict['customers'][session_id] = cur
-    return dumps(customer_menu_search(cur, query))
+    return_val = (customer_menu_search(cur, query))
+    if 'error' in return_val:
+        abort(400, return_val['error'])
+    return dumps(return_val)
 
 @APP.route("/get_allergies", methods=['GET'])
 def get_allergies_flask():
@@ -635,6 +690,11 @@ def customer_finalise_order_flask():
     session_id = data["session_id"]
     menu_id = data["menu_id"]
     
+    invalid_session_id = 'invalid session_id'
+    invalid_menu_id = 'no orders with the given menu_id'
+    already_sent_to_kitchen = 'Already sent to kitchen'
+    success = {'success': 'order finalised'}
+
     # update_points_query = """
     #     UPDATE menu_items
     #     SET points = %s
@@ -664,14 +724,14 @@ def customer_finalise_order_flask():
     if menu_id in orders:
         orders_list = orders[menu_id]
     else:
-        return { 'error': 'no orders with the given menu_id'}
+        abort(400, invalid_menu_id)
 
     # find the order with session_id
     order_list = [order for order in orders_list if order["session_id"] == session_id]
     
     if len(order_list) > 0:
         if order_list[0]['status'] == 'kitchen':
-            return { 'error': 'Already sent to kitchen'}
+            abort(400, already_sent_to_kitchen)
         else:
             order_list[0]['status'] = 'kitchen'
             order_list[0]['timestamp'] = datetime.now().strftime("%d %B %Y, %H:%M:%S")
@@ -689,17 +749,17 @@ def customer_finalise_order_flask():
             
         
         # db_conn.commit()
-        return {'success': 'order finalised'}
+        return success
     else:
-        return {'error': 'invalid session_id' }
+        abort(400, invalid_session_id)
     
     
 @APP.route("/customer/request_assistance", methods=['POST'])
 def customer_request_assistance_flask():
     data = ast.literal_eval(request.get_json())
     
-    already_in = {"invalid": "The request has already been added in the system"}
-    fail = {"error": "It did not successfully add to the dictionary"}
+    already_in = "The request has already been added in the system"
+    fail = "It did not successfully add to the dictionary"
     success = {"success": "assistance requested"}
     
     table_id = data["table_id"]
@@ -713,7 +773,7 @@ def customer_request_assistance_flask():
     # might remove this block and allow multiple requests    
     for notification in notifications[menu_id]:
         if notification['table_id'] == table_id:
-            return dumps(already_in)
+            abort(400, already_in)
     
     
     notifications[menu_id].append( {
@@ -731,7 +791,7 @@ def customer_request_assistance_flask():
     if found:
         return dumps(success)
     else:    
-        return dumps(fail)
+        abort(400, fail)
     
 @APP.route("/customer/give_rating", methods=['POST'])
 def customer_give_rating_flask():
@@ -749,6 +809,9 @@ def customer_give_rating_flask():
         cur_dict['customers'][session_id] = cur
 
     return_val = customer_give_rating(cur, menu_item_id, rating, amount)
+
+    if 'error' in return_val:
+        abort(400, return_val['error'])
 
     db_conn.commit()
 
@@ -817,12 +880,12 @@ def kitchen_staff_mark_currently_cooking_flask():
     session_id = data['session_id']
     kitchen_staff_id = data['kitchen_staff_id']
 
+    fail = 'could not change order status'
+    invalid_id = 'invalid menu_id' 
     success = {'success': 'Marked as currently cooking'}
-    fail = {'fail': 'could not change order status'}
-    invalid_id = { 'error': 'invalid menu_id' }
 
     if menu_id not in orders:
-        return  dumps(invalid_id)
+        abort(400, invalid_id)
 
     order_list = orders[menu_id]
 
@@ -833,7 +896,7 @@ def kitchen_staff_mark_currently_cooking_flask():
             
     for order in order_list: #check if it got changed
         if order['session_id'] == session_id and order['status'] != 'cooking':
-            return dumps(fail)
+            abort(400, fail)
             
     return dumps(success)
 
@@ -845,10 +908,10 @@ def kitchen_staff_mark_order_complete_flask():
     menu_id = data['menu_id']
     session_id = data['session_id']
 
+    fail = 'could not change order status'
+    invalid_id = 'invalid menu_id'
     success = {'success': 'Order sent to wait staff'}
-    fail = {'fail': 'could not change order status'}
     
-    invalid_id = { 'error': 'invalid menu_id' } # error message
     # query_find_staff_menu = """
     #     SELECT menu_id
     #     FROM staff
@@ -865,7 +928,7 @@ def kitchen_staff_mark_order_complete_flask():
     # menu_id = menu_id[0][0] # grabbing it from the list
     
     if menu_id not in orders:
-        return  dumps(invalid_id)
+        abort(400, invalid_id)
 
     order = orders[menu_id] # grabbing the orders from the dictionary
     
@@ -876,7 +939,7 @@ def kitchen_staff_mark_order_complete_flask():
             
     for customer_order in order: #check if it got changed
         if customer_order['session_id'] == session_id and customer_order['status'] != 'wait':
-            return dumps(fail)
+            abort(400, fail)
             
     return dumps(success)
             
@@ -946,12 +1009,12 @@ def wait_staff_mark_currently_serving_flask():
     session_id = data['session_id']
     wait_staff_id = data['wait_staff_id']
 
-    invalid_id = { 'error': 'invalid menu_id, or there are no orders' } # error message
+    invalid_id = 'invalid menu_id, or there are no orders'
+    fail = 'could not mark order as being served'
     success = {'success': 'Order marked as currently serving'}
-    fail = {'fail': 'could not mark order as being served'}
 
     if menu_id not in orders:
-        return  dumps(invalid_id)
+        abort(400, invalid_id)
 
     order_list = orders[menu_id]
 
@@ -962,7 +1025,7 @@ def wait_staff_mark_currently_serving_flask():
 
     for order in order_list: # check if it got updated
         if order['session_id'] == session_id and order['status'] != 'serving':
-            return dumps(fail)
+            abort(400, fail)
     
     return dumps(success)
 
@@ -976,9 +1039,9 @@ def wait_staff_mark_order_complete_flask():
     session_id = data['session_id']
 
 
-    invalid_id = { 'error': 'invalid menu_id, or there are no orders' } # error message
+    invalid_id = 'invalid menu_id, or there are no orders' # error message
+    fail = 'could not remove order'
     success = {'success': 'Order removed from orders'}
-    fail = {'fail': 'could not remove order'}
     
     # query_find_staff_menu = """
     #     SELECT menu_id
@@ -996,7 +1059,7 @@ def wait_staff_mark_order_complete_flask():
     # menu_id = menu_id[0][0] # grabbing it from the list
     
     if menu_id not in orders:
-        return  dumps(invalid_id)
+        abort(400, invalid_id)
 
     customer_orders = orders[menu_id] # grabbing the orders from the dictionary
     
@@ -1006,7 +1069,7 @@ def wait_staff_mark_order_complete_flask():
             
     for customer_order in customer_orders: # check if it got removed
         if customer_order['session_id'] == session_id and customer_order['status'] == 'serving':
-            return dumps(fail)
+            abort(400, fail)
     
     return dumps(success)
 
@@ -1049,7 +1112,7 @@ def wait_staff_mark_notification_complete_flask():
             
     for notif in notifications_list: # check if it got removed
         if notif['session_id'] == session_id and notif['table_id'] == table_id:
-            return 
+            abort(400, fail)
     
     return dumps(success)
 
