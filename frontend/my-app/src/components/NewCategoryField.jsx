@@ -32,7 +32,8 @@ function NewCategoryField({ menuId, managerId, fetchAllMenuData }) {
       <Card
         style={{
           width: '300px',
-          marginRight: '0'
+          marginRight: '0',
+          borderRadius: '20px'
         }}
         className="category-box"
         sx={{ m: 2, p: 7 }}
