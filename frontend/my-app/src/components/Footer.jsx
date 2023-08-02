@@ -1,6 +1,6 @@
 import React from 'react';
 import './Components.css';
-import { BrowserRouter, Routes, Route, Link, useParams } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import PersonAddAlt1SharpIcon from '@mui/icons-material/PersonAddAlt1Sharp';
 import RestaurantMenuIcon from '@mui/icons-material/RestaurantMenu';
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
@@ -8,11 +8,25 @@ import SettingsIcon from '@mui/icons-material/Settings';
 import { StyledButton } from '../pages/CustomerOrStaff';
 import makeRequest from '../makeRequest';
 import BackHandIcon from '@mui/icons-material/BackHand';
-import { Typography, Button, Snackbar, Alert } from '@mui/material';
+import { Snackbar, Alert } from '@mui/material';
 
+/**
+ * Represents a Footer component.
+ * @param {Object} props - The properties passed to the component.
+ * @param {string} props.sessionId - The session ID.
+ * @param {string} props.menuId - The menu ID.
+ * @param {string} props.id - The ID.
+ * @param {boolean} props.isManager - A boolean flag indicating whether the user is a manager.
+ * @param {boolean} props.isCustomer - A boolean flag indicating whether the user is a customer.
+ * @param {string} props.tableNumber - The table number.
+ * @returns {JSX.Element} The JSX representation of the Footer component.
+ */
 function Footer(props) {
   const [isSnackbarOpen, setSnackbarOpen] = React.useState(false); // State variable for Snackbar open/close status
 
+  /**
+   * Sends a request for assistance.
+   */
   const requestAssistance = () => {
     const body = JSON.stringify({
       table_id: props.tableNumber,
@@ -29,11 +43,18 @@ function Footer(props) {
       .catch(e => console.log('Error: ' + e));
   }
 
+  /**
+   * Handles the Snackbar close event.
+   */
   const handleSnackbarClose = () => {
     setSnackbarOpen(false); // Close the Snackbar
   };
 
-  const Footer = () => {
+  /**
+   * Returns the appropriate footer content based on the user type.
+   * @returns {JSX.Element} The JSX representation of the footer content.
+   */
+  const FooterContent = () => {
     if (props.isManager) {
       return (
         <div className="footer-container">
@@ -57,7 +78,7 @@ function Footer(props) {
           <StyledButton startIcon={<SettingsIcon />}>
             <Link to={`/customer/${props.sessionId}/${props.menuId}/${props.tableNumber}/personalise`} className="toNavy">Personalise</Link>
           </StyledButton>
-          <StyledButton onClick={requestAssistance} startIcon={<BackHandIcon />} className="toNavy" >
+          <StyledButton onClick={requestAssistance} startIcon={<BackHandIcon />} className="toNavy">
             Request Assistance
           </StyledButton>
           <Snackbar
@@ -82,9 +103,8 @@ function Footer(props) {
       return null; // Render nothing if menuId or tableNumber is missing
     }
   };
-  return <>
-    <Footer />
-  </>
+
+  return <FooterContent />;
 }
 
 export default Footer;
