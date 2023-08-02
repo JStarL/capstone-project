@@ -266,6 +266,15 @@ def login_flask():
 
 @APP.route('/auth/logout', methods=['POST'])
 def auth_logout_flask():
+    """
+    Get the staff_id to log out of system and remove the cursor from dictionary
+    
+    Inputs:
+        - staff (string): The staff id
+
+    Returns:
+        - return_val: (dictionary): This will have 'success' or 'error' as a key
+    """
     data = ast.literal_eval(request.get_json())
     logged_out = { 'success': 'logged out' }
     error = 'invalid staff_id'
@@ -279,6 +288,20 @@ def auth_logout_flask():
 
 @APP.route('/manager/add_staff', methods=['POST'])
 def auth_add_staff_flask():
+    """
+    This adds wait or kitchen staff details that are obtained from frontend to be registered in the database
+    
+    Inputs:
+        - staff (string): The staff id
+        - email (string): The email
+        - password (string): The password
+        - name (string): The name
+        - staff_type (string): Whether it will be an 'k' or 'w' for kitchen staff or wait staff
+        - menu_id (string): The menu Id that the staff will be assigned to
+
+    Returns:
+        - return_val: (dictionary): This will have 'success' or 'error' as a key
+    """
     data = ast.literal_eval(request.get_json())
 
     invalid_manager = 'invalid manager_id'
@@ -297,6 +320,18 @@ def auth_add_staff_flask():
 
 @APP.route("/manager/view_menu", methods=['GET'])
 def manager_view_menu_flask():
+    """
+    This brings the data of the categories of menu of the inputed menu_id
+    
+    Inputs:
+        - manager_id (string): The manager id
+        - menu_id (string): The menu id
+        - excluded_cat_ids (Optional list): The list of category ids that will get excluded 
+        - top_k (Optional int): This is the amount of items shown from the category
+
+    Returns:
+        - return_val: (List): This is a list of dictionary that contains each category id and the first category will have all of info shown
+    """
     manager_id = request.args.get("manager_id")
     menu_id = request.args.get("menu_id")
     excluded_ids = [-1]
@@ -314,6 +349,17 @@ def manager_view_menu_flask():
 
 @APP.route("/manager/view_category", methods=['GET'])
 def manager_view_category_flask():
+    """
+    This brings the data of the menu items for the category
+    
+    Inputs:
+        - manager_id (string): The manager id
+        - category_id (string): The category id
+        - top_k (Optional int): This is the amount of items shown from the category
+
+    Returns:
+        - return_val: (List): This is a list of dictionary that contains each menu item and all of its info
+    """
     manager_id = request.args.get("manager_id")
     category_id = request.args.get("category_id")
     excluded_ids = [-1]
@@ -331,6 +377,16 @@ def manager_view_category_flask():
 
 @APP.route("/manager/view_menu_item", methods=['GET'])
 def manager_view_menu_item_flask():
+    """
+    This shows more info about the menu item
+    
+    Inputs:
+        - manager_id (string): The manager id
+        - menu_item_id (string): The menu item id
+
+    Returns:
+        - return_val: (dictionary): This is a dictionary that contains either success or error. This will also have all the info of the specfic menu item
+    """
     manager_id = request.args.get("manager_id")
     food_id = request.args.get("menu_item_id")
     cur = cur_dict['staff'][manager_id]
@@ -341,6 +397,17 @@ def manager_view_menu_item_flask():
 
 @APP.route("/manager/add_category", methods=['POST'])
 def manager_add_category_flask():
+    """
+    This adds a new category to the database
+    
+    Inputs:
+        - manager_id (string): The manager id
+        - menu_id (string): The menu id
+        - category_name (string): The name of the category
+
+    Returns:
+        - return_val: (dictionary): This is a dictionary that contains either success or error. This will also have the new category id
+    """
     data = ast.literal_eval(request.get_json())
     cur = cur_dict['staff'][data['manager_id']]
     return_val = manager_add_category(cur, data['category_name'], data['menu_id'])
@@ -351,6 +418,17 @@ def manager_add_category_flask():
 
 @APP.route("/manager/delete_category", methods=['DELETE'])
 def manager_delete_category_flask():
+    """
+    This deletes the category in the database
+    
+    Inputs:
+        - manager_id (string): The manager id
+        - menu_id (string): The menu id
+        - category_id (string): The category id
+
+    Returns:
+        - return_val: (dictionary): This is a dictionary that contains either success or error
+    """
     data = ast.literal_eval(request.get_json())
     cur = cur_dict['staff'][data['manager_id']]
     return_val = manager_delete_category(cur, data['category_id'])
@@ -361,6 +439,17 @@ def manager_delete_category_flask():
 
 @APP.route("/manager/update_category", methods=['POST'])
 def manager_update_category_flask():
+    """
+    This updates the category in the database
+    
+    Inputs:
+        - manager_id (string): The manager id
+        - category_name (string): The name of the category
+        - category_id (string): The category id
+
+    Returns:
+        - return_val: (dictionary): This is a dictionary that contains either success or error. Also send back the category id
+    """
     data = ast.literal_eval(request.get_json())
     cur = cur_dict['staff'][data['manager_id']]
     return_val = manager_update_category(cur, data['category_name'], data['category_id'])
@@ -371,6 +460,22 @@ def manager_update_category_flask():
 
 @APP.route("/manager/add_menu_item", methods=['POST'])
 def manager_add_menu_item_flask():
+    """
+    This adds a new menu item to the database
+    
+    Inputs:
+        - manager_id (string): The manager id
+        - menu_id (string): The menu id
+        - category_id (string): The id of the category
+        - title (string): The name of the menu item
+        - price (float): The price of the menu item
+        - ingredients (dictionary): The ingredients of the menu item
+        - description (string): The description of the menu item
+        - image (string): the image of the menu item
+
+    Returns:
+        - return_val: (dictionary): This is a dictionary that contains either success or error. This will also have the new menu item id
+    """
     data = ast.literal_eval(request.get_json())
     cur = cur_dict['staff'][data['manager_id']]
     if 'image' not in data:
@@ -385,6 +490,15 @@ def manager_add_menu_item_flask():
 
 @APP.route("/manager/delete_menu_item", methods=['DELETE'])
 def manager_delete_menu_item_flask():
+    """
+    This deletes a menu item in the database
+    
+    Inputs:
+        - manager_id (string): The manager id
+        - menu_item_id (string): The menu item id
+    Returns:
+        - return_val: (dictionary): This is a dictionary that contains either success or error
+    """
     data = ast.literal_eval(request.get_json())
     cur = cur_dict['staff'][data['manager_id']]
     return_val = manager_delete_menu_item(cur, data['menu_item_id'])
@@ -395,6 +509,23 @@ def manager_delete_menu_item_flask():
 
 @APP.route("/manager/update_menu_item", methods=['POST'])
 def manager_update_menu_item_flask():
+    """
+    This update a menu item in the database
+    
+    Inputs:
+        - manager_id (string): The manager id
+        - menu_item_id (string): The menu item id
+        - title (string): The name of the menu item
+        - price (float): The price of the menu item
+        - ingredients (dictionary): The ingredients of the menu item
+        - description (string): The description of the menu item
+        - image (string): the image of the menu item
+        - menu_id (string): The menu id
+        - category_id (string): The id of the category
+        
+    Returns:
+        - return_val: (dictionary): This is a dictionary that contains either success or error. Also shows the menu item id
+    """
     data = ast.literal_eval(request.get_json())
     cur = cur_dict['staff'][data['manager_id']]
     return_val = manager_update_menu_item(cur, data['menu_item_id'], data['title'], data['price'], data['ingredients'], data['description'], data['category_id'], data['menu_id'], data['image'])
@@ -405,6 +536,18 @@ def manager_update_menu_item_flask():
 
 @APP.route("/manager/update_category_ordering", methods=['POST'])
 def manager_update_category_ordering_flask():
+    """
+    This updates the category order 
+    
+    Inputs:
+        - manager_id (string): The manager id
+        - category_id (string): The id of the category
+        - prev_ordering_id (string): The previous id of the previous category postion
+        - new_ordering_id (string): The new id of where the category will be postion
+        
+    Returns:
+        - return_val: (dictionary): This is a dictionary that contains either success or error
+    """
     data = ast.literal_eval(request.get_json())
     cur = cur_dict['staff'][data['manager_id']]
     return_val = manager_update_category_ordering(cur, data['category_id'], data['prev_ordering_id'], data['new_ordering_id'])
@@ -415,6 +558,18 @@ def manager_update_category_ordering_flask():
 
 @APP.route("/manager/update_menu_item_ordering", methods=['POST'])
 def manager_update_menu_item_ordering_flask():
+    """
+    This updates the menu item order 
+    
+    Inputs:
+        - manager_id (string): The manager id
+        - menu_item_id (string): The menu item id
+        - prev_ordering_id (string): The previous id of the previous menu item postion
+        - new_ordering_id (string): The new id of where the menu item will be postion
+        
+    Returns:
+        - return_val: (dictionary): This is a dictionary that contains either success or error
+    """
     data = ast.literal_eval(request.get_json())
     cur = cur_dict['staff'][data['manager_id']]
     return_val = manager_update_menu_item_ordering(cur, data['menu_item_id'], data['prev_ordering_id'], data['new_ordering_id'])
@@ -427,6 +582,19 @@ def manager_update_menu_item_ordering_flask():
 
 @APP.route("/customer/view_menu", methods=['GET'])
 def customer_view_menu_flask():
+    """
+    This gets the categories and menu items for the menu id
+    
+    Inputs:
+        - session_id (string): The session id
+        - menu_id (string): The menu id
+        - allergies (List): The list of ints, for the ids of allergies
+        - excluded_cat_ids (Optional list): This is a collection of category ids
+        - top_k (Optional int): This shows the amount of items that the user wants to see
+        
+    Returns:
+        - return_val: (dictionary): This is a dictionary that contains either success or error. This also shows all categories ids with their names and all the menu item info for the first category
+    """
     menu_id = request.args.get("menu_id")
     session_id = request.args.get("session_id")
     allergy_ids = ast.literal_eval(request.args.get("allergies"))
@@ -454,6 +622,19 @@ def customer_view_menu_flask():
 
 @APP.route("/customer/view_category", methods=['GET'])
 def customer_view_category_flask():
+    """
+    This gets the categories and menu items for the menu id
+    
+    Inputs:
+        - session_id (string): The session id
+        - category_id (string): The category id
+        - allergies (List): The list of ints, for the ids of allergies
+        - excluded_cat_ids (Optional list): This is a collection of category ids
+        - top_k (Optional int): This shows the amount of items that the user wants to see
+        
+    Returns:
+        - return_val: (dictionary): This is a dictionary that contains either success or error. This also shows all the menu item for the category
+    """
     session_id = request.args.get("session_id")
     category_id = request.args.get("category_id")
     allergy_ids = ast.literal_eval(request.args.get("allergies"))
@@ -479,6 +660,16 @@ def customer_view_category_flask():
 
 @APP.route("/customer/view_menu_item", methods=['GET'])
 def customer_view_menu_item_flask():
+    """
+    This gets more info about the menu item
+    
+    Inputs:
+        - session_id (string): The session id
+        - menu_item_id (string): The menu item id
+        
+    Returns:
+        - return_val: (dictionary): This is a dictionary that contains either success or error. This also shows all the info of the specfic menu item
+    """
     session_id = request.args.get("session_id")
     menu_item_id = request.args.get("menu_item_id")
     cur = None
@@ -494,6 +685,17 @@ def customer_view_menu_item_flask():
 
 @APP.route("/customer/menu/table", methods=['POST'])
 def customer_menu_table_flask():
+    """
+    This adds the table number of the user and creates a dictionary key in the order's
+    
+    Inputs:
+        - session_id (string): The session id
+        - menu_id (string): The menu id
+        - table_id (string): The table number
+        
+    Returns:
+        - return_val: (dictionary): This is a dictionary that contains either success or error. This also shows the table id
+    """
     data = ast.literal_eval(request.get_json())
     table_id = data['table_id']
     menu_id = data['menu_id']
@@ -523,6 +725,19 @@ def customer_menu_table_flask():
 
 @APP.route("/customer/add_menu_item", methods=['POST'])
 def customer_add_menu_item_flask():
+    """
+    This adds the menu item into the order of the user
+    
+    Inputs:
+        - session_id (string): The session id
+        - menu_id (string): The menu id
+        - menu_item_id (string): The menu item id
+        - amount (int): The amount they want to have of the menu item
+        - persona_name (string): The persona name
+        
+    Returns:
+        - return_val: (dictionary): This is a dictionary that contains either success or error. This also shows the current order of the user
+    """
     data = ast.literal_eval(request.get_json())
     session_id = data['session_id']
     menu_id = data['menu_id']
@@ -589,6 +804,19 @@ def customer_add_menu_item_flask():
 
 @APP.route("/customer/remove_menu_item", methods=['DELETE'])
 def customer_remove_menu_item_flask():
+    """
+    This removes the menu item in the order of the user
+    
+    Inputs:
+        - session_id (string): The session id
+        - menu_id (string): The menu id
+        - menu_item_id (string): The menu item id
+        - amount (int): The amount they want to have of the menu item
+        - persona (string): The persona name
+        
+    Returns:
+        - return_val: (dictionary): This is a dictionary that contains either success or error. This also shows the current order of the user
+    """
     data = ast.literal_eval(request.get_json())
     session_id = data['session_id']
     menu_id = data['menu_id']
@@ -633,6 +861,16 @@ def customer_remove_menu_item_flask():
 
 @APP.route("/customer/view_order", methods=['GET'])
 def customer_view_order_flask():
+    """
+    This shows the order that the user has
+    
+    Inputs:
+        - session_id (string): The session id
+        - menu_id (string): The menu id
+        
+    Returns:
+        - return_val: (dictionary): This is a dictionary that contains either success or error. This also shows the current order of the user
+    """
     session_id = request.args.get("session_id")
     menu_id = request.args.get('menu_id')
 
@@ -655,6 +893,16 @@ def customer_view_order_flask():
     
 @APP.route("/customer/menu/search", methods=['GET'])
 def customer_menu_search_flask():
+    """
+    This shows the resturants that the user has searched
+    
+    Inputs:
+        - query (string): The text that will be used to search
+        - session_id (string): The session id
+        
+    Returns:
+        - return_val: (dictionary): This is a dictionary that contains either success or error. This also shows the the resturants that match the query
+    """
 
     session_id = request.args.get("session_id")
     query = request.args.get("query")
@@ -672,10 +920,19 @@ def customer_menu_search_flask():
 
 @APP.route("/get_allergies", methods=['GET'])
 def get_allergies_flask():
+    """
+    Shows the list of allergies
+    
+    Inputs: No inputs
+        
+    Returns:
+        - return_val: (dictionary): This is a dictionary of all allergies
+    """
     cur = db_conn.cursor()
 
     query = """
-        select id, name, description from allergies;
+        select id, name, description 
+        from allergies;
     """
 
     cur.execute(query, [])
@@ -693,6 +950,16 @@ def get_allergies_flask():
 
 @APP.route("/customer/finalise_order", methods=['POST'])
 def customer_finalise_order_flask():
+    """
+    This confirms the selection of the order for the user and sends it to the kitchen staff
+    
+    Inputs:
+        - session_id (string): The session_id 
+        - menu_id (string): The menu id
+        
+    Returns:
+        - return_val: (dictionary): This will show if it was a success or an error
+    """
     data = ast.literal_eval(request.get_json())
     
     session_id = data["session_id"]
@@ -702,31 +969,6 @@ def customer_finalise_order_flask():
     invalid_menu_id = 'no orders with the given menu_id'
     already_sent_to_kitchen = 'Already sent to kitchen'
     success = {'success': 'order finalised'}
-
-    # update_points_query = """
-    #     UPDATE menu_items
-    #     SET points = %s
-    #     WHERE id = %s;
-    # """
-    
-    # get_menu_items = """
-    #     SELECT id, points
-    #     FROM menu_items
-    #     WHERE menu_id = %s;
-    # """
-    
-    # cur.execute(get_menu_items, [menu_id])
-    
-    # menu_items_list = cur.fetchall()
-    
-    # tmp_list = []
-
-    # cur = None
-    # if session_id in cur_dict['customers']:
-    #     cur = cur_dict['customers'][session_id]
-    # else:
-    #     cur = db_conn.cursor()
-    #     cur_dict['customers'][session_id] = cur
     
     orders_list = None
     if menu_id in orders:
@@ -744,19 +986,6 @@ def customer_finalise_order_flask():
             order_list[0]['status'] = 'kitchen'
             order_list[0]['timestamp'] = datetime.now().strftime("%d %B %Y, %H:%M:%S")
             
-        # for menu_item in order_list[0]['menu_items']:
-        #     for menu_item_cur in menu_items_list:
-        #         if int(menu_item_cur[0]) == int(menu_item['menu_item_id']):
-        #             tmp_list.append({
-        #                 "menu_item_id" : menu_item['menu_item_id'],
-        #                 "points" : str(int(menu_item['amount']) + int(menu_item_cur[1]))
-        #             })
-        
-        # for apply in tmp_list:
-        #     cur.execute(update_points_query, [apply['points'], apply['menu_item_id']])
-            
-        
-        # db_conn.commit()
         return success
     else:
         abort(400, invalid_session_id)
@@ -764,6 +993,17 @@ def customer_finalise_order_flask():
     
 @APP.route("/customer/request_assistance", methods=['POST'])
 def customer_request_assistance_flask():
+    """
+    This sends a request to the wait staff
+    
+    Inputs:
+        - session_id (string): The session_id 
+        - menu_id (string): The menu id
+        - table_id (string): The table number
+        
+    Returns:
+        - return_val: (dictionary): This will show if it was a success or an error
+    """
     data = ast.literal_eval(request.get_json())
     
     already_in = "The request has already been added in the system"
@@ -803,6 +1043,18 @@ def customer_request_assistance_flask():
     
 @APP.route("/customer/give_rating", methods=['POST'])
 def customer_give_rating_flask():
+    """
+    This gives a rating to the menu item
+    
+    Inputs:
+        - session_id (string): The session_id 
+        - menu_item_id (string): The menu item id
+        - rating (int): A number between 1-5 
+        - amount (int): The amount
+        
+    Returns:
+        - return_val: (dictionary): This will show if it was a success or an error
+    """
     data = ast.literal_eval(request.get_json())
     session_id = data['session_id']
     menu_item_id = data['menu_item_id']
@@ -829,28 +1081,20 @@ def customer_give_rating_flask():
 
 @APP.route("/kitchen_staff/get_order_list", methods=['GET'])
 def kitchen_staff_get_order_list_flask():   
-    # kitchen_id = request.args.get('kitchen_staff_id')
+    """
+    This gets the list of orders being sent to the kitchen staff from the order dictionary
+    
+    Inputs:
+        - kitchen_staff_id (string): The kitchen staff id
+        - menu_id (string): The menu id
+        
+    Returns:
+        - return_val: (dictionary): This will show if it was a success or an error and gives all the orders that are sent to the kitchen staff
+    """
     menu_id = request.args.get('menu_id')
     kitchen_staff_id = request.args.get('kitchen_staff_id')
 
     output = []
-    
-    # invalid_id = { 'error': 'invalid kitchen_staff_id' } # error message
-    # cur = cur_dict['staff'][kitchen_id]
-    # query_find_staff_menu = """
-    #     SELECT menu_id
-    #     FROM staff
-    #     WHERE id = %s;
-    # """
-    
-    # cur.execute(query_find_staff_menu, [kitchen_id])
-    
-    # menu_id = cur.fetchall()
-    
-    # if len(menu_id) == 0:
-    #     return dumps(invalid_id)
-    
-    # menu_id = menu_id[0][0] # grabbing it from the list
     
     if menu_id not in orders:
         return dumps(output)
@@ -883,6 +1127,17 @@ def kitchen_staff_get_order_list_flask():
 
 @APP.route("/kitchen_staff/mark_currently_cooking", methods=['POST'])
 def kitchen_staff_mark_currently_cooking_flask():
+    """
+    This marks the order to be currently cooking
+    
+    Inputs:
+        - kitchen_staff_id (string): The kitchen staff id
+        - menu_id (string): The menu id
+        - session_id (string): The session id
+        
+    Returns:
+        - return_val: (dictionary): This will show if it was a success or an error
+    """
     data = ast.literal_eval(request.get_json())
     menu_id = data['menu_id']
     session_id = data['session_id']
@@ -910,30 +1165,23 @@ def kitchen_staff_mark_currently_cooking_flask():
 
 @APP.route("/kitchen_staff/mark_order_complete", methods=['POST'])
 def kitchen_staff_mark_order_complete_flask():   
+    """
+    This marks the order sets the order as complete and sends it to wait staff
+    
+    Inputs:
+        - menu_id (string): The menu id
+        - session_id (string): The session id
+        
+    Returns:
+        - return_val: (dictionary): This will show if it was a success or an error
+    """
     data = ast.literal_eval(request.get_json())
-    # cur = cur_dict['staff'][data['kitchen_staff_id']]
-    # kitchen_id = data['kitchen_staff_id']
     menu_id = data['menu_id']
     session_id = data['session_id']
 
     fail = 'could not change order status'
     invalid_id = 'invalid menu_id'
     success = {'success': 'Order sent to wait staff'}
-    
-    # query_find_staff_menu = """
-    #     SELECT menu_id
-    #     FROM staff
-    #     WHERE id = %s;
-    # """
-    
-    # cur.execute(query_find_staff_menu, [kitchen_id])
-    
-    # menu_id = cur.fetchall()
-    
-    # if len(menu_id) == 0:
-    #     return dumps(invalid_id)
-    
-    # menu_id = menu_id[0][0] # grabbing it from the list
     
     if menu_id not in orders:
         abort(400, invalid_id)
@@ -956,29 +1204,21 @@ def kitchen_staff_mark_order_complete_flask():
 # Wait Staff functions
 
 @APP.route("/wait_staff/get_order_list", methods=['GET'])
-def wait_staff_get_order_list_flask():   
-    # wait_id = request.args.get('wait_staff_id')
+def wait_staff_get_order_list_flask():
+    """
+    This gets the orders of what is sent to the wait staff
+    
+    Inputs:
+        - menu_id (string): The menu id
+        - wait_staff_id (string): The wait staff id
+        
+    Returns:
+        - return_val: (dictionary): This will show if it was a success or an error and shows all the orders that was sent to the wait staff
+    """   
     menu_id = request.args.get('menu_id')
     wait_staff_id = request.args.get('wait_staff_id')
 
     output = []
-
-    # invalid_id = { 'error': 'invalid wait_staff_id' } # error message
-    # cur = cur_dict['staff'][wait_id]
-    # query_find_staff_menu = """
-    #     SELECT menu_id
-    #     FROM staff
-    #     WHERE id = %s;
-    # """
-    
-    # cur.execute(query_find_staff_menu, [wait_id])
-    
-    # menu_id = cur.fetchall()
-    
-    # if len(menu_id) == 0:
-    #     return dumps(invalid_id)
-    
-    # menu_id = menu_id[0][0] # grabbing it from the list
     
     if menu_id not in orders:
         return dumps(output)
@@ -1011,6 +1251,17 @@ def wait_staff_get_order_list_flask():
 
 @APP.route("/wait_staff/mark_currently_serving", methods=['POST'])
 def wait_staff_mark_currently_serving_flask():
+    """
+    This marks the order to be currently serving
+    
+    Inputs:
+        - wait_staff_id (string): The wait staff id
+        - menu_id (string): The menu id
+        - session_id (string): The session id
+        
+    Returns:
+        - return_val: (dictionary): This will show if it was a success or an error
+    """   
     data = ast.literal_eval(request.get_json())
 
     menu_id = data['menu_id']
@@ -1039,10 +1290,18 @@ def wait_staff_mark_currently_serving_flask():
 
 
 @APP.route("/wait_staff/mark_order_complete", methods=['DELETE'])
-def wait_staff_mark_order_complete_flask():   
+def wait_staff_mark_order_complete_flask():
+    """
+    This marks the order to be complete
+    
+    Inputs:
+        - menu_id (string): The menu id
+        - session_id (string): The session id
+        
+    Returns:
+        - return_val: (dictionary): This will show if it was a success or an error
+    """
     data = ast.literal_eval(request.get_json())
-    # wait_id = data['wait_staff_id']
-    # cur = cur_dict['staff'][wait_id]
     menu_id = data['menu_id']
     session_id = data['session_id']
 
@@ -1050,21 +1309,6 @@ def wait_staff_mark_order_complete_flask():
     invalid_id = 'invalid menu_id, or there are no orders' # error message
     fail = 'could not remove order'
     success = {'success': 'Order removed from orders'}
-    
-    # query_find_staff_menu = """
-    #     SELECT menu_id
-    #     FROM staff
-    #     WHERE id = %s;
-    # """
-    
-    # cur.execute(query_find_staff_menu, [wait_id])
-    
-    # menu_id = cur.fetchall()
-    
-    # if len(menu_id) == 0:
-    #     return dumps(invalid_id)
-    
-    # menu_id = menu_id[0][0] # grabbing it from the list
     
     if menu_id not in orders:
         abort(400, invalid_id)
@@ -1083,7 +1327,18 @@ def wait_staff_mark_order_complete_flask():
 
 
 @APP.route("/wait_staff/mark_notification_complete", methods=['DELETE'])
-def wait_staff_mark_notification_complete_flask():   
+def wait_staff_mark_notification_complete_flask():
+    """
+    This marks the notifcation to be complete
+    
+    Inputs:
+        - menu_id (string): The menu id
+        - session_id (string): The session id
+        - table_id (string): The table number
+        
+    Returns:
+        - return_val: (dictionary): This will show if it was a success or an error
+    """
     data = ast.literal_eval(request.get_json())
     menu_id = data['menu_id']
     
@@ -1093,21 +1348,6 @@ def wait_staff_mark_notification_complete_flask():
     success = {'success': 'notification removed from notifications'}
     fail = 'could not remove notification'
     invalid_menu_id = 'given menu id has no list of notifications'
-    
-    # invalid_id = { 'error': 'invalid wait_staff_id' } # error message
-    # wait_id = data['wait_staff_id']
-    # cur = cur_dict['staff'][wait_id]
-    # query_find_staff_menu = """
-    #     SELECT menu_id
-    #     FROM staff
-    #     WHERE id = %s;
-    # """
-    # cur.execute(query_find_staff_menu, [wait_id])
-    # menu_id = cur.fetchall()
-    # if len(menu_id) == 0:
-    #     return dumps(invalid_id)
-    
-    # menu_id = menu_id[0][0] # grabbing it from the list 
     
     if menu_id not in notifications:
         abort(400, invalid_menu_id)
@@ -1126,6 +1366,18 @@ def wait_staff_mark_notification_complete_flask():
 
 @APP.route("/wait_staff/get_assistance_notifications", methods=['GET'])
 def wait_staff_get_assistance_notifications_flask():
+    """
+    This gets all notifcations for assistance
+    
+    Inputs:
+        - menu_id (string): The menu id
+        - session_id (string): The session id
+        - table_id (string): The table number
+        - wait_staff_id (string): The wait staff id
+        
+    Returns:
+        - return_val: (dictionary): This will show if it was a success or an error
+    """
     menu_id = request.args.get('menu_id')    
     wait_staff_id = request.args.get('wait_staff_id')
 
@@ -1141,6 +1393,17 @@ def wait_staff_get_assistance_notifications_flask():
 
 @APP.route("/wait_staff/mark_currently_assisting", methods=['POST'])
 def wait_staff_mark_currently_assisting_flask():
+    """
+    This marks the notfication to be currently assisting
+    
+    Inputs:
+        - menu_id (string): The menu id
+        - session_id (string): The session id
+        - table_id (string): The table number
+        
+    Returns:
+        - return_val: (dictionary): This will show if it was a success or an error
+    """
     data = ast.literal_eval(str(request.get_json()))
     session_id = data['session_id']
     menu_id = data['menu_id']
