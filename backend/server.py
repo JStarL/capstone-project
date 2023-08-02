@@ -761,9 +761,9 @@ def customer_add_menu_item_flask():
         abort(400, amount_negative_error)
     
     menu_item_query = """
-        SELECT title, description, image, price, category_id
-        FROM menu_items
-        WHERE id = %s;
+        select title, description, image, price, category_id
+        from menu_items
+        where id = %s;
     """
     
     cur.execute(menu_item_query, [menu_item_id])
