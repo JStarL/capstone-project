@@ -4,7 +4,7 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import { StyledButton } from '../pages/CustomerOrStaff';
 
 /**
- * Represents a pair of ingredient and allergy for managing allergies in a form.
+ * Represents a pair of ingredient and allergy.
  * @param {Object} props - The properties passed to the component.
  * @param {Array} props.ingredientAllergyPair - An array containing the ingredient and associated allergy.
  * @param {Array} props.allergies - An array of allergies to populate the allergy selection.

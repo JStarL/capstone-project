@@ -19,7 +19,7 @@ import AddIcon from '@mui/icons-material/Add';
 import UpdateIcon from '@mui/icons-material/Update';
 
 /**
- * Represents a component displaying a food item managed by the manager.
+ * Represents a component displaying a food item that can be modified by the manager.
  * @param {Object} props - The properties passed to the component.
  * @param {Array} props.allergies - An array of allergies for the food item.
  * @param {Function} props.fetchAllMenuData - A function to fetch all menu data.

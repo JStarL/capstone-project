@@ -3,10 +3,26 @@ import '../App.css';
 import CustomerFoodItem from '../components/CustomerFoodItem';
 import CategoryCustomer from '../components/CategoryCustomer';
 import makeRequest from '../makeRequest';
-import { Typography, Select, MenuItem, FormControl, InputLabel, useThemeProps } from '@mui/material';
+import { Typography, Select, MenuItem, FormControl, InputLabel } from '@mui/material';
 import { useParams } from 'react-router-dom';
 
-function CustomerMenuPage({ personas, handleExcludeCategories, currentlySelectedPersona, setCurrentlySelectedPersona, currentlySelectedPersonaAllergies, setCurrentlySelectedPersonaAllergies, setMenuId, setSessionId, setTableNumber, setExcludeCategories, excludeCategories }) {
+/**
+ * Represents the Customer Menu Page in the customer interface.
+ * @param {Object} props - The props passed to the component.
+ * @param {Array} props.personas - The list of personas available for selection.
+ * @param {function} props.handleExcludeCategories - The callback function to handle excluding categories.
+ * @param {number} props.currentlySelectedPersona - The currently selected persona index.
+ * @param {function} props.setCurrentlySelectedPersona - The callback function to set the currently selected persona index.
+ * @param {Array} props.currentlySelectedPersonaAllergies - The list of allergies for the currently selected persona.
+ * @param {function} props.setCurrentlySelectedPersonaAllergies - The callback function to set the list of allergies for the currently selected persona.
+ * @param {function} props.setMenuId - The callback function to set the menu ID.
+ * @param {function} props.setSessionId - The callback function to set the session ID.
+ * @param {function} props.setTableNumber - The callback function to set the table number.
+ * @param {Array} props.setExcludeCategories - The list of categories to be excluded.
+ * @param {Array} props.excludeCategories - The list of excluded categories.
+ * @returns {JSX.Element} The JSX representation of the CustomerMenuPage component.
+ */
+function CustomerMenuPage(props) {
   const [categories, setCategories] = React.useState([]);
   const [currentSelectedCategory, setCurrentSelectedCategory] = React.useState('Best Selling');
   const [currentSelectedCategoryId, setCurrentSelectedCategoryId] = React.useState(-1);
@@ -19,9 +35,9 @@ function CustomerMenuPage({ personas, handleExcludeCategories, currentlySelected
   const tableNumber = params.tableNumber
 
   React.useEffect(() => {
-    setMenuId(menuId)
-    setSessionId(sessionId)
-    setTableNumber(tableNumber)
+    props.setMenuId(menuId)
+    props.setSessionId(sessionId)
+    props.setTableNumber(tableNumber)
   }, []);
 
   React.useEffect(() => {
@@ -34,12 +50,12 @@ function CustomerMenuPage({ personas, handleExcludeCategories, currentlySelected
     };
 
     fetchData();
-  }, [currentlySelectedPersona]);
+  }, [props.currentlySelectedPersona]);
 
   React.useEffect(() => {
     const fetchCategoryData = async () => {
       if (currentSelectedCategoryId !== -1) {
-        const url = `/customer/view_category?session_id=${sessionId}&category_id=${currentSelectedCategoryId}&allergies=[${currentlySelectedPersonaAllergies}]&excluded_cat_ids=[${excludeCategories}]`;
+        const url = `/customer/view_category?session_id=${sessionId}&category_id=${currentSelectedCategoryId}&allergies=[${props.currentlySelectedPersonaAllergies}]&excluded_cat_ids=[${props.excludeCategories}]`;
         const data = await makeRequest(url, 'GET', undefined, undefined);
         setMenuItems(data);
         fetchAllMenuData();
@@ -48,25 +64,36 @@ function CustomerMenuPage({ personas, handleExcludeCategories, currentlySelected
     fetchCategoryData();
   }, [currentSelectedCategoryId, trigger]);
 
+  /**
+   * Fetches all menu data based on the currently selected persona and excluded categories.
+   * @returns {Array} The list of categories with their menu items.
+   */
   async function fetchAllMenuData() {
-    const url = `/customer/view_menu?session_id=${sessionId}&menu_id=${menuId}&allergies=[${currentlySelectedPersonaAllergies}]&excluded_cat_ids=[${excludeCategories}]`;
+    const url = `/customer/view_menu?session_id=${sessionId}&menu_id=${menuId}&allergies=[${props.currentlySelectedPersonaAllergies}]&excluded_cat_ids=[${props.excludeCategories}]`;
     const data = await makeRequest(url, 'GET', undefined, undefined);
     setCategories(data);
     return data;
   }
 
+  /**
+   * Handles the change of persona selection.
+   * @param {Object} event - The event object containing the selected value.
+   */
   const handlePersonaChange = (event) => {
     const selectedIndex = event.target.value;
-    const selectedPersona = personas[selectedIndex];
+    const selectedPersona = props.personas[selectedIndex];
     const selectedPersonaAllergies = selectedPersona[1] || [];
     const selectedPersonaExcludedCatList = selectedPersona[2] || [];
 
-    setCurrentlySelectedPersona(selectedIndex); // Use the index as the selected value
-    setCurrentlySelectedPersonaAllergies(selectedPersonaAllergies);
-    setExcludeCategories(selectedPersonaExcludedCatList);
+    props.setCurrentlySelectedPersona(selectedIndex);
+    props.setCurrentlySelectedPersonaAllergies(selectedPersonaAllergies);
+    props.setExcludeCategories(selectedPersonaExcludedCatList);
   };
 
-
+  /**
+   * Fetches the menu items for the currently selected category.
+   * @returns {Array} The list of menu items for the selected category.
+   */
   async function fetchCategoryMenuItems() {
     const url = `/customer/view_category?session_id=${sessionId}&category_id=${currentSelectedCategoryId}`;
     const data = await makeRequest(url, 'GET', undefined, undefined);
@@ -103,11 +130,11 @@ function CustomerMenuPage({ personas, handleExcludeCategories, currentlySelected
               <FormControl variant="outlined" style={{width: '15vh', margin: '10px'}}>
                 <InputLabel>Choose Persona</InputLabel>
                 <Select
-                  value={currentlySelectedPersona}
+                  value={props.currentlySelectedPersona}
                   onChange={handlePersonaChange}
                   label="Choose Persona"
                 >
-                  {personas.map((persona, index) => (
+                  {props.personas.map((persona, index) => (
                     <MenuItem key={index} value={index}>
                       {persona[0]}
                     </MenuItem>
@@ -129,12 +156,12 @@ function CustomerMenuPage({ personas, handleExcludeCategories, currentlySelected
               foodCategoryId={menuItem.food_category_id}
               fetchAllMenuData={fetchAllMenuData}
               fetchCategoryMenuItems={fetchCategoryMenuItems}
-              currentlySelectedPersona={currentlySelectedPersona}
+              currentlySelectedPersona={props.currentlySelectedPersona}
               currentSelectedCategoryId={currentSelectedCategoryId}
-              personas={personas}
-              setExcludeCategories={setExcludeCategories}
-              excludeCategories={excludeCategories}
-              handleExcludeCategories={handleExcludeCategories}
+              personas={props.personas}
+              setExcludeCategories={props.setExcludeCategories}
+              excludeCategories={props.excludeCategories}
+              handleExcludeCategories={props.handleExcludeCategories}
             />
           ))}
         </div>
