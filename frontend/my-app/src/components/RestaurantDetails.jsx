@@ -34,7 +34,7 @@ function RestaurantDetails(props) {
 
 	return (
 		<div className='food-item-div'>
-			<div className='food-item-middle'>
+			<div className='food-item-middle' style={{margin: '10px'}}>
 				<div className='div-section'>
 					<b>Name: </b>
 					{props.restaurantName}
