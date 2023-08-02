@@ -22,3 +22,15 @@ export async function fileToDataUrl(file) {
     return dataUrl;
   }
 }
+
+/**
+   * Converts total seconds to minutes and seconds.
+   * @param {number} totalSeconds - The total number of seconds to convert.
+   */
+export const convertToMinutesAndHours = (totalSeconds, setMinutes, setSeconds) => {
+  const remainingSeconds = totalSeconds % 3600;
+  const minutes = Math.floor(remainingSeconds / 60);
+  const seconds = Math.floor(remainingSeconds % 60);
+  setMinutes(minutes);
+  setSeconds(seconds);
+};

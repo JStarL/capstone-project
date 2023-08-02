@@ -1,11 +1,11 @@
 import React from 'react';
-import './Components.css';
-import { Link } from 'react-router-dom';
+import '../App.css';
+import { useNavigate } from 'react-router-dom';
 import PersonAddAlt1SharpIcon from '@mui/icons-material/PersonAddAlt1Sharp';
 import RestaurantMenuIcon from '@mui/icons-material/RestaurantMenu';
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 import SettingsIcon from '@mui/icons-material/Settings';
-import { StyledButton } from '../pages/CustomerOrStaff';
+import { Button, styled } from '@mui/material';
 import makeRequest from '../makeRequest';
 import BackHandIcon from '@mui/icons-material/BackHand';
 import { Snackbar, Alert } from '@mui/material';
@@ -23,6 +23,20 @@ import { Snackbar, Alert } from '@mui/material';
  */
 function Footer(props) {
   const [isSnackbarOpen, setSnackbarOpen] = React.useState(false); // State variable for Snackbar open/close status
+  const navigate = useNavigate()
+
+  const StyledButton = styled(Button)({
+    backgroundColor: '#002250',
+    color: '#fff',
+    '&:hover': {
+      backgroundColor: '#fff',
+      color: '#002250',
+    },
+    width: '100%',
+    whiteSpace: 'nowrap',
+    padding: '20px',
+    margin: '5px'
+  });
 
   /**
    * Sends a request for assistance.
@@ -58,27 +72,27 @@ function Footer(props) {
     if (props.isManager) {
       return (
         <div className="footer-container">
-          <StyledButton startIcon={<PersonAddAlt1SharpIcon />}>
-            <Link to={`/manager/addstaff/${props.menuId}/${props.id}`} className="toNavy">Add Staff</Link>
+          <StyledButton startIcon={<PersonAddAlt1SharpIcon />}
+            onClick={() => {navigate(`/manager/addstaff/${props.menuId}/${props.id}`)}} className="toNavy">Add Staff
           </StyledButton>
-          <StyledButton startIcon={<RestaurantMenuIcon />}>
-            <Link to={`/manager/menu/${props.menuId}/${props.id}`} className="toNavy">Go to Menu</Link>
+          <StyledButton startIcon={<RestaurantMenuIcon />}
+            onClick={() => {navigate(`/manager/menu/${props.menuId}/${props.id}`)}} className="toNavy">Go to Menu
           </StyledButton>
         </div>
       );
     } else if (props.isCustomer) {
       return (
         <div className="footer-container">
-          <StyledButton startIcon={<ShoppingCartIcon />}>
-            <Link to={`/customer/${props.sessionId}/view_order/${props.menuId}/${props.tableNumber}`} className="toNavy">View Cart</Link>
+          <StyledButton startIcon={<ShoppingCartIcon />}
+            onClick={() => {navigate(`/customer/${props.sessionId}/view_order/${props.menuId}/${props.tableNumber}`)}} className="toNavy">View Cart
           </StyledButton>
-          <StyledButton startIcon={<RestaurantMenuIcon />}>
-            <Link to={`/customer/${props.sessionId}/${props.menuId}/${props.tableNumber}`} className="toNavy">Go to Menu</Link>
+          <StyledButton startIcon={<RestaurantMenuIcon />}
+            onClick={() => {navigate(`/customer/${props.sessionId}/${props.menuId}/${props.tableNumber}`)}} className="toNavy">Go to Menu
           </StyledButton>
-          <StyledButton startIcon={<SettingsIcon />}>
-            <Link to={`/customer/${props.sessionId}/${props.menuId}/${props.tableNumber}/personalise`} className="toNavy">Personalise</Link>
+          <StyledButton startIcon={<SettingsIcon />}
+            onClick={() => {navigate(`/customer/${props.sessionId}/${props.menuId}/${props.tableNumber}/personalise`)}} className="toNavy">Personalise
           </StyledButton>
-          <StyledButton onClick={requestAssistance} startIcon={<BackHandIcon />} className="toNavy">
+          <StyledButton startIcon={<BackHandIcon />} onClick={requestAssistance} className="toNavy" style={{ paddingRight: '35px', paddingLeft: '40px' }}>
             Request Assistance
           </StyledButton>
           <Snackbar
@@ -100,7 +114,7 @@ function Footer(props) {
         </div>
       );
     } else {
-      return null; // Render nothing if menuId or tableNumber is missing
+      return null;
     }
   };
 

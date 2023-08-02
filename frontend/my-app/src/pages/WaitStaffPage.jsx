@@ -85,7 +85,7 @@ function WaitStaffPage() {
                 padding: '1vw',
                 width: 'auto',
                 marginLeft: '10px',
-                textAlign: 'center', // Center the text horizontally
+                textAlign: 'center',
               }} variant="overline" gutterBottom>No Pending orders at the moment</Typography>
             </div>
           ) : (
@@ -116,7 +116,7 @@ function WaitStaffPage() {
                 padding: '1vw',
                 width: 'auto',
                 marginLeft: '10px',
-                textAlign: 'center', // Center the text horizontally
+                textAlign: 'center',
               }} variant="overline" gutterBottom>No customers need assistance at the moment</Typography>
             </div>
           ) : (

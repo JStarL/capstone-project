@@ -5,6 +5,7 @@ import makeRequest from '../makeRequest';
 import { Typography } from '@mui/material';
 import DoneIcon from '@mui/icons-material/Done';
 import PriorityHighIcon from '@mui/icons-material/PriorityHigh';
+import { convertToMinutesAndHours } from './helperFunctions';
 
 /**
  * Represents a wait staff notifications component in the staff interface.
@@ -24,18 +25,6 @@ function WaitStaffNotifications(props) {
   const [minutes, setMinutes] = React.useState(0);
   const [seconds, setSeconds] = React.useState(0);
 
-  /**
-   * Converts total seconds to minutes and seconds.
-   * @param {number} totalSeconds - The total number of seconds to convert.
-   */
-  const convertToMinutesAndHours = (totalSeconds) => {
-    const remainingSeconds = totalSeconds % 3600;
-    const minutes = Math.floor(remainingSeconds / 60);
-    const seconds = Math.floor(remainingSeconds % 60);
-    setMinutes(minutes);
-    setSeconds(seconds);
-  };
-
   React.useEffect(() => {
     const timer = () => {
       const timeCustomerOrdered = new Date(props.timestamp);
@@ -44,7 +33,7 @@ function WaitStaffNotifications(props) {
       setTimestamp(timeDifference / 1000);
     };
     const timerFunction = setInterval(timer, 1000);
-    convertToMinutesAndHours(timestamp);
+    convertToMinutesAndHours(timestamp, setMinutes, setSeconds);
 
     return () => {
       clearInterval(timerFunction);

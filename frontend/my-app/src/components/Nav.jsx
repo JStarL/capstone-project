@@ -37,8 +37,6 @@ function Nav(props) {
     props.setStaffType(null);
     props.setIsCustomer(false);
     props.setIsStaff(false)
-
-    localStorage.clear()
   }
 
   /**
