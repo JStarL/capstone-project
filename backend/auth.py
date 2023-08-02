@@ -1,6 +1,27 @@
 
 
 def login_backend(cur, email, password):
+    """
+    Update logged in status for the respective staff member that attempts to log in to the system.
+
+    Inputs:
+        - cur (cursor): The active cursor
+        - email (string): Email of the staff member logging in
+        - password (string): Password entered by staff member logging in
+
+    Returns:
+        - logged_in (dictionary): If logged in successfully, updates the staff type of the member to be
+        manager, wait or kitchen based on who they are.
+
+        OR
+
+        - invalid_email (dictionary): Error message if email entered is invalid
+
+        OR
+
+        - invalid_password (dictionary): Error message if password entered is invalid.
+
+    """
 
     # NOTE: The token used is their 'email' for now,
     # since managers and staff are stored in different tables
@@ -11,17 +32,17 @@ def login_backend(cur, email, password):
     logged_in = { 'success': 'logged in' }
 
     query = """
-    select password, id, menu_id, staff_type from staff where email = %s;
+        select password, id, menu_id, staff_type from staff where email = %s;
     """
 
     cur.execute(query, [email])
-    list1 = cur.fetchall()
+    staff_list = cur.fetchall()
     
-    if len(list1) == 0:
+    if len(staff_list) == 0:
         return invalid_email
     else:
         # Access and compare staff's password
-        logged_in_tuple = list1[0]
+        logged_in_tuple = staff_list[0]
         if password == logged_in_tuple[0]:
             logged_in['staff_id'] = logged_in_tuple[1]
             logged_in['menu_id'] = logged_in_tuple[2]
@@ -40,6 +61,33 @@ def login_backend(cur, email, password):
             return invalid_password
         
 def register_backend(cur, email, password, name, resturant_name, location):
+    """
+    Registers themself (manager) into the system.
+
+    Inputs:
+        - cur (cursor): The active cursor
+        - email (string): Email of the staff member registering
+        - password (string): Password entered by staff member registering
+        - name (string): Name of the staff member registering
+        - resturant_name (string): Name of restaurant they are registering  
+        - location (string): Address of restaurant
+
+    Returns:
+        - invalid_register (dictionary): Error message if staff member couldn't register successfully.
+
+        OR
+
+        - already_registered (dictionary): Error message if email already exists in system.
+        
+        OR
+
+        - failed_category_insert (dictionary): Error message if best sellling category wasn't inserted successfully.
+        
+        OR
+
+        - registered (dictionary): Success message if registered successfully.
+
+    """
 
     invalid_register = { 'error': 'invalid' }
     already_registered = { 'error': 'This email is already registered'}
@@ -48,58 +96,54 @@ def register_backend(cur, email, password, name, resturant_name, location):
     
     # Check if email is already registered
 
-    query0 = """
-    SELECT id
-    FROM staff
-    WHERE email = %s;
+    staff_query = """
+        select id
+        from staff
+        where email = %s;
     """
 
-    cur.execute(query0, [email])
-    list1 = cur.fetchall()
+    cur.execute(staff_query, [email])
+    staff_list = cur.fetchall()
     
-    if len(list1) > 0:
+    if len(staff_list) > 0:
         return already_registered
 
-    query2 = """
-    INSERT INTO menus (restaurant_name, restaurant_loc)
-    VALUES (%s, %s);
+    add_resturant_query = """
+        insert into menus (restaurant_name, restaurant_loc)
+        values (%s, %s);
     """
     
-    query3 = """
-    SELECT id 
-    FROM menus 
-    where restaurant_name = %s
-    AND restaurant_loc = %s;
+    menu_query = """
+        select id 
+        from menus 
+        where restaurant_name = %s
+        and restaurant_loc = %s;
     """
 
-    query = """
-    INSERT INTO staff (email, name, password, menu_id, staff_type)
-    VALUES (%s, %s, %s, %s, 'M');
-    """
-    
-    query4 = """
-    SELECT id 
-    FROM staff
-    where email = %s
-    ;
+    add_staff_query = """
+        insert into staff (email, name, password, menu_id, staff_type)
+        values (%s, %s, %s, %s, 'M');
     """
 
-    query5 = """
-    insert into categories(name, menu_id)
-    values ('Best Selling', %s)
-    ;
+
+    add_best_selling_query = """
+        insert into categories(name, menu_id)
+        values ('Best Selling', %s)
+        ;
     """
 
-    query6 = """
-    select id
-    from categories
-    where name = 'Best Selling'
-    and menu_id = %s
-    ;
+    check_best_selling_query = """
+        select id
+        from categories
+        where name = 'Best Selling'
+        and menu_id = %s
+        ;
     """
 
-    cur.execute(query2, [resturant_name, location]) #adding in the database of the menus
-    cur.execute(query3, [resturant_name, location]) #grabbing the id of the menu
+    # adding in the database of the menus
+    cur.execute(add_resturant_query, [resturant_name, location])
+    # grabbing the id of the menu
+    cur.execute(menu_query, [resturant_name, location]) 
     list1 = cur.fetchall()
     
     if len(list1) == 0:
@@ -107,11 +151,14 @@ def register_backend(cur, email, password, name, resturant_name, location):
     
     menu_id = list1[0][0]
 
-    cur.execute(query, [email, name, password, menu_id]) #adding in the database of the staff
-    cur.execute(query4, [email]) #grabbing the manager id
+    # adding in the database of the staff
+    cur.execute(add_staff_query, [email, name, password, menu_id])
+    # grabbing the manager id
+    cur.execute(staff_query, [email])
     list1 = cur.fetchall()
     
-    if len(list1) == 0: #if it breaks and didn't get anything
+    # if it breaks and didn't get anything
+    if len(list1) == 0:
         return invalid_register
     
     staff_id = list1[0][0]
@@ -120,11 +167,13 @@ def register_backend(cur, email, password, name, resturant_name, location):
     registered['manager_id'] = staff_id
     registered['menu_id'] = menu_id
 
-    cur.execute(query5, [menu_id]) # inserting the default 'Best Selling' category
+    # inserting the default 'Best Selling' category
+    cur.execute(add_best_selling_query, [menu_id])
 
     # Check that this insert worked
 
-    cur.execute(query6, [menu_id]) # get the category_id
+    # get the category_id
+    cur.execute(check_best_selling_query, [menu_id])
     list1 = cur.fetchall()
 
     if len(list1) == 0:
@@ -134,7 +183,34 @@ def register_backend(cur, email, password, name, resturant_name, location):
         return registered
 
 def auth_add_staff_backend(cur, email, password, staff_type, name, menu_id):
-    
+    """
+    Registers another staff member (kitchen or wait staff) into the system.
+
+    Inputs:
+        - cur (cursor): The active cursor
+        - email (string): Email of the staff member who wants to be registered into the system
+        - password (string): Password entered by staff member registering into the system
+        - staff_type (string): 'kitchen' or 'staff', depending on who the manager is registering into the system
+        - name (string): Name of the staff member registering into the system
+        - menu_id (int): Menu id of menu associated with the staff member registering into the system
+
+    Returns:
+        - invalid_staff_type (dictionary): Error message if staff type isn't 'kitchen' or 'wait'
+
+        OR
+
+        - staff_already_exists (dictionary): Error message if email already exists in system.
+        
+        OR
+
+        - insert_fail (dictionary): Error message if staff member wasn't registered into the system
+        
+        OR
+
+        - success (dictionary): Success message if registered successfully.
+
+    """
+
     invalid_staff_type = { 'error': 'invalid staff type' }
     staff_already_exists = { 'error': 'this email has already been registered' }
     insert_fail = { 'error': 'failed to insert new staff member'}
@@ -147,31 +223,31 @@ def auth_add_staff_backend(cur, email, password, staff_type, name, menu_id):
         staff_char = 'W'
     else:
         return invalid_staff_type
-    
-    query0 = """
-    select id from staff where email = %s;
+
+    staff_query = """
+        select id from staff where email = %s;
     """
 
-    cur.execute(query0, [email])
-    l1 = cur.fetchall()
+    cur.execute(staff_query, [email])
+    staff_list = cur.fetchall()
 
-    if len(l1) > 0:
+    if len(staff_list) > 0:
         return staff_already_exists
 
-    query1 = """
-    INSERT INTO staff (email, name, password, menu_id, staff_type)
-    VALUES (%s, %s, %s, %s, %s);
+    add_staff_query = """
+        insert into staff (email, name, password, menu_id, staff_type)
+        values (%s, %s, %s, %s, %s);
     """
 
-    cur.execute(query1, [email, name, password, menu_id, staff_char])
+    cur.execute(add_staff_query, [email, name, password, menu_id, staff_char])
 
     # Check that insert worked
 
-    cur.execute(query0, [email])
-    l1 = cur.fetchall()
+    cur.execute(staff_query, [email])
+    staff_list = cur.fetchall()
 
-    if len(l1) > 0:
-        success['staff_id'] = str(l1[0][0])
+    if len(staff_list) > 0:
+        success['staff_id'] = str(staff_list[0][0])
         return success
     else:
         return insert_fail

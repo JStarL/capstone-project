@@ -11,3 +11,5 @@
 - We consider general use cases where the user does not try to intentionally break the system, however we stop unwanted behaviours as much as possible regardless
 
 - Persona names are unique
+
+- Best Selling Category for a newly created menu is empty, until someone places an order for a menu item the first time
