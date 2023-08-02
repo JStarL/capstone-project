@@ -48,7 +48,6 @@ function CustomerViewOrderPage(props) {
     });
     makeRequest('/customer/finalise_order', 'POST', body, undefined)
       .then(data => {
-        console.log(data);
         navigate(`/customer/${sessionId}/view_order/${menuId}/${tableId}/pay`);
       })
       .catch(e => console.log('Error: ' + e));

@@ -13,7 +13,6 @@ function Nav(props) {
     })
     makeRequest('/auth/logout', 'POST', body, undefined)
       .then(data => {
-        console.log(data)
       })
       .catch(e => console.log('Error: ' + e))
     props.setId(null);

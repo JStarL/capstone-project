@@ -39,7 +39,6 @@ function CustomerPayPage(props) {
 
 		// Loop through each key-value pair in the payData object
 		for (const [persona, price] of Object.entries(payData)) {
-			console.log(price)
 			totalPrice += Number(price);
 		}
 		return totalPrice;

@@ -21,7 +21,6 @@ function Footer(props) {
     });
     makeRequest('/customer/request_assistance', 'POST', body, undefined)
       .then(data => {
-        console.log(data);
         setSnackbarOpen(true); // Open the Snackbar on successful request
         setTimeout(() => {
           handleSnackbarClose(); // Close the Snackbar after 3 seconds

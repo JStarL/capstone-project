@@ -30,14 +30,11 @@ function OrderItem (props) {
     setMenuItemId(props.menu_item_id)
     setOrderedByPersona(props.orderedByPersona)
     setCurrentlySelectedPersona(props.currentlySelectedPersona)
-    console.log(props.foodName)
   }, [props.amount, props.foodDescription, props.foodName, props.foodImage, props.foodPrice, props.menu_item_id, props.orderedByPersona, props.currentlySelectedPersona]);
 
   const handleAmountChange = (e) => {
     
     const newAmount = e.target.value;
-    console.log(e.target.value)
-    console.log(prevAmount)
     setAmount(newAmount);
     const diff = Math.abs(newAmount - prevAmount);
 
@@ -53,7 +50,6 @@ function OrderItem (props) {
     }
     
     if (currentlySelectedPersona !== orderedByPersona) {
-      console.log('dont change the amount')
       setAmount(prevAmount)
     } else {
       setPrevAmount(newAmount);
@@ -72,7 +68,6 @@ function OrderItem (props) {
     })
     makeRequest('/customer/add_menu_item', 'POST', body, undefined)
       .then(data => {
-        console.log(data)
         props.fetchOrder()
       })
       .catch(e => console.log('Error: ' + e))
@@ -106,7 +101,7 @@ function OrderItem (props) {
     <div className='food-item-middle' style={{ padding: '10px' }}>
       <div className='div-section'><b>{name}</b></div>
       <div className='div-section'><i>{description}</i></div>
-      <div className='div-section'><b>Ordered By: </b>{props.personas[orderedByPersona][0]}{console.log(props.personas)}</div>
+      <div className='div-section'><b>Ordered By: </b>{props.personas[orderedByPersona][0]}</div>
       <div className='div-section'><b>Price:</b> ${price}</div>
     </div>
     <div className='food-item-end' style={{ flexDirection: 'column', alignItems:'center', justifyContent:'center'}}>

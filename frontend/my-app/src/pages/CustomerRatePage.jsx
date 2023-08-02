@@ -28,7 +28,6 @@ function CustomerRatePage(props) {
     const url = `/customer/view_order?session_id=${sessionId}&menu_id=${menuId}`;
     const data = await makeRequest(url, 'GET', undefined, undefined)
     setOrders(data.menu_items)
-    // console.log(data.menu_items)
     return data;
   }
 

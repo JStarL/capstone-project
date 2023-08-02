@@ -23,7 +23,6 @@ function RatingItem(props) {
 
 	const handleRatingSubmit = () => {
 		if (rating !== 0 && !isRatingSubmitted) {
-			// console.log(`Submit rating for menu item: ${props.foodName} with Id: ${props.menu_item_id} with rating: ${rating}`);
 			const body = JSON.stringify({
 				session_id: sessionId,
 				menu_item_id: props.menu_item_id,
@@ -33,7 +32,6 @@ function RatingItem(props) {
 
 			makeRequest('/customer/give_rating', 'POST', body, undefined)
 				.then((data) => {
-					console.log(data);
 					// Handle success message or update the UI as needed
 					setIsRatingSubmitted(true); // Set the flag to indicate rating is submitted
 				})

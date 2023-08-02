@@ -65,8 +65,6 @@ function ManagerFoodItem({ allergies, fetchAllMenuData, originalFoodName, origin
     });
     makeRequest('/manager/update_menu_item', 'POST', body, undefined)
       .then(data => {
-        console.log(data);
-
         // Trigger the snackbar here
         setSnackbarOpen(true);
       })
