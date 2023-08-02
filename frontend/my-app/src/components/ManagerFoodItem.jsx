@@ -18,6 +18,27 @@ import ArrowDownwardIcon from '@mui/icons-material/ArrowDownward';
 import AddIcon from '@mui/icons-material/Add';
 import UpdateIcon from '@mui/icons-material/Update';
 
+/**
+ * Represents a component displaying a food item that can be modified by the manager.
+ * @param {Object} props - The properties passed to the component.
+ * @param {Array} props.allergies - An array of allergies for the food item.
+ * @param {Function} props.fetchAllMenuData - A function to fetch all menu data.
+ * @param {string} props.originalFoodName - The original name of the food item.
+ * @param {string} props.originalFoodDescription - The original description of the food item.
+ * @param {number} props.originalPrice - The original price of the food item.
+ * @param {string} props.originalImage - The original image URL of the food item.
+ * @param {Array} props.originalIngredients - An array of original ingredients for the food item.
+ * @param {string} props.foodId - The ID of the food item.
+ * @param {string} props.categoryId - The ID of the category to which the food item belongs.
+ * @param {string} props.categoryName - The name of the category to which the food item belongs.
+ * @param {Function} props.fetchCategoryMenuItems - A function to fetch menu items for the category.
+ * @param {string} props.orderingId - The ordering ID of the food item.
+ * @param {Function} props.getOtherMenuItemOrderingId - A function to get the ordering ID of other menu items.
+ * @param {number} props.index - The index of the food item in the list.
+ * @param {number} props.menuItemsSize - The total number of menu items.
+ * @returns {JSX.Element} The JSX representation of the ManagerFoodItem component.
+ */
+
 function ManagerFoodItem({ allergies, fetchAllMenuData, originalFoodName, originalFoodDescription, originalPrice, originalImage, originalIngredients, foodId, categoryId, categoryName, fetchCategoryMenuItems, orderingId, getOtherMenuItemOrderingId, index, menuItemsSize }) {
   const [foodName, setFoodName] = React.useState('');
   const [foodDescription, setFoodDescription] = React.useState('');
@@ -65,8 +86,6 @@ function ManagerFoodItem({ allergies, fetchAllMenuData, originalFoodName, origin
     });
     makeRequest('/manager/update_menu_item', 'POST', body, undefined)
       .then(data => {
-        console.log(data);
-
         // Trigger the snackbar here
         setSnackbarOpen(true);
       })

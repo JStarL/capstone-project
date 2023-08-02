@@ -5,6 +5,10 @@ import makeRequest from '../makeRequest';
 import KitchenStaffOrder from '../components/KitchenStaffOrder';
 import PendingActionsIcon from '@mui/icons-material/PendingActions';
 
+/**
+ * Represents the KitchenStaffPage component that displays pending orders for kitchen staff.
+ * @returns {JSX.Element} The JSX representation of the KitchenStaffPage component.
+ */
 function KitchenStaffPage() {
   const [orderList, setOrderList] = React.useState([]);
   const [trigger, setTrigger] = React.useState(true);
@@ -20,6 +24,7 @@ function KitchenStaffPage() {
 
     fetchData();
 
+    // Polling mechanism to fetch order list periodically
     const interval = setInterval(() => {
       fetchData();
     }, 3000);
@@ -29,8 +34,9 @@ function KitchenStaffPage() {
     };
   }, [trigger]);
 
-  console.log(staffId)
-
+  /**
+   * Fetches the list of pending orders for the kitchen staff.
+   */
   async function getOrderList() {
     const url = `/kitchen_staff/get_order_list?menu_id=${menuId}&kitchen_staff_id=${staffId}`;
     const data = await makeRequest(url, 'GET', undefined, undefined);

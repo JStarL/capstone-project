@@ -10,7 +10,24 @@ import PropTypes from 'prop-types';
 import NewCategoryField from '../components/NewCategoryField';
 import { StyledButton } from './CustomerOrStaff';
 
+/**
+ * Represents the ManagerMenuPage component that allows a manager to manage and modify the menu items and categories.
+ * @returns {JSX.Element} The JSX representation of the ManagerMenuPage component.
+ */
+
+/**
+ * Prop types for ManagerMenuPage component.
+ * @typedef {Object} ManagerMenuPagePropTypes
+ * @property {string} id - The ID of the ManagerMenuPage component.
+ */
+
+/**
+ * Prop types for ManagerMenuPage component.
+ * @type {ManagerMenuPagePropTypes}
+ */
+
 function ManagerMenuPage() {
+  // State variables
   const [categories, setCategories] = React.useState([]);
   const [currentSelectedCategory, setCurrentSelectedCategory] = React.useState('Best Selling');
   const [currentSelectedCategoryId, setCurrentSelectedCategoryId] = React.useState(-1);
@@ -19,9 +36,11 @@ function ManagerMenuPage() {
   const navigate = useNavigate();
   const params = useParams();
 
+  // Extract managerId and menuId from the URL params
   const managerId = params.managerId;
   const menuId = params.menuId;
 
+  // Fetch all menu data when the component mounts
   React.useEffect(() => {
     const fetchData = async () => {
       const data = await fetchAllMenuData();
@@ -33,24 +52,19 @@ function ManagerMenuPage() {
     fetchData();
   }, []);
 
+  // Fetch category data when the currentSelectedCategoryId changes
   React.useEffect(() => {
     const fetchCategoryData = async () => {
       if (currentSelectedCategoryId !== -1) {
         const url = `/manager/view_category?manager_id=${managerId}&category_id=${currentSelectedCategoryId}`;
-        const data = await makeRequest(url, 'GET', undefined, undefined)
+        const data = await makeRequest(url, 'GET', undefined, undefined);
         setMenuItems(data);
       }
     };
     fetchCategoryData();
-  }, [currentSelectedCategoryId])
+  }, [currentSelectedCategoryId]);
 
-  async function fetchAllMenuData() {
-    const url = `/manager/view_menu?manager_id=${managerId}&menu_id=${menuId}`;
-    const data = await makeRequest(url, 'GET', undefined, undefined);
-    setCategories(data);
-    return data; // Return the fetched data
-  }
-
+  // Fetch all allergies when the component mounts
   React.useEffect(() => {
     const fetchData = async () => {
       await fetchAllergies();
@@ -58,6 +72,15 @@ function ManagerMenuPage() {
     fetchData();
   }, []);
 
+  // Fetch all menu data from the server
+  async function fetchAllMenuData() {
+    const url = `/manager/view_menu?manager_id=${managerId}&menu_id=${menuId}`;
+    const data = await makeRequest(url, 'GET', undefined, undefined);
+    setCategories(data);
+    return data; // Return the fetched data
+  }
+
+  // Fetch all allergies from the server
   async function fetchAllergies() {
     const url = '/get_allergies';
     const data = await makeRequest(url, 'GET', undefined, undefined);
@@ -65,13 +88,15 @@ function ManagerMenuPage() {
     return data;
   }
 
+  // Fetch menu items for the selected category
   async function fetchCategoryMenuItems() {
     const url = `/manager/view_category?manager_id=${managerId}&category_id=${currentSelectedCategoryId}`;
-    const data = await makeRequest(url, 'GET', undefined, undefined)
+    const data = await makeRequest(url, 'GET', undefined, undefined);
     setMenuItems(data);
-    return data
+    return data;
   }
 
+  // Get the ordering ID for another category to be swapped with
   function getOtherCategoryOrderingId(swapDirection, categoryId) {
     let categoriesIndex = -1;
     categoryId = Number(categoryId);
@@ -84,7 +109,7 @@ function ManagerMenuPage() {
         }
       }
       return true;
-    })
+    });
 
     if (swapDirection === 'up') {
       categoriesIndex = categoriesIndex - 1;
@@ -99,34 +124,34 @@ function ManagerMenuPage() {
         return;
       }
     } else {
-      alert('Invalid swap direction')
+      alert('Invalid swap direction');
       return;
     }
 
-
     for (const [key] of Object.entries(categories[categoriesIndex])) {
-      return Number(categories[categoriesIndex][key][2])
+      return Number(categories[categoriesIndex][key][2]);
     }
   }
-  
+
+  // Get the ordering ID for another menu item to be swapped with
   function getOtherMenuItemOrderingId(swapDirection, menuItemId) {
-  	let menuItemIndex = -1;
+    let menuItemIndex = -1;
     menuItemId = Number(menuItemId);
     menuItems.every((obj, index) => {
-      let foodId = Number(obj['food_id'])
+      let foodId = Number(obj['food_id']);
       if (foodId === menuItemId) {
         menuItemIndex = index;
         return false;
       }
-      
+
       return true;
-    })
+    });
 
     if (swapDirection === 'up') {
       menuItemIndex = menuItemIndex - 1;
       if (menuItemIndex < 0) {
-      	alert('Error: This is the first menu item, cannot move it further up');
-      	return;
+        alert('Error: This is the first menu item, cannot move it further up');
+        return;
       }
     } else if (swapDirection === 'down') {
       menuItemIndex = menuItemIndex + 1;
@@ -139,12 +164,12 @@ function ManagerMenuPage() {
       return;
     }
 
-
     return Number(menuItems[menuItemIndex]['food_ordering_id']);
-   
   }
 
+  // Return loading if categories are not available yet
   if (!categories || !Array.isArray(categories)) return <>loading...</>;
+
   return (
     <>
       <div style={{ display: 'flex', flexDirection: 'row' }}>
@@ -174,7 +199,7 @@ function ManagerMenuPage() {
           />
         </div>
         <div style={{ width: '75%', height: '100%' }}>
-          <Typography className='h4' variant="overline" style={{fontSize: '2rem', margin: '10px'}} gutterBottom><b>{currentSelectedCategory}</b></Typography>
+          <Typography className='h4' variant="overline" style={{ fontSize: '2rem', margin: '10px' }} gutterBottom><b>{currentSelectedCategory}</b></Typography>
           <div>
             {menuItems && menuItems.length > 0 && menuItems.map((menuItem, index) => (
               currentSelectedCategory === 'Best Selling' ? (

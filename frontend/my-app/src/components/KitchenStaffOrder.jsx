@@ -6,43 +6,65 @@ import RestaurantMenuIcon from '@mui/icons-material/RestaurantMenu';
 import makeRequest from '../makeRequest';
 import DoneIcon from '@mui/icons-material/Done';
 
+/**
+ * Represents a component displaying an order assigned to a kitchen staff member.
+ * @param {Object} props - The properties passed to the component.
+ * @param {string} props.menuId - The ID of the menu.
+ * @param {string} props.sessionId - The ID of the session.
+ * @param {string} props.tableId - The table number of the order.
+ * @param {string} props.staffId - The ID of the kitchen staff member.
+ * @param {string} props.status - The status of the order (either 'kitchen' or 'cooking').
+ * @param {number} props.timestamp - The timestamp when the order was placed.
+ * @param {Array} props.menuItems - An array of menu items associated with the order.
+ * @param {Function} props.setTrigger - A function to trigger a re-render of the component.
+ * @returns {JSX.Element} The JSX representation of the KitchenStaffOrder component.
+ */
 function KitchenStaffOrder(props) {
-  const [timestamp, setTimestamp] = React.useState(0)
-  const [minutes, setMinutes] = React.useState(0)
-  const [seconds, setSeconds] = React.useState(0)
+  const [timestamp, setTimestamp] = React.useState(0);
+  const [minutes, setMinutes] = React.useState(0);
+  const [seconds, setSeconds] = React.useState(0);
 
+  /**
+   * Converts the total seconds to minutes and seconds.
+   * @param {number} totalSeconds - The total number of seconds.
+   */
   const convertToMinutesAndHours = (totalSeconds) => {
     const remainingSeconds = totalSeconds % 3600;
     const minutes = Math.floor(remainingSeconds / 60);
-    const seconds = Math.floor(remainingSeconds % 60)
-    setMinutes(minutes)
-    setSeconds(seconds)
+    const seconds = Math.floor(remainingSeconds % 60);
+    setMinutes(minutes);
+    setSeconds(seconds);
   };
 
-  React.useEffect(() => {  
+  React.useEffect(() => {
     const timer = () => {
       const timeCustomerOrdered = new Date(props.timestamp);
       const timeNow = new Date(Date.now());
-      const timeDifference = timeNow - timeCustomerOrdered
+      const timeDifference = timeNow - timeCustomerOrdered;
       setTimestamp(timeDifference / 1000);
     };
     const timerFunction = setInterval(timer, 1000);
-    convertToMinutesAndHours(timestamp)
+    convertToMinutesAndHours(timestamp);
 
     return () => {
       clearInterval(timerFunction);
     };
   }, [timestamp]);
 
+  /**
+   * Handles the button click event based on the current order status.
+   */
   const handleClick = () => {
     if (props.status === 'kitchen') {
       markCooking();
-
-    } else if (props.status === 'cooking'){
+    } else if (props.status === 'cooking') {
       completeOrder();
     }
   };
-  
+
+  /**
+   * Marks the order as currently cooking and updates the status.
+   */
   const markCooking = () => {
     const body = JSON.stringify({
       'menu_id': props.menuId,
@@ -55,7 +77,11 @@ function KitchenStaffOrder(props) {
         props.setTrigger(!props.trigger);
       })
       .catch(e => console.log('Error: ' + e));
-    };
+  };
+
+  /**
+   * Marks the order as complete and updates the status.
+   */
   const completeOrder = () => {
     const body = JSON.stringify({
       'menu_id': props.menuId,
@@ -74,8 +100,8 @@ function KitchenStaffOrder(props) {
     <>
       <div className='kitchen-staff-order'>
         <div style={{ width: '60%' }} className='kitchen-staff-order-div'>
-            <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '2em', marginTop: '30px' }}><b>Table Number: {props.tableId}</b></div>
-            <div>Time since order was placed: <b>{minutes === 0 ? '' : `${minutes} minute(s) and `} {seconds} second(s)</b> ago</div>
+          <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '2em', marginTop: '30px' }}><b>Table Number: {props.tableId}</b></div>
+          <div>Time since order was placed: <b>{minutes === 0 ? '' : `${minutes} minute(s) and `} {seconds} second(s)</b> ago</div>
           <div className='kitchen-staff-menu-items-container'>
             {props.menuItems?.map((menuItem) => (
               <div key={menuItem.food_name} className='kitchen-staff-menu-item'>
@@ -93,7 +119,7 @@ function KitchenStaffOrder(props) {
                 </div>
                 <div style={{
                   width: '20vh',
-                  justifyContent: 'flex-start', 
+                  justifyContent: 'flex-start',
                   textAlign: 'left',
                   marginTop: '12px'
                 }}>
@@ -114,4 +140,3 @@ function KitchenStaffOrder(props) {
 }
 
 export default KitchenStaffOrder;
-

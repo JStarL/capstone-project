@@ -11,8 +11,12 @@ export const StyledRadio = styled(Radio)({
 	'&.Mui-checked': {
 		color: '#002250',
 	}
-})
+});
 
+/**
+ * Represents a component to add a new staff member.
+ * @returns {JSX.Element} The JSX representation of the NewStaffForm component.
+ */
 function NewStaffForm() {
 	const [name, setName] = React.useState('')
 	const [email, setEmail] = React.useState('')
@@ -24,10 +28,16 @@ function NewStaffForm() {
 	const managerId = params.managerId
 	const menuId = params.menuId
 
+	/**
+	 * Handles the closing of the snackbar.
+	 */
 	const handleSnackbarClose = () => {
 		setSnackbarOpen(false);
 	};
 
+	/**
+	 * Adds a new staff member.
+	 */
 	function addNewStaff() {
 		const body = JSON.stringify({
 			'manager_id': managerId,
@@ -46,9 +56,7 @@ function NewStaffForm() {
 					setPassword('')
 				}
 			})
-			.catch(e => console.log('Error: ' + e))
-			
-		
+			.catch(e => console.log('Error: ' + e));
 	}
 
 	return (

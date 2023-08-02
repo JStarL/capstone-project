@@ -14,6 +14,13 @@ export const StyledButton = styled(Button)({
   width: '100%'
 });
 
+/**
+ * Represents the CustomerOrStaff component that allows users to select whether they are a customer or staff.
+ * @param {Object} props - The props passed to the component.
+ * @param {function} props.onSuccess - The callback function to handle successful selection.
+ * @param {function} props.reset - The callback function to reset the component.
+ * @returns {JSX.Element} The JSX representation of the CustomerOrStaff component.
+ */
 function CustomerOrStaff({ onSuccess, reset }) {
   const navigate = useNavigate();
 
@@ -21,6 +28,9 @@ function CustomerOrStaff({ onSuccess, reset }) {
     reset(null, null, null, null)
   }, []);
 
+  /**
+   * Handles the selection of the customer option.
+   */
   function selectCustomer() {
     const timestamp = Math.floor(Date.now() / 1000);
     onSuccess('customer', timestamp)

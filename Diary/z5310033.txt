@@ -132,3 +132,7 @@ Week 8
     - Going through every user story to check if all functionality is working 
     - Assign roles for final demo 
     - Do a practice demo 
+  
+  - Working on: 
+    - Cleaning up UI and code style 
+    - Add JavaDocs and comments
