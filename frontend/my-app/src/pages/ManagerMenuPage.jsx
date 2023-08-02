@@ -14,6 +14,18 @@ import { StyledButton } from './CustomerOrStaff';
  * Represents the ManagerMenuPage component that allows a manager to manage the menu items and categories.
  * @returns {JSX.Element} The JSX representation of the ManagerMenuPage component.
  */
+
+/**
+ * Prop types for ManagerMenuPage component.
+ * @typedef {Object} ManagerMenuPagePropTypes
+ * @property {string} id - The ID of the ManagerMenuPage component.
+ */
+
+/**
+ * Prop types for ManagerMenuPage component.
+ * @type {ManagerMenuPagePropTypes}
+ */
+
 function ManagerMenuPage() {
   // State variables
   const [categories, setCategories] = React.useState([]);
@@ -235,16 +247,6 @@ function ManagerMenuPage() {
 
 export default ManagerMenuPage;
 
-/**
- * Prop types for ManagerMenuPage component.
- * @typedef {Object} ManagerMenuPagePropTypes
- * @property {string} id - The ID of the ManagerMenuPage component.
- */
-
-/**
- * Prop types for ManagerMenuPage component.
- * @type {ManagerMenuPagePropTypes}
- */
 ManagerMenuPage.propTypes = {
   id: PropTypes.string,
 };

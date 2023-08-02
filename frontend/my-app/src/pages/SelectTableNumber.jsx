@@ -4,31 +4,41 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { StyledButton } from './CustomerOrStaff';
 import makeRequest from '../makeRequest';
 
+/**
+ * Represents the SelectTableNumber component that allows customers to input their table number.
+ * @param {Object} props - The props object that contains the onSuccess function.
+ * @param {Function} props.onSuccess - A function to be called upon successful table number selection.
+ * @returns {JSX.Element} The JSX representation of the SelectTableNumber component.
+ */
 function SelectTableNumber({ onSuccess }) {
 	const navigate = useNavigate();
 	const [tableNumber, setTableNumber] = React.useState('');
-	const params = useParams()
-	const menuId = params.menuId
-	const sessionId = params.sessionId
+	const params = useParams();
+	const menuId = params.menuId;
+	const sessionId = params.sessionId;
+
+	/**
+	 * Handles the selection of the table number.
+	 */
 	function selectTableNumber() {
 		if (tableNumber === '') {
-			alert('Table Number cannot be empty')
-			return
-		} 
+			alert('Table Number cannot be empty');
+			return;
+		}
 		const body = JSON.stringify({
-			'session_id': sessionId,
-			'menu_id': menuId,
-			'table_id': tableNumber,
-		})
+			session_id: sessionId,
+			menu_id: menuId,
+			table_id: tableNumber,
+		});
 		makeRequest('/customer/menu/table', 'POST', body, undefined)
 			.then(data => {
-				// localStorage.setItem('table_number', tableNumber)
 				// forward user to select table number
-				onSuccess(tableNumber)
-				navigate(`/customer/${sessionId}/${menuId}/${tableNumber}`)
+				onSuccess(tableNumber);
+				navigate(`/customer/${sessionId}/${menuId}/${tableNumber}`);
 			})
-			.catch(e => console.log('Error: ' + e))
+			.catch(e => console.log('Error: ' + e));
 	}
+
 	return (
 		<div className='login-page' sx={{ alignItems: 'center' }}>
 			<Paper elevation={10} sx={{ p: 6, borderRadius: '20px', width: '40%' }}>
@@ -43,7 +53,7 @@ function SelectTableNumber({ onSuccess }) {
 							value={tableNumber}
 							onChange={e => setTableNumber(e.target.value)}
 						/>
-						<StyledButton sx={{ m: 2, width: '100%' }} variant="outlined" onClick={() => selectTableNumber()}>
+						<StyledButton sx={{ m: 2, width: '100%' }} variant="outlined" onClick={selectTableNumber}>
 							Confirm
 						</StyledButton>
 					</Grid>
