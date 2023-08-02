@@ -15,8 +15,7 @@ import { StyledButton } from './CustomerOrStaff';
 function FoodItemPage(props) {
   const navigate = useNavigate();
   const params = useParams();
-  
-  // Change to get from params
+  // Retrieve data from params
   const sessionId = params.sessionId;
   const menuId = params.menuId;
   const tableNumber = params.tableNumber
