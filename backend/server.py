@@ -245,18 +245,14 @@ def register_flask():
 @APP.route('/auth/login', methods=['POST'])
 def login_flask():
     """
-    Gets the input from the frontend and then sends that data to be processed
-    and registers the manager to the database. It also adds the menu and the best selling category to the resturant
+    Get the login details from frontend to be sent to a function at backend to be processed and send if it failed or not
     
     Inputs:
         - email (string): The email
         - password (string): The password
-        - name (string): The name
-        - restaurant_name (string): The restaurant name
-        - location (string): The location of the restaurant
 
     Returns:
-        - return_val: (dictionary): This will have 'success' or 'error' as a key and have category_id, manager_id and menu_id as keys
+        - return_val: (dictionary): This will have 'success' or 'error' as a key
     """
     data = ast.literal_eval(request.get_json())
     cur = db_conn.cursor()
