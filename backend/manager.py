@@ -770,7 +770,7 @@ def manager_update_menu_item(cur, menu_item_id, menu_item_name, price, ingredien
     cur.execute(query_ingredients_count, [menu_item_id])
     ingredients_count = cur.fetchall()
 
-    if ingredients_count[0][0] != len(ingredients):
+    if len(ingredients) > 0 and ingredients_count[0][0] != len(ingredients):
         return invalid_ingredients_update
 
     # Return successfully updated message
