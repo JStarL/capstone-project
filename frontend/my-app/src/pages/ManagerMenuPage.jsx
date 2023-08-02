@@ -11,7 +11,7 @@ import NewCategoryField from '../components/NewCategoryField';
 import { StyledButton } from './CustomerOrStaff';
 
 /**
- * Represents the ManagerMenuPage component that allows a manager to manage the menu items and categories.
+ * Represents the ManagerMenuPage component that allows a manager to manage and modify the menu items and categories.
  * @returns {JSX.Element} The JSX representation of the ManagerMenuPage component.
  */
 
