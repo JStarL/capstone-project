@@ -233,7 +233,7 @@ def register_flask():
             'success': string
             'manager_id': string
             'menu_id': string
-            'category': string
+            'category_id': string
         }
         OR
         - return_value: {
