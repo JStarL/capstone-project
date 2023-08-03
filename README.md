@@ -26,9 +26,11 @@ For the setup of this project, firstly
     - Please download the codebase if you do not already have it (ignore this step if this README.md is within your downloaded respository)
     - We will assume that you have the project in your home directory (prompt will show `lubuntu@lubuntu2004:~/<project-folder-name>$`)
 
-- Now please run the following command to install the dependencies of this project
+- Now please run the following commands to install the dependencies of this project
+    - `sed -i -e 's/\r$//' install.sh`
     - `sudo bash install.sh`
     - Type the password `lubuntu`
+    - At every prompt, type `Y` and press `Enter`
     - Also run the following command for the first time only: `source ~/.bashrc`
 
 - For optimum performance, please install the following software by running the following command
