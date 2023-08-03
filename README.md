@@ -39,7 +39,9 @@ For the setup of this project, firstly
     
 - Any time you want to run the server, enter `python3 server.py` on this terminal. It should show some messages and then wait for any HTTP requests
 
-- the default port number is 8880, but please do not change this, as the frontend also requires this precise port number. If you have to use a different port number, enter `python3 server.py <port-no>` and the provided port number will be used as the port for the server. Please then also follow [these](TODO) instructions to alter the frontend accordingly
+- the default port number is 8880, but please do not change this, as the frontend also requires this precise port number. If you have to use a different port number, enter `python3 server.py <port-no>` and the provided port number will be used as the port for the server. Please then also follow the below instructions to alter the frontend accordingly
+
+- If you wish to use a different port number to run the backend, open the following file using `nano ~/<project-folder-name>/frontend/my-app/src/makeRequest.jsx`, then alter the line which says `const BACKEND_PORT = 8880;` to whatever port you wish (Press `Ctrl + O` to save and then press `Ctrl + X` to quit nano) . Then you can use the same `<port-number>` to run `server.py`
 
 ### For the frontend
 
