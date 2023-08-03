@@ -70,3 +70,8 @@ Open a new bash terminal and navigate to the following folder using `cd ~/<proje
 
 - Please repeat these steps whenever you want to start the frontend, except running `npm install`
 
+## Testing the project
+
+- There are already pre-loaded menus in our application, to use them for testing purposes, we suggest you use:
+    - For customers, select the restaurant with name 'Sample Restaurant' and location 'Sample Address'
+    - For managers, login as 'test@test.com' with password 'idk', this will take you to the pre-loaded database that we have used for testing purposes
