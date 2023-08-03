@@ -10,18 +10,14 @@ sudo apt-get install postgresql
 
 ### Configure PostgreSQL
 
-sudo su postgres
-
 # create a new superuser lubuntu
-createuser -d -r -s lubuntu
+sudo su postgres -c 'createuser -d -r -s lubuntu'
 
 # creaate the database and set the owner as lubuntu
-psql --command='create database wait_management_system owner lubuntu;' postgres
-
-exit
+sudo su postgres -c 'psql --command="create database wait_management_system owner lubuntu;" postgres'
 
 # Load in the pre-existing database
-psql wait_management_system -f database/wms_database.dump
+psql wait_management_system -f database/wms_data.dump
 
 
 ### Install the software for the backend
@@ -48,7 +44,11 @@ sudo apt install curl
 
 curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/master/install.sh | bash
 
-source ~/.bashrc
+export NVM_DIR="$HOME/.nvm"
+# To load nvm
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+# To load nvm bash completion
+[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"
 
 # Download node v18.16.0 using nvm
 
