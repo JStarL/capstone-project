@@ -1,9 +1,8 @@
 import React from 'react';
-import { Typography } from '@mui/material';
+import { Typography, Button, styled } from '@mui/material';
 import { useParams, useNavigate } from 'react-router-dom';
 import makeRequest from '../makeRequest';
 import OrderItem from '../components/OrderItem';
-import { StyledButton } from './CustomerOrStaff';
 
 /**
  * Represents the CustomerViewOrderPage that displays the customer's order details.
@@ -14,13 +13,27 @@ import { StyledButton } from './CustomerOrStaff';
  * @returns {JSX.Element} The JSX representation of the CustomerViewOrderPage component.
  */
 function CustomerViewOrderPage(props) {
+  // State variables
   const [orders, setOrders] = React.useState([])
   const [totalCost, setTotalCost] = React.useState(0)
+  
+  // Extract menuId, sessionId and tableId from the URL params
   const params = useParams();
   const menuId = params.menuId;
   const sessionId = params.sessionId;
   const tableId = params.tableNumber;
+  
   const navigate = useNavigate();
+
+  const StyledButton = styled(Button)({
+    backgroundColor: orders.length === 0 ? 'grey' : '#002250',
+    color: '#fff',
+    '&:hover': {
+      backgroundColor: '#fff',
+      color: '#002250',
+    },
+    width: '70%'
+  });
 
   /**
    * Use Effect hook to fetch data and intialise totalCost state variable to 0
@@ -80,28 +93,40 @@ function CustomerViewOrderPage(props) {
     <>
       <Typography className='h4' variant="overline" style={{fontSize: '2rem', margin: '10px'}} gutterBottom><b>Your Order</b></Typography>
       <div className='view-order-page' style={{justifywidth: '100%', alignItems:'center' }}>
-        {orders?.map((order, index) => (
-          <OrderItem
-            key={index}
-            amount={order.amount}
-            menu_item_id={order.menu_item_id}
-            foodName={order.title}
-            foodDescription={order.description}
-            foodImage={order.image}
-            foodPrice={order.price}
-            foodCategoryId={order.category_id}
-            fetchOrder={fetchOrder}
-            setTotalCost={setTotalCost}
-            orderedByPersona={order.persona}
-            personas={props.personas}
-            currentlySelectedPersona={props.currentlySelectedPersona}
-            handleExcludeCategories={props.handleExcludeCategories}
-          >
-          </OrderItem>
-        ))}
+      {orders.length === 0 ? (
+            <div style={{ display: 'flex', justifyContent: 'center', marginTop: '30px' }}>
+              <Typography style={{
+                boxShadow: "0 3px 6px rgba(0, 0, 0, 0.4)",
+                borderRadius: '10px',
+                padding: '1vw',
+                width: 'auto',
+                marginLeft: '10px',
+                textAlign: 'center',
+              }} variant="overline" gutterBottom>No Menu Items in Cart</Typography>
+            </div>
+        ) : (
+          orders?.map((order, index) => (
+            <OrderItem
+              key={index}
+              amount={order.amount}
+              menu_item_id={order.menu_item_id}
+              foodName={order.title}
+              foodDescription={order.description}
+              foodImage={order.image}
+              foodPrice={order.price}
+              foodCategoryId={order.category_id}
+              fetchOrder={fetchOrder}
+              setTotalCost={setTotalCost}
+              orderedByPersona={order.persona}
+              personas={props.personas}
+              currentlySelectedPersona={props.currentlySelectedPersona}
+              handleExcludeCategories={props.handleExcludeCategories}
+            >
+            </OrderItem>
+          )))}
       </div>
       <Typography variant="h4" style={{ padding: '5px', margin: '20px' }}><b>Total: ${totalCost}</b></Typography>
-      <StyledButton onClick={() => finaliseOrder()} style={{ width: '70%'}}>Finalise Order</StyledButton>
+      <StyledButton disabled={orders.length === 0} onClick={() => finaliseOrder()}>Finalise Order</StyledButton>
     </>
   );
 }

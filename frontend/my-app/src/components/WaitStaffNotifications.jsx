@@ -25,6 +25,9 @@ function WaitStaffNotifications(props) {
   const [minutes, setMinutes] = React.useState(0);
   const [seconds, setSeconds] = React.useState(0);
 
+  /**
+   * Use Effect hook to update the timestamp state every second using setInterval
+   */
   React.useEffect(() => {
     const timer = () => {
       const timeCustomerOrdered = new Date(props.timestamp);

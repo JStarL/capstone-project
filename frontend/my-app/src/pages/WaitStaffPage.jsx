@@ -12,22 +12,27 @@ import BackHandIcon from '@mui/icons-material/BackHand';
  * @returns {JSX.Element} The JSX representation of the WaitStaffPage component.
  */
 function WaitStaffPage() {
+  // State variables
   const [orderList, setOrderList] = React.useState([]);
   const [notificationsList, setNotificationsList] = React.useState([]);
   const [orderTrigger, setOrderTrigger] = React.useState(true);
   const [notificationTrigger, setNotificationTrigger] = React.useState(true);
 
+  // Extract menuId and staffId from the URL params
   const params = useParams();
-
   const menuId = params.menuId;
   const staffId = params.staffId;
 
+  /**
+  * Use Effect hook to fetch all pending orders for wait staff
+  */
   React.useEffect(() => {
     async function fetchData() {
       await getOrderList();
     }
     fetchData();
-
+    
+    // Polling mechanism to fetch order list periodically
     const interval = setInterval(() => {
       fetchData();
     }, 3000);
@@ -37,12 +42,16 @@ function WaitStaffPage() {
     };
   }, [orderTrigger]);
 
+  /**
+    * Use Effect hook to fetch notifications pending for wait staff
+    */
   React.useEffect(() => {
     async function fetchData() {
       await getNotificationList();
     }
     fetchData();
 
+    // Polling mechanism to fetch order list periodically
     const interval = setInterval(() => {
       fetchData();
     }, 3000);

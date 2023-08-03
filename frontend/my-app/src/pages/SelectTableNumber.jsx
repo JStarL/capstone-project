@@ -12,7 +12,11 @@ import makeRequest from '../makeRequest';
  */
 function SelectTableNumber({ onSuccess }) {
 	const navigate = useNavigate();
+	
+	// State variable
 	const [tableNumber, setTableNumber] = React.useState('');
+
+	// Extract menuId and sessionId from the URL params
 	const params = useParams();
 	const menuId = params.menuId;
 	const sessionId = params.sessionId;

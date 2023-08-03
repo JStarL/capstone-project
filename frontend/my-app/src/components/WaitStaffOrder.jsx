@@ -53,6 +53,9 @@ function WaitStaffOrder(props) {
       .catch(e => console.log('Error: ' + e));
   };
 
+  /**
+   * Use Effect hook to update the timestamp state every second using setInterval
+   */
   React.useEffect(() => {
     const timer = () => {
       const timeCustomerOrdered = new Date(props.timestamp);

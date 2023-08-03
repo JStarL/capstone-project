@@ -31,6 +31,8 @@ function NewMenuItem(props) {
 
   const params = useParams();
   const navigate = useNavigate();
+
+  // Extract manager_id, category_id and menu_id from the URL params
   const manager_id = params.managerId
   const category_id = params.categoryId;
   const menu_id = params.menuId;

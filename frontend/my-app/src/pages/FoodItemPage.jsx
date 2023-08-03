@@ -14,14 +14,15 @@ import { StyledButton } from './CustomerOrStaff';
  */
 function FoodItemPage(props) {
   const navigate = useNavigate();
+
+  // Extract sessionId, menuId and tableNumber from the URL params
   const params = useParams();
-  // Retrieve data from params
   const sessionId = params.sessionId;
   const menuId = params.menuId;
   const tableNumber = params.tableNumber
 
+  // State variables
   const [foodData, setFoodData] = React.useState({});
-  
   const [foodId, setFoodId] = React.useState(params.foodId);
   const [isSnackbarOpen, setSnackbarOpen] = React.useState(false);
 

@@ -27,6 +27,9 @@ import { Link, useNavigate } from 'react-router-dom';
 function Nav(props) {
   const navigate = useNavigate()
 
+  /**
+   * Logs out
+   */
   const logout = () => {
     const body = JSON.stringify({
       'staff_id': props.id.toString(),

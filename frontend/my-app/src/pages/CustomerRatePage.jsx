@@ -15,10 +15,13 @@ import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
  * @returns {JSX.Element} The JSX representation of the CustomerRatePage component.
  */
 function CustomerRatePage(props) {
+  // Extract tableId, sessionId and menuId from the URL params
   const params = useParams();
   const tableId = params.tableNumber;
   const sessionId = params.sessionId;
   const menuId = params.menuId;
+
+  // State variables
   const [orders, setOrders] = React.useState([])
 
   const navigate = useNavigate();

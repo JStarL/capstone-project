@@ -26,8 +26,11 @@ import makeRequest from '../makeRequest';
  * @returns {JSX.Element} - The JSX element representing the CategoryManager component.
  */
 function CategoryManager(props) {
+  // State variables
   const [categoryName, setCategoryName] = React.useState(props.categoryName);
   const [categoryId] = React.useState(props.id);
+
+  // Extract managerId and menuId from the URL params
   const params = useParams();
   const managerId = params.managerId;
   const menuId = params.menuId;

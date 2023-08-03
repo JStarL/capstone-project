@@ -12,6 +12,7 @@ import { StyledButton } from './CustomerOrStaff';
  * @returns {JSX.Element} The JSX representation of the RegisterPage component.
  */
 function RegisterPage({ onSuccess }) {
+  // State variables
   const [email, setEmail] = React.useState('');
   const [name, setName] = React.useState('');
   const [password, setPassword] = React.useState('');

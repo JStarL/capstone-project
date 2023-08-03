@@ -22,6 +22,7 @@ import { Snackbar, Alert } from '@mui/material';
  * @returns {JSX.Element} The JSX representation of the Footer component.
  */
 function Footer(props) {
+  // State variables
   const [isSnackbarOpen, setSnackbarOpen] = React.useState(false); // State variable for Snackbar open/close status
   const navigate = useNavigate()
 

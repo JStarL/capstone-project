@@ -23,12 +23,14 @@ import { useParams } from 'react-router-dom';
  * @returns {JSX.Element} The JSX representation of the CustomerMenuPage component.
  */
 function CustomerMenuPage(props) {
+  // State variables
   const [categories, setCategories] = React.useState([]);
   const [currentSelectedCategory, setCurrentSelectedCategory] = React.useState('Best Selling');
   const [currentSelectedCategoryId, setCurrentSelectedCategoryId] = React.useState(-1);
   const [menuItems, setMenuItems] = React.useState([]);
   const [trigger, setTrigger] = React.useState(0);
 
+  // Extract sessionId, menuId and tableNumber from the URL params
   const params = useParams()
   const sessionId = params.sessionId
   const menuId = params.menuId

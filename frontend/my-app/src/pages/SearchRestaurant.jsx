@@ -11,12 +11,17 @@ import RestaurantDetails from '../components/RestaurantDetails';
  * @returns {JSX.Element} The JSX representation of the SearchRestaurant component.
  */
 function SearchRestaurant({ onSuccess }) {
+  // State variables
 	const [searchQuery, setSearchQuery] = React.useState('');
 	const [restaurants, setRestaurants] = React.useState([]);
 
+  // Extract sessionId from the URL params
 	const params = useParams();
 	const sessionId = params.sessionId;
 
+	/**
+		* Use Effect hook to fetch all restaurants that match the searchQuery
+		*/
 	React.useEffect(() => {
 		const fetchData = async () => {
 			await fetchRestaurants();

@@ -10,10 +10,12 @@ import PendingActionsIcon from '@mui/icons-material/PendingActions';
  * @returns {JSX.Element} The JSX representation of the KitchenStaffPage component.
  */
 function KitchenStaffPage() {
+  // State variables
   const [orderList, setOrderList] = React.useState([]);
   const [trigger, setTrigger] = React.useState(true);
+  
+  // Extract menuId and staffId from the URL params
   const params = useParams();
-
   const menuId = params.menuId;
   const staffId = params.staffId;
 

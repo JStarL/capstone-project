@@ -14,6 +14,7 @@ import PersonAddAlt1Icon from '@mui/icons-material/PersonAddAlt1';
  * @returns {JSX.Element} The JSX representation of the PersonalisePage component.
  */
 function PersonalisePage({ personas, handlePersonas, handleCurrentlySelectedPersona }) {
+  // State variables
   const [allergies, setAllergies] = React.useState([]);
   const [personaName, setPersonaName] = React.useState('');
   const [currentlySelectedPersona, setCurrentlySelectedPersona] = React.useState('');
@@ -21,6 +22,8 @@ function PersonalisePage({ personas, handlePersonas, handleCurrentlySelectedPers
   const [newPersona, setNewPersona] = React.useState(true);
 
   const navigate = useNavigate();
+  
+  // Extract sessionId, menuId and tableNumber from the URL params
   const params = useParams();
   const sessionId = params.sessionId;
   const menuId = params.menuId;
@@ -55,6 +58,7 @@ function PersonalisePage({ personas, handlePersonas, handleCurrentlySelectedPers
     return data;
   }
 
+  // Handles changes to the checkbox for allergies
   const handleCheckboxChange = (event) => {
     const { value, checked } = event.target;
     if (checked) {
@@ -80,12 +84,14 @@ function PersonalisePage({ personas, handlePersonas, handleCurrentlySelectedPers
     navigate(`/customer/${sessionId}/${menuId}/${tableNumber}`);
   };
 
+  // Handles persona change
   const handlePersonaChange = (persona) => {
     setCurrentlySelectedPersona(persona);
     setPersonaName(persona[0]);
     setNewPersona(false);
   };
 
+  // Handles a state to display a new form with no inputs when user tries to add new persona
   const handleNewPersona = () => {
     setCurrentlySelectedPersona('');
     setPersonaName('');
