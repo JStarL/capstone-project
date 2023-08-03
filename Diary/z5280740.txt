@@ -117,3 +117,13 @@ separate personas.
 
 Next week we plan to refactor, style up and comment our codebase, finish the report, decide on a structure for the final demo, and then deliver the
 project deliverables, one at a time.
+
+Week 10
+
+This week we have spent a considerable amount of time refactoring our code so that it looks clean, for good coding style and sufficient comments and
+documentation through docstrings for function in the backend, and javadocs for functions in the frontend. Throughout the week we have also been
+practising our Final Demo, and we allocated parts for each team member. I volunteered to present the complex novel functionalities! Everyone has been
+contributing to the group report, and I have reviewed all parts myself for double verification purposes, and it all looks fine. I made several changes
+to ensure a professional style and look, because presentation and good content matter. I took the task of creating the User Manual, though Rohan helped
+with some initial starter code typed up in the report based on SETUP.md. I have also contributed to the Implementation Challenges, where actually there 
+was a lot to talk about!
