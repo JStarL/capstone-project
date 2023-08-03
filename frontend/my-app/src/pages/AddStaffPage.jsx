@@ -13,6 +13,13 @@ export const StyledRadio = styled(Radio)({
 	}
 })
 
+/**
+ * Represents a page for adding new staff members in the manager interface.
+ * @param {Object} props - The props passed to the component.
+ * @param {string} props.setId - The callback function to set the manager ID.
+ * @param {string} props.setMenuId - The callback function to set the menu ID.
+ * @returns {JSX.Element} The JSX representation of the AddStaffPage component.
+ */
 function AddStaffPage(props) {
 	const [name, setName] = React.useState('')
 	const [email, setEmail] = React.useState('')
@@ -24,20 +31,24 @@ function AddStaffPage(props) {
 	const managerId = params.managerId
 	const menuId = params.menuId
 
-  React.useEffect(() => {
-    props.setId(managerId)
-    props.setMenuId(menuId)
-  }, []);
+	React.useEffect(() => {
+		props.setId(managerId)
+		props.setMenuId(menuId)
+	}, []);
 
 	const handleSnackbarClose = () => {
 		setSnackbarOpen(false);
 	};
 
+	/**
+	 * Adds a new staff member based on the provided information.
+	 * Performs form validation and sends the request to the server.
+	 */
 	function addNewStaff() {
-    if (name === '') {
-      alert('Staff name cannot be empty')
-      return;
-    }
+		if (name === '') {
+			alert('Staff name cannot be empty')
+			return;
+		}
 		const body = JSON.stringify({
 			'manager_id': managerId,
 			'staff_type': staffType,
@@ -56,8 +67,6 @@ function AddStaffPage(props) {
 				}
 			})
 			.catch(e => console.log('Error: ' + e))
-			
-		
 	}
 
 	return (
@@ -139,4 +148,3 @@ function AddStaffPage(props) {
 }
 
 export default AddStaffPage;
-

@@ -20,7 +20,7 @@ create table staff (
     staff_type  StaffType not null,
 
     primary key (id),
-    foreign key (menu_id) references menus(id)
+    foreign key (menu_id) references menus(id) on delete cascade
 
 );
 
@@ -37,7 +37,7 @@ create table categories (
     ordering_id serial not null,
     
     primary key (id),
-    foreign key (menu_id) references menus(id)
+    foreign key (menu_id) references menus(id) on delete cascade
 
 );
 
@@ -60,7 +60,41 @@ create table menu_items (
 
     primary key (id),
     foreign key (category_id) references categories(id) on delete cascade,
-    foreign key (menu_id) references menus(id)
+    foreign key (menu_id) references menus(id) on delete cascade
+);
+
+create or replace view menu_items_and_categories(menu_item_id, title, description, image, price, category_id, category_name, menu_id) as
+select m.id, m.title, m.description, m.image, m.price, c.id, c.name, c.menu_id
+from menu_items m join categories c on (m.category_id = c.id)
+;
+
+create table allergies (
+    id                  serial,
+    name                text not null unique,
+    description         text,
+
+    primary key (id)
+);
+
+create table ingredients (
+    menu_item_id        integer not null,
+    name                text not null,
+    allergy_id          integer null,
+
+    primary key (menu_item_id, name),
+    foreign key (menu_item_id) references menu_items(id) on delete cascade,
+    foreign key (allergy_id) references allergies(id)
+);
+
+create table best_selling_items (
+    menu_id             integer not null,
+    menu_item_id        integer not null,
+    ordering_id         serial not null,
+
+    primary key (menu_id, menu_item_id),
+    foreign key (menu_id) references menus(id) on delete cascade,
+    foreign key (menu_item_id) references menu_items(id) on delete cascade
+
 );
 
 create or replace function update_best_selling_function()
@@ -146,37 +180,3 @@ create trigger update_best_selling_trigger
 after update on menu_items
 for each row
 execute procedure update_best_selling_function();
-
-create or replace view menu_items_and_categories(menu_item_id, title, description, image, price, category_id, category_name, menu_id) as
-select m.id, m.title, m.description, m.image, m.price, c.id, c.name, c.menu_id
-from menu_items m join categories c on (m.category_id = c.id)
-;
-
-create table allergies (
-    id                  serial,
-    name                text not null unique,
-    description         text,
-
-    primary key (id)
-);
-
-create table ingredients (
-    menu_item_id        integer not null,
-    name                text not null,
-    allergy_id          integer null,
-
-    primary key (menu_item_id, name),
-    foreign key (menu_item_id) references menu_items(id),
-    foreign key (allergy_id) references allergies(id)
-);
-
-create table best_selling_items (
-    menu_id             integer not null,
-    menu_item_id        integer not null,
-    ordering_id         serial not null,
-
-    primary key (menu_id, menu_item_id),
-    foreign key (menu_id) references menus(id),
-    foreign key (menu_item_id) references menu_items(id)
-
-);

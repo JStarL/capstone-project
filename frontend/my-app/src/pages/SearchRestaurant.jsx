@@ -4,12 +4,18 @@ import { useParams } from 'react-router-dom';
 import makeRequest from '../makeRequest';
 import RestaurantDetails from '../components/RestaurantDetails';
 
+/**
+ * Represents the SearchRestaurant component that allows customers to search for restaurants.
+ * @param {Object} props - The props object that contains the onSuccess function.
+ * @param {Function} props.onSuccess - A function to be called upon successful restaurant selection.
+ * @returns {JSX.Element} The JSX representation of the SearchRestaurant component.
+ */
 function SearchRestaurant({ onSuccess }) {
 	const [searchQuery, setSearchQuery] = React.useState('');
 	const [restaurants, setRestaurants] = React.useState([]);
 
 	const params = useParams();
-	const sessionId = params.sessionId
+	const sessionId = params.sessionId;
 
 	React.useEffect(() => {
 		const fetchData = async () => {
@@ -18,6 +24,10 @@ function SearchRestaurant({ onSuccess }) {
 		fetchData();
 	}, [searchQuery]);
 
+	/**
+	 * Fetches the restaurants based on the search query.
+	 * @returns {Array} The array of restaurants matching the search query.
+	 */
 	async function fetchRestaurants() {
 		const url = `/customer/menu/search?session_id=${sessionId}&query=${searchQuery}`;
 		const data = await makeRequest(url, 'GET', undefined, undefined);

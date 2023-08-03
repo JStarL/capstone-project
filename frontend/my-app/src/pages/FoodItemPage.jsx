@@ -6,11 +6,16 @@ import { useNavigate, useParams } from 'react-router-dom';
 import makeRequest from '../makeRequest';
 import { StyledButton } from './CustomerOrStaff';
 
+/**
+ * Represents the FoodItemPage that displays details of a specific food item.
+ * @param {Object} props - The props passed to the component.
+ * @param {Object} props.currentlySelectedPersona - The currently selected persona
+ * @returns {JSX.Element} The JSX representation of the FoodItemPage component.
+ */
 function FoodItemPage(props) {
   const navigate = useNavigate();
   const params = useParams();
-  
-  // Change to get from params
+  // Retrieve data from params
   const sessionId = params.sessionId;
   const menuId = params.menuId;
   const tableNumber = params.tableNumber
@@ -25,6 +30,9 @@ function FoodItemPage(props) {
     fetchFoodItemData();
   }, [foodId]);
 
+  /**
+   * Fetches the data of the food item using the specified menu item ID.
+   */
   async function fetchFoodItemData() {
     const url = `/customer/view_menu_item?session_id=${sessionId}&menu_item_id=${foodId}`;
     const data = await makeRequest(url, 'GET', undefined, undefined);
@@ -32,10 +40,16 @@ function FoodItemPage(props) {
     setFoodData(data);
   }
 
+  /**
+   * Navigates back to the menu page.
+   */
   function backToMenu() {
     navigate(`/customer/${sessionId}/${menuId}/${tableNumber}`);
   }
 
+  /**
+   * Adds the food item to the customer's order and displays a success snackbar.
+   */
   function addToOrder() {
     const body = JSON.stringify({
       session_id: sessionId,
@@ -53,6 +67,9 @@ function FoodItemPage(props) {
       .catch(e => console.log('Error: ' + e));
   }
 
+  /**
+   * Handles the snackbar close event.
+   */
   const handleSnackbarClose = () => {
     setSnackbarOpen(false);
   };

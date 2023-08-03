@@ -8,6 +8,13 @@ import makeRequest from '../makeRequest';
 import { StyledButton } from './CustomerOrStaff';
 import StarsIcon from '@mui/icons-material/Stars';
 
+/**
+ * Represents the CustomerPayPage that displays the bill and payment options for customers.
+ * @param {Object} props - The props passed to the component.
+ * @param {Object} props.personas - An object containing information about different personas
+ * @returns {JSX.Element} The JSX representation of the CustomerPayPage component.
+ */
+
 function CustomerPayPage(props) {
 	const [paymentType, setPaymentType] = React.useState('group');
 	const params = useParams();
@@ -23,6 +30,9 @@ function CustomerPayPage(props) {
 		fetchData();
 	}, [paymentType]);
 
+	/**
+	 * Fetches the payment data based on the selected payment type.
+	 */
 	const fetchData = async () => {
 		if (paymentType === 'group') {
 			setTotalPrice(await calculateTotalPay())
@@ -32,6 +42,10 @@ function CustomerPayPage(props) {
 		}
 	};
 
+	/**
+	 * Calculates the total payment amount for the group payment option.
+	 * @returns {number} The total payment amount.
+	 */
 	const calculateTotalPay = async () => {
 		const payData = await calculatePersonaPay();
 
@@ -39,12 +53,15 @@ function CustomerPayPage(props) {
 
 		// Loop through each key-value pair in the payData object
 		for (const [persona, price] of Object.entries(payData)) {
-			console.log(price)
 			totalPrice += Number(price);
 		}
 		return totalPrice;
 	};
 
+	/**
+	 * Calculates the payment amount for each persona in the persona payment option.
+	 * @returns {Object} An object containing the payment amount for each persona.
+	 */
 	const calculatePersonaPay = async () => {
 		let payData = {};
 		const url = `/customer/view_order?session_id=${sessionId}&menu_id=${menuId}`;
@@ -60,7 +77,7 @@ function CustomerPayPage(props) {
 
 		return payData;
 		/**
-		 * payData data sructure example:
+		 * payData data structure example:
 		 * {
 		 *  'default': '12.5',
 		 *  'persona 1': 37,

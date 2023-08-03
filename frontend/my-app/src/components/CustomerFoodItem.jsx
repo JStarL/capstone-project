@@ -1,19 +1,37 @@
 import React from 'react';
 import './Components.css';
-import { Typography, Button, Snackbar, Alert } from '@mui/material';
+import { Typography, Snackbar, Alert } from '@mui/material';
 import { useNavigate, useParams } from 'react-router-dom';
 import { StyledButton } from '../pages/CustomerOrStaff';
 import makeRequest from '../makeRequest';
 
+/**
+ * Represents a Customer Food Item component.
+ * @param {Object} props - The properties passed to the component.
+ * @param {string} props.foodId - The ID of the food item.
+ * @param {string} props.originalImage - The URL of the original food image.
+ * @param {string} props.originalFoodName - The name of the original food.
+ * @param {string} props.originalFoodDescription - The description of the original food.
+ * @param {number} props.originalPrice - The price of the original food.
+ * @param {Object} props.personas - An object containing personas data.
+ * @param {string} props.currentlySelectedPersona - The currently selected persona.
+ * @param {string} props.foodCategoryId - The ID of the food category.
+ * @param {Function} props.handleExcludeCategories - Function to handle excluding categories.
+ * @returns {JSX.Element} The JSX representation of the Customer Food Item component.
+ */
+
 function CustomerFoodItem(props) {
   const navigate = useNavigate();
   const params = useParams();
-  const sessionId = params.sessionId
+  const sessionId = params.sessionId;
   const menuId = params.menuId;
-  const tableNumber = params.tableNumber
-  const [trigger, setTrigger] = React.useState(true)
+  const tableNumber = params.tableNumber;
+  const [trigger, setTrigger] = React.useState(true);
   const [isSnackbarOpen, setSnackbarOpen] = React.useState(false);
 
+  /**
+   * Adds the food item to the order.
+   */
   function addToOrder() {
     const body = JSON.stringify({
       session_id: sessionId,
@@ -28,11 +46,14 @@ function CustomerFoodItem(props) {
       .then(data => {
         setSnackbarOpen(true);
         props.handleExcludeCategories(props.personas[props.currentlySelectedPersona][0], props.foodCategoryId, true);
-        setTrigger(!trigger)
+        setTrigger(!trigger);
       })
       .catch(e => console.log('Error: ' + e));
   }
 
+  /**
+   * Handles the snackbar close event.
+   */
   const handleSnackbarClose = () => {
     setSnackbarOpen(false);
   };
@@ -92,8 +113,6 @@ function CustomerFoodItem(props) {
           {` to order!`}
         </Alert>
       </Snackbar>
-
-
     </>
   );
 }

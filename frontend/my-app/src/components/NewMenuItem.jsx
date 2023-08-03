@@ -13,6 +13,11 @@ import { StyledButton } from '../pages/CustomerOrStaff';
 import AddIcon from '@mui/icons-material/Add';
 import IngredientAllergyPair from './IngredientAllergyPair';
 
+/**
+ * Represents a component to add a new menu item.
+ * @param {Object} props - The properties passed to the component.
+ * @returns {JSX.Element} The JSX representation of the NewMenuItem component.
+ */
 function NewMenuItem(props) {
   const [foodName, setFoodName] = React.useState('');
   const [description, setDescription] = React.useState('');
@@ -30,6 +35,9 @@ function NewMenuItem(props) {
   const category_id = params.categoryId;
   const menu_id = params.menuId;
 
+  /**
+   * Adds a new menu item.
+   */
   function addMenuItem() {
     const body = JSON.stringify({
       'manager_id': manager_id,
@@ -56,6 +64,10 @@ function NewMenuItem(props) {
     fetchData();
   }, []);
 
+  /**
+   * Fetches allergy data from the server.
+   * @returns {Array} An array of allergy data.
+   */
   async function fetchAllergies() {
     const url = '/get_allergies';
     const data = await makeRequest(url, 'GET', undefined, undefined);
@@ -63,18 +75,29 @@ function NewMenuItem(props) {
     return data;
   }
 
+  /**
+   * Handles the selection of a file for the menu item image.
+   * @param {Event} event - The file select event.
+   */
   async function handleFileSelect(event) {
     setImageName(event.target.files[0].name);
     const thumbnailUrl = await fileToDataUrl(event.target.files[0]);
     setImage(thumbnailUrl);
   }
 
+  /**
+   * Adds a new ingredient and allergy pair to the menu item.
+   */
   function addIngredientAllergyPair() {
     setIngredientAndAllergyList([...ingredientAndAllergyList, [ingredient, selectedAllergy]])
     setSelectedAllergy(0)
     setIngredient('')
   }
 
+  /**
+   * Handles the deletion of an ingredient and allergy pair from the menu item.
+   * @param {number} index - The index of the ingredient and allergy pair to be deleted.
+   */
   function handleDelete(index) {
     const updatedList = [...ingredientAndAllergyList];
     updatedList.splice(index, 1);

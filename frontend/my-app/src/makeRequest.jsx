@@ -1,51 +1,37 @@
-// import React from 'react';
-// import PropTypes from 'prop-types';
-// const configData = require('../config.json');
+/**
+ * The port number of the backend server.
+ * @type {number}
+ */
 const BACKEND_PORT = 8880;
-// const BACKEND_BASE_URL = 'http://localhost:' + BACKEND_PORT;
 
-// export const fetchFromBackend = (subUrl, methodType, reqBody, token) => {
-//   return new Promise((resolve, reject) => {
-//     const reqHeaders = new Headers();
-
-//     reqHeaders.set('accept', 'application/json');
-
-//     if (reqBody !== undefined) {
-//       reqHeaders.set('Content-Type', 'application/json');
-//     }
-
-//     if (!(subUrl.startsWith('/admin/auth/register') || subUrl.startsWith('/admin/auth/login'))) {
-//       reqHeaders.set('Authorization', 'Bearer ' + token);
-//     }
-
-//     fetch(BACKEND_BASE_URL + subUrl, {
-//       method: methodType,
-//       headers: reqHeaders,
-//       body: JSON.stringify(reqBody)
-//     })
-//       .then(res => res.json())
-//       .then(val => resolve(val))
-//       .catch(err => reject(err));
-//   })
-// };
-
-
+/**
+ * Makes an HTTP request to the backend server using the provided route, method, body, and staff ID (if applicable).
+ *
+ * @param {string} route - The route of the API endpoint to which the request is made.
+ * @param {string} method - The HTTP method for the request (e.g., GET, POST, PUT, DELETE).
+ * @param {Object} body - The request body data to be sent in JSON format (optional).
+ * @param {string|undefined} staff_id - The staff ID (optional) to be included in the request headers for authentication purposes.
+ * @returns {Promise<Object>} A Promise that resolves to the parsed JSON response data from the backend server.
+ * @throws {Error} If the response status code indicates an error (4xx or 5xx range), an error will be thrown.
+ */
 const makeRequest = async (route, method, body, staff_id) => {
   let options = {};
+
   if (staff_id !== undefined) {
     options = {
       method,
       headers: {
         'Content-type': 'application/json',
-      }
-    }
+        'Authorization': staff_id, // Add staff ID to the request headers for authentication (if provided)
+      },
+    };
   } else {
     options = {
       method,
       headers: {
         'Content-type': 'application/json',
-      }
-    }
+      },
+    };
   }
 
   if (body !== undefined) {
@@ -54,32 +40,15 @@ const makeRequest = async (route, method, body, staff_id) => {
 
   const response = await fetch('http://localhost:' + BACKEND_PORT + route, options);
   const data = await response.json();
-  console.log(data)
+
   if (response.ok) {
-    console.log(data);
     return data;
   } else {
     // The response status code indicates an error (4xx or 5xx range)
     console.error('There was an error:', data.error);
-    // return;
     alert(`An error occurred:${data.error}`);
+    throw new Error(data.error);
   }
+};
 
-  // const response = await fetch('http://localhost:' + BACKEND_PORT + route, options)
-  // const data = await response.json()
-  // if (data['error']) {
-  //   console.log('There was an error: ' + data['error'])
-  //   alert(data.error);
-  // } else {
-  //   console.log(data)
-  //   return data
-  // }
-}
-
-export default makeRequest
-// makeRequest.propTypes = {
-//   route: PropTypes.string,
-//   method: PropTypes.string,
-//   body: PropTypes.object,
-//   token: PropTypes.string
-// };
+export default makeRequest;
