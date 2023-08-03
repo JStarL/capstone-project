@@ -21,6 +21,7 @@ For the setup of this project, firstly
 - Once you have downloaded both the VirtualBox software and the VM image,
     - Please follow [this](https://moodle.telt.unsw.edu.au/pluginfile.php/10307161/mod_resource/content/0/VirtualBoxGuide.pdf) link to see the instructions of how to import the VM image to VirtualBox, and how to initially set up the VM
     - The username and password credentials are both: `lubuntu`
+    - TIP: While starting up the vm, when the page shows the lubuntu screen with the loading dots, press `Esc` to ensure smooth booting
 
 - Once you are logged in as lubuntu:
     - Please download the codebase if you do not already have it (ignore this step if this README.md is within your downloaded respository)
