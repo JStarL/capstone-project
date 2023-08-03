@@ -31,6 +31,17 @@ For the setup of this project, firstly
     - Type the password `lubuntu`
     - Also run the following command for the first time only: `source ~/.bashrc`
 
+- For optimum performance, please install the following software by running the following command
+    - `sudo apt install virtualbox-guest-dkms virtualbox-guest-utils virtualbox-guest-x11`
+    - Run this step **after** running `sudo bash install.sh`, otherwise the command may not work
+
+- After installing the above, restart the Virtual Machine and do the following:
+    - Start the Virtual Machine
+    - log in as `lubuntu`
+    - click the small screen button beside the close button at the top-right of the window to make the screen smalll
+    - Click on `View -> Virtual Screen 1 -> Scale to 150%` in the toolbar
+    - Next click on `View -> Virtual Screen 1 -> Resize to 1920x1080`
+    - Now click on the full screen button beside the close button at the top-right of the window to get the optimum screen resolution
 
 ## Running the project
 
