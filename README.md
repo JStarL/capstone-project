@@ -32,7 +32,7 @@ For the setup of this project, firstly
     - Also run the following command for the first time only: `source ~/.bashrc`
 
 - For optimum performance, please install the following software by running the following command
-    - `sudo apt install virtualbox-guest-dkms virtualbox-guest-utils virtualbox-guest-x11`
+    - `sudo apt install virtualbox-guest-dkms virtualbox-guest-utils virtualbox-guest-x11`, and type the password `lubuntu`
     - Run this step **after** running `sudo bash install.sh`, otherwise the command may not work
 
 - After installing the above, restart the Virtual Machine and do the following:
