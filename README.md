@@ -31,6 +31,7 @@ For the setup of this project, firstly
     - `sudo bash install.sh`
     - Type the password `lubuntu`
     - At every prompt, type `Y` and press `Enter`
+    - For the first time only, run `echo "export PATH=\"/home/lubuntu/.local/bin:\$PATH\"" >> ~/.bashrc`
     - Also run the following command for the first time only: `source ~/.bashrc`
 
 - For optimum performance, please install the following software by running the following command
