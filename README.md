@@ -79,4 +79,4 @@ Open a new bash terminal and navigate to the following folder using `cd ~/<proje
 ## Potential Errors during Installation
 
 - If `nvm` is installed in the wrong directory, when trying to run the command, it may show that it doesn't exist. For this run `bash install.sh` again and note in the terminal output where the nvm directory is installed
-    - Edit the `export NVM_DIR=$HOME/.config/nvm` to whatever the path is, like `export NVM_DIR=<the-path-you-found>`, in the file `~/.bashrc` 
+    - Edit the command `export NVM_DIR=$HOME/.config/nvm` to whatever the path is, like `export NVM_DIR=<the-path-you-found>`, in the file `~/.bashrc` 
