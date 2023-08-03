@@ -28,6 +28,7 @@ For the setup of this project, firstly
 
 - Now please run the following command to install the dependencies of this project
     - `sudo bash install.sh`
+    - Type the password `lubuntu`
     - Also run the following command for the first time only: `source ~/.bashrc`
 
 
