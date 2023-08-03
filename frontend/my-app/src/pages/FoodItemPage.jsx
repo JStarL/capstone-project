@@ -14,18 +14,21 @@ import { StyledButton } from './CustomerOrStaff';
  */
 function FoodItemPage(props) {
   const navigate = useNavigate();
+
+  // Extract sessionId, menuId and tableNumber from the URL params
   const params = useParams();
-  
-  // Change to get from params
   const sessionId = params.sessionId;
   const menuId = params.menuId;
   const tableNumber = params.tableNumber
 
+  // State variables
   const [foodData, setFoodData] = React.useState({});
-  
   const [foodId, setFoodId] = React.useState(params.foodId);
   const [isSnackbarOpen, setSnackbarOpen] = React.useState(false);
 
+  /**
+    * Use Effect hook to fetch food item information when food id changes.
+    */
   React.useEffect(() => {
     setFoodId(params.foodId);
     fetchFoodItemData();

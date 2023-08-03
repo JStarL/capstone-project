@@ -22,10 +22,14 @@ import makeRequest from '../makeRequest';
 
 function CustomerFoodItem(props) {
   const navigate = useNavigate();
+  
+  // Extract sessionId, menuId and tableNumber from the URL params
   const params = useParams();
   const sessionId = params.sessionId;
   const menuId = params.menuId;
   const tableNumber = params.tableNumber;
+
+  // State variables
   const [trigger, setTrigger] = React.useState(true);
   const [isSnackbarOpen, setSnackbarOpen] = React.useState(false);
 

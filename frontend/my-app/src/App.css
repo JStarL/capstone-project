@@ -24,16 +24,9 @@ a {
   color: #fff
 }
 
-/* a:hover {
-  color: #002250
-} */
-
 body {
   font-family: sans-serif;
-  /* height: calc(100% + 120px); */
   text-align: center;
-  /* position: relative; */
-  /* min-height: calc(100vh - 80px); */
 }
 
 .paper {
@@ -117,6 +110,7 @@ nav {
   width: 100%;
   background-color: #002250;
   display: flex;
+  z-index: 1000;
 }
 
 .logo-container {
@@ -134,6 +128,7 @@ nav {
 .nav-container {
   display: flex;
   justify-content: 'space-between';
+  z-index: 1000;
 }
 
 .customer-nav-container {

@@ -39,7 +39,8 @@ import UpdateIcon from '@mui/icons-material/Update';
  * @returns {JSX.Element} The JSX representation of the ManagerFoodItem component.
  */
 
-function ManagerFoodItem({ allergies, fetchAllMenuData, originalFoodName, originalFoodDescription, originalPrice, originalImage, originalIngredients, foodId, categoryId, categoryName, fetchCategoryMenuItems, orderingId, getOtherMenuItemOrderingId, index, menuItemsSize }) {
+function ManagerFoodItem({ allergies, originalFoodName, originalFoodDescription, originalPrice, originalImage, originalIngredients, foodId, categoryId, categoryName, fetchCategoryMenuItems, orderingId, getOtherMenuItemOrderingId, index, menuItemsSize }) {
+  // State variables
   const [foodName, setFoodName] = React.useState('');
   const [foodDescription, setFoodDescription] = React.useState('');
   const [ingredientAndAllergyList, setIngredientAndAllergyList] = React.useState(originalIngredients);
@@ -47,11 +48,11 @@ function ManagerFoodItem({ allergies, fetchAllMenuData, originalFoodName, origin
   const [price, setPrice] = React.useState(originalPrice);
   const [isListVisible, setListVisible] = React.useState(false);
   const [ingredient, setIngredient] = React.useState('');
-  const [selectedAllergy, setSelectedAllergy] = React.useState(0); // New state variable for selected allergy
-
-  const params = useParams()
+  const [selectedAllergy, setSelectedAllergy] = React.useState(0);
   const [isSnackbarOpen, setSnackbarOpen] = React.useState(false);
 
+  // Extract managerId and menuId from the URL params
+  const params = useParams()
   const managerId = params.managerId
   const menuId = params.menuId
 

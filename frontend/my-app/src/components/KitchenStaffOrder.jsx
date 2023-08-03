@@ -21,10 +21,14 @@ import { convertToMinutesAndHours } from './helperFunctions';
  * @returns {JSX.Element} The JSX representation of the KitchenStaffOrder component.
  */
 function KitchenStaffOrder(props) {
+  // State variables
   const [timestamp, setTimestamp] = React.useState(0);
   const [minutes, setMinutes] = React.useState(0);
   const [seconds, setSeconds] = React.useState(0);
 
+  /**
+   * Use Effect hook to update the timestamp state every second using setInterval
+   */
   React.useEffect(() => {
     const timer = () => {
       const timeCustomerOrdered = new Date(props.timestamp);

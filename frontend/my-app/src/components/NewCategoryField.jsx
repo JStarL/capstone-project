@@ -13,6 +13,7 @@ import LibraryAddIcon from '@mui/icons-material/LibraryAdd';
  * @returns {JSX.Element} The JSX representation of the NewCategoryField component.
  */
 function NewCategoryField({ menuId, managerId, fetchAllMenuData }) {
+  // State variable
   const [newCategoryName, setNewCategoryName] = React.useState('')
 
   /**

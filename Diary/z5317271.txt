@@ -100,6 +100,9 @@ Work Done:
 WEEK 10
 Meeting (31/07/2023 2pm)
 - Discuss how demo will be conducted and allocate roles of who is explaining which functionality
+- Focus on cleaning up code and refactoring
+- Moved nav bars, footers into components
+- helperFunctions.jsx to include convertToMinutesAndHours function so its accessible in other components
 - Practice Demo (1/8/2023 2pm)
 
 Work Done: 

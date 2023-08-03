@@ -21,16 +21,21 @@ export const StyledRadio = styled(Radio)({
  * @returns {JSX.Element} The JSX representation of the AddStaffPage component.
  */
 function AddStaffPage(props) {
+  // State variables
 	const [name, setName] = React.useState('')
 	const [email, setEmail] = React.useState('')
 	const [password, setPassword] = React.useState('')
 	const [staffType, setStaffType] = React.useState('kitchen')
 	const [isSnackbarOpen, setSnackbarOpen] = React.useState(false);
 
+  // Extract managerId and menuId from the URL params
 	const params = useParams()
 	const managerId = params.managerId
 	const menuId = params.menuId
-
+	
+	/**
+   	* Use Effect hook initalise variables
+    */
 	React.useEffect(() => {
 		props.setId(managerId)
 		props.setMenuId(menuId)

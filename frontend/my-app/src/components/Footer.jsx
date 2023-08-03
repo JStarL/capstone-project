@@ -22,6 +22,7 @@ import { Snackbar, Alert } from '@mui/material';
  * @returns {JSX.Element} The JSX representation of the Footer component.
  */
 function Footer(props) {
+  // State variables
   const [isSnackbarOpen, setSnackbarOpen] = React.useState(false); // State variable for Snackbar open/close status
   const navigate = useNavigate()
 
@@ -84,15 +85,15 @@ function Footer(props) {
       return (
         <div className="footer-container">
           <StyledButton startIcon={<ShoppingCartIcon />}
-            onClick={() => {navigate(`/customer/${props.sessionId}/view_order/${props.menuId}/${props.tableNumber}`)}} className="toNavy">View Cart
+            onClick={() => {navigate(`/customer/${props.sessionId}/view_order/${props.menuId}/${props.tableNumber}`)}} className="toNavy" style={{ padding: '10px'}} >View Cart
           </StyledButton>
           <StyledButton startIcon={<RestaurantMenuIcon />}
-            onClick={() => {navigate(`/customer/${props.sessionId}/${props.menuId}/${props.tableNumber}`)}} className="toNavy">Go to Menu
+            onClick={() => {navigate(`/customer/${props.sessionId}/${props.menuId}/${props.tableNumber}`)}} className="toNavy" style={{ padding: '10px'}} >Go to Menu
           </StyledButton>
           <StyledButton startIcon={<SettingsIcon />}
             onClick={() => {navigate(`/customer/${props.sessionId}/${props.menuId}/${props.tableNumber}/personalise`)}} className="toNavy">Personalise
           </StyledButton>
-          <StyledButton startIcon={<BackHandIcon />} onClick={requestAssistance} className="toNavy" style={{ paddingRight: '35px', paddingLeft: '40px' }}>
+          <StyledButton startIcon={<BackHandIcon />} onClick={requestAssistance} className="toNavy" style={{ paddingRight: '50px', paddingLeft: '50px' }}>
             Request Assistance
           </StyledButton>
           <Snackbar

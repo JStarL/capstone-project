@@ -33,6 +33,7 @@ function ManagerMenuPage() {
   const [currentSelectedCategoryId, setCurrentSelectedCategoryId] = React.useState(-1);
   const [menuItems, setMenuItems] = React.useState([]); // List of Menu items for the current selected category
   const [allergies, setAllergies] = React.useState([]);
+
   const navigate = useNavigate();
   const params = useParams();
 
@@ -40,7 +41,9 @@ function ManagerMenuPage() {
   const managerId = params.managerId;
   const menuId = params.menuId;
 
-  // Fetch all menu data when the component mounts
+  /**
+  * Use Effect hook to fetch all menu data when the component mounts
+  */
   React.useEffect(() => {
     const fetchData = async () => {
       const data = await fetchAllMenuData();
@@ -52,7 +55,9 @@ function ManagerMenuPage() {
     fetchData();
   }, []);
 
-  // Fetch category data when the currentSelectedCategoryId changes
+  /**
+    * Use Effect hook to fetch category data when the currentSelectedCategoryId changes
+    */
   React.useEffect(() => {
     const fetchCategoryData = async () => {
       if (currentSelectedCategoryId !== -1) {
@@ -64,7 +69,9 @@ function ManagerMenuPage() {
     fetchCategoryData();
   }, [currentSelectedCategoryId]);
 
-  // Fetch all allergies when the component mounts
+  /**
+    * Use Effect hook to fetch all allergies
+    */
   React.useEffect(() => {
     const fetchData = async () => {
       await fetchAllergies();
@@ -220,7 +227,6 @@ function ManagerMenuPage() {
                   foodId={menuItem.food_id.toString()}
                   categoryId={currentSelectedCategoryId}
                   categoryName={currentSelectedCategory}
-                  fetchAllMenuData={fetchAllMenuData}
                   fetchCategoryMenuItems={fetchCategoryMenuItems}
                   allergies={allergies}
                   getOtherMenuItemOrderingId={getOtherMenuItemOrderingId}

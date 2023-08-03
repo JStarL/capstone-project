@@ -12,6 +12,7 @@ import { StyledButton } from './CustomerOrStaff';
  * @returns {JSX.Element} The JSX representation of the LoginPage component.
  */
 function LoginPage({ onSuccess }) {
+  // State variables
   const [email, setEmail] = React.useState('');
   const [password, setPassword] = React.useState('');
   const navigate = useNavigate();

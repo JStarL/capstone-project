@@ -23,23 +23,31 @@ import { useParams } from 'react-router-dom';
  * @returns {JSX.Element} The JSX representation of the CustomerMenuPage component.
  */
 function CustomerMenuPage(props) {
+  // State variables
   const [categories, setCategories] = React.useState([]);
   const [currentSelectedCategory, setCurrentSelectedCategory] = React.useState('Best Selling');
   const [currentSelectedCategoryId, setCurrentSelectedCategoryId] = React.useState(-1);
   const [menuItems, setMenuItems] = React.useState([]);
   const [trigger, setTrigger] = React.useState(0);
 
+  // Extract sessionId, menuId and tableNumber from the URL params
   const params = useParams()
   const sessionId = params.sessionId
   const menuId = params.menuId
   const tableNumber = params.tableNumber
 
+  /**
+    * Use Effect hook initialise menuId, sessionId and tableNumber
+    */
   React.useEffect(() => {
     props.setMenuId(menuId)
     props.setSessionId(sessionId)
     props.setTableNumber(tableNumber)
   }, []);
 
+  /**
+    * Use Effect hook to fetch all menu data when persona changes
+    */
   React.useEffect(() => {
     const fetchData = async () => {
       const data = await fetchAllMenuData();
@@ -52,6 +60,9 @@ function CustomerMenuPage(props) {
     fetchData();
   }, [props.currentlySelectedPersona]);
 
+  /**
+    * Use Effect hook to fetch all menus in corresponding category or when trigger is triggered
+    */
   React.useEffect(() => {
     const fetchCategoryData = async () => {
       if (currentSelectedCategoryId !== -1) {

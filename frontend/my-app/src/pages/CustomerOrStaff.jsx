@@ -24,6 +24,9 @@ export const StyledButton = styled(Button)({
 function CustomerOrStaff({ onSuccess, reset }) {
   const navigate = useNavigate();
 
+  /**
+   * Use Effect hook to initialise all variables to null
+   */
   React.useEffect(function () {
     reset(null, null, null, null)
   }, []);
