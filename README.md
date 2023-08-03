@@ -42,6 +42,7 @@ For the setup of this project, firstly
     - Click on `View -> Virtual Screen 1 -> Scale to 150%` in the toolbar
     - Next click on `View -> Virtual Screen 1 -> Resize to 1920x1080`
     - Now click on the full screen button beside the close button at the top-right of the window to get the optimum screen resolution
+    - Keep these settings for the best resolution display of this project's frontend
 
 ## Running the project
 
