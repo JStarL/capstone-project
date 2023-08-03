@@ -27,9 +27,6 @@ sudo apt install python3-pip
 pip install Flask
 pip install Flask-Cors
 
-# Append the PATH variable statement to ~/.bashrc
-echo "export PATH=\"/home/lubuntu/.local/bin:\$PATH\"" >> ~/.bashrc
-
 ### Install psycopg2, the python to postgreSQL database connector
 
 sudo apt install python3-dev libpq-dev
