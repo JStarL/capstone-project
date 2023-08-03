@@ -17,7 +17,7 @@ sudo su postgres -c 'createuser -d -r -s lubuntu'
 sudo su postgres -c 'psql --command="create database wait_management_system owner lubuntu;" postgres'
 
 # Load in the pre-existing database
-psql wait_management_system -f database/wms_data.dump
+sudo su postgres -c 'psql wait_management_system -f database/wms_data.dump'
 
 
 ### Install the software for the backend
