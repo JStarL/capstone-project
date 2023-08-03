@@ -22,7 +22,7 @@ function CustomerViewOrderPage(props) {
   const menuId = params.menuId;
   const sessionId = params.sessionId;
   const tableId = params.tableNumber;
-  
+
   const navigate = useNavigate();
 
   const StyledButton = styled(Button)({
@@ -93,17 +93,16 @@ function CustomerViewOrderPage(props) {
     <>
       <Typography className='h4' variant="overline" style={{fontSize: '2rem', margin: '10px'}} gutterBottom><b>Your Order</b></Typography>
       <div className='view-order-page' style={{justifywidth: '100%', alignItems:'center' }}>
-      {orders.length === 0 ? (
-            <div style={{ display: 'flex', justifyContent: 'center', marginTop: '30px' }}>
-              <Typography style={{
-                boxShadow: "0 3px 6px rgba(0, 0, 0, 0.4)",
-                borderRadius: '10px',
-                padding: '1vw',
-                width: 'auto',
-                marginLeft: '10px',
-                textAlign: 'center',
-              }} variant="overline" gutterBottom>No Menu Items in Cart</Typography>
-            </div>
+        {orders.length === 0 ? (
+          <div style={{ display: 'flex', justifyContent: 'center', marginTop: '30px' }}>
+            <Typography style={{
+              boxShadow: "0 3px 6px rgba(0, 0, 0, 0.4)",
+              borderRadius: '10px',
+              padding: '1vw',
+              width: 'auto',
+              textAlign: 'center',
+            }} variant="overline" gutterBottom>No Menu Items in Cart</Typography>
+          </div>
         ) : (
           orders?.map((order, index) => (
             <OrderItem
