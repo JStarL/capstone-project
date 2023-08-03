@@ -24,7 +24,7 @@ For the setup of this project, firstly
 
 - Once you are logged in as lubuntu:
     - Please download the codebase if you do not already have it (ignore this step if this README.md is within your downloaded respository)
-    - We will assume that you have the project in your home directory (prompt will show `lubuntu@lubuntu2004:~/<project-folder-name>$`)
+    - We will assume that you have the project in your home directory, and that you are inside the project folder (prompt will show `lubuntu@lubuntu2004:~/<project-folder-name>$`)
 
 - Now please run the following commands to install the dependencies of this project
     - `sed -i -e 's/\r$//' install.sh`
