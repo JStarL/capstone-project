@@ -28,8 +28,8 @@ For the setup of this project, firstly
 
 - Now please run the following commands to install the dependencies of this project
     - `sed -i -e 's/\r$//' install.sh`
-    - `sudo bash install.sh`
-    - Type the password `lubuntu`
+    - `bash install.sh`
+    - Whenever there is a prompt for a password, type `lubuntu`
     - At every prompt, type `Y` and press `Enter`
     - For the first time only, run `echo "export PATH=\"/home/lubuntu/.local/bin:\$PATH\"" >> ~/.bashrc`
     - Also run the following command for the first time only: `source ~/.bashrc`
