@@ -32,7 +32,7 @@ For the setup of this project, firstly
     - Whenever there is a prompt for a password, type `lubuntu`
     - At every prompt, type `Y` and press `Enter`
     - For the first time only, run `echo "export PATH=\"/home/lubuntu/.local/bin:\$PATH\"" >> ~/.bashrc`
-    - Also run the following command for the first time only: `source ~/.bashrc`
+    - Restart the terminal by closing the terminal window, opening a new terminal, and navigating to the same directory you were previously in using `cd <folder-path>` (Remember to copy the folder path before closing the terminal!)
 
 - For optimum performance, please install the following software by running the following command
     - `sudo apt install virtualbox-guest-dkms virtualbox-guest-utils virtualbox-guest-x11`, and type the password `lubuntu`
