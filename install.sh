@@ -52,6 +52,3 @@ export NVM_DIR="$HOME/.nvm"
 nvm install v18.16.0
 
 nvm use v18.16.0
-
-sudo apt install npm
-
