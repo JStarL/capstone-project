@@ -23,6 +23,9 @@ function CustomerRatePage(props) {
 
   const navigate = useNavigate();
 
+  /**
+    * Use Effect hook to fetch all orders ordered by the customer.
+    */
   React.useEffect(() => {
     async function fetchData() {
       await fetchOrder();

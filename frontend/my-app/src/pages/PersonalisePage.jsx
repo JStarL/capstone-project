@@ -26,6 +26,9 @@ function PersonalisePage({ personas, handlePersonas, handleCurrentlySelectedPers
   const menuId = params.menuId;
   const tableNumber = params.tableNumber;
 
+  /**
+   * Use Effect hook to fetch all allergies
+   */
   React.useEffect(() => {
     const fetchData = async () => {
       await fetchAllergies();
@@ -33,6 +36,9 @@ function PersonalisePage({ personas, handlePersonas, handleCurrentlySelectedPers
     fetchData();
   }, []);
 
+  /**
+   * Use Effect hook to update current allergies when persona is changed
+   */
   React.useEffect(() => {
     if (currentlySelectedPersona) {
       setSelectedAllergies(currentlySelectedPersona[1]);
@@ -41,6 +47,7 @@ function PersonalisePage({ personas, handlePersonas, handleCurrentlySelectedPers
     }
   }, [currentlySelectedPersona]);
 
+  // Fetches all allergies from the backend
   async function fetchAllergies() {
     const url = '/get_allergies';
     const data = await makeRequest(url, 'GET', undefined, undefined);

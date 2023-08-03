@@ -34,12 +34,18 @@ function CustomerMenuPage(props) {
   const menuId = params.menuId
   const tableNumber = params.tableNumber
 
+  /**
+    * Use Effect hook initialise menuId, sessionId and tableNumber
+    */
   React.useEffect(() => {
     props.setMenuId(menuId)
     props.setSessionId(sessionId)
     props.setTableNumber(tableNumber)
   }, []);
 
+  /**
+    * Use Effect hook to fetch all menu data when persona changes
+    */
   React.useEffect(() => {
     const fetchData = async () => {
       const data = await fetchAllMenuData();
@@ -52,6 +58,9 @@ function CustomerMenuPage(props) {
     fetchData();
   }, [props.currentlySelectedPersona]);
 
+  /**
+    * Use Effect hook to fetch all menus in corresponding category or when trigger is triggered
+    */
   React.useEffect(() => {
     const fetchCategoryData = async () => {
       if (currentSelectedCategoryId !== -1) {

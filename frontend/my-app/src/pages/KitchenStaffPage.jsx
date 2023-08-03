@@ -17,6 +17,9 @@ function KitchenStaffPage() {
   const menuId = params.menuId;
   const staffId = params.staffId;
 
+  /**
+    * Use Effect hook to fetch orders pending for kitchen staff
+    */
   React.useEffect(() => {
     async function fetchData() {
       await getOrderList();

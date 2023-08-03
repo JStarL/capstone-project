@@ -30,7 +30,10 @@ function AddStaffPage(props) {
 	const params = useParams()
 	const managerId = params.managerId
 	const menuId = params.menuId
-
+	
+	/**
+   	* Use Effect hook initalise variables
+   */
 	React.useEffect(() => {
 		props.setId(managerId)
 		props.setMenuId(menuId)

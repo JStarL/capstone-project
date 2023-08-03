@@ -4,7 +4,7 @@ import { Typography } from '@mui/material';
 import makeRequest from '../makeRequest';
 import { StyledButton } from '../pages/CustomerOrStaff';
 import LogoutIcon from '@mui/icons-material/Logout';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 /**
  * Represents a navigation component that displays navigation options based on user type (staff or customer).
@@ -25,12 +25,15 @@ import { Link } from 'react-router-dom';
  * @returns {JSX.Element} The JSX representation of the Nav component.
  */
 function Nav(props) {
+  const navigate = useNavigate()
+
   const logout = () => {
     const body = JSON.stringify({
       'staff_id': props.id.toString(),
     })
     makeRequest('/auth/logout', 'POST', body, undefined)
       .then(data => {
+        navigate('/')
       })
       .catch(e => console.log('Error: ' + e))
     props.setId(null);
@@ -53,12 +56,12 @@ function Nav(props) {
           <StyledButton sx={{
             margin: '5px',
             marginLeft: 'auto',
+            padding: '20px',
+            paddingRight: '30px',
+            paddingLeft: '30px',
             width: '70%',
             height: '70%',
-          }} onClick={logout} startIcon={<LogoutIcon />}>
-            <a className='toNavy' href='/'>
-              Logout
-            </a>
+          }} onClick={logout} startIcon={<LogoutIcon />} className='toNavy'>Logout
           </StyledButton>
         </div>
       </nav>

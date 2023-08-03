@@ -44,7 +44,7 @@ const makeRequest = async (route, method, body, staff_id) => {
   if (response.ok) {
     return data;
   } else {
-    // The response status code indicates an error (4xx or 5xx range)
+    // 4xx or 5xx range errors
     console.error('There was an error:', data.error);
     alert(`An error occurred:${data.error}`);
     throw new Error(data.error);

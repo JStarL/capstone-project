@@ -25,6 +25,9 @@ function FoodItemPage(props) {
   const [foodId, setFoodId] = React.useState(params.foodId);
   const [isSnackbarOpen, setSnackbarOpen] = React.useState(false);
 
+  /**
+    * Use Effect hook to fetch food item information when food id changes.
+    */
   React.useEffect(() => {
     setFoodId(params.foodId);
     fetchFoodItemData();

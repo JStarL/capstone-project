@@ -22,6 +22,9 @@ function CustomerViewOrderPage(props) {
   const tableId = params.tableNumber;
   const navigate = useNavigate();
 
+  /**
+   * Use Effect hook to fetch data and intialise totalCost state variable to 0
+   */
   React.useEffect(() => {
     async function fetchData() {
       await fetchOrder();
@@ -30,6 +33,9 @@ function CustomerViewOrderPage(props) {
     setTotalCost(0)
   }, [])
 
+  /**
+   * Use Effect hook to calculate and update the total cost of orders
+   */
   React.useEffect(() => {
     let total = 0
     orders?.map((order) => {
