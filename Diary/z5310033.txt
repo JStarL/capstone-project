@@ -115,24 +115,26 @@ Week 8
   - Reordering of category and menu items 
   - add to order and add staff pop up  
 
-  Week 9 
-  - Meeting Monday 24/7/23:
-    - Delegate roles for the next sprint 
-    - Create child issues
-    - trying to figure out how to implement notifications 
+Week 9 
+- Meeting Monday 24/7/23:
+  - Delegate roles for the next sprint 
+  - Create child issues
+  - trying to figure out how to implement notifications 
 
-  - Working on: 
-    - Payment screen (split the bill based on persona or pay as a group)
-    - Styling for kitchen staff
-    - Bug fixes 
-    - Ratings Page 
+- Working on: 
+  - Payment screen (split the bill based on persona or pay as a group)
+  - Styling for kitchen staff
+  - Bug fixes 
+  - Customer Ratings Page 
 
-  Week 10
-  - Meeting Monday 31/7/23: 
-    - Going through every user story to check if all functionality is working 
-    - Assign roles for final demo 
-    - Do a practice demo 
-  
-  - Working on: 
-    - Cleaning up UI and code style 
-    - Add JavaDocs and comments
+Week 10
+- Meeting Monday 31/7/23: 
+  - Going through every user story to check if all functionality is working 
+  - Assign roles for final demo 
+  - Do a practice demo 
+
+- Working on: 
+  - Continue doing practice demos throughout the week 
+  - Cleaning up UI, refactoring and code style 
+  - Add JSDocs and comments for frontend code
+  - Work on final report

@@ -68,3 +68,9 @@ Week 9
 - These were fairly easy for me to code up as it was just dictionary manipulation
 - Next week the plan is to refactor all our code and eliminate all code smells
 - We also plan on preparing our report, and preparing our final demo.
+
+Week 10
+- We had a lot of demo practice, as we met 3 times during the week.
+- I completed refactoring code on the backend. I refactored both auth.py and customer.py
+- I also worked on the project report. I had completed the overview section, the functionalities section, and had written some stuff on the user manual and installation section.
+- The plan for after the demo is to do the peer evaluation and proof read the entire report.
