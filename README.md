@@ -75,3 +75,8 @@ Open a new bash terminal and navigate to the following folder using `cd ~/<proje
 - There are already pre-loaded menus in our application, to use them for testing purposes, we suggest you use:
     - For customers, select the restaurant with name 'Sample Restaurant' and location 'Sample Address'
     - For managers, login as 'test@test.com' with password 'idk', this will take you to the pre-loaded database that we have used for testing purposes
+
+## Potential Errors during Installation
+
+- If `nvm` is installed in the wrong directory, when trying to run the command, it may show that it doesn't exist. For this run `bash install.sh` again and note in the terminal output where the nvm directory is installed
+    - Edit the command `export NVM_DIR=$HOME/.config/nvm` to whatever the path is, like `export NVM_DIR=<the-path-you-found>`, in the file `~/.bashrc` 
