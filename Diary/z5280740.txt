@@ -126,4 +126,5 @@ practising our Final Demo, and we allocated parts for each team member. I volunt
 contributing to the group report, and I have reviewed all parts myself for double verification purposes, and it all looks fine. I made several changes
 to ensure a professional style and look, because presentation and good content matter. I took the task of creating the User Manual, though Rohan helped
 with some initial starter code typed up in the report based on SETUP.md. Completing install.sh took considerable effort, as there were whole classes of
-bugs to deal with. I have also contributed to the Implementation Challenges, where actually there was a lot to talk about!
+bugs to deal with with bash and the vm. I have also completely refurbished the Functionalities section in the Project Report, and cleaned up and added
+to the Implementation Challenges, where actually there was a lot to talk about!
