@@ -5,8 +5,8 @@ The following are the steps to set up the virtual machine from its initial stage
 - run `ssh-keygen -t rsa -P '' -f ~/.ssh/id_rsa`
 - Add the file's contents of `~/.ssh/id_rsa.pub` to a new SSH key on your Github Account
     - `cat ~/.ssh/id_rsa.pub`
-- run `git clone git@github.com:unsw-cse-comp3900-9900-23T2/capstone-project-3900f18bwhatreallyhappenedjib.git`
-- `cd capstone-project-3900f18bwhatreallyhappenedjib`
+- run `git clone git@github.com:JStarL/capstone-project.git`
+- `cd capstone-project`
 
 # To install the database
 
@@ -43,6 +43,6 @@ The following are the steps to set up the virtual machine from its initial stage
 - `source ~/.bashrc`
 - to download the latest lts version of node that we are using, do `nvm install v18.16.0`
 - run `nvm use v18.16.0`
-- `cd ~/capstone-project-3900f18bwhatreallyhappenedjib/frontend/my-app`
+- `cd ~/capstone-project/frontend/my-app`
 - run `npm install`
 - run `npm start`
